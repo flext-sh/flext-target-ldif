@@ -1,11 +1,16 @@
 """Enterprise Singer Target for LDIF data export."""
 
-from __future__ import annotations
+"""
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
+
 
 import importlib.metadata
 
 # flext-core imports
 from flext_core import FlextExceptions, FlextResult, FlextModels, FlextLogger
+from flext_core import FlextTypes
 
 # === FLEXT-MELTANO INTEGRATION ===
 # Re-export available flext-meltano facilities
@@ -26,18 +31,13 @@ from flext_meltano import (
     TargetServiceProtocol,
 )
 
-# === PEP8 CONSOLIDATED MODULE IMPORTS ===
-# Import from consolidated PEP8 modules for better organization
-from flext_target_ldif.target_client import (
-    LDIFSink,
-    LdifWriter,
-    TargetClient,
-    TargetLDIF,
-    TargetSink,
-    TargetWriter,
-)
-from flext_target_ldif.target_config import FlextTargetLdifConfig, TargetConfig
-from flext_target_ldif.target_exceptions import (
+# === DIRECT MODULE IMPORTS ===
+# Import directly from implementation modules
+from flext_target_ldif.sinks import LDIFSink
+from flext_target_ldif.target import TargetLDIF
+from flext_target_ldif.writer import LdifWriter
+from flext_target_ldif.config import FlextTargetLdifConfig
+from flext_target_ldif.exceptions import (
     FlextTargetLdifError,
     FlextTargetLdifErrorDetails,
     FlextTargetLdifFileError,
@@ -45,18 +45,9 @@ from flext_target_ldif.target_exceptions import (
     FlextTargetLdifSchemaError,
     FlextTargetLdifTransformationError,
     FlextTargetLdifWriterError,
-    TargetError,
-    TargetErrorDetails,
-    TargetFileError,
-    TargetInfrastructureError,
-    TargetSchemaError,
-    TargetTransformationError,
-    TargetWriterError,
 )
-from flext_target_ldif.models import (
-    RecordTransformer,
-    TargetTransformer,
-    TargetValidator,
+from flext_target_ldif.transformers import RecordTransformer
+from flext_target_ldif.validation import (
     ValidationError,
     normalize_attribute_value,
     sanitize_attribute_name,
@@ -71,16 +62,7 @@ from flext_target_ldif.models import (
     validate_record,
     validate_schema,
 )
-from flext_target_ldif.target_services import (
-    TargetCLI,
-    TargetContainer,
-    TargetService,
-    cli_main,
-    config_target_dependencies,
-    configure_flext_target_ldif_dependencies,
-    get_flext_target_ldif_container,
-    get_flext_target_ldif_service,
-)
+from flext_target_ldif.cli import main as cli_main
 
 # === BACKWARD COMPATIBILITY IMPORTS ===
 # Direct imports for existing code compatibility
@@ -109,7 +91,7 @@ except importlib.metadata.PackageNotFoundError:
 __version_info__ = tuple(int(x) for x in __version__.split(".") if x.isdigit())
 
 # Complete public API exports with PEP8 consolidation and backward compatibility
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     # === FLEXT-MELTANO RE-EXPORTS ===
     "FlextMeltanoBridge",
     "FlextMeltanoConfig",
@@ -124,21 +106,14 @@ __all__: list[str] = [
     "FlextResult",
     "FlextModels",
     "FlextLogger",
-    # === PEP8 CONSOLIDATED MODULES (Primary Interface) ===
-    # Configuration
+    # === DIRECT MODULE IMPORTS ===
+    # Core components
     "FlextTargetLdifConfig",
-    "TargetConfig",
-    # Client (Target + Sink + Writer)
     "LDIFSink",
     "LdifWriter",
-    "TargetClient",
     "TargetLDIF",
-    "TargetSink",
-    "TargetWriter",
     # Models (Validation + Transformation)
     "RecordTransformer",
-    "TargetTransformer",
-    "TargetValidator",
     "ValidationError",
     "normalize_attribute_value",
     "sanitize_attribute_name",
@@ -160,22 +135,8 @@ __all__: list[str] = [
     "FlextTargetLdifSchemaError",
     "FlextTargetLdifTransformationError",
     "FlextTargetLdifWriterError",
-    "TargetError",
-    "TargetErrorDetails",
-    "TargetFileError",
-    "TargetInfrastructureError",
-    "TargetSchemaError",
-    "TargetTransformationError",
-    "TargetWriterError",
-    # Services (DI + CLI)
-    "TargetCLI",
-    "TargetContainer",
-    "TargetService",
+    # CLI
     "cli_main",
-    "config_target_dependencies",
-    "configure_flext_target_ldif_dependencies",
-    "get_flext_target_ldif_container",
-    "get_flext_target_ldif_service",
     # === BACKWARD COMPATIBILITY ALIASES ===
     "FlextLDIFTarget",
     "FlextLDIFTargetConfig",

@@ -1,10 +1,15 @@
-"""Singer Sink implementation for LDIF output."""
+"""Singer Sink implementation for LDIF output.
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
 from pathlib import Path
 
-# Use available flext-meltano abstractions
+from flext_core import FlextTypes
+
 from flext_target_ldif.writer import LdifWriter
 
 
@@ -13,10 +18,10 @@ class LDIFSink:
 
     def __init__(
         self,
-        target_config: dict[str, object],
+        target_config: FlextTypes.Core.Dict,
         stream_name: str,
-        schema: dict[str, object],
-        key_properties: list[str] | None = None,
+        schema: FlextTypes.Core.Dict,
+        key_properties: FlextTypes.Core.StringList | None = None,
     ) -> None:
         """Initialize the LDIF sink."""
         self.config = target_config
@@ -48,7 +53,12 @@ class LDIFSink:
         return self._output_file
 
     def _get_ldif_writer(self) -> LdifWriter:
-        """Get or create the LDIF writer for this sink."""
+        """Get or create the LDIF writer for this sink.
+
+        Returns:
+            LdifWriter: The LDIF writer.
+
+        """
         if self._ldif_writer is None:
             output_file = self._get_output_file()
 
@@ -75,17 +85,22 @@ class LDIFSink:
 
         return self._ldif_writer
 
-    def process_batch(self, _context: dict[str, object]) -> None:
+    def process_batch(self, _context: FlextTypes.Core.Dict) -> None:
         """Process a batch of records."""
         # BatchSink handles the batching, we just need to ensure writer is ready
         self._get_ldif_writer()
 
     def process_record(
         self,
-        record: dict[str, object],
-        _context: dict[str, object],
+        record: FlextTypes.Core.Dict,
+        _context: FlextTypes.Core.Dict,
     ) -> None:
-        """Process a single record and write to LDIF."""
+        """Process a single record and write to LDIF.
+
+        Returns:
+            object: Description of return value.
+
+        """
         ldif_writer = self._get_ldif_writer()
         result = ldif_writer.write_record(record)
         if not result.success:

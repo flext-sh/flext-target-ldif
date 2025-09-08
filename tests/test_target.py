@@ -1,9 +1,10 @@
 """Comprehensive tests for FlextTargetLdif main target class.
 
-Copyright (c) 2025 Flext. All rights reserved.
-SPDX-License-Identifier: MIT
-
 REFACTORED: Complete target system with 100% coverage and validation.
+
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations

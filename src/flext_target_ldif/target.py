@@ -1,9 +1,14 @@
-"""Main Singer Target implementation for LDIF output."""
+"""Main Singer Target implementation for LDIF output.
 
-# MIGRATED: Singer SDK imports centralized via flext-meltano
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
+
 from __future__ import annotations
 
 from pathlib import Path
+
+from flext_core import FlextTypes
 
 from flext_target_ldif.sinks import LDIFSink
 
@@ -15,7 +20,7 @@ class TargetLDIF:
 
     def __init__(
         self,
-        config: dict[str, object] | None = None,
+        config: FlextTypes.Core.Dict | None = None,
     ) -> None:
         """Initialize the LDIF target."""
         self.config = config or {}
@@ -28,7 +33,7 @@ class TargetLDIF:
         output_path = Path(output_path_str)
         output_path.mkdir(parents=True, exist_ok=True)
 
-    def get_sink(self, stream_name: str, schema: dict[str, object]) -> LDIFSink:
+    def get_sink(self, stream_name: str, schema: FlextTypes.Core.Dict) -> LDIFSink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = LDIFSink(

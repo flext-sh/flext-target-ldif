@@ -1,10 +1,10 @@
 """LDIF writer for flext-target-ldif using flext-ldif infrastructure.
 
-Copyright (c) 2025 Flext. All rights reserved.
-SPDX-License-Identifier: MIT
-
 This module eliminates code duplication by using the FLEXT LDIF infrastructure
 implementation from flext-ldif project.
+
+Copyright (c) 2025 Flext. All rights reserved.
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ import types
 from pathlib import Path
 from typing import Self
 
-from flext_core import FlextLogger, FlextResult
+from flext_core import FlextLogger, FlextResult, FlextTypes
 from flext_ldif import FlextLDIFAPI
 
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError
@@ -27,10 +27,10 @@ class LdifWriter:
     def __init__(
         self,
         output_file: Path | str | None = None,
-        ldif_options: dict[str, object] | None = None,
+        ldif_options: FlextTypes.Core.Dict | None = None,
         dn_template: str | None = None,
-        attribute_mapping: dict[str, str] | None = None,
-        schema: dict[str, object] | None = None,
+        attribute_mapping: FlextTypes.Core.Headers | None = None,
+        schema: FlextTypes.Core.Dict | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure."""
         self.output_file = Path(output_file) if output_file else Path("output.ldif")
@@ -40,9 +40,9 @@ class LdifWriter:
         self.schema = schema or {}
         # Use flext-ldif API for writing
         self._ldif_api = FlextLDIFAPI()
-        self._records: list[dict[str, object]] = []
+        self._records: list[FlextTypes.Core.Dict] = []
         self._record_count = 0
-        self._ldif_entries: list[dict[str, object]] = []
+        self._ldif_entries: list[FlextTypes.Core.Dict] = []
 
     def open(self) -> FlextResult[None]:
         """Open the output file for writing."""
@@ -78,7 +78,7 @@ class LdifWriter:
                                 else [str(v) for v in value]
                             )
                         # Create simple entry dict for LDIF writing
-                        entry: dict[str, object] = {
+                        entry: FlextTypes.Core.Dict = {
                             "dn": dn,
                             "attributes": dict(attr_dict),  # Ensure it's a dict
                         }
@@ -114,7 +114,7 @@ class LdifWriter:
         except (RuntimeError, ValueError, TypeError) as e:
             return FlextResult[None].fail(f"Failed to close LDIF file: {e}")
 
-    def write_record(self, record: dict[str, object]) -> FlextResult[None]:
+    def write_record(self, record: FlextTypes.Core.Dict) -> FlextResult[None]:
         """Write a record to the LDIF file buffer."""
         try:
             # Buffer the record for batch writing
@@ -124,7 +124,7 @@ class LdifWriter:
         except (RuntimeError, ValueError, TypeError) as e:
             return FlextResult[None].fail(f"Failed to buffer record: {e}")
 
-    def _generate_dn(self, record: dict[str, object]) -> str:
+    def _generate_dn(self, record: FlextTypes.Core.Dict) -> str:
         """Generate DN from record using template."""
         try:
             return self.dn_template.format(**record)
@@ -152,6 +152,6 @@ class LdifWriter:
         self.close()
 
 
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     "LdifWriter",
 ]

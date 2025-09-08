@@ -8,9 +8,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from flext_core import FlextModels, FlextResult
-
-# Basic validation without dependencies
+from flext_core import FlextModels, FlextResult, FlextTypes
 from pydantic import Field, field_validator
 
 
@@ -29,12 +27,12 @@ class FlextTargetLdifConfig(FlextModels.Config):
         description="Template for generating Distinguished Names (DN) - MUST be configured for production",
         json_schema_extra={"example": "uid={uid},ou=users,dc=company,dc=local"},
     )
-    attribute_mapping: dict[str, str] = Field(
+    attribute_mapping: FlextTypes.Core.Headers = Field(
         default_factory=dict,
         description="Mapping of stream fields to LDAP attributes",
     )
-    ldif_options: dict[str, object] = Field(
-        default_factory=lambda: dict[str, object](
+    ldif_options: FlextTypes.Core.Dict = Field(
+        default_factory=lambda: FlextTypes.Core.Dict(
             {
                 "line_length": 78,
                 "base64_encode": False,
@@ -106,6 +104,6 @@ class FlextTargetLdifConfig(FlextModels.Config):
             return FlextResult[None].fail(f"Configuration validation failed: {e}")
 
 
-__all__: list[str] = [
+__all__: FlextTypes.Core.StringList = [
     "FlextTargetLdifConfig",
 ]
