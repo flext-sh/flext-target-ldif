@@ -1,6 +1,10 @@
 """Data transformation utilities for LDIF target using flext-ldap infrastructure.
 
 Eliminates code duplication by using LDAP transformation functionality from flext-ldap.
+
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
@@ -8,7 +12,7 @@ from __future__ import annotations
 import typing as t
 from datetime import datetime
 
-# Use flext-ldap for LDAP-specific transformations instead of duplicating
+from flext_core import FlextTypes
 
 
 def transform_timestamp(value: object) -> str:
@@ -131,14 +135,14 @@ class RecordTransformer:
 
     def __init__(
         self,
-        attribute_mapping: dict[str, str] | None = None,
+        attribute_mapping: FlextTypes.Core.Headers | None = None,
         custom_transformers: dict[str, t.Callable[[object], str]] | None = None,
     ) -> None:
         """Initialize the record transformer."""
         self.attribute_mapping = attribute_mapping or {}
         self.custom_transformers = custom_transformers or {}
 
-    def transform_record(self, record: dict[str, object]) -> dict[str, str]:
+    def transform_record(self, record: FlextTypes.Core.Dict) -> FlextTypes.Core.Headers:
         """Transform a Singer record to LDAP-compatible format."""
         transformed = {}
 
@@ -167,9 +171,11 @@ class RecordTransformer:
 
         return transformed
 
-    def add_required_attributes(self, record: dict[str, str]) -> dict[str, object]:
+    def add_required_attributes(
+        self, record: FlextTypes.Core.Headers
+    ) -> FlextTypes.Core.Dict:
         """Add required LDAP attributes to the record."""
-        result: dict[str, object] = dict(record)
+        result: FlextTypes.Core.Dict = dict(record)
 
         # Ensure objectClass is present
         if "objectclass" not in result:

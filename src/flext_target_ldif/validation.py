@@ -1,13 +1,16 @@
 """Data validation utilities for LDIF target using flext-ldap infrastructure.
 
 Eliminates code duplication by using LDAP validation functionality from flext-ldap.
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
 
 import re
 
-# Use flext-ldif for LDIF-specific validation
+from flext_core import FlextTypes
 
 
 class ValidationError(Exception):
@@ -62,9 +65,11 @@ def sanitize_attribute_name(name: str) -> str:
     return sanitized
 
 
-def validate_record(record: dict[str, object]) -> dict[str, list[str]]:
+def validate_record(
+    record: FlextTypes.Core.Dict,
+) -> dict[str, FlextTypes.Core.StringList]:
     """Validate a record and return validation errors."""
-    errors: dict[str, list[str]] = {}
+    errors: dict[str, FlextTypes.Core.StringList] = {}
 
     if not record:
         errors["record"] = ["Record cannot be empty"]
@@ -98,9 +103,11 @@ def validate_record(record: dict[str, object]) -> dict[str, list[str]]:
     return errors
 
 
-def validate_schema(schema: dict[str, object]) -> dict[str, list[str]]:
+def validate_schema(
+    schema: FlextTypes.Core.Dict,
+) -> dict[str, FlextTypes.Core.StringList]:
     """Validate Singer schema for LDIF compatibility."""
-    errors: dict[str, list[str]] = {}
+    errors: dict[str, FlextTypes.Core.StringList] = {}
 
     if not schema:
         errors["schema"] = ["Schema cannot be empty"]

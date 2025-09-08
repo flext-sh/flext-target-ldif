@@ -1,4 +1,8 @@
-"""Pytest configuration and fixtures for FLEXT Target LDIF tests."""
+"""Pytest configuration and fixtures for FLEXT Target LDIF tests.
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 import tempfile
 from collections.abc import Generator
@@ -28,7 +32,7 @@ def temp_file() -> Generator[Path]:
 
 
 @pytest.fixture
-def sample_config(temp_dir: Path) -> dict[str, object]:
+def sample_config(temp_dir: Path) -> FlextTypes.Core.Dict:
     """Provide a sample configuration for testing."""
     return {
         "output_path": str(temp_dir),
@@ -48,7 +52,7 @@ def sample_config(temp_dir: Path) -> dict[str, object]:
 
 
 @pytest.fixture
-def sample_record() -> dict[str, str]:
+def sample_record() -> FlextTypes.Core.Headers:
     """Provide a sample record for testing."""
     return {
         "uid": "testuser",
@@ -63,7 +67,7 @@ def sample_record() -> dict[str, str]:
 
 
 @pytest.fixture
-def sample_schema() -> dict[str, object]:
+def sample_schema() -> FlextTypes.Core.Dict:
     """Provide a sample Singer schema for testing."""
     return {
         "type": "object",
@@ -82,7 +86,7 @@ def sample_schema() -> dict[str, object]:
 
 
 @pytest.fixture
-def multiple_records() -> list[dict[str, str]]:
+def multiple_records() -> list[FlextTypes.Core.Headers]:
     """Provide multiple sample records for testing."""
     return [
         {
@@ -110,7 +114,7 @@ def multiple_records() -> list[dict[str, str]]:
 
 
 @pytest.fixture
-def ldif_options() -> dict[str, object]:
+def ldif_options() -> FlextTypes.Core.Dict:
     """Provide sample LDIF options for testing."""
     return {
         "line_length": 78,
@@ -120,7 +124,7 @@ def ldif_options() -> dict[str, object]:
 
 
 @pytest.fixture
-def attribute_mapping() -> dict[str, str]:
+def attribute_mapping() -> FlextTypes.Core.Headers:
     """Provide sample attribute mapping for testing."""
     return {
         "user_id": "uid",

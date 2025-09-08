@@ -1,22 +1,18 @@
 """LDIF target exception hierarchy using flext-core DRY patterns.
 
-Copyright (c) 2025 FLEXT Contributors
-SPDX-License-Identifier: MIT
+Domain-specific exceptions using factory pattern to eliminate code duplication.
 
-Domain-specific exceptions using factory pattern to eliminate 200+ lines of duplication.
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
 
-from flext_core import (
-    FlextExceptions,
-    FlextModels,
-    FlextResult,
-)
+from flext_core import FlextResult, FlextTypes
+from pydantic import BaseModel
 
 
-# Base exception class for flext-target-ldif
-class FlextTargetLdifError(FlextExceptions._Error):
+class FlextTargetLdifError(Exception):
     """Base exception for FLEXT Target LDIF errors."""
 
     def __init__(
@@ -30,13 +26,13 @@ class FlextTargetLdifError(FlextExceptions._Error):
         super().__init__(f"Target LDIF: {message}")
 
 
-class FlextTargetLdifTransformationError(FlextExceptions._ProcessingError):
+class FlextTargetLdifTransformationError(Exception):
     """Data transformation errors."""
 
     def __init__(
         self,
         message: str = "LDIF target transformation failed",
-        record_data: dict[str, object] | None = None,
+        record_data: FlextTypes.Core.Dict | None = None,
         transformation_stage: str | None = None,
         **kwargs: object,
     ) -> None:
@@ -48,11 +44,7 @@ class FlextTargetLdifTransformationError(FlextExceptions._ProcessingError):
         if transformation_stage is not None:
             context["transformation_stage"] = transformation_stage
 
-        super().__init__(
-            f"LDIF target transformation: {message}",
-            business_rule="ldif_transformation",
-            context=context,
-        )
+        super().__init__(f"LDIF target transformation: {message}")
 
 
 class FlextTargetLdifInfrastructureError(FlextTargetLdifError):
@@ -112,7 +104,7 @@ class FlextTargetLdifFileError(FlextTargetLdifError):
         super().__init__(f"LDIF target file: {message}", **context)
 
 
-class FlextTargetLdifSchemaError(FlextExceptions._ValidationError):
+class FlextTargetLdifSchemaError(Exception):
     """Schema validation errors."""
 
     def __init__(
@@ -130,12 +122,12 @@ class FlextTargetLdifSchemaError(FlextExceptions._ValidationError):
         super().__init__(f"LDIF target schema: {message}")
 
 
-class FlextTargetLdifErrorDetails(FlextModels):
+class FlextTargetLdifErrorDetails(BaseModel):
     """Structured error details using flext-core patterns."""
 
     error_code: str
     error_type: str
-    context: dict[str, object]
+    context: FlextTypes.Core.Dict
     timestamp: str
     source_component: str
 
