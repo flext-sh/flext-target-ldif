@@ -62,7 +62,6 @@ class LDIFSink:
         if self._ldif_writer is None:
             output_file = self._get_output_file()
 
-            # Type-safe config extraction
             ldif_options = self.config.get("ldif_options", {})
             if not isinstance(ldif_options, dict):
                 ldif_options = {}

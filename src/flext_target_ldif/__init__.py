@@ -21,7 +21,6 @@ from flext_meltano import (
     FlextMeltanoConfig,
     # Enterprise services
     FlextMeltanoTargetService,
-    # Types and protocols
     FlextSingerTypes,
     FlextTargetAbstractions,
     FlextTargetPlugin,
