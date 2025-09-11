@@ -9,8 +9,13 @@ SPDX-License-Identifier: MIT
 import importlib.metadata
 
 # flext-core imports
-from flext_core import FlextExceptions, FlextResult, FlextModels, FlextLogger
-from flext_core import FlextTypes
+from flext_core import (
+    FlextExceptions,
+    FlextLogger,
+    FlextModels,
+    FlextResult,
+    FlextTypes,
+)
 
 # === FLEXT-MELTANO INTEGRATION ===
 # Re-export available flext-meltano facilities
@@ -30,12 +35,14 @@ from flext_meltano import (
     TargetServiceProtocol,
 )
 
-# === DIRECT MODULE IMPORTS ===
-# Import directly from implementation modules
-from flext_target_ldif.sinks import LDIFSink
-from flext_target_ldif.target import TargetLDIF
-from flext_target_ldif.writer import LdifWriter
-from flext_target_ldif.config import FlextTargetLdifConfig
+from flext_target_ldif.cli import main as cli_main
+
+# === BACKWARD COMPATIBILITY IMPORTS ===
+# Direct imports for existing code compatibility
+from flext_target_ldif.config import (
+    FlextTargetLdifConfig,
+    FlextTargetLdifConfig as _FlextTargetLdifConfig,
+)
 from flext_target_ldif.exceptions import (
     FlextTargetLdifError,
     FlextTargetLdifErrorDetails,
@@ -45,6 +52,11 @@ from flext_target_ldif.exceptions import (
     FlextTargetLdifTransformationError,
     FlextTargetLdifWriterError,
 )
+
+# === DIRECT MODULE IMPORTS ===
+# Import directly from implementation modules
+from flext_target_ldif.sinks import LDIFSink, LDIFSink as _LDIFSink
+from flext_target_ldif.target import TargetLDIF, TargetLDIF as _TargetLDIF
 from flext_target_ldif.transformers import RecordTransformer
 from flext_target_ldif.validation import (
     ValidationError,
@@ -61,14 +73,7 @@ from flext_target_ldif.validation import (
     validate_record,
     validate_schema,
 )
-from flext_target_ldif.cli import main as cli_main
-
-# === BACKWARD COMPATIBILITY IMPORTS ===
-# Direct imports for existing code compatibility
-from flext_target_ldif.config import FlextTargetLdifConfig as _FlextTargetLdifConfig
-from flext_target_ldif.sinks import LDIFSink as _LDIFSink
-from flext_target_ldif.target import TargetLDIF as _TargetLDIF
-from flext_target_ldif.writer import LdifWriter as _LdifWriter
+from flext_target_ldif.writer import LdifWriter, LdifWriter as _LdifWriter
 
 # === BACKWARD COMPATIBILITY ALIASES ===
 # Ensure all existing code continues to work
@@ -91,29 +96,51 @@ __version_info__ = tuple(int(x) for x in __version__.split(".") if x.isdigit())
 
 # Complete public API exports with PEP8 consolidation and backward compatibility
 __all__: FlextTypes.Core.StringList = [
+    # === FLEXT-CORE RE-EXPORTS ===
+    "FlextExceptions",
+    # === BACKWARD COMPATIBILITY ALIASES ===
+    "FlextLDIFTarget",
+    "FlextLDIFTargetConfig",
+    "FlextLogger",
     # === FLEXT-MELTANO RE-EXPORTS ===
     "FlextMeltanoBridge",
     "FlextMeltanoConfig",
     "FlextMeltanoTargetService",
+    "FlextModels",
+    "FlextResult",
     "FlextSingerTypes",
     "FlextTargetAbstractions",
-    "FlextTargetPlugin",
-    "StreamDefinition",
-    "TargetServiceProtocol",
-    # === FLEXT-CORE RE-EXPORTS ===
-    "FlextExceptions",
-    "FlextResult",
-    "FlextModels",
-    "FlextLogger",
+    "FlextTargetLDIF",
+    "FlextTargetLDIFConfig",
     # === DIRECT MODULE IMPORTS ===
     # Core components
     "FlextTargetLdifConfig",
+    # Exceptions
+    "FlextTargetLdifError",
+    "FlextTargetLdifErrorDetails",
+    "FlextTargetLdifFileError",
+    "FlextTargetLdifInfrastructureError",
+    "FlextTargetLdifSchemaError",
+    "FlextTargetLdifTransformationError",
+    "FlextTargetLdifWriterError",
+    "FlextTargetPlugin",
     "LDIFSink",
+    "LDIFTarget",
     "LdifWriter",
-    "TargetLDIF",
     # Models (Validation + Transformation)
     "RecordTransformer",
+    "StreamDefinition",
+    "TargetLDIF",
+    "TargetLDIFConfig",
+    "TargetServiceProtocol",
     "ValidationError",
+    "_LDIFSink",
+    "_LdifWriter",
+    # === METADATA ===
+    "__version__",
+    "__version_info__",
+    # CLI
+    "cli_main",
     "normalize_attribute_value",
     "sanitize_attribute_name",
     "transform_boolean",
@@ -126,24 +153,4 @@ __all__: FlextTypes.Core.StringList = [
     "validate_dn_component",
     "validate_record",
     "validate_schema",
-    # Exceptions
-    "FlextTargetLdifError",
-    "FlextTargetLdifErrorDetails",
-    "FlextTargetLdifFileError",
-    "FlextTargetLdifInfrastructureError",
-    "FlextTargetLdifSchemaError",
-    "FlextTargetLdifTransformationError",
-    "FlextTargetLdifWriterError",
-    # CLI
-    "cli_main",
-    # === BACKWARD COMPATIBILITY ALIASES ===
-    "FlextLDIFTarget",
-    "FlextLDIFTargetConfig",
-    "FlextTargetLDIF",
-    "FlextTargetLDIFConfig",
-    "LDIFTarget",
-    "TargetLDIFConfig",
-    # === METADATA ===
-    "__version__",
-    "__version_info__",
 ]
