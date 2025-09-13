@@ -1,8 +1,5 @@
 """Comprehensive tests for flext-target-ldif exception hierarchy.
 
-REFACTORED: Complete exception system with 100% coverage and validation.
-
-
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """

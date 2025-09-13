@@ -1,8 +1,5 @@
 """Data transformation utilities for LDIF target using flext-ldap infrastructure.
 
-Eliminates code duplication by using LDAP transformation functionality from flext-ldap.
-
-
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """

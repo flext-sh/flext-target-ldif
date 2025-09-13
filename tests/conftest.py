@@ -8,8 +8,6 @@ import tempfile
 from collections.abc import Generator
 from pathlib import Path
 
-object
-
 import pytest
 
 

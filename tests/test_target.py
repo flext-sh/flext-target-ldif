@@ -1,8 +1,5 @@
 """Comprehensive tests for FlextTargetLdif main target class.
 
-REFACTORED: Complete target system with 100% coverage and validation.
-
-
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
@@ -48,8 +45,6 @@ class TestFlextTargetLdifConfig:
 
     def test_config_creation_with_custom_values(self) -> None:
         """Test creating config with custom values."""
-        import tempfile
-
         with tempfile.TemporaryDirectory() as temp_dir:
             custom_file = f"{temp_dir}/custom.ldif"
             config = FlextTargetLdifConfig(
