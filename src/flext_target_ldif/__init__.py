@@ -1,14 +1,11 @@
-"""Enterprise Singer Target for LDIF data export."""
+"""Enterprise Singer Target for LDIF data export.
 
-"""
 Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
+SPDX-License-Identifier: MIT.
 """
-
 
 import importlib.metadata
 
-# flext-core imports
 from flext_core import (
     FlextExceptions,
     FlextLogger,
@@ -16,33 +13,19 @@ from flext_core import (
     FlextResult,
     FlextTypes,
 )
-
-# === FLEXT-MELTANO INTEGRATION ===
-# Re-export available flext-meltano facilities
 from flext_meltano import (
-    # Bridge integration
     FlextMeltanoBridge,
-    # Configuration and validation
     FlextMeltanoConfig,
-    # Enterprise services
     FlextMeltanoTargetService,
     FlextSingerTypes,
     FlextTargetAbstractions,
     FlextTargetPlugin,
-    # Stream and configuration
     StreamDefinition,
-    # Service protocols
     TargetServiceProtocol,
 )
 
 from flext_target_ldif.cli import main as cli_main
-
-# === BACKWARD COMPATIBILITY IMPORTS ===
-# Direct imports for existing code compatibility
-from flext_target_ldif.config import (
-    FlextTargetLdifConfig,
-    FlextTargetLdifConfig as _FlextTargetLdifConfig,
-)
+from flext_target_ldif.config import FlextTargetLdifConfig
 from flext_target_ldif.exceptions import (
     FlextTargetLdifError,
     FlextTargetLdifErrorDetails,
@@ -52,9 +35,6 @@ from flext_target_ldif.exceptions import (
     FlextTargetLdifTransformationError,
     FlextTargetLdifWriterError,
 )
-
-# === DIRECT MODULE IMPORTS ===
-# Import directly from implementation modules
 from flext_target_ldif.sinks import LDIFSink, LDIFSink as _LDIFSink
 from flext_target_ldif.target import TargetLDIF, TargetLDIF as _TargetLDIF
 from flext_target_ldif.transformers import RecordTransformer
@@ -75,10 +55,20 @@ from flext_target_ldif.validation import (
 )
 from flext_target_ldif.writer import LdifWriter, LdifWriter as _LdifWriter
 
+# === FLEXT-MELTANO INTEGRATION ===
+# Re-export available flext-meltano facilities
+
+
+# === BACKWARD COMPATIBILITY IMPORTS ===
+# Direct imports for existing code compatibility
+
+# === DIRECT MODULE IMPORTS ===
+# Import directly from implementation modules
+
 # === BACKWARD COMPATIBILITY ALIASES ===
 # Ensure all existing code continues to work
 FlextLDIFTarget = _TargetLDIF
-FlextLDIFTargetConfig = _FlextTargetLdifConfig
+_FlextTargetLdifConfig = FlextTargetLdifConfig
 FlextTargetLDIF = _TargetLDIF
 FlextTargetLDIFConfig = _FlextTargetLdifConfig
 LDIFTarget = _TargetLDIF
