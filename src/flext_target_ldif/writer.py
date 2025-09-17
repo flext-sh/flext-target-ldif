@@ -14,8 +14,7 @@ from pathlib import Path
 from typing import Self
 
 from flext_core import FlextLogger, FlextResult, FlextTypes
-from flext_ldif import FlextLDIFAPI
-
+from flext_ldif import FlextLdifAPI
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError
 
 logger = FlextLogger(__name__)
@@ -39,7 +38,7 @@ class LdifWriter:
         self.attribute_mapping = attribute_mapping or {}
         self.schema = schema or {}
         # Use flext-ldif API for writing
-        self._ldif_api = FlextLDIFAPI()
+        self._ldif_api = FlextLdifAPI()
         self._records: list[FlextTypes.Core.Dict] = []
         self._record_count = 0
         self._ldif_entries: list[FlextTypes.Core.Dict] = []
@@ -57,7 +56,7 @@ class LdifWriter:
         """Close the output file and write all collected records."""
         try:
             if self._records:
-                # Convert records to FlextLDIFEntry objects for flext-ldif API
+                # Convert records to FlextLdifEntry objects for flext-ldif API
                 self._ldif_entries = []
                 for record in self._records:
                     try:
@@ -68,8 +67,8 @@ class LdifWriter:
                             if key != "dn":  # Skip DN as it's already set
                                 mapped_key = self.attribute_mapping.get(key, key)
                                 attributes[mapped_key] = value
-                        # Create FlextLDIFEntry using the real API
-                        # Convert dict to list format expected by FlextLDIFAttributes
+                        # Create FlextLdifEntry using the real API
+                        # Convert dict to list format expected by FlextLdifAttributes
                         attr_dict = {}
                         for key, value in attributes.items():
                             attr_dict[key] = (

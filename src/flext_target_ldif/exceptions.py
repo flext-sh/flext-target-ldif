@@ -8,8 +8,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextResult, FlextTypes
 from pydantic import BaseModel
+
+from flext_core import FlextResult, FlextTypes
 
 
 class FlextTargetLdifError(Exception):

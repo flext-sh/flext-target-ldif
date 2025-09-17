@@ -6,10 +6,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import cast
+
+from pydantic import Field, field_validator
 
 from flext_core import FlextModels, FlextResult, FlextTypes
-from pydantic import Field, field_validator
 
 
 class FlextTargetLdifConfig(FlextModels.Config):
@@ -32,7 +33,8 @@ class FlextTargetLdifConfig(FlextModels.Config):
         description="Mapping of stream fields to LDAP attributes",
     )
     ldif_options: FlextTypes.Core.Dict = Field(
-        default_factory=lambda: FlextTypes.Core.Dict(
+        default_factory=lambda: cast(
+            "FlextTypes.Core.Dict",
             {
                 "line_length": 78,
                 "base64_encode": False,
@@ -45,19 +47,13 @@ class FlextTargetLdifConfig(FlextModels.Config):
     @field_validator("output_path")
     @classmethod
     def validate_output_path(cls, v: str) -> str:
-        """Validate output path exists or can be created."""
-        if not v:
-            msg = "Output path cannot be empty"
-            raise ValueError(msg)
-
-        path = Path(v)
-        try:
-            path.mkdir(parents=True, exist_ok=True)
-        except (OSError, PermissionError) as e:
-            error_msg: str = f"Cannot create output directory: {e}"
-            raise ValueError(error_msg) from e
-
-        return v
+        """Validate output path using centralized FlextModels validation."""
+        # Use centralized FlextModels validation instead of duplicate logic
+        validation_result = FlextModels.create_validated_file_path(v)
+        if validation_result.is_failure:
+            error_msg = f"Invalid output path: {validation_result.error}"
+            raise ValueError(error_msg)
+        return validation_result.unwrap()
 
     @field_validator("dn_template")
     @classmethod
@@ -76,13 +72,14 @@ class FlextTargetLdifConfig(FlextModels.Config):
     def validate_business_rules(self) -> FlextResult[None]:
         """Validate LDIF target configuration business rules using FlextModels.Config pattern."""
         try:
-            # Validate output path is accessible
-            output_path = Path(self.output_path)
-            if not output_path.exists():
-                try:
-                    output_path.mkdir(parents=True, exist_ok=True)
-                except (OSError, PermissionError) as e:
-                    return FlextResult[None].fail(f"Cannot access output path: {e}")
+            # Use centralized FlextModels validation instead of duplicate path logic
+            path_validation_result = FlextModels.create_validated_file_path(
+                self.output_path
+            )
+            if path_validation_result.is_failure:
+                return FlextResult[None].fail(
+                    f"Output path validation failed: {path_validation_result.error}"
+                )
 
             # Use flext-ldap for DN validation - NO local duplication
             if not self.dn_template:

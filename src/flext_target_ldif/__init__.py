@@ -23,7 +23,6 @@ from flext_meltano import (
     StreamDefinition,
     TargetServiceProtocol,
 )
-
 from flext_target_ldif.cli import main as cli_main
 from flext_target_ldif.config import FlextTargetLdifConfig
 from flext_target_ldif.exceptions import (
@@ -67,7 +66,7 @@ from flext_target_ldif.writer import LdifWriter, LdifWriter as _LdifWriter
 
 # === BACKWARD COMPATIBILITY ALIASES ===
 # Ensure all existing code continues to work
-FlextLDIFTarget = _TargetLDIF
+FlextLdifTarget = _TargetLDIF
 _FlextTargetLdifConfig = FlextTargetLdifConfig
 FlextTargetLDIF = _TargetLDIF
 FlextTargetLDIFConfig = _FlextTargetLdifConfig
@@ -89,8 +88,8 @@ __all__: FlextTypes.Core.StringList = [
     # === FLEXT-CORE RE-EXPORTS ===
     "FlextExceptions",
     # === BACKWARD COMPATIBILITY ALIASES ===
-    "FlextLDIFTarget",
-    "FlextLDIFTargetConfig",
+    "FlextLdifTarget",
+    "FlextLdifTargetConfig",
     "FlextLogger",
     # === FLEXT-MELTANO RE-EXPORTS ===
     "FlextMeltanoBridge",
