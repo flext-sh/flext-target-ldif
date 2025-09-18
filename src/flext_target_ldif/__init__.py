@@ -89,7 +89,6 @@ __all__: FlextTypes.Core.StringList = [
     "FlextExceptions",
     # === BACKWARD COMPATIBILITY ALIASES ===
     "FlextLdifTarget",
-    "FlextLdifTargetConfig",
     "FlextLogger",
     # === FLEXT-MELTANO RE-EXPORTS ===
     "FlextMeltanoBridge",
