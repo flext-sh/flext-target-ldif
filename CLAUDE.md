@@ -3,8 +3,20 @@
 **Enterprise-Grade LDIF File Export Target with Singer Protocol Integration**  
 **Version**: 2.1.0 | **Authority**: PROJECT | **Updated**: 2025-01-08  
 **Environment**: `/home/marlonsc/flext/.venv/bin/python` (No PYTHONPATH required)  
-**Parent**: [FLEXT Workspace CLAUDE.md](../CLAUDE.md)  
-**Based on**: flext-core 0.9.0 with 79% test coverage (PROVEN FOUNDATION)
+**Parent**: [FLEXT Workspace CLAUDE.md](../CLAUDE.md)
+**Based on**: flext-core 0.9.0 with 75%+ test coverage (PROVEN FOUNDATION)
+
+**Hierarchy**: This document provides project-specific standards based on workspace-level patterns defined in [../CLAUDE.md](../CLAUDE.md). For architectural principles, quality gates, and MCP server usage, reference the main workspace standards.
+
+## 🔗 MCP SERVER INTEGRATION
+
+| MCP Server | Purpose | Status |
+|------------|---------|--------|
+| **serena** | Singer target codebase analysis and LDIF export patterns | **ACTIVE** |
+| **sequential-thinking** | LDIF data export and Singer protocol architecture | **ACTIVE** |
+| **github** | Singer ecosystem integration and target PRs | **ACTIVE** |
+
+**Usage**: `claude mcp list` for available servers, leverage for Singer-specific development patterns and LDIF export analysis.
 
 ---
 
@@ -44,8 +56,8 @@
 ### ❌ FORBIDDEN PRACTICES
 
 1. **CODE QUALITY VIOLATIONS**:
-   - Any use of `# type: ignore` without specific error codes
-   - Any use of `Any` types instead of proper type annotations
+   - object use of `# type: ignore` without specific error codes
+   - object use of `object` types instead of proper type annotations
    - Silencing errors with ignore hints instead of fixing root causes
    - Creating wrappers, aliases, or compatibility facades
    - Using sed, awk, or automated scripts for complex refactoring
@@ -78,7 +90,7 @@
    - **FORBIDDEN**: Direct `import click` in any project code
    - **FORBIDDEN**: Direct `import rich` in any project code for output/formatting
    - **FORBIDDEN**: Local CLI implementations bypassing flext-cli
-   - **FORBIDDEN**: Any CLI functionality not going through flext-cli layer
+   - **FORBIDDEN**: object CLI functionality not going through flext-cli layer
    - **REQUIRED**: If flext-cli lacks functionality, IMPROVE flext-cli first - NEVER work around
    - **PRINCIPLE**: Fix the foundation, don't work around it
    - **OUTPUT RULE**: ALL data output, formatting, tables, progress bars MUST use flext-cli wrappers
@@ -238,7 +250,7 @@ class LdifExportConfig(FlextModels.Entity):
     file_naming_pattern: str
     dn_template: str
     attribute_mapping: dict[str, str]
-    ldif_options: dict[str, Any]
+    ldif_options: dict[str, object]
 
     def validate_business_rules(self) -> FlextResult[None]:
         """Required abstract method implementation for LDIF config."""
@@ -651,7 +663,7 @@ class UnifiedFlextLdifTargetService(FlextDomainService):
 
 ```python
 # BEFORE - Weak Singer integration
-def process_singer_message(message: Any) -> Any:
+def process_singer_message(message: object) -> object:
     return message
 
 # AFTER - Strong Singer protocol compliance (incremental improvement)
@@ -833,7 +845,7 @@ class LdifTargetProcessor(Generic[LdifEntryType]):
         """Process LDIF entry maintaining type safety."""
         return FlextResult[LdifEntryType].ok(entry)
 
-# ✅ CORRECT - LDIF Protocol usage instead of Any
+# ✅ CORRECT - LDIF Protocol usage instead of object
 class LdifWritable(Protocol):
     """Protocol defining LDIF writable interface."""
 
@@ -1419,7 +1431,7 @@ def ldif_file_generation_operation(export_request: dict, ldif_config: LdifExport
 
 ## ⚡ EXECUTION CHECKLIST - LDIF TARGET DOMAIN
 
-### Before Starting Any Work
+### Before Starting object Work
 
 - [ ] Read all documentation: `CLAUDE.md`, `FLEXT_REFACTORING_PROMPT.md`, project `README.md`
 - [ ] Verify virtual environment: `/home/marlonsc/flext/.venv/bin/python` (VERIFIED WORKING)
