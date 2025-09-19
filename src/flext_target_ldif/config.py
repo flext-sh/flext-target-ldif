@@ -74,11 +74,11 @@ class FlextTargetLdifConfig(FlextModels.Config):
         try:
             # Use centralized FlextModels validation instead of duplicate path logic
             path_validation_result = FlextModels.create_validated_file_path(
-                self.output_path
+                self.output_path,
             )
             if path_validation_result.is_failure:
                 return FlextResult[None].fail(
-                    f"Output path validation failed: {path_validation_result.error}"
+                    f"Output path validation failed: {path_validation_result.error}",
                 )
 
             # Use flext-ldap for DN validation - NO local duplication

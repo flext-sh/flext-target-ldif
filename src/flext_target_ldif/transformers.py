@@ -169,7 +169,7 @@ class RecordTransformer:
         return transformed
 
     def add_required_attributes(
-        self, record: FlextTypes.Core.Headers
+        self, record: FlextTypes.Core.Headers,
     ) -> FlextTypes.Core.Dict:
         """Add required LDAP attributes to the record."""
         result: FlextTypes.Core.Dict = dict(record)
