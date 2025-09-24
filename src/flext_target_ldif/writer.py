@@ -43,7 +43,7 @@ class LdifWriter:
         self._record_count = 0
         self._ldif_entries: list[FlextTypes.Core.Dict] = []
 
-    def open(self) -> FlextResult[None]:
+    def open(self: object) -> FlextResult[None]:
         """Open the output file for writing."""
         try:
             # Create output directory if needed
@@ -52,7 +52,7 @@ class LdifWriter:
         except (RuntimeError, ValueError, TypeError) as e:
             return FlextResult[None].fail(f"Failed to prepare LDIF file: {e}")
 
-    def close(self) -> FlextResult[None]:
+    def close(self: object) -> FlextResult[None]:
         """Close the output file and write all collected records."""
         try:
             if self._records:
@@ -90,7 +90,7 @@ class LdifWriter:
                     for entry in self._ldif_entries:
                         dn_obj = entry.get("dn", "")
                         dn_str = str(dn_obj) if dn_obj else ""
-                        attributes_obj = entry.get("attributes", {})
+                        attributes_obj: dict[str, object] = entry.get("attributes", {})
                         f.write(f"dn: {dn_str}\n")
                         if isinstance(attributes_obj, dict):
                             for attr, values in attributes_obj.items():
@@ -101,7 +101,9 @@ class LdifWriter:
                                     f.write(f"{attr}: {values}\n")
                         f.write("\n")  # Blank line between entries
 
-                write_result = FlextResult[str].ok("LDIF written successfully")
+                write_result: FlextResult[object] = FlextResult[str].ok(
+                    "LDIF written successfully"
+                )
                 if not write_result.success:
                     return FlextResult[None].fail(
                         f"LDIF write failed: {write_result.error}",
@@ -132,11 +134,11 @@ class LdifWriter:
             raise FlextTargetLdifWriterError(msg) from e
 
     @property
-    def record_count(self) -> int:
+    def record_count(self: object) -> int:
         """Get the number of records written."""
         return self._record_count
 
-    def __enter__(self) -> Self:
+    def __enter__(self: object) -> Self:
         """Context manager entry."""
         self.open()
         return self

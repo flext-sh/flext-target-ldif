@@ -22,7 +22,7 @@ class TargetLDIF:
         config: FlextTypes.Core.Dict | None = None,
     ) -> None:
         """Initialize the LDIF target."""
-        self.config = config or {}
+        self.config: dict[str, object] = config or {}
         self.sinks: dict[str, LDIFSink] = {}
 
         # Ensure output directory exists

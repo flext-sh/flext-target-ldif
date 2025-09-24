@@ -10,10 +10,10 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-from flext_core import FlextResult, FlextTypes
+from flext_core import FlextExceptions, FlextResult, FlextTypes
 
 
-class FlextTargetLdifError(Exception):
+class FlextTargetLdifError(FlextExceptions.Error):
     """Base exception for FLEXT Target LDIF errors."""
 
     def __init__(
@@ -22,12 +22,10 @@ class FlextTargetLdifError(Exception):
         **kwargs: object,
     ) -> None:
         """Initialize Target LDIF error with context."""
-        self.message = message
-        self.context = kwargs
-        super().__init__(f"Target LDIF: {message}")
+        super().__init__(f"Target LDIF: {message}", **kwargs)
 
 
-class FlextTargetLdifTransformationError(Exception):
+class FlextTargetLdifTransformationError(FlextExceptions.ProcessingError):
     """Data transformation errors."""
 
     def __init__(
@@ -132,7 +130,7 @@ class FlextTargetLdifErrorDetails(BaseModel):
     timestamp: str
     source_component: str
 
-    def validate_domain_rules(self) -> FlextResult[None]:
+    def validate_domain_rules(self: object) -> FlextResult[None]:
         """Validate domain-specific business rules."""
         try:
             # Validate error code format
