@@ -196,7 +196,9 @@ class RecordTransformer:
             if "cn" in result:
                 # Use last word of cn as surname
                 cn_value = result["cn"]
-                words = cn_value.split() if isinstance(cn_value, str) else []
+                words: list[object] = (
+                    cn_value.split() if isinstance(cn_value, str) else []
+                )
                 result["sn"] = words[-1] if words else "Unknown"
             else:
                 result["sn"] = "Unknown"

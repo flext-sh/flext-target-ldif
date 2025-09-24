@@ -49,7 +49,9 @@ class FlextTargetLdifConfig(FlextModels.Config):
     def validate_output_path(cls, v: str) -> str:
         """Validate output path using centralized FlextModels validation."""
         # Use centralized FlextModels validation instead of duplicate logic
-        validation_result = FlextModels.create_validated_file_path(v)
+        validation_result: FlextResult[object] = FlextModels.create_validated_file_path(
+            v
+        )
         if validation_result.is_failure:
             error_msg = f"Invalid output path: {validation_result.error}"
             raise ValueError(error_msg)
@@ -69,7 +71,7 @@ class FlextTargetLdifConfig(FlextModels.Config):
 
         return v
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self: object) -> FlextResult[None]:
         """Validate LDIF target configuration business rules using FlextModels.Config pattern."""
         try:
             # Use centralized FlextModels validation instead of duplicate path logic

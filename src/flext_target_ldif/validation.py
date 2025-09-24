@@ -87,7 +87,7 @@ def validate_record(
 
     # Validate individual fields
     for field, value in record.items():
-        field_errors = []
+        field_errors: list[str] = []
 
         # Validate field name
         if not validate_attribute_name(field):
@@ -113,7 +113,7 @@ def validate_schema(
         errors["schema"] = ["Schema cannot be empty"]
         return errors
 
-    properties = schema.get("properties", {})
+    properties: dict[str, object] = schema.get("properties", {})
     if not properties:
         errors["properties"] = ["Schema must define properties"]
         return errors
