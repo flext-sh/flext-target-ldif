@@ -163,7 +163,7 @@ class TestLdifWriterFileOperations:
         assert result.success
 
     @patch("pathlib.Path.open")
-    def test_close_failure(self, mock_open_method: Mock) -> None:
+    def test_self(self, mock_open_method: Mock) -> None:
         """Test file closing failure."""
         mock_file = Mock()
         mock_file.close.side_effect = Exception("Close failed")
