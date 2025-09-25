@@ -132,7 +132,7 @@ class TestFlextTargetLdif:
         assert hasattr(target, "config")
 
     @patch("flext_target_ldif.target.TargetLDIF.__init__")
-    def test_target_initialization(self, mock_init: Mock) -> None:
+    def test_self(self, mock_init: Mock) -> None:
         """Test target initialization calls parent."""
         mock_init.return_value = None
 
