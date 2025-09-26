@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
+from typing import override
 
 from flext_core import FlextResult, FlextTypes
 from flext_target_ldif.writer import LdifWriter
@@ -15,6 +16,7 @@ from flext_target_ldif.writer import LdifWriter
 class LDIFSink:
     """Singer sink for writing records to LDIF format."""
 
+    @override
     def __init__(
         self,
         target_config: FlextTypes.Core.Dict,
