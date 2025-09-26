@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
+from typing import override
 
 from flext_core import FlextTypes
 from flext_target_ldif.sinks import LDIFSink
@@ -17,6 +18,7 @@ class TargetLDIF:
 
     name: str = "target-ldif"
 
+    @override
     def __init__(
         self,
         config: FlextTypes.Core.Dict | None = None,

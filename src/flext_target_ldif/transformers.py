@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import typing as t
 from datetime import datetime
+from typing import override
 
 from flext_core import FlextTypes
 
@@ -130,6 +131,7 @@ def normalize_attribute_value(
 class RecordTransformer:
     """Transform Singer records for LDIF output."""
 
+    @override
     def __init__(
         self,
         attribute_mapping: FlextTypes.Core.Headers | None = None,

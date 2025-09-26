@@ -8,6 +8,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from typing import override
+
 from pydantic import BaseModel
 
 from flext_core import FlextExceptions, FlextResult, FlextTypes
@@ -16,6 +18,12 @@ from flext_core import FlextExceptions, FlextResult, FlextTypes
 class FlextTargetLdifError(FlextExceptions.Error):
     """Base exception for FLEXT Target LDIF errors."""
 
+    @override
+    @override
+    @override
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "Target LDIF operation failed",
@@ -28,6 +36,12 @@ class FlextTargetLdifError(FlextExceptions.Error):
 class FlextTargetLdifTransformationError(FlextExceptions.ProcessingError):
     """Data transformation errors."""
 
+    @override
+    @override
+    @override
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "LDIF target transformation failed",
@@ -49,6 +63,12 @@ class FlextTargetLdifTransformationError(FlextExceptions.ProcessingError):
 class FlextTargetLdifInfrastructureError(FlextTargetLdifError):
     """Infrastructure and dependency injection errors."""
 
+    @override
+    @override
+    @override
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "LDIF target infrastructure error",
@@ -66,6 +86,12 @@ class FlextTargetLdifInfrastructureError(FlextTargetLdifError):
 class FlextTargetLdifWriterError(FlextTargetLdifError):
     """LDIF writer-specific errors."""
 
+    @override
+    @override
+    @override
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "LDIF writer error",
@@ -86,6 +112,12 @@ class FlextTargetLdifWriterError(FlextTargetLdifError):
 class FlextTargetLdifFileError(FlextTargetLdifError):
     """File-related errors."""
 
+    @override
+    @override
+    @override
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "LDIF target file error",
@@ -106,6 +138,12 @@ class FlextTargetLdifFileError(FlextTargetLdifError):
 class FlextTargetLdifSchemaError(Exception):
     """Schema validation errors."""
 
+    @override
+    @override
+    @override
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "LDIF target schema validation failed",

@@ -10,11 +10,11 @@ from typing import cast
 
 from pydantic import Field, field_validator
 
-from flext_core import FlextModels, FlextResult, FlextTypes
+from flext_core import FlextConfig, FlextModels, FlextResult, FlextTypes
 
 
-class FlextTargetLdifConfig(FlextModels.Config):
-    """Configuration for FLEXT Target LDIF using FlextConfig.BaseModel patterns."""
+class FlextTargetLdifConfig(FlextConfig):
+    """Configuration for FLEXT Target LDIF using FlextConfig patterns."""
 
     output_path: str = Field(
         default="./output",
@@ -37,8 +37,8 @@ class FlextTargetLdifConfig(FlextModels.Config):
             "FlextTypes.Core.Dict",
             {
                 "line_length": 78,
-                "base64_encode": False,
-                "include_timestamps": True,
+                "base64_encode": "False",
+                "include_timestamps": "True",
             },
         ),
         description="LDIF format options",
@@ -72,7 +72,7 @@ class FlextTargetLdifConfig(FlextModels.Config):
         return v
 
     def validate_business_rules(self: object) -> FlextResult[None]:
-        """Validate LDIF target configuration business rules using FlextModels.Config pattern."""
+        """Validate LDIF target configuration business rules using FlextConfig pattern."""
         try:
             # Use centralized FlextModels validation instead of duplicate path logic
             path_validation_result = FlextModels.create_validated_file_path(

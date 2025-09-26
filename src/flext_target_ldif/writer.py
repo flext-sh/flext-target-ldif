@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import types
 from pathlib import Path
-from typing import Self
+from typing import Self, override
 
 from flext_core import FlextLogger, FlextResult, FlextTypes
 from flext_ldif import FlextLdifAPI
@@ -23,6 +23,7 @@ logger = FlextLogger(__name__)
 class LdifWriter:
     """Writer for converting data records to LDIF format."""
 
+    @override
     def __init__(
         self,
         output_file: Path | str | None = None,
@@ -60,7 +61,7 @@ class LdifWriter:
                 self._ldif_entries = []
                 for record in self._records:
                     try:
-                        dn = self._generate_dn(record)
+                        self._generate_dn(record)
                         attributes = {}
                         # Apply attribute mapping and add to entry
                         for key, value in record.items():
@@ -78,7 +79,7 @@ class LdifWriter:
                             )
                         # Create simple entry dict for LDIF writing
                         entry: FlextTypes.Core.Dict = {
-                            "dn": dn,
+                            "dn": "dn",
                             "attributes": dict(attr_dict),  # Ensure it's a dict
                         }
                         self._ldif_entries.append(entry)
@@ -86,7 +87,7 @@ class LdifWriter:
                         logger.warning("Skipping invalid record: %s", e)
                         continue
                 # Write LDIF entries to file
-                with self.output_file.open("w", encoding="utf-8") as f:
+                with self.output_file.open(w, encoding="utf-8") as f:
                     for entry in self._ldif_entries:
                         dn_obj = entry.get("dn", "")
                         dn_str = str(dn_obj) if dn_obj else ""

@@ -1,3 +1,7 @@
+"""Module docstring."""
+
+from __future__ import annotations
+
 """Enterprise Singer Target for LDIF data export.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
