@@ -77,7 +77,9 @@ FlextTargetLDIFConfig = _FlextTargetLdifConfig
 LDIFTarget = _TargetLDIF
 TargetLDIFConfig = _FlextTargetLdifConfig
 
-# FlextTargetLdifConfig already imported from target_config module above
+# Standardized [Project]Models and [Project]Utilities patterns
+from flext_target_ldif.models import FlextTargetLdifModels
+from flext_target_ldif.utilities import FlextTargetLdifUtilities
 
 # Version following semantic versioning
 try:
@@ -112,8 +114,11 @@ __all__: FlextTypes.Core.StringList = [
     "FlextTargetLdifErrorDetails",
     "FlextTargetLdifFileError",
     "FlextTargetLdifInfrastructureError",
+    # === STANDARDIZED PATTERNS ===
+    "FlextTargetLdifModels",
     "FlextTargetLdifSchemaError",
     "FlextTargetLdifTransformationError",
+    "FlextTargetLdifUtilities",
     "FlextTargetLdifWriterError",
     "FlextTargetPlugin",
     "LDIFSink",

@@ -87,7 +87,7 @@ class LdifWriter:
                         logger.warning("Skipping invalid record: %s", e)
                         continue
                 # Write LDIF entries to file
-                with self.output_file.open(w, encoding="utf-8") as f:
+                with self.output_file.open("w", encoding="utf-8") as f:
                     for entry in self._ldif_entries:
                         dn_obj = entry.get("dn", "")
                         dn_str = str(dn_obj) if dn_obj else ""

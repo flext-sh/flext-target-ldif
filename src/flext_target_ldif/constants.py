@@ -19,9 +19,9 @@ class FlextTargetLdifConstants(FlextConstants):
     DEFAULT_LINE_LENGTH = 78
     MAX_LINE_LENGTH = 1024
 
-    # Singer Target Configuration
-    DEFAULT_BATCH_SIZE = 1000
-    MAX_BATCH_SIZE = 10000
+    # Singer Target Configuration - using FlextConstants composition
+    DEFAULT_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE
+    MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
 
     # LDIF Format Options
     SUPPORTED_ENCODINGS: ClassVar[list[str]] = ["utf-8", "utf-16", "latin-1"]
