@@ -6,9 +6,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import cast
+from typing import Self, cast
 
 from pydantic import Field, field_validator
+from pydantic_settings import SettingsConfigDict
 
 from flext_core import FlextConfig, FlextModels, FlextResult, FlextTypes
 
@@ -43,6 +44,70 @@ class FlextTargetLdifConfig(FlextConfig):
         ),
         description="LDIF format options",
     )
+
+    model_config = SettingsConfigDict(
+        env_prefix="FLEXT_TARGET_LDIF_",
+        case_sensitive=False,
+        extra="ignore",
+        str_strip_whitespace=True,
+        validate_assignment=True,
+        arbitrary_types_allowed=True,
+        frozen=False,
+    )
+
+    @classmethod
+    def get_global_instance(cls) -> Self:
+        """Get the global singleton instance using enhanced FlextConfig pattern."""
+        return cls.get_or_create_shared_instance(project_name="flext-target-ldif")
+
+    @classmethod
+    def create_for_development(cls, **overrides: object) -> Self:
+        """Create configuration for development environment."""
+        dev_overrides: dict[str, object] = {
+            "file_naming_pattern": "dev_{stream_name}_{timestamp}.ldif",
+            "ldif_options": {
+                "line_length": 120,
+                "base64_encode": "False",
+                "include_timestamps": "True",
+            },
+            **overrides,
+        }
+        return cls.get_or_create_shared_instance(
+            project_name="flext-target-ldif", **dev_overrides
+        )
+
+    @classmethod
+    def create_for_production(cls, **overrides: object) -> Self:
+        """Create configuration for production environment."""
+        prod_overrides: dict[str, object] = {
+            "file_naming_pattern": "prod_{stream_name}_{timestamp}.ldif",
+            "ldif_options": {
+                "line_length": 78,
+                "base64_encode": "False",
+                "include_timestamps": "True",
+            },
+            **overrides,
+        }
+        return cls.get_or_create_shared_instance(
+            project_name="flext-target-ldif", **prod_overrides
+        )
+
+    @classmethod
+    def create_for_testing(cls, **overrides: object) -> Self:
+        """Create configuration for testing environment."""
+        test_overrides: dict[str, object] = {
+            "output_path": "./test-output",
+            "file_naming_pattern": "test_{stream_name}.ldif",
+            "ldif_options": {
+                "line_length": 78,
+                "base64_encode": "True",
+                "include_timestamps": "False",
+            },
+            **overrides,
+        }
+        return cls.get_or_create_shared_instance(
+            project_name="flext-target-ldif", **test_overrides
+        )
 
     @field_validator("output_path")
     @classmethod
