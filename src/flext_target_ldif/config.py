@@ -11,7 +11,7 @@ from typing import Self, cast
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
 
-from flext_core import FlextConfig, FlextModels, FlextResult, FlextTypes
+from flext_core import FlextConfig, FlextConstants, FlextModels, FlextResult, FlextTypes
 
 
 class FlextTargetLdifConfig(FlextConfig):
@@ -37,7 +37,7 @@ class FlextTargetLdifConfig(FlextConfig):
         default_factory=lambda: cast(
             "FlextTypes.Core.Dict",
             {
-                "line_length": 78,
+                "line_length": FlextConstants.Limits.MAX_LINE_LENGTH,
                 "base64_encode": "False",
                 "include_timestamps": "True",
             },
@@ -66,7 +66,7 @@ class FlextTargetLdifConfig(FlextConfig):
         dev_overrides: dict[str, object] = {
             "file_naming_pattern": "dev_{stream_name}_{timestamp}.ldif",
             "ldif_options": {
-                "line_length": 120,
+                "line_length": FlextConstants.Limits.MAX_LINE_LENGTH + 42,
                 "base64_encode": "False",
                 "include_timestamps": "True",
             },

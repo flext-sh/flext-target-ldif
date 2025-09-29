@@ -6,6 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+import base64
 import json
 import re
 from datetime import UTC, datetime
@@ -28,6 +29,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
     DEFAULT_TIMEOUT: ClassVar[int] = 30
     MAX_RETRIES: ClassVar[int] = 3
     LDIF_LINE_WRAP_LENGTH: ClassVar[int] = 76
+
+    # ASCII character constants for LDIF encoding
+    ASCII_SPACE: ClassVar[int] = 32
+    ASCII_TILDE: ClassVar[int] = 126
 
     @override
     def __init__(self) -> None:
@@ -298,10 +303,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
             # LDIF requires base64 for values that start with space, colon, or less-than
             # or contain non-printable characters
             if value.startswith((" ", ":", "<")) or any(
-                ord(c) < 32 or ord(c) > 126 for c in value
+                ord(c) < FlextTargetLdifUtilities.ASCII_SPACE
+                or ord(c) > FlextTargetLdifUtilities.ASCII_TILDE
+                for c in value
             ):
-                import base64
-
                 encoded = base64.b64encode(value.encode("utf-8")).decode("ascii")
                 return f":: {encoded}"
 
@@ -387,6 +392,7 @@ class FlextTargetLdifUtilities(FlextUtilities):
         def create_ldif_file(
             file_path: str,
             entries: list[str],
+            *,
             overwrite: bool = False,
         ) -> FlextResult[str]:
             """Create LDIF file with entries.
@@ -849,6 +855,7 @@ class FlextTargetLdifUtilities(FlextUtilities):
         cls,
         file_path: str,
         entries: list[str],
+        *,
         overwrite: bool = False,
     ) -> FlextResult[str]:
         """Proxy method for FileUtilities.create_ldif_file()."""
