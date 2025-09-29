@@ -79,6 +79,7 @@ TargetLDIFConfig = _FlextTargetLdifConfig
 
 # Standardized [Project]Models and [Project]Utilities patterns
 from flext_target_ldif.models import FlextTargetLdifModels
+from flext_target_ldif.protocols import FlextTargetLdifProtocols
 from flext_target_ldif.utilities import FlextTargetLdifUtilities
 
 # Version following semantic versioning
@@ -116,6 +117,7 @@ __all__: FlextTypes.Core.StringList = [
     "FlextTargetLdifInfrastructureError",
     # === STANDARDIZED PATTERNS ===
     "FlextTargetLdifModels",
+    "FlextTargetLdifProtocols",
     "FlextTargetLdifSchemaError",
     "FlextTargetLdifTransformationError",
     "FlextTargetLdifUtilities",
