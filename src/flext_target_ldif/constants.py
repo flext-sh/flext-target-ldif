@@ -8,6 +8,8 @@ from __future__ import annotations
 
 from typing import ClassVar
 
+from flext_ldif.constants import FlextLdifConstants
+
 from flext_core import FlextConstants
 
 
