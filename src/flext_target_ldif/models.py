@@ -6,11 +6,19 @@ This module provides data models for LDIF target operations.
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from typing import Any, Literal
-
-from pydantic import Field
 
 from flext_core import FlextConfig, FlextModels, FlextResult
+from pydantic import Field
+
+# LDIF target constants
+FORMAT_VALIDATION = "FORMAT_VALIDATION"
+FILE_IO = "FILE_IO"
+TRANSFORMATION = "TRANSFORMATION"
+SINGER_PROTOCOL = "SINGER_PROTOCOL"
+CONFIGURATION = "CONFIGURATION"
+DISK_SPACE = "DISK_SPACE"
+PERMISSION = "PERMISSION"
+ENCODING = "ENCODING"
 
 """LDIF target models extending flext-core FlextModels.
 
@@ -178,7 +186,9 @@ class LdifFile(FlextModels.Entity):
 class LdifTransformationResult(FlextModels.Entity):
     """Result of Singer to LDIF transformation."""
 
-    original_record: dict[str, Any] = Field(..., description="Original Singer record")
+    original_record: dict[str, object] = Field(
+        ..., description="Original Singer record"
+    )
     transformed_entry: FlextTargetLdifModels.LdifEntry = Field(
         ..., description="Resulting LDIF entry"
     )
@@ -360,14 +370,14 @@ class LdifErrorContext(FlextModels.BaseModel):
     """Error context for LDIF target error handling."""
 
     error_type: Literal[
-        "FORMAT_VALIDATION",
-        "FILE_IO",
-        "TRANSFORMATION",
-        "SINGER_PROTOCOL",
-        "CONFIGURATION",
-        "DISK_SPACE",
-        "PERMISSION",
-        "ENCODING",
+        FORMAT_VALIDATION,
+        FILE_IO,
+        TRANSFORMATION,
+        SINGER_PROTOCOL,
+        CONFIGURATION,
+        DISK_SPACE,
+        PERMISSION,
+        ENCODING,
     ] = Field(..., description="Error category")
 
     # Context information
@@ -384,7 +394,7 @@ class LdifErrorContext(FlextModels.BaseModel):
 
 
 # Type aliases for backward compatibility
-LdifRecord = dict[str, Any]
+LdifRecord = dict[str, object]
 LdifRecords = list[LdifRecord]
 
 
@@ -426,6 +436,8 @@ class FlextTargetLdifModels(FlextModels):
 # This was a ZERO TOLERANCE violation of the user's explicit requirements.
 #
 # RESOLUTION: Import from utilities.py to eliminate duplication completely.
+
+from typing import Literal
 
 from flext_target_ldif.utilities import FlextTargetLdifUtilities
 

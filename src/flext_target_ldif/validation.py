@@ -11,6 +11,7 @@ from __future__ import annotations
 import re
 
 from flext_core import FlextTypes
+from flext_target_ldif.constants import FlextTargetLdifConstants
 
 
 class ValidationError(Exception):
@@ -33,8 +34,7 @@ def validate_attribute_name(name: str) -> bool:
     return bool(re.match(r"^[a-zA-Z][a-zA-Z0-9\-]*$", name))
 
 
-# Constants for validation limits
-MAX_ATTRIBUTE_VALUE_LENGTH = 1000
+# Constants for validation limits - moved to FlextTargetLdifConstants.Validation.MAX_ATTRIBUTE_VALUE_LENGTH
 
 
 def validate_attribute_value(value: object) -> bool:
@@ -42,7 +42,9 @@ def validate_attribute_value(value: object) -> bool:
     if value is None:
         return False
     if isinstance(value, str):
-        return len(value) <= MAX_ATTRIBUTE_VALUE_LENGTH
+        return (
+            len(value) <= FlextTargetLdifConstants.Validation.MAX_ATTRIBUTE_VALUE_LENGTH
+        )
     return True
 
 
