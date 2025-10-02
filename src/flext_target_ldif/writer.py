@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Self, override
 
 from flext_core import FlextLogger, FlextResult, FlextTypes
-from flext_ldif import FlextLdifAPI
+from flext_ldif import FlextLdif
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError
 
 logger = FlextLogger(__name__)
@@ -39,7 +39,7 @@ class LdifWriter:
         self.attribute_mapping = attribute_mapping or {}
         self.schema = schema or {}
         # Use flext-ldif API for writing
-        self._ldif_api = FlextLdifAPI()
+        self._ldif_api = FlextLdif()
         self._records: list[FlextTypes.Core.Dict] = []
         self._record_count = 0
         self._ldif_entries: list[FlextTypes.Core.Dict] = []
