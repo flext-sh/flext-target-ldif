@@ -8,9 +8,8 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from flext_ldif.constants import FlextLdifConstants
-
 from flext_core import FlextConstants
+from flext_ldif.constants import FlextLdifConstants
 
 
 class FlextTargetLdifConstants(FlextConstants):
@@ -63,6 +62,7 @@ class FlextTargetLdifConstants(FlextConstants):
         MAX_ATTRIBUTES_PER_ENTRY = (
             FlextLdifConstants.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
         )
+        MAX_ATTRIBUTE_VALUE_LENGTH = 1000
 
 
 __all__ = ["FlextTargetLdifConstants"]
