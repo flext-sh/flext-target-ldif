@@ -29,13 +29,13 @@ class FlextTargetLdifConfig(FlextConfig):
         description="Template for generating Distinguished Names (DN) - MUST be configured for production",
         json_schema_extra={"example": "uid={uid},ou=users,dc=company,dc=local"},
     )
-    attribute_mapping: FlextTypes.Core.Headers = Field(
+    attribute_mapping: FlextTypes.StringDict = Field(
         default_factory=dict,
         description="Mapping of stream fields to LDAP attributes",
     )
-    ldif_options: FlextTypes.Core.Dict = Field(
+    ldif_options: FlextTypes.Dict = Field(
         default_factory=lambda: cast(
-            "FlextTypes.Core.Dict",
+            "FlextTypes.Dict",
             {
                 "line_length": FlextConstants.Limits.MAX_LINE_LENGTH,
                 "base64_encode": "False",
@@ -63,7 +63,7 @@ class FlextTargetLdifConfig(FlextConfig):
     @classmethod
     def create_for_development(cls, **overrides: object) -> Self:
         """Create configuration for development environment."""
-        dev_overrides: dict[str, object] = {
+        dev_overrides: FlextTypes.Dict = {
             "file_naming_pattern": "dev_{stream_name}_{timestamp}.ldif",
             "ldif_options": {
                 "line_length": FlextConstants.Limits.MAX_LINE_LENGTH + 42,
@@ -79,7 +79,7 @@ class FlextTargetLdifConfig(FlextConfig):
     @classmethod
     def create_for_production(cls, **overrides: object) -> Self:
         """Create configuration for production environment."""
-        prod_overrides: dict[str, object] = {
+        prod_overrides: FlextTypes.Dict = {
             "file_naming_pattern": "prod_{stream_name}_{timestamp}.ldif",
             "ldif_options": {
                 "line_length": 78,
@@ -95,7 +95,7 @@ class FlextTargetLdifConfig(FlextConfig):
     @classmethod
     def create_for_testing(cls, **overrides: object) -> Self:
         """Create configuration for testing environment."""
-        test_overrides: dict[str, object] = {
+        test_overrides: FlextTypes.Dict = {
             "output_path": "./test-output",
             "file_naming_pattern": "test_{stream_name}.ldif",
             "ldif_options": {
@@ -168,6 +168,6 @@ class FlextTargetLdifConfig(FlextConfig):
             return FlextResult[None].fail(f"Configuration validation failed: {e}")
 
 
-__all__: FlextTypes.Core.StringList = [
+__all__: FlextTypes.StringList = [
     "FlextTargetLdifConfig",
 ]

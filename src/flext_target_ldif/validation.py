@@ -68,10 +68,10 @@ def sanitize_attribute_name(name: str) -> str:
 
 
 def validate_record(
-    record: FlextTypes.Core.Dict,
-) -> dict[str, FlextTypes.Core.StringList]:
+    record: FlextTypes.Dict,
+) -> dict[str, FlextTypes.StringList]:
     """Validate a record and return validation errors."""
-    errors: dict[str, FlextTypes.Core.StringList] = {}
+    errors: dict[str, FlextTypes.StringList] = {}
 
     if not record:
         errors["record"] = ["Record cannot be empty"]
@@ -89,7 +89,7 @@ def validate_record(
 
     # Validate individual fields
     for field, value in record.items():
-        field_errors: list[str] = []
+        field_errors: FlextTypes.StringList = []
 
         # Validate field name
         if not validate_attribute_name(field):
@@ -106,16 +106,16 @@ def validate_record(
 
 
 def validate_schema(
-    schema: FlextTypes.Core.Dict,
-) -> dict[str, FlextTypes.Core.StringList]:
+    schema: FlextTypes.Dict,
+) -> dict[str, FlextTypes.StringList]:
     """Validate Singer schema for LDIF compatibility."""
-    errors: dict[str, FlextTypes.Core.StringList] = {}
+    errors: dict[str, FlextTypes.StringList] = {}
 
     if not schema:
         errors["schema"] = ["Schema cannot be empty"]
         return errors
 
-    properties: dict[str, object] = schema.get("properties", {})
+    properties: FlextTypes.Dict = schema.get("properties", {})
     if not properties:
         errors["properties"] = ["Schema must define properties"]
         return errors

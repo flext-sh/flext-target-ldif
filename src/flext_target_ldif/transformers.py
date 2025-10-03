@@ -134,14 +134,14 @@ class RecordTransformer:
     @override
     def __init__(
         self,
-        attribute_mapping: FlextTypes.Core.Headers | None = None,
+        attribute_mapping: FlextTypes.StringDict | None = None,
         custom_transformers: dict[str, t.Callable[[object], str]] | None = None,
     ) -> None:
         """Initialize the record transformer."""
         self.attribute_mapping = attribute_mapping or {}
         self.custom_transformers = custom_transformers or {}
 
-    def transform_record(self, record: FlextTypes.Core.Dict) -> FlextTypes.Core.Headers:
+    def transform_record(self, record: FlextTypes.Dict) -> FlextTypes.StringDict:
         """Transform a Singer record to LDAP-compatible format."""
         transformed = {}
 
@@ -172,10 +172,10 @@ class RecordTransformer:
 
     def add_required_attributes(
         self,
-        record: FlextTypes.Core.Headers,
-    ) -> FlextTypes.Core.Dict:
+        record: FlextTypes.StringDict,
+    ) -> FlextTypes.Dict:
         """Add required LDAP attributes to the record."""
-        result: FlextTypes.Core.Dict = dict(record)
+        result: FlextTypes.Dict = dict(record)
 
         # Ensure objectClass is present
         if "objectclass" not in result:
@@ -198,7 +198,7 @@ class RecordTransformer:
             if "cn" in result:
                 # Use last word of cn as surname
                 cn_value = result["cn"]
-                words: list[object] = (
+                words: FlextTypes.List = (
                     cn_value.split() if isinstance(cn_value, str) else []
                 )
                 result["sn"] = words[-1] if words else "Unknown"
