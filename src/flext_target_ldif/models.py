@@ -7,8 +7,9 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from flext_core import FlextConfig, FlextModels, FlextResult
 from pydantic import Field
+
+from flext_core import FlextConfig, FlextModels, FlextResult, FlextTypes
 
 # LDIF target constants
 FORMAT_VALIDATION = "FORMAT_VALIDATION"
@@ -58,10 +59,10 @@ class LdifExportConfig(FlextConfig):
     dn_template: str = Field(
         ..., description="DN template for generating LDIF entry DNs"
     )
-    attribute_mappings: dict[str, str] = Field(
+    attribute_mappings: FlextTypes.StringDict = Field(
         default_factory=dict, description="Singer field to LDIF attribute mappings"
     )
-    object_classes: list[str] = Field(
+    object_classes: FlextTypes.StringList = Field(
         default_factory=list, description="Default LDAP object classes for entries"
     )
 
@@ -88,16 +89,16 @@ class LdifEntry(FlextModels.Entity):
     distinguished_name: str = Field(
         ..., description="LDIF Distinguished Name (DN)", min_length=1, max_length=1000
     )
-    attributes: dict[str, list[str]] = Field(
+    attributes: dict[str, FlextTypes.StringList] = Field(
         default_factory=dict, description="LDIF attributes with values"
     )
-    object_classes: list[str] = Field(
+    object_classes: FlextTypes.StringList = Field(
         default_factory=list, description="LDAP object classes"
     )
     change_type: str | None = Field(
         None, description="LDIF change type (add, modify, delete, modrdn)"
     )
-    controls: list[str] = Field(
+    controls: FlextTypes.StringList = Field(
         default_factory=list, description="LDAP controls for the entry"
     )
 
@@ -186,13 +187,11 @@ class LdifFile(FlextModels.Entity):
 class LdifTransformationResult(FlextModels.Entity):
     """Result of Singer to LDIF transformation."""
 
-    original_record: dict[str, object] = Field(
-        ..., description="Original Singer record"
-    )
+    original_record: FlextTypes.Dict = Field(..., description="Original Singer record")
     transformed_entry: FlextTargetLdifModels.LdifEntry = Field(
         ..., description="Resulting LDIF entry"
     )
-    transformation_errors: list[str] = Field(
+    transformation_errors: FlextTypes.StringList = Field(
         default_factory=list, description="Transformation errors"
     )
     processing_time_ms: float = Field(
@@ -298,7 +297,7 @@ class LdifTargetResult(FlextModels.Entity):
     """Result of LDIF target operation processing."""
 
     stream_name: str = Field(..., description="Singer stream name")
-    output_files: list[str] = Field(
+    output_files: FlextTypes.StringList = Field(
         default_factory=list, description="Generated LDIF file paths"
     )
     records_processed: int = Field(
@@ -326,10 +325,12 @@ class LdifTargetResult(FlextModels.Entity):
     )
 
     # Error tracking
-    error_messages: list[str] = Field(
+    error_messages: FlextTypes.StringList = Field(
         default_factory=list, description="Error messages encountered"
     )
-    warnings: list[str] = Field(default_factory=list, description="Warning messages")
+    warnings: FlextTypes.StringList = Field(
+        default_factory=list, description="Warning messages"
+    )
 
     def validate_business_rules(self) -> FlextResult[None]:
         """Validate LDIF target result business rules."""
@@ -394,7 +395,7 @@ class LdifErrorContext(FlextModels.BaseModel):
 
 
 # Type aliases for backward compatibility
-LdifRecord = dict[str, object]
+LdifRecord = FlextTypes.Dict
 LdifRecords = list[LdifRecord]
 
 

@@ -35,19 +35,33 @@ class FlextTargetLdifTransformationError(FlextExceptions.ProcessingError):
     def __init__(
         self,
         message: str = "LDIF target transformation failed",
-        record_data: FlextTypes.Core.Dict | None = None,
+        *,
+        record_data: FlextTypes.Dict | None = None,
         transformation_stage: str | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize LDIF target transformation error with context."""
-        context = kwargs.copy()
-        if record_data is not None:
-            # Include minimal record info for debugging
-            context["record_keys"] = list(record_data.keys())
-        if transformation_stage is not None:
-            context["transformation_stage"] = transformation_stage
+        # Store domain-specific attributes before extracting common kwargs
+        self.record_data = record_data
+        self.transformation_stage = transformation_stage
 
-        super().__init__(f"LDIF target transformation: {message}")
+        # Extract common parameters using helper
+        base_context, correlation_id, error_code = self._extract_common_kwargs(kwargs)
+
+        # Build context with transformation-specific fields
+        context = self._build_context(
+            base_context,
+            record_keys=list(record_data.keys()) if record_data is not None else None,
+            transformation_stage=transformation_stage,
+        )
+
+        # Call parent with complete error information
+        super().__init__(
+            f"LDIF target transformation: {message}",
+            code=error_code or "TARGET_LDIF_TRANSFORMATION_ERROR",
+            context=context,
+            correlation_id=correlation_id,
+        )
 
 
 class FlextTargetLdifInfrastructureError(FlextTargetLdifError):
@@ -57,15 +71,30 @@ class FlextTargetLdifInfrastructureError(FlextTargetLdifError):
     def __init__(
         self,
         message: str = "LDIF target infrastructure error",
+        *,
         component: str | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize LDIF target infrastructure error with context."""
-        context = kwargs.copy()
-        if component is not None:
-            context["component"] = component
+        # Store domain-specific attributes before extracting common kwargs
+        self.component = component
 
-        super().__init__(f"LDIF target infrastructure: {message}", **context)
+        # Extract common parameters using helper
+        base_context, correlation_id, error_code = self._extract_common_kwargs(kwargs)
+
+        # Build context with infrastructure-specific fields
+        context = self._build_context(
+            base_context,
+            component=component,
+        )
+
+        # Call parent with complete error information
+        super().__init__(
+            f"LDIF target infrastructure: {message}",
+            code=error_code or "TARGET_LDIF_INFRASTRUCTURE_ERROR",
+            context=context,
+            correlation_id=correlation_id,
+        )
 
 
 class FlextTargetLdifWriterError(FlextTargetLdifError):
@@ -75,18 +104,33 @@ class FlextTargetLdifWriterError(FlextTargetLdifError):
     def __init__(
         self,
         message: str = "LDIF writer error",
+        *,
         output_file: str | None = None,
         line_number: int | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize LDIF writer error with context."""
-        context = kwargs.copy()
-        if output_file is not None:
-            context["output_file"] = output_file
-        if line_number is not None:
-            context["line_number"] = line_number
+        # Store domain-specific attributes before extracting common kwargs
+        self.output_file = output_file
+        self.line_number = line_number
 
-        super().__init__(f"LDIF writer: {message}", **context)
+        # Extract common parameters using helper
+        base_context, correlation_id, error_code = self._extract_common_kwargs(kwargs)
+
+        # Build context with writer-specific fields
+        context = self._build_context(
+            base_context,
+            output_file=output_file,
+            line_number=line_number,
+        )
+
+        # Call parent with complete error information
+        super().__init__(
+            f"LDIF writer: {message}",
+            code=error_code or "TARGET_LDIF_WRITER_ERROR",
+            context=context,
+            correlation_id=correlation_id,
+        )
 
 
 class FlextTargetLdifFileError(FlextTargetLdifError):
@@ -96,37 +140,69 @@ class FlextTargetLdifFileError(FlextTargetLdifError):
     def __init__(
         self,
         message: str = "LDIF target file error",
+        *,
         file_path: str | None = None,
         operation: str | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize LDIF target file error with context."""
-        context = kwargs.copy()
-        if file_path is not None:
-            context["file_path"] = file_path
-        if operation is not None:
-            context["operation"] = operation
+        # Store domain-specific attributes before extracting common kwargs
+        self.file_path = file_path
+        self.operation = operation
 
-        super().__init__(f"LDIF target file: {message}", **context)
+        # Extract common parameters using helper
+        base_context, correlation_id, error_code = self._extract_common_kwargs(kwargs)
+
+        # Build context with file-specific fields
+        context = self._build_context(
+            base_context,
+            file_path=file_path,
+            operation=operation,
+        )
+
+        # Call parent with complete error information
+        super().__init__(
+            f"LDIF target file: {message}",
+            code=error_code or "TARGET_LDIF_FILE_ERROR",
+            context=context,
+            correlation_id=correlation_id,
+        )
 
 
-class FlextTargetLdifSchemaError(Exception):
+class FlextTargetLdifSchemaError(FlextExceptions.BaseError):
     """Schema validation errors."""
 
     @override
     def __init__(
         self,
         message: str = "LDIF target schema validation failed",
+        *,
         schema_name: str | None = None,
         field: str | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize LDIF target schema error with context."""
-        self.message = message
+        # Store domain-specific attributes before extracting common kwargs
         self.schema_name = schema_name
         self.field = field
-        self.context = kwargs
-        super().__init__(f"LDIF target schema: {message}")
+
+        # Extract common parameters using helper
+        base_context, correlation_id, error_code = self._extract_common_kwargs(kwargs)
+
+        # Build context with schema-specific fields
+        context = self._build_context(
+            base_context,
+            schema_name=schema_name,
+            field=field,
+        )
+
+        # Call parent with complete error information
+        super().__init__(
+            f"LDIF target schema: {message}",
+            code=error_code or "TARGET_LDIF_SCHEMA_ERROR",
+            context=context,
+            correlation_id=correlation_id,
+        )
 
 
 class FlextTargetLdifErrorDetails(BaseModel):
@@ -134,7 +210,7 @@ class FlextTargetLdifErrorDetails(BaseModel):
 
     error_code: str
     error_type: str
-    context: FlextTypes.Core.Dict
+    context: FlextTypes.Dict
     timestamp: str
     source_component: str
 
