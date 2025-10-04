@@ -11,6 +11,7 @@ from __future__ import annotations
 import re
 
 from flext_core import FlextTypes
+
 from flext_target_ldif.constants import FlextTargetLdifConstants
 
 

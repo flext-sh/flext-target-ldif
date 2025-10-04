@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import override
 
 from flext_core import FlextTypes
+
 from flext_target_ldif.sinks import LDIFSink
 
 

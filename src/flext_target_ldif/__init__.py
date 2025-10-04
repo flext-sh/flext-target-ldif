@@ -2,6 +2,12 @@
 
 from __future__ import annotations
 
+from flext_core import (
+    FlextExceptions,
+    FlextLogger,
+    FlextResult,
+    FlextTypes,
+)
 from flext_meltano import (
     FlextMeltanoBridge,
     FlextMeltanoConfig,
@@ -10,12 +16,6 @@ from flext_meltano import (
     StreamDefinition,
 )
 
-from flext_core import (
-    FlextExceptions,
-    FlextLogger,
-    FlextResult,
-    FlextTypes,
-)
 from flext_target_ldif.cli import main as cli_main
 from flext_target_ldif.config import FlextTargetLdifConfig
 from flext_target_ldif.exceptions import (
