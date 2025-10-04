@@ -10,9 +10,8 @@ from __future__ import annotations
 
 from typing import override
 
-from pydantic import BaseModel
-
 from flext_core import FlextExceptions, FlextResult, FlextTypes
+from pydantic import BaseModel
 
 
 class FlextTargetLdifError(FlextExceptions.Error):

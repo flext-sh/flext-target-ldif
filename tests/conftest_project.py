@@ -9,7 +9,6 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-
 from flext_core import FlextTypes
 
 # Docker container management with FlextTestDocker (LDIF doesn't need Docker)

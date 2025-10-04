@@ -7,9 +7,8 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from pydantic import Field
-
 from flext_core import FlextConfig, FlextModels, FlextResult, FlextTypes
+from pydantic import Field
 
 # LDIF target constants
 FORMAT_VALIDATION = "FORMAT_VALIDATION"

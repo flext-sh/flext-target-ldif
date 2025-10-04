@@ -13,9 +13,9 @@ import types
 from pathlib import Path
 from typing import Self, override
 
+from flext_core import FlextLogger, FlextResult, FlextTypes
 from flext_ldif import FlextLdif
 
-from flext_core import FlextLogger, FlextResult, FlextTypes
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError
 
 logger = FlextLogger(__name__)
