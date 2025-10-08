@@ -11,8 +11,8 @@ from flext_core import (
 from flext_meltano import (
     FlextMeltanoBridge,
     FlextMeltanoConfig,
-    FlextSingerTypes,
-    FlextTargetAbstractions,
+    FlextMeltanoTargetAbstractions,
+    FlextMeltanoTypes,
     StreamDefinition,
 )
 
@@ -70,9 +70,9 @@ __all__: FlextTypes.StringList = [
     "FlextLogger",
     "FlextMeltanoBridge",
     "FlextMeltanoConfig",
+    "FlextMeltanoTargetAbstractions",
+    "FlextMeltanoTypes",
     "FlextResult",
-    "FlextSingerTypes",
-    "FlextTargetAbstractions",
     "FlextTargetLDIF",
     "FlextTargetLDIFConfig",
     "FlextTargetLdifConfig",
