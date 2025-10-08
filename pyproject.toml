@@ -26,7 +26,6 @@
     ]
     description = "FLEXT Target LDIF - Singer Target for LDAP Data Interchange Format (LDIF) output"
     keywords = [
-        "",
         "data-loading",
         "enterprise",
         "etl",
