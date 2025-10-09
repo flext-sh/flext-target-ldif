@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from flext_target_ldif.__version__ import __version__, __version_info__
+
 from flext_core import (
     FlextExceptions,
     FlextLogger,
