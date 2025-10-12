@@ -10,11 +10,11 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import FlextExceptions, FlextResult, FlextTypes
+from flext_core import FlextCore
 from pydantic import BaseModel
 
 
-class FlextTargetLdifError(FlextExceptions.Error):
+class FlextTargetLdifError(FlextCore.Exceptions.Error):
     """Base exception for FLEXT Target LDIF errors."""
 
     @override
@@ -27,7 +27,7 @@ class FlextTargetLdifError(FlextExceptions.Error):
         super().__init__(f"Target LDIF: {message}", **kwargs)
 
 
-class FlextTargetLdifTransformationError(FlextExceptions.ProcessingError):
+class FlextTargetLdifTransformationError(FlextCore.Exceptions.ProcessingError):
     """Data transformation errors."""
 
     @override
@@ -35,7 +35,7 @@ class FlextTargetLdifTransformationError(FlextExceptions.ProcessingError):
         self,
         message: str = "LDIF target transformation failed",
         *,
-        record_data: FlextTypes.Dict | None = None,
+        record_data: FlextCore.Types.Dict | None = None,
         transformation_stage: str | None = None,
         **kwargs: object,
     ) -> None:
@@ -168,7 +168,7 @@ class FlextTargetLdifFileError(FlextTargetLdifError):
         )
 
 
-class FlextTargetLdifSchemaError(FlextExceptions.BaseError):
+class FlextTargetLdifSchemaError(FlextCore.Exceptions.BaseError):
     """Schema validation errors."""
 
     @override
@@ -209,20 +209,20 @@ class FlextTargetLdifErrorDetails(BaseModel):
 
     error_code: str
     error_type: str
-    context: FlextTypes.Dict
+    context: FlextCore.Types.Dict
     timestamp: str
     source_component: str
 
-    def validate_domain_rules(self: object) -> FlextResult[None]:
+    def validate_domain_rules(self: object) -> FlextCore.Result[None]:
         """Validate domain-specific business rules."""
         try:
             # Validate error code format
             if not self.error_code or not self.error_code.startswith("LDIF"):
-                return FlextResult[None].fail("Error code must start with 'LDIF'")
+                return FlextCore.Result[None].fail("Error code must start with 'LDIF'")
 
             # Validate error type is not empty
             if not self.error_type:
-                return FlextResult[None].fail("Error type cannot be empty")
+                return FlextCore.Result[None].fail("Error type cannot be empty")
 
             # Validate source component is valid
             valid_components = [
@@ -233,10 +233,10 @@ class FlextTargetLdifErrorDetails(BaseModel):
                 "validation",
             ]
             if self.source_component not in valid_components:
-                return FlextResult[None].fail(
+                return FlextCore.Result[None].fail(
                     f"Invalid source component: {self.source_component}",
                 )
 
-            return FlextResult[None].ok(None)
+            return FlextCore.Result[None].ok(None)
         except Exception as e:
-            return FlextResult[None].fail(f"Domain validation failed: {e}")
+            return FlextCore.Result[None].fail(f"Domain validation failed: {e}")

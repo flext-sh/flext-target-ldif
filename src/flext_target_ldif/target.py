@@ -9,7 +9,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextTypes
+from flext_core import FlextCore
 
 from flext_target_ldif.sinks import LDIFSink
 
@@ -22,10 +22,10 @@ class TargetLDIF:
     @override
     def __init__(
         self,
-        config: FlextTypes.Dict | None = None,
+        config: FlextCore.Types.Dict | None = None,
     ) -> None:
         """Initialize the LDIF target."""
-        self.config: FlextTypes.Dict = config or {}
+        self.config: FlextCore.Types.Dict = config or {}
         self.sinks: dict[str, LDIFSink] = {}
 
         # Ensure output directory exists
@@ -35,7 +35,7 @@ class TargetLDIF:
         output_path = Path(output_path_str)
         output_path.mkdir(parents=True, exist_ok=True)
 
-    def get_sink(self, stream_name: str, schema: FlextTypes.Dict) -> LDIFSink:
+    def get_sink(self, stream_name: str, schema: FlextCore.Types.Dict) -> LDIFSink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = LDIFSink(

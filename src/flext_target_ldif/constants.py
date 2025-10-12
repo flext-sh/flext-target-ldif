@@ -8,11 +8,11 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from flext_core import FlextConstants, FlextTypes
+from flext_core import FlextCore
 from flext_ldif.constants import FlextLdifConstants
 
 
-class FlextTargetLdifConstants(FlextConstants):
+class FlextTargetLdifConstants(FlextCore.Constants):
     """LDIF target export-specific constants following flext-core patterns.
 
     Composes with FlextLdifConstants to avoid duplication and ensure consistency.
@@ -26,12 +26,12 @@ class FlextTargetLdifConstants(FlextConstants):
     DEFAULT_LINE_LENGTH = FlextLdifConstants.Format.MAX_LINE_LENGTH
     MAX_LINE_LENGTH = 1024
 
-    # Singer Target Configuration - using FlextConstants composition
-    DEFAULT_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE
-    MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
+    # Singer Target Configuration - using FlextCore.Constants composition
+    DEFAULT_BATCH_SIZE = FlextCore.Constants.Performance.BatchProcessing.DEFAULT_SIZE
+    MAX_BATCH_SIZE = FlextCore.Constants.Performance.BatchProcessing.MAX_ITEMS
 
     # LDIF Format Options using composition
-    SUPPORTED_ENCODINGS: ClassVar[FlextTypes.StringList] = list(
+    SUPPORTED_ENCODINGS: ClassVar[FlextCore.Types.StringList] = list(
         FlextLdifConstants.Encoding.SUPPORTED_ENCODINGS
     )
 
