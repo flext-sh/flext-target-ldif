@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from flext_core import FlextConfig, FlextModels, FlextResult, FlextTypes
+from flext_core import FlextCore
 from pydantic import Field
 
 # LDIF target constants
@@ -20,14 +20,14 @@ DISK_SPACE = "DISK_SPACE"
 PERMISSION = "PERMISSION"
 ENCODING = "ENCODING"
 
-"""LDIF target models extending flext-core FlextModels.
+"""LDIF target models extending flext-core FlextCore.Models.
 
 Provides comprehensive models for LDIF file export, Singer protocol
 compliance, format validation, and target operations following standardized patterns.
 """
 
 
-class LdifFormatOptions(FlextConfig):
+class LdifFormatOptions(FlextCore.Config):
     """LDIF format configuration with specification compliance."""
 
     line_length: int = Field(
@@ -48,7 +48,7 @@ class LdifFormatOptions(FlextConfig):
     line_separator: str = Field(default="\n", description="Line separator character")
 
 
-class LdifExportConfig(FlextConfig):
+class LdifExportConfig(FlextCore.Config):
     """LDIF export configuration with file management."""
 
     output_path: str = Field(..., description="Output directory for LDIF files")
@@ -58,10 +58,10 @@ class LdifExportConfig(FlextConfig):
     dn_template: str = Field(
         ..., description="DN template for generating LDIF entry DNs"
     )
-    attribute_mappings: FlextTypes.StringDict = Field(
+    attribute_mappings: FlextCore.Types.StringDict = Field(
         default_factory=dict, description="Singer field to LDIF attribute mappings"
     )
-    object_classes: FlextTypes.StringList = Field(
+    object_classes: FlextCore.Types.StringList = Field(
         default_factory=list, description="Default LDAP object classes for entries"
     )
 
@@ -82,26 +82,26 @@ class LdifExportConfig(FlextConfig):
     )
 
 
-class LdifEntry(FlextModels.Entity):
+class LdifEntry(FlextCore.Models.Entity):
     """LDIF entry representation with format validation."""
 
     distinguished_name: str = Field(
         ..., description="LDIF Distinguished Name (DN)", min_length=1, max_length=1000
     )
-    attributes: dict[str, FlextTypes.StringList] = Field(
+    attributes: dict[str, FlextCore.Types.StringList] = Field(
         default_factory=dict, description="LDIF attributes with values"
     )
-    object_classes: FlextTypes.StringList = Field(
+    object_classes: FlextCore.Types.StringList = Field(
         default_factory=list, description="LDAP object classes"
     )
     change_type: str | None = Field(
         None, description="LDIF change type (add, modify, delete, modrdn)"
     )
-    controls: FlextTypes.StringList = Field(
+    controls: FlextCore.Types.StringList = Field(
         default_factory=list, description="LDAP controls for the entry"
     )
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextCore.Result[None]:
         """Validate LDIF entry business rules."""
         try:
             errors = []
@@ -121,10 +121,10 @@ class LdifEntry(FlextModels.Entity):
                 errors.append("Entry must have at least one attribute")
 
             if errors:
-                return FlextResult[None].fail("; ".join(errors))
-            return FlextResult[None].ok(None)
+                return FlextCore.Result[None].fail("; ".join(errors))
+            return FlextCore.Result[None].ok(None)
         except Exception as e:
-            return FlextResult[None].fail(f"LDIF entry validation failed: {e}")
+            return FlextCore.Result[None].fail(f"LDIF entry validation failed: {e}")
 
     def to_ldif_string(self) -> str:
         """Convert entry to LDIF string format."""
@@ -145,7 +145,7 @@ class LdifEntry(FlextModels.Entity):
         return "\n".join(lines)
 
 
-class LdifFile(FlextModels.Entity):
+class LdifFile(FlextCore.Models.Entity):
     """LDIF file representation with metadata."""
 
     file_path: str = Field(..., description="Path to the LDIF file")
@@ -165,32 +165,34 @@ class LdifFile(FlextModels.Entity):
     entry_count: int = Field(default=0, ge=0, description="Number of entries in file")
     is_compressed: bool = Field(default=False, description="Whether file is compressed")
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextCore.Result[None]:
         """Validate LDIF file business rules."""
         try:
             # Validate file path
             if not self.file_path.strip():
-                return FlextResult[None].fail("File path cannot be empty")
+                return FlextCore.Result[None].fail("File path cannot be empty")
 
             # Validate entry count matches actual entries
             if len(self.entries) != self.entry_count:
-                return FlextResult[None].fail(
+                return FlextCore.Result[None].fail(
                     f"Entry count mismatch: {len(self.entries)} vs {self.entry_count}"
                 )
 
-            return FlextResult[None].ok(None)
+            return FlextCore.Result[None].ok(None)
         except Exception as e:
-            return FlextResult[None].fail(f"LDIF file validation failed: {e}")
+            return FlextCore.Result[None].fail(f"LDIF file validation failed: {e}")
 
 
-class LdifTransformationResult(FlextModels.Entity):
+class LdifTransformationResult(FlextCore.Models.Entity):
     """Result of Singer to LDIF transformation."""
 
-    original_record: FlextTypes.Dict = Field(..., description="Original Singer record")
+    original_record: FlextCore.Types.Dict = Field(
+        ..., description="Original Singer record"
+    )
     transformed_entry: FlextTargetLdifModels.LdifEntry = Field(
         ..., description="Resulting LDIF entry"
     )
-    transformation_errors: FlextTypes.StringList = Field(
+    transformation_errors: FlextCore.Types.StringList = Field(
         default_factory=list, description="Transformation errors"
     )
     processing_time_ms: float = Field(
@@ -201,22 +203,22 @@ class LdifTransformationResult(FlextModels.Entity):
         description="Transformation timestamp",
     )
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextCore.Result[None]:
         """Validate transformation result business rules."""
         try:
             if not self.original_record:
-                return FlextResult[None].fail("Original record cannot be empty")
+                return FlextCore.Result[None].fail("Original record cannot be empty")
 
             # Validate transformed entry
             entry_validation = self.transformed_entry.validate_business_rules()
             if entry_validation.is_failure:
-                return FlextResult[None].fail(
+                return FlextCore.Result[None].fail(
                     f"Transformed entry is invalid: {entry_validation.error}"
                 )
 
-            return FlextResult[None].ok(None)
+            return FlextCore.Result[None].ok(None)
         except Exception as e:
-            return FlextResult[None].fail(
+            return FlextCore.Result[None].fail(
                 f"Transformation result validation failed: {e}"
             )
 
@@ -231,7 +233,7 @@ class LdifTransformationResult(FlextModels.Entity):
         return 0.0 if self.has_errors else 100.0
 
 
-class LdifBatchProcessing(FlextModels.Entity):
+class LdifBatchProcessing(FlextCore.Models.Entity):
     """LDIF batch processing configuration and state."""
 
     stream_name: str = Field(..., description="Singer stream name")
@@ -248,20 +250,24 @@ class LdifBatchProcessing(FlextModels.Entity):
         None, description="Last processing timestamp"
     )
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextCore.Result[None]:
         """Validate batch processing business rules."""
         try:
             if len(self.current_batch) > self.batch_size:
-                return FlextResult[None].fail(
+                return FlextCore.Result[None].fail(
                     f"Current batch size exceeds maximum: {len(self.current_batch)} > {self.batch_size}"
                 )
 
             if self.successful_exports + self.failed_exports > self.total_processed:
-                return FlextResult[None].fail("Export counts exceed total processed")
+                return FlextCore.Result[None].fail(
+                    "Export counts exceed total processed"
+                )
 
-            return FlextResult[None].ok(None)
+            return FlextCore.Result[None].ok(None)
         except Exception as e:
-            return FlextResult[None].fail(f"Batch processing validation failed: {e}")
+            return FlextCore.Result[None].fail(
+                f"Batch processing validation failed: {e}"
+            )
 
     @property
     def is_batch_full(self) -> bool:
@@ -277,7 +283,7 @@ class LdifBatchProcessing(FlextModels.Entity):
         return (self.successful_exports / total) * 100.0
 
 
-class SingerStreamConfig(FlextConfig):
+class SingerStreamConfig(FlextCore.Config):
     """Singer stream configuration for LDIF export."""
 
     stream_name: str = Field(..., description="Singer stream name")
@@ -292,11 +298,11 @@ class SingerStreamConfig(FlextConfig):
     )
 
 
-class LdifTargetResult(FlextModels.Entity):
+class LdifTargetResult(FlextCore.Models.Entity):
     """Result of LDIF target operation processing."""
 
     stream_name: str = Field(..., description="Singer stream name")
-    output_files: FlextTypes.StringList = Field(
+    output_files: FlextCore.Types.StringList = Field(
         default_factory=list, description="Generated LDIF file paths"
     )
     records_processed: int = Field(
@@ -324,32 +330,32 @@ class LdifTargetResult(FlextModels.Entity):
     )
 
     # Error tracking
-    error_messages: FlextTypes.StringList = Field(
+    error_messages: FlextCore.Types.StringList = Field(
         default_factory=list, description="Error messages encountered"
     )
-    warnings: FlextTypes.StringList = Field(
+    warnings: FlextCore.Types.StringList = Field(
         default_factory=list, description="Warning messages"
     )
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextCore.Result[None]:
         """Validate LDIF target result business rules."""
         try:
             # Validate entry counts
             total_entries = self.entries_exported + self.entries_failed
             if total_entries > self.records_processed:
-                return FlextResult[None].fail(
+                return FlextCore.Result[None].fail(
                     "Total entries cannot exceed records processed"
                 )
 
             # Validate file count
             if len(self.output_files) == 0 and self.entries_exported > 0:
-                return FlextResult[None].fail(
+                return FlextCore.Result[None].fail(
                     "No output files but entries were exported"
                 )
 
-            return FlextResult[None].ok(None)
+            return FlextCore.Result[None].ok(None)
         except Exception as e:
-            return FlextResult[None].fail(f"Target result validation failed: {e}")
+            return FlextCore.Result[None].fail(f"Target result validation failed: {e}")
 
     @property
     def success_rate(self) -> float:
@@ -366,7 +372,7 @@ class LdifTargetResult(FlextModels.Entity):
         return (self.entries_failed / self.records_processed) * 100.0
 
 
-class LdifErrorContext(FlextModels.BaseModel):
+class LdifErrorContext(FlextCore.Models.BaseModel):
     """Error context for LDIF target error handling."""
 
     error_type: Literal[
@@ -394,14 +400,14 @@ class LdifErrorContext(FlextModels.BaseModel):
 
 
 # Type aliases for backward compatibility
-LdifRecord = FlextTypes.Dict
+LdifRecord = FlextCore.Types.Dict
 LdifRecords = list[LdifRecord]
 
 
-class FlextTargetLdifModels(FlextModels):
+class FlextTargetLdifModels(FlextCore.Models):
     """Unified models collection for FLEXT Target LDIF following [Project]Models standard.
 
-    This class extends FlextModels and provides a centralized access point for all
+    This class extends FlextCore.Models and provides a centralized access point for all
     LDIF target-related model classes, ensuring consistency with the FLEXT ecosystem
     patterns and enabling reusable model composition across the project.
 

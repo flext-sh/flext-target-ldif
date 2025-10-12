@@ -9,7 +9,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextResult, FlextTypes
+from flext_core import FlextCore
 
 from flext_target_ldif.writer import LdifWriter
 
@@ -20,13 +20,13 @@ class LDIFSink:
     @override
     def __init__(
         self,
-        target_config: FlextTypes.Dict,
+        target_config: FlextCore.Types.Dict,
         stream_name: str,
-        schema: FlextTypes.Dict,
-        key_properties: FlextTypes.StringList | None = None,
+        schema: FlextCore.Types.Dict,
+        key_properties: FlextCore.Types.StringList | None = None,
     ) -> None:
         """Initialize the LDIF sink."""
-        self.config: FlextTypes.Dict = target_config
+        self.config: FlextCore.Types.Dict = target_config
         self.stream_name = stream_name
         self.schema = schema
         self.key_properties = key_properties or []
@@ -64,7 +64,7 @@ class LDIFSink:
         if self._ldif_writer is None:
             output_file = self._get_output_file()
 
-            ldif_options: FlextTypes.Dict = self.config.get("ldif_options", {})
+            ldif_options: FlextCore.Types.Dict = self.config.get("ldif_options", {})
             if not isinstance(ldif_options, dict):
                 ldif_options = {}
 
@@ -72,7 +72,7 @@ class LDIFSink:
             if dn_template is not None and not isinstance(dn_template, str):
                 dn_template = None
 
-            attribute_mapping: FlextTypes.Dict = self.config.get(
+            attribute_mapping: FlextCore.Types.Dict = self.config.get(
                 "attribute_mapping", {}
             )
             if not isinstance(attribute_mapping, dict):
@@ -88,15 +88,15 @@ class LDIFSink:
 
         return self._ldif_writer
 
-    def process_batch(self, _context: FlextTypes.Dict) -> None:
+    def process_batch(self, _context: FlextCore.Types.Dict) -> None:
         """Process a batch of records."""
         # BatchSink handles the batching, we just need to ensure writer is ready
         self._get_ldif_writer()
 
     def process_record(
         self,
-        record: FlextTypes.Dict,
-        _context: FlextTypes.Dict,
+        record: FlextCore.Types.Dict,
+        _context: FlextCore.Types.Dict,
     ) -> None:
         """Process a single record and write to LDIF.
 
@@ -105,7 +105,7 @@ class LDIFSink:
 
         """
         ldif_writer = self._get_ldif_writer()
-        result: FlextResult[object] = ldif_writer.write_record(record)
+        result: FlextCore.Result[object] = ldif_writer.write_record(record)
         if not result.success:
             msg: str = f"Failed to write LDIF record: {result.error}"
             raise RuntimeError(msg)
@@ -113,7 +113,7 @@ class LDIFSink:
     def clean_up(self: object) -> None:
         """Clean up resources when sink is finished."""
         if self._ldif_writer:
-            result: FlextResult[object] = self._ldif_writer.close()
+            result: FlextCore.Result[object] = self._ldif_writer.close()
             if not result.success and hasattr(self, "logger"):
                 self.logger.error("Failed to close LDIF writer: %s", result.error)
             elif hasattr(self, "logger"):

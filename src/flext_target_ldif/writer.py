@@ -13,12 +13,12 @@ import types
 from pathlib import Path
 from typing import Self, override
 
-from flext_core import FlextLogger, FlextResult, FlextTypes
+from flext_core import FlextCore
 from flext_ldif import FlextLdif
 
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError
 
-logger = FlextLogger(__name__)
+logger = FlextCore.Logger(__name__)
 
 
 class LdifWriter:
@@ -28,10 +28,10 @@ class LdifWriter:
     def __init__(
         self,
         output_file: Path | str | None = None,
-        ldif_options: FlextTypes.Dict | None = None,
+        ldif_options: FlextCore.Types.Dict | None = None,
         dn_template: str | None = None,
-        attribute_mapping: FlextTypes.StringDict | None = None,
-        schema: FlextTypes.Dict | None = None,
+        attribute_mapping: FlextCore.Types.StringDict | None = None,
+        schema: FlextCore.Types.Dict | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure."""
         self.output_file = Path(output_file) if output_file else Path("output.ldif")
@@ -41,20 +41,20 @@ class LdifWriter:
         self.schema = schema or {}
         # Use flext-ldif API for writing
         self._ldif_api = FlextLdif()
-        self._records: list[FlextTypes.Dict] = []
+        self._records: list[FlextCore.Types.Dict] = []
         self._record_count = 0
-        self._ldif_entries: list[FlextTypes.Dict] = []
+        self._ldif_entries: list[FlextCore.Types.Dict] = []
 
-    def open(self: object) -> FlextResult[None]:
+    def open(self: object) -> FlextCore.Result[None]:
         """Open the output file for writing."""
         try:
             # Create output directory if needed
             self.output_file.parent.mkdir(parents=True, exist_ok=True)
-            return FlextResult[None].ok(None)
+            return FlextCore.Result[None].ok(None)
         except (RuntimeError, ValueError, TypeError) as e:
-            return FlextResult[None].fail(f"Failed to prepare LDIF file: {e}")
+            return FlextCore.Result[None].fail(f"Failed to prepare LDIF file: {e}")
 
-    def close(self: object) -> FlextResult[None]:
+    def close(self: object) -> FlextCore.Result[None]:
         """Close the output file and write all collected records."""
         try:
             if self._records:
@@ -79,7 +79,7 @@ class LdifWriter:
                                 else [str(v) for v in value]
                             )
                         # Create simple entry dict for LDIF writing
-                        entry: FlextTypes.Dict = {
+                        entry: FlextCore.Types.Dict = {
                             "dn": "dn",
                             "attributes": dict(attr_dict),  # Ensure it's a dict
                         }
@@ -92,7 +92,9 @@ class LdifWriter:
                     for entry in self._ldif_entries:
                         dn_obj = entry.get("dn", "")
                         dn_str = str(dn_obj) if dn_obj else ""
-                        attributes_obj: FlextTypes.Dict = entry.get("attributes", {})
+                        attributes_obj: FlextCore.Types.Dict = entry.get(
+                            "attributes", {}
+                        )
                         f.write(f"dn: {dn_str}\n")
                         if isinstance(attributes_obj, dict):
                             for attr, values in attributes_obj.items():
@@ -103,31 +105,31 @@ class LdifWriter:
                                     f.write(f"{attr}: {values}\n")
                         f.write("\n")  # Blank line between entries
 
-                write_result: FlextResult[object] = FlextResult[str].ok(
+                write_result: FlextCore.Result[object] = FlextCore.Result[str].ok(
                     "LDIF written successfully"
                 )
                 if not write_result.success:
-                    return FlextResult[None].fail(
+                    return FlextCore.Result[None].fail(
                         f"LDIF write failed: {write_result.error}",
                     )
                 ldif_content = write_result.data or ""
                 # Write to file
                 self.output_file.write_text(ldif_content, encoding="utf-8")
-            return FlextResult[None].ok(None)
+            return FlextCore.Result[None].ok(None)
         except (RuntimeError, ValueError, TypeError) as e:
-            return FlextResult[None].fail(f"Failed to close LDIF file: {e}")
+            return FlextCore.Result[None].fail(f"Failed to close LDIF file: {e}")
 
-    def write_record(self, record: FlextTypes.Dict) -> FlextResult[None]:
+    def write_record(self, record: FlextCore.Types.Dict) -> FlextCore.Result[None]:
         """Write a record to the LDIF file buffer."""
         try:
             # Buffer the record for batch writing
             self._records.append(record.copy())
             self._record_count += 1
-            return FlextResult[None].ok(None)
+            return FlextCore.Result[None].ok(None)
         except (RuntimeError, ValueError, TypeError) as e:
-            return FlextResult[None].fail(f"Failed to buffer record: {e}")
+            return FlextCore.Result[None].fail(f"Failed to buffer record: {e}")
 
-    def _generate_dn(self, record: FlextTypes.Dict) -> str:
+    def _generate_dn(self, record: FlextCore.Types.Dict) -> str:
         """Generate DN from record using template."""
         try:
             return self.dn_template.format(**record)
@@ -155,6 +157,6 @@ class LdifWriter:
         self.close()
 
 
-__all__: FlextTypes.StringList = [
+__all__: FlextCore.Types.StringList = [
     "LdifWriter",
 ]
