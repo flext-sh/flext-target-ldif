@@ -126,24 +126,6 @@ class LdifEntry(FlextCore.Models.Entity):
         except Exception as e:
             return FlextCore.Result[None].fail(f"LDIF entry validation failed: {e}")
 
-    def to_ldif_string(self) -> str:
-        """Convert entry to LDIF string format."""
-        lines = [f"dn: {self.distinguished_name}"]
-
-        # Add object classes
-        lines.extend(f"objectClass: {oc}" for oc in self.object_classes)
-
-        # Add attributes
-        for attr_name, attr_values in self.attributes.items():
-            lines.extend(f"{attr_name}: {value}" for value in attr_values)
-
-        # Add change type if specified
-        if self.change_type:
-            lines.append(f"changetype: {self.change_type}")
-
-        lines.append("")  # Empty line after entry
-        return "\n".join(lines)
-
 
 class LdifFile(FlextCore.Models.Entity):
     """LDIF file representation with metadata."""
