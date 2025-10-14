@@ -8,7 +8,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 from flext_core import FlextCore
-from pydantic import Field
+from pydantic import ConfigDict, Field
 
 # LDIF target constants
 FORMAT_VALIDATION = "FORMAT_VALIDATION"
@@ -354,7 +354,7 @@ class LdifTargetResult(FlextCore.Models.Entity):
         return (self.entries_failed / self.records_processed) * 100.0
 
 
-class LdifErrorContext(FlextCore.Models.BaseModel):
+class LdifErrorContext(FlextCore.Models.StrictArbitraryTypesModel):
     """Error context for LDIF target error handling."""
 
     error_type: Literal[
@@ -399,6 +399,21 @@ class FlextTargetLdifModels(FlextCore.Models):
     - Processing: Batch processing and transformation models
     - Results: Operation results and error context models
     """
+
+    model_config = ConfigDict(
+        validate_assignment=True,
+        validate_return=True,
+        validate_default=True,
+        use_enum_values=True,
+        arbitrary_types_allowed=True,
+        extra="forbid",
+        frozen=False,
+        strict=True,
+        str_strip_whitespace=True,
+        ser_json_timedelta="iso8601",
+        ser_json_bytes="base64",
+        hide_input_in_errors=True,
+    )
 
     # Configuration models
     LdifFormatOptions = LdifFormatOptions
