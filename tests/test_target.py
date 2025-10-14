@@ -275,7 +275,7 @@ class TestTargetLDIF:
         assert callable(target.cli)
 
     def test_target_ldif_config_dict_access(self) -> None:
-        """Test config dict access."""
+        """Test config dict[str, object] access."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             config = {
                 "output_path": tmp_dir,
@@ -364,7 +364,7 @@ class TestIntegration:
             assert hasattr(flext_target, "validate_config")
 
     def test_config_to_dict_conversion(self) -> None:
-        """Test config can be converted to dict for Singer SDK."""
+        """Test config can be converted to dict[str, object] for Singer SDK."""
         config = FlextTargetLdifConfig(
             output_file="test.ldif",
             schema_validation=True,
