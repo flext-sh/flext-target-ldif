@@ -177,7 +177,7 @@ class RecordTransformer:
         record: FlextCore.Types.StringDict,
     ) -> FlextCore.Types.Dict:
         """Add required LDAP attributes to the record."""
-        result: FlextCore.Types.Dict = dict(record)
+        result: FlextCore.Types.Dict = dict[str, object](record)
 
         # Ensure objectClass is present
         if "objectclass" not in result:

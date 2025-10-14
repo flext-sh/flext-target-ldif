@@ -70,7 +70,7 @@ class LdifWriter:
                                 mapped_key = self.attribute_mapping.get(key, key)
                                 attributes[mapped_key] = value
                         # Create FlextLdifEntry using the real API
-                        # Convert dict to list format expected by FlextLdifAttributes
+                        # Convert dict[str, object] to list format expected by FlextLdifAttributes
                         attr_dict = {}
                         for key, value in attributes.items():
                             attr_dict[key] = (
@@ -78,10 +78,12 @@ class LdifWriter:
                                 if not isinstance(value, list)
                                 else [str(v) for v in value]
                             )
-                        # Create simple entry dict for LDIF writing
+                        # Create simple entry dict[str, object] for LDIF writing
                         entry: FlextCore.Types.Dict = {
                             "dn": "dn",
-                            "attributes": dict(attr_dict),  # Ensure it's a dict
+                            "attributes": dict[str, object](
+                                attr_dict
+                            ),  # Ensure it's a dict
                         }
                         self._ldif_entries.append(entry)
                     except (RuntimeError, ValueError, TypeError) as e:
