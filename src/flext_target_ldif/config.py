@@ -9,13 +9,13 @@ from __future__ import annotations
 
 from typing import Self, cast
 
-from flext_core import FlextCore
+from flext_core import FlextConfig, FlextConstants, FlextModels, FlextResult, FlextTypes
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
 
 
-class FlextTargetLdifConfig(FlextCore.Config):
-    """Configuration for FLEXT Target LDIF using FlextCore.Config patterns."""
+class FlextTargetLdifConfig(FlextConfig):
+    """Configuration for FLEXT Target LDIF using FlextConfig patterns."""
 
     output_path: str = Field(
         default="./output",
@@ -29,15 +29,15 @@ class FlextTargetLdifConfig(FlextCore.Config):
         description="Template for generating Distinguished Names (DN) - MUST be configured for production",
         json_schema_extra={"example": "uid={uid},ou=users,dc=company,dc=local"},
     )
-    attribute_mapping: FlextCore.Types.StringDict = Field(
+    attribute_mapping: FlextTypes.StringDict = Field(
         default_factory=dict,
         description="Mapping of stream fields to LDAP attributes",
     )
-    ldif_options: FlextCore.Types.Dict = Field(
+    ldif_options: FlextTypes.Dict = Field(
         default_factory=lambda: cast(
-            "FlextCore.Types.Dict",
+            "FlextTypes.Dict",
             {
-                "line_length": FlextCore.Constants.Limits.MAX_LINE_LENGTH,
+                "line_length": FlextConstants.Limits.MAX_LINE_LENGTH,
                 "base64_encode": "False",
                 "include_timestamps": "True",
             },
@@ -57,16 +57,16 @@ class FlextTargetLdifConfig(FlextCore.Config):
 
     @classmethod
     def get_global_instance(cls) -> Self:
-        """Get the global singleton instance using enhanced FlextCore.Config pattern."""
+        """Get the global singleton instance using enhanced FlextConfig pattern."""
         return cls.get_or_create_shared_instance(project_name="flext-target-ldif")
 
     @classmethod
     def create_for_development(cls, **overrides: object) -> Self:
         """Create configuration for development environment."""
-        dev_overrides: FlextCore.Types.Dict = {
+        dev_overrides: FlextTypes.Dict = {
             "file_naming_pattern": "dev_{stream_name}_{timestamp}.ldif",
             "ldif_options": {
-                "line_length": FlextCore.Constants.Limits.MAX_LINE_LENGTH + 42,
+                "line_length": FlextConstants.Limits.MAX_LINE_LENGTH + 42,
                 "base64_encode": "False",
                 "include_timestamps": "True",
             },
@@ -79,7 +79,7 @@ class FlextTargetLdifConfig(FlextCore.Config):
     @classmethod
     def create_for_production(cls, **overrides: object) -> Self:
         """Create configuration for production environment."""
-        prod_overrides: FlextCore.Types.Dict = {
+        prod_overrides: FlextTypes.Dict = {
             "file_naming_pattern": "prod_{stream_name}_{timestamp}.ldif",
             "ldif_options": {
                 "line_length": 78,
@@ -95,7 +95,7 @@ class FlextTargetLdifConfig(FlextCore.Config):
     @classmethod
     def create_for_testing(cls, **overrides: object) -> Self:
         """Create configuration for testing environment."""
-        test_overrides: FlextCore.Types.Dict = {
+        test_overrides: FlextTypes.Dict = {
             "output_path": "./test-output",
             "file_naming_pattern": "test_{stream_name}.ldif",
             "ldif_options": {
@@ -112,10 +112,10 @@ class FlextTargetLdifConfig(FlextCore.Config):
     @field_validator("output_path")
     @classmethod
     def validate_output_path(cls, v: str) -> str:
-        """Validate output path using centralized FlextCore.Models validation."""
-        # Use centralized FlextCore.Models validation instead of duplicate logic
-        validation_result: FlextCore.Result[object] = (
-            FlextCore.Models.create_validated_file_path(v)
+        """Validate output path using centralized FlextModels validation."""
+        # Use centralized FlextModels validation instead of duplicate logic
+        validation_result: FlextResult[object] = FlextModels.create_validated_file_path(
+            v
         )
         if validation_result.is_failure:
             error_msg = f"Invalid output path: {validation_result.error}"
@@ -136,21 +136,21 @@ class FlextTargetLdifConfig(FlextCore.Config):
 
         return v
 
-    def validate_business_rules(self: object) -> FlextCore.Result[None]:
-        """Validate LDIF target configuration business rules using FlextCore.Config pattern."""
+    def validate_business_rules(self: object) -> FlextResult[None]:
+        """Validate LDIF target configuration business rules using FlextConfig pattern."""
         try:
-            # Use centralized FlextCore.Models validation instead of duplicate path logic
-            path_validation_result = FlextCore.Models.create_validated_file_path(
+            # Use centralized FlextModels validation instead of duplicate path logic
+            path_validation_result = FlextModels.create_validated_file_path(
                 self.output_path,
             )
             if path_validation_result.is_failure:
-                return FlextCore.Result[None].fail(
+                return FlextResult[None].fail(
                     f"Output path validation failed: {path_validation_result.error}",
                 )
 
             # Use flext-ldap for DN validation - NO local duplication
             if not self.dn_template:
-                return FlextCore.Result[None].fail("DN template cannot be empty")
+                return FlextResult[None].fail("DN template cannot be empty")
 
             # For template validation, create a sample DN with dummy values
             sample_dn = self.dn_template.replace("{uid}", "testuser").replace(
@@ -159,15 +159,15 @@ class FlextTargetLdifConfig(FlextCore.Config):
             )
             # Basic DN validation - check if contains = and ,
             if "=" not in sample_dn or not sample_dn.strip():
-                return FlextCore.Result[None].fail(
+                return FlextResult[None].fail(
                     "DN template format is invalid - must follow LDAP DN structure",
                 )
 
-            return FlextCore.Result[None].ok(None)
+            return FlextResult[None].ok(None)
         except Exception as e:
-            return FlextCore.Result[None].fail(f"Configuration validation failed: {e}")
+            return FlextResult[None].fail(f"Configuration validation failed: {e}")
 
 
-__all__: FlextCore.Types.StringList = [
+__all__: FlextTypes.StringList = [
     "FlextTargetLdifConfig",
 ]

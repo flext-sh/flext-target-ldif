@@ -14,15 +14,15 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
 
-from flext_core import FlextCore
+from flext_core import FlextResult, FlextTypes, FlextUtilities
 
 
-class FlextTargetLdifUtilities(FlextCore.Utilities):
+class FlextTargetLdifUtilities(FlextUtilities):
     """Single unified utilities class for Singer target LDIF operations.
 
     Follows FLEXT unified class pattern with nested helper classes for
     domain-specific Singer target functionality with LDIF file operations.
-    Extends FlextCore.Utilities with LDIF target-specific operations.
+    Extends FlextUtilities with LDIF target-specific operations.
     """
 
     # Configuration constants
@@ -44,104 +44,100 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
         """Singer protocol utilities for target operations."""
 
         @staticmethod
-        def parse_singer_message(line: str) -> FlextCore.Result[FlextCore.Types.Dict]:
+        def parse_singer_message(line: str) -> FlextResult[FlextTypes.Dict]:
             """Parse Singer message from input line.
 
             Args:
                 line: JSON line from Singer tap
 
             Returns:
-                FlextCore.Result[FlextCore.Types.Dict]: Parsed message or error
+                FlextResult[FlextTypes.Dict]: Parsed message or error
 
             """
             if not line or not line.strip():
-                return FlextCore.Result[FlextCore.Types.Dict].fail("Empty input line")
+                return FlextResult[FlextTypes.Dict].fail("Empty input line")
 
             try:
                 message = json.loads(line.strip())
                 if not isinstance(message, dict):
-                    return FlextCore.Result[FlextCore.Types.Dict].fail(
+                    return FlextResult[FlextTypes.Dict].fail(
                         "Message must be a JSON object"
                     )
 
                 if "type" not in message:
-                    return FlextCore.Result[FlextCore.Types.Dict].fail(
+                    return FlextResult[FlextTypes.Dict].fail(
                         "Message missing required 'type' field"
                     )
 
-                return FlextCore.Result[FlextCore.Types.Dict].ok(message)
+                return FlextResult[FlextTypes.Dict].ok(message)
 
             except json.JSONDecodeError as e:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(f"Invalid JSON: {e}")
+                return FlextResult[FlextTypes.Dict].fail(f"Invalid JSON: {e}")
 
         @staticmethod
         def validate_record_message(
-            message: FlextCore.Types.Dict,
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+            message: FlextTypes.Dict,
+        ) -> FlextResult[FlextTypes.Dict]:
             """Validate Singer RECORD message structure.
 
             Args:
                 message: Singer message to validate
 
             Returns:
-                FlextCore.Result[FlextCore.Types.Dict]: Validated record or error
+                FlextResult[FlextTypes.Dict]: Validated record or error
 
             """
             if message.get("type") != "RECORD":
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
-                    "Message type must be RECORD"
-                )
+                return FlextResult[FlextTypes.Dict].fail("Message type must be RECORD")
 
             required_fields = ["stream", "record"]
             for field in required_fields:
                 if field not in message:
-                    return FlextCore.Result[FlextCore.Types.Dict].fail(
+                    return FlextResult[FlextTypes.Dict].fail(
                         f"RECORD message missing '{field}' field"
                     )
 
             record = message["record"]
             if not isinstance(record, dict):
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     "Record data must be a dictionary"
                 )
 
-            return FlextCore.Result[FlextCore.Types.Dict].ok(message)
+            return FlextResult[FlextTypes.Dict].ok(message)
 
         @staticmethod
         def validate_schema_message(
-            message: FlextCore.Types.Dict,
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+            message: FlextTypes.Dict,
+        ) -> FlextResult[FlextTypes.Dict]:
             """Validate Singer SCHEMA message structure.
 
             Args:
                 message: Singer message to validate
 
             Returns:
-                FlextCore.Result[FlextCore.Types.Dict]: Validated schema or error
+                FlextResult[FlextTypes.Dict]: Validated schema or error
 
             """
             if message.get("type") != "SCHEMA":
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
-                    "Message type must be SCHEMA"
-                )
+                return FlextResult[FlextTypes.Dict].fail("Message type must be SCHEMA")
 
             required_fields = ["stream", "schema"]
             for field in required_fields:
                 if field not in message:
-                    return FlextCore.Result[FlextCore.Types.Dict].fail(
+                    return FlextResult[FlextTypes.Dict].fail(
                         f"SCHEMA message missing '{field}' field"
                     )
 
             schema = message["schema"]
             if not isinstance(schema, dict):
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     "Schema data must be a dictionary"
                 )
 
-            return FlextCore.Result[FlextCore.Types.Dict].ok(message)
+            return FlextResult[FlextTypes.Dict].ok(message)
 
         @staticmethod
-        def write_state_message(state: FlextCore.Types.Dict) -> None:
+        def write_state_message(state: FlextTypes.Dict) -> None:
             """Write Singer state message to stdout.
 
             Args:
@@ -154,10 +150,10 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
 
         @staticmethod
         def build_ldif_dn(
-            record: FlextCore.Types.Dict,
+            record: FlextTypes.Dict,
             dn_template: str,
             base_dn: str | None = None,
-        ) -> FlextCore.Result[str]:
+        ) -> FlextResult[str]:
             """Build LDIF Distinguished Name from record data.
 
             Args:
@@ -166,11 +162,11 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 base_dn: Optional base DN to append
 
             Returns:
-                FlextCore.Result[str]: Built DN or error
+                FlextResult[str]: Built DN or error
 
             """
             if not record or not dn_template:
-                return FlextCore.Result[str].fail("Record and DN template are required")
+                return FlextResult[str].fail("Record and DN template are required")
 
             try:
                 # Replace placeholders in DN template
@@ -179,14 +175,14 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                     placeholder = f"{{{key}}}"
                     if placeholder in dn_rdn:
                         if value is None:
-                            return FlextCore.Result[str].fail(
+                            return FlextResult[str].fail(
                                 f"Cannot build DN: {key} is null"
                             )
                         dn_rdn = dn_rdn.replace(placeholder, str(value))
 
                 # Check if all placeholders were replaced
                 if "{" in dn_rdn and "}" in dn_rdn:
-                    return FlextCore.Result[str].fail(
+                    return FlextResult[str].fail(
                         f"Unresolved placeholders in DN: {dn_rdn}"
                     )
 
@@ -197,12 +193,12 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 if not FlextTargetLdifUtilities.LdifDataProcessing.validate_dn_format(
                     full_dn
                 ):
-                    return FlextCore.Result[str].fail(f"Invalid DN format: {full_dn}")
+                    return FlextResult[str].fail(f"Invalid DN format: {full_dn}")
 
-                return FlextCore.Result[str].ok(full_dn)
+                return FlextResult[str].ok(full_dn)
 
             except Exception as e:
-                return FlextCore.Result[str].fail(f"Error building DN: {e}")
+                return FlextResult[str].fail(f"Error building DN: {e}")
 
         @staticmethod
         def validate_dn_format(dn: str) -> bool:
@@ -227,11 +223,11 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
 
         @staticmethod
         def convert_record_to_ldif_entry(
-            record: FlextCore.Types.Dict,
+            record: FlextTypes.Dict,
             dn: str,
-            object_classes: FlextCore.Types.StringList | None = None,
-            attribute_mapping: FlextCore.Types.StringDict | None = None,
-        ) -> FlextCore.Result[str]:
+            object_classes: FlextTypes.StringList | None = None,
+            attribute_mapping: FlextTypes.StringDict | None = None,
+        ) -> FlextResult[str]:
             """Convert Singer record to LDIF entry format.
 
             Args:
@@ -241,11 +237,11 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 attribute_mapping: Optional mapping from record keys to LDIF attributes
 
             Returns:
-                FlextCore.Result[str]: LDIF entry or error
+                FlextResult[str]: LDIF entry or error
 
             """
             if not record or not dn:
-                return FlextCore.Result[str].fail("Record and DN are required")
+                return FlextResult[str].fail("Record and DN are required")
 
             try:
                 ldif_lines = []
@@ -285,12 +281,10 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 # Add empty line to separate entries
                 ldif_lines.append("")
 
-                return FlextCore.Result[str].ok("\n".join(ldif_lines))
+                return FlextResult[str].ok("\n".join(ldif_lines))
 
             except Exception as e:
-                return FlextCore.Result[str].fail(
-                    f"Error converting to LDIF entry: {e}"
-                )
+                return FlextResult[str].fail(f"Error converting to LDIF entry: {e}")
 
         @staticmethod
         def format_ldif_value(value: str) -> str:
@@ -357,42 +351,40 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
             return "\n".join(lines)
 
         @staticmethod
-        def validate_ldif_entry(entry: str) -> FlextCore.Result[bool]:
+        def validate_ldif_entry(entry: str) -> FlextResult[bool]:
             """Validate LDIF entry format.
 
             Args:
                 entry: LDIF entry to validate
 
             Returns:
-                FlextCore.Result[bool]: Validation result
+                FlextResult[bool]: Validation result
 
             """
             if not entry or not entry.strip():
-                return FlextCore.Result[bool].fail("LDIF entry cannot be empty")
+                return FlextResult[bool].fail("LDIF entry cannot be empty")
 
             lines = entry.strip().split("\n")
             if not lines:
-                return FlextCore.Result[bool].fail(
-                    "LDIF entry must have at least one line"
-                )
+                return FlextResult[bool].fail("LDIF entry must have at least one line")
 
             # First line must be DN
             first_line = lines[0].strip()
             if not first_line.startswith("dn:"):
-                return FlextCore.Result[bool].fail("LDIF entry must start with DN")
+                return FlextResult[bool].fail("LDIF entry must start with DN")
 
             # Extract DN value
             dn_value = first_line[3:].strip()
             if not dn_value:
-                return FlextCore.Result[bool].fail("DN cannot be empty")
+                return FlextResult[bool].fail("DN cannot be empty")
 
             # Validate DN format
             if not FlextTargetLdifUtilities.LdifDataProcessing.validate_dn_format(
                 dn_value
             ):
-                return FlextCore.Result[bool].fail(f"Invalid DN format: {dn_value}")
+                return FlextResult[bool].fail(f"Invalid DN format: {dn_value}")
 
-            return FlextCore.Result[bool].ok(True)
+            return FlextResult[bool].ok(True)
 
     class FileUtilities:
         """File handling utilities for LDIF operations."""
@@ -400,10 +392,10 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
         @staticmethod
         def create_ldif_file(
             file_path: str,
-            entries: FlextCore.Types.StringList,
+            entries: FlextTypes.StringList,
             *,
             overwrite: bool = False,
-        ) -> FlextCore.Result[str]:
+        ) -> FlextResult[str]:
             """Create LDIF file with entries.
 
             Args:
@@ -412,20 +404,18 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 overwrite: Whether to overwrite existing file
 
             Returns:
-                FlextCore.Result[str]: Success message or error
+                FlextResult[str]: Success message or error
 
             """
             if not file_path or not entries:
-                return FlextCore.Result[str].fail("File path and entries are required")
+                return FlextResult[str].fail("File path and entries are required")
 
             try:
                 path = Path(file_path)
 
                 # Check if file exists and overwrite flag
                 if path.exists() and not overwrite:
-                    return FlextCore.Result[str].fail(
-                        f"File already exists: {file_path}"
-                    )
+                    return FlextResult[str].fail(f"File already exists: {file_path}")
 
                 # Create parent directories if needed
                 path.parent.mkdir(parents=True, exist_ok=True)
@@ -437,16 +427,16 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                         if not entry.endswith("\n"):
                             f.write("\n")
 
-                return FlextCore.Result[str].ok(f"LDIF file created: {file_path}")
+                return FlextResult[str].ok(f"LDIF file created: {file_path}")
 
             except Exception as e:
-                return FlextCore.Result[str].fail(f"Error creating LDIF file: {e}")
+                return FlextResult[str].fail(f"Error creating LDIF file: {e}")
 
         @staticmethod
         def append_to_ldif_file(
             file_path: str,
-            entries: FlextCore.Types.StringList,
-        ) -> FlextCore.Result[str]:
+            entries: FlextTypes.StringList,
+        ) -> FlextResult[str]:
             """Append entries to existing LDIF file.
 
             Args:
@@ -454,11 +444,11 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 entries: List of LDIF entries to append
 
             Returns:
-                FlextCore.Result[str]: Success message or error
+                FlextResult[str]: Success message or error
 
             """
             if not file_path or not entries:
-                return FlextCore.Result[str].fail("File path and entries are required")
+                return FlextResult[str].fail("File path and entries are required")
 
             try:
                 path = Path(file_path)
@@ -474,46 +464,46 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                         if not entry.endswith("\n"):
                             f.write("\n")
 
-                return FlextCore.Result[str].ok(
+                return FlextResult[str].ok(
                     f"Entries appended to LDIF file: {file_path}"
                 )
 
             except Exception as e:
-                return FlextCore.Result[str].fail(f"Error appending to LDIF file: {e}")
+                return FlextResult[str].fail(f"Error appending to LDIF file: {e}")
 
         @staticmethod
-        def validate_ldif_file_path(file_path: str) -> FlextCore.Result[str]:
+        def validate_ldif_file_path(file_path: str) -> FlextResult[str]:
             """Validate LDIF file path.
 
             Args:
                 file_path: Path to validate
 
             Returns:
-                FlextCore.Result[str]: Validated path or error
+                FlextResult[str]: Validated path or error
 
             """
             if not file_path or not file_path.strip():
-                return FlextCore.Result[str].fail("File path cannot be empty")
+                return FlextResult[str].fail("File path cannot be empty")
 
             try:
                 path = Path(file_path)
 
                 # Check if path is valid
                 if not path.name:
-                    return FlextCore.Result[str].fail("Invalid file path")
+                    return FlextResult[str].fail("Invalid file path")
 
                 # Check file extension
                 if path.suffix.lower() != ".ldif":
-                    return FlextCore.Result[str].fail("File must have .ldif extension")
+                    return FlextResult[str].fail("File must have .ldif extension")
 
                 # Check if parent directory is writable (if it exists)
                 if path.parent.exists() and not path.parent.is_dir():
-                    return FlextCore.Result[str].fail("Parent path is not a directory")
+                    return FlextResult[str].fail("Parent path is not a directory")
 
-                return FlextCore.Result[str].ok(str(path.resolve()))
+                return FlextResult[str].ok(str(path.resolve()))
 
             except Exception as e:
-                return FlextCore.Result[str].fail(f"Invalid file path: {e}")
+                return FlextResult[str].fail(f"Invalid file path: {e}")
 
     class StreamUtilities:
         """Stream processing utilities for Singer targets."""
@@ -542,8 +532,8 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
         @staticmethod
         def validate_stream_compatibility(
             stream_name: str,
-            schema: FlextCore.Types.Dict,
-        ) -> FlextCore.Result[bool]:
+            schema: FlextTypes.Dict,
+        ) -> FlextResult[bool]:
             """Validate stream compatibility with LDIF operations.
 
             Args:
@@ -551,18 +541,16 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 schema: Stream schema
 
             Returns:
-                FlextCore.Result[bool]: Validation result
+                FlextResult[bool]: Validation result
 
             """
             if not stream_name or not schema:
-                return FlextCore.Result[bool].fail(
-                    "Stream name and schema are required"
-                )
+                return FlextResult[bool].fail("Stream name and schema are required")
 
             # Check if schema has required properties
             properties = schema.get("properties", {})
             if not properties:
-                return FlextCore.Result[bool].fail("Schema must have properties")
+                return FlextResult[bool].fail("Schema must have properties")
 
             # Check for DN building capability
             has_dn_field = "dn" in properties
@@ -571,11 +559,11 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
             )
 
             if not has_dn_field and not has_id_fields:
-                return FlextCore.Result[bool].fail(
+                return FlextResult[bool].fail(
                     "Schema must have either 'dn' field or identifier fields (id, uid, cn, username, email)"
                 )
 
-            return FlextCore.Result[bool].ok(True)
+            return FlextResult[bool].ok(True)
 
         @staticmethod
         def generate_ldif_stream_metadata(
@@ -583,7 +571,7 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
             record_count: int,
             file_size_bytes: int,
             processing_time: float,
-        ) -> FlextCore.Types.Dict:
+        ) -> FlextTypes.Dict:
             """Generate metadata for LDIF stream processing.
 
             Args:
@@ -593,7 +581,7 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 processing_time: Time taken for processing
 
             Returns:
-                FlextCore.Types.Dict: Stream metadata
+                FlextTypes.Dict: Stream metadata
 
             """
             return {
@@ -612,22 +600,22 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
 
         @staticmethod
         def validate_ldif_target_config(
-            config: FlextCore.Types.Dict,
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+            config: FlextTypes.Dict,
+        ) -> FlextResult[FlextTypes.Dict]:
             """Validate LDIF target configuration.
 
             Args:
                 config: Configuration dictionary
 
             Returns:
-                FlextCore.Result[FlextCore.Types.Dict]: Validated config or error
+                FlextResult[FlextTypes.Dict]: Validated config or error
 
             """
             required_fields = ["output_file"]
             missing_fields = [field for field in required_fields if field not in config]
 
             if missing_fields:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Missing required LDIF target fields: {', '.join(missing_fields)}"
                 )
 
@@ -639,7 +627,7 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 )
             )
             if file_validation.is_failure:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Invalid output file: {file_validation.error}"
                 )
 
@@ -647,7 +635,7 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
             operation_mode = config.get("operation_mode", "append")
             valid_modes = ["append", "overwrite", "create"]
             if operation_mode not in valid_modes:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Invalid operation mode: {operation_mode}. Valid modes: {', '.join(valid_modes)}"
                 )
 
@@ -655,7 +643,7 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
             if "dn_template" in config:
                 dn_template = config["dn_template"]
                 if not isinstance(dn_template, str) or not dn_template.strip():
-                    return FlextCore.Result[FlextCore.Types.Dict].fail(
+                    return FlextResult[FlextTypes.Dict].fail(
                         "DN template must be a non-empty string"
                     )
 
@@ -664,36 +652,36 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 "batch_size", FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE
             )
             if not isinstance(batch_size, int) or batch_size <= 0:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     "Batch size must be a positive integer"
                 )
 
-            return FlextCore.Result[FlextCore.Types.Dict].ok(config)
+            return FlextResult[FlextTypes.Dict].ok(config)
 
         @staticmethod
         def validate_ldif_entry_config(
-            config: FlextCore.Types.Dict,
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+            config: FlextTypes.Dict,
+        ) -> FlextResult[FlextTypes.Dict]:
             """Validate LDIF entry configuration.
 
             Args:
                 config: Entry configuration
 
             Returns:
-                FlextCore.Result[FlextCore.Types.Dict]: Validated config or error
+                FlextResult[FlextTypes.Dict]: Validated config or error
 
             """
             # Validate object classes if provided
             if "object_classes" in config:
                 object_classes = config["object_classes"]
                 if not isinstance(object_classes, list) or not object_classes:
-                    return FlextCore.Result[FlextCore.Types.Dict].fail(
+                    return FlextResult[FlextTypes.Dict].fail(
                         "Object classes must be a non-empty list"
                     )
 
                 for oc in object_classes:
                     if not isinstance(oc, str) or not oc.strip():
-                        return FlextCore.Result[FlextCore.Types.Dict].fail(
+                        return FlextResult[FlextTypes.Dict].fail(
                             "All object classes must be non-empty strings"
                         )
 
@@ -701,25 +689,25 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
             if "attribute_mapping" in config:
                 attribute_mapping = config["attribute_mapping"]
                 if not isinstance(attribute_mapping, dict):
-                    return FlextCore.Result[FlextCore.Types.Dict].fail(
+                    return FlextResult[FlextTypes.Dict].fail(
                         "Attribute mapping must be a dictionary"
                     )
 
                 for key, value in attribute_mapping.items():
                     if not isinstance(key, str) or not isinstance(value, str):
-                        return FlextCore.Result[FlextCore.Types.Dict].fail(
+                        return FlextResult[FlextTypes.Dict].fail(
                             "Attribute mapping keys and values must be strings"
                         )
 
-            return FlextCore.Result[FlextCore.Types.Dict].ok(config)
+            return FlextResult[FlextTypes.Dict].ok(config)
 
     class StateManagement:
         """State management utilities for target operations."""
 
         @staticmethod
         def get_target_state(
-            state: FlextCore.Types.Dict, stream_name: str
-        ) -> FlextCore.Types.Dict:
+            state: FlextTypes.Dict, stream_name: str
+        ) -> FlextTypes.Dict:
             """Get state for a specific target stream.
 
             Args:
@@ -727,17 +715,17 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 stream_name: Name of the stream
 
             Returns:
-                FlextCore.Types.Dict: Stream state
+                FlextTypes.Dict: Stream state
 
             """
             return state.get("bookmarks", {}).get(stream_name, {})
 
         @staticmethod
         def set_target_state(
-            state: FlextCore.Types.Dict,
+            state: FlextTypes.Dict,
             stream_name: str,
-            stream_state: FlextCore.Types.Dict,
-        ) -> FlextCore.Types.Dict:
+            stream_state: FlextTypes.Dict,
+        ) -> FlextTypes.Dict:
             """Set state for a specific target stream.
 
             Args:
@@ -746,7 +734,7 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 stream_state: State data for the stream
 
             Returns:
-                FlextCore.Types.Dict: Updated state
+                FlextTypes.Dict: Updated state
 
             """
             if "bookmarks" not in state:
@@ -761,8 +749,8 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
             records_processed: int,
             file_path: str,
             file_size_bytes: int,
-            last_processed_record: FlextCore.Types.Dict | None = None,
-        ) -> FlextCore.Types.Dict:
+            last_processed_record: FlextTypes.Dict | None = None,
+        ) -> FlextTypes.Dict:
             """Create processing state for target stream.
 
             Args:
@@ -773,7 +761,7 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 last_processed_record: Last processed record for checkpointing
 
             Returns:
-                FlextCore.Types.Dict: Processing state
+                FlextTypes.Dict: Processing state
 
             """
             state = {
@@ -800,11 +788,11 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
 
         @staticmethod
         def update_processing_progress(
-            state: FlextCore.Types.Dict,
+            state: FlextTypes.Dict,
             stream_name: str,
             records_count: int,
             file_size_bytes: int,
-        ) -> FlextCore.Types.Dict:
+        ) -> FlextTypes.Dict:
             """Update processing progress in state.
 
             Args:
@@ -814,7 +802,7 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
                 file_size_bytes: Current file size
 
             Returns:
-                FlextCore.Types.Dict: Updated state
+                FlextTypes.Dict: Updated state
 
             """
             stream_state = FlextTargetLdifUtilities.StateManagement.get_target_state(
@@ -838,28 +826,28 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
 
     # Proxy methods for backward compatibility
     @classmethod
-    def parse_singer_message(cls, line: str) -> FlextCore.Result[FlextCore.Types.Dict]:
+    def parse_singer_message(cls, line: str) -> FlextResult[FlextTypes.Dict]:
         """Proxy method for SingerUtilities.parse_singer_message()."""
         return cls.SingerUtilities.parse_singer_message(line)
 
     @classmethod
     def build_ldif_dn(
         cls,
-        record: FlextCore.Types.Dict,
+        record: FlextTypes.Dict,
         dn_template: str,
         base_dn: str | None = None,
-    ) -> FlextCore.Result[str]:
+    ) -> FlextResult[str]:
         """Proxy method for LdifDataProcessing.build_ldif_dn()."""
         return cls.LdifDataProcessing.build_ldif_dn(record, dn_template, base_dn)
 
     @classmethod
     def convert_record_to_ldif_entry(
         cls,
-        record: FlextCore.Types.Dict,
+        record: FlextTypes.Dict,
         dn: str,
-        object_classes: FlextCore.Types.StringList | None = None,
-        attribute_mapping: FlextCore.Types.StringDict | None = None,
-    ) -> FlextCore.Result[str]:
+        object_classes: FlextTypes.StringList | None = None,
+        attribute_mapping: FlextTypes.StringDict | None = None,
+    ) -> FlextResult[str]:
         """Proxy method for LdifDataProcessing.convert_record_to_ldif_entry()."""
         return cls.LdifDataProcessing.convert_record_to_ldif_entry(
             record, dn, object_classes, attribute_mapping
@@ -869,24 +857,24 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
     def create_ldif_file(
         cls,
         file_path: str,
-        entries: FlextCore.Types.StringList,
+        entries: FlextTypes.StringList,
         *,
         overwrite: bool = False,
-    ) -> FlextCore.Result[str]:
+    ) -> FlextResult[str]:
         """Proxy method for FileUtilities.create_ldif_file()."""
         return cls.FileUtilities.create_ldif_file(file_path, entries, overwrite)
 
     @classmethod
     def validate_ldif_target_config(
-        cls, config: FlextCore.Types.Dict
-    ) -> FlextCore.Result[FlextCore.Types.Dict]:
+        cls, config: FlextTypes.Dict
+    ) -> FlextResult[FlextTypes.Dict]:
         """Proxy method for ConfigValidation.validate_ldif_target_config()."""
         return cls.ConfigValidation.validate_ldif_target_config(config)
 
     @classmethod
     def get_target_state(
-        cls, state: FlextCore.Types.Dict, stream_name: str
-    ) -> FlextCore.Types.Dict:
+        cls, state: FlextTypes.Dict, stream_name: str
+    ) -> FlextTypes.Dict:
         """Proxy method for StateManagement.get_target_state()."""
         return cls.StateManagement.get_target_state(state, stream_name)
 
@@ -897,8 +885,8 @@ class FlextTargetLdifUtilities(FlextCore.Utilities):
         records_processed: int,
         file_path: str,
         file_size_bytes: int,
-        last_processed_record: FlextCore.Types.Dict | None = None,
-    ) -> FlextCore.Types.Dict:
+        last_processed_record: FlextTypes.Dict | None = None,
+    ) -> FlextTypes.Dict:
         """Proxy method for StateManagement.create_processing_state()."""
         return cls.StateManagement.create_processing_state(
             stream_name,

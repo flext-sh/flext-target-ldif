@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from flext_core import FlextCore
+from flext_core import FlextExceptions, FlextLogger, FlextResult, FlextTypes
 from flext_meltano import (
     FlextMeltanoBridge,
     FlextMeltanoConfig,
@@ -11,10 +11,8 @@ from flext_meltano import (
     StreamDefinition,
 )
 
-from flext_target_ldif.__version__ import __version__, __version_info__
 from flext_target_ldif.cli import main as cli_main
 from flext_target_ldif.config import FlextTargetLdifConfig
-from flext_target_ldif.exceptions import (
     FlextTargetLdifError,
     FlextTargetLdifErrorDetails,
     FlextTargetLdifFileError,
@@ -60,15 +58,14 @@ FlextTargetLDIFConfig = _FlextTargetLdifConfig
 LDIFTarget = _TargetLDIF
 TargetLDIFConfig = _FlextTargetLdifConfig
 
-__all__: FlextCore.Types.StringList = [
-    "FlextCore.Exceptions",
-    "FlextCore.Logger",
-    "FlextCore.Result",
+__all__: FlextTypes.StringList = [
     "FlextLdifTarget",
+    "FlextLogger",
     "FlextMeltanoBridge",
     "FlextMeltanoConfig",
     "FlextMeltanoTargetAbstractions",
     "FlextMeltanoTypes",
+    "FlextResult",
     "FlextTargetLDIF",
     "FlextTargetLDIFConfig",
     "FlextTargetLdifConfig",
@@ -107,4 +104,4 @@ __all__: FlextCore.Types.StringList = [
     "validate_record",
     "validate_schema",
 ]
-from typing import Final
+from typing import Final  # noqa: E402

@@ -11,7 +11,7 @@ import typing as t
 from datetime import datetime
 from typing import override
 
-from flext_core import FlextCore
+from flext_core import FlextTypes
 
 
 def transform_timestamp(value: object) -> str:
@@ -135,16 +135,14 @@ class RecordTransformer:
     @override
     def __init__(
         self,
-        attribute_mapping: FlextCore.Types.StringDict | None = None,
+        attribute_mapping: FlextTypes.StringDict | None = None,
         custom_transformers: dict[str, t.Callable[[object], str]] | None = None,
     ) -> None:
         """Initialize the record transformer."""
         self.attribute_mapping = attribute_mapping or {}
         self.custom_transformers = custom_transformers or {}
 
-    def transform_record(
-        self, record: FlextCore.Types.Dict
-    ) -> FlextCore.Types.StringDict:
+    def transform_record(self, record: FlextTypes.Dict) -> FlextTypes.StringDict:
         """Transform a Singer record to LDAP-compatible format."""
         transformed = {}
 
@@ -175,10 +173,10 @@ class RecordTransformer:
 
     def add_required_attributes(
         self,
-        record: FlextCore.Types.StringDict,
-    ) -> FlextCore.Types.Dict:
+        record: FlextTypes.StringDict,
+    ) -> FlextTypes.Dict:
         """Add required LDAP attributes to the record."""
-        result: FlextCore.Types.Dict = dict[str, object](record)
+        result: FlextTypes.Dict = dict[str, object](record)
 
         # Ensure objectClass is present
         if "objectclass" not in result:
@@ -201,7 +199,7 @@ class RecordTransformer:
             if "cn" in result:
                 # Use last word of cn as surname
                 cn_value = result["cn"]
-                words: FlextCore.Types.List = (
+                words: FlextTypes.List = (
                     cn_value.split() if isinstance(cn_value, str) else []
                 )
                 result["sn"] = words[-1] if words else "Unknown"
