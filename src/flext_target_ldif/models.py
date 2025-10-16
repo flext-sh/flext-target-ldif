@@ -434,9 +434,9 @@ class FlextTargetLdifModels(FlextModels):
 #
 # RESOLUTION: Import from utilities.py to eliminate duplication completely.
 
-from typing import Literal  # noqa: E402
+from typing import Literal
 
-from flext_target_ldif.utilities import FlextTargetLdifUtilities  # noqa: E402
+from flext_target_ldif.utilities import FlextTargetLdifUtilities
 
 # Note: This import ensures backward compatibility while eliminating duplication
 
