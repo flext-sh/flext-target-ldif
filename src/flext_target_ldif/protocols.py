@@ -2,11 +2,11 @@
 
 from typing import Protocol, runtime_checkable
 
-from flext_core import FlextCore
+from flext_core import FlextProtocols, FlextResult, FlextTypes
 
 
 class FlextTargetLdifProtocols:
-    """Singer Target LDIF protocols with explicit re-exports from FlextCore.Protocols foundation.
+    """Singer Target LDIF protocols with explicit re-exports from FlextProtocols foundation.
 
     Domain Extension Pattern (Phase 3):
     - Explicit re-export of foundation protocols (not inheritance)
@@ -18,13 +18,6 @@ class FlextTargetLdifProtocols:
     # RE-EXPORT FOUNDATION PROTOCOLS (EXPLICIT PATTERN)
     # ============================================================================
 
-    Foundation = FlextCore.Protocols.Foundation
-    Domain = FlextCore.Protocols.Domain
-    Application = FlextCore.Protocols.Application
-    Infrastructure = FlextCore.Protocols.Infrastructure
-    Extensions = FlextCore.Protocols.Extensions
-    Commands = FlextCore.Protocols.Commands
-
     # ============================================================================
     # SINGER TARGET LDIF-SPECIFIC PROTOCOLS (DOMAIN NAMESPACE)
     # ============================================================================
@@ -33,46 +26,46 @@ class FlextTargetLdifProtocols:
         """Singer Target LDIF domain protocols for LDIF file generation."""
 
         @runtime_checkable
-        class LdifGenerationProtocol(FlextCore.Protocols.Domain.Service, Protocol):
+        class LdifGenerationProtocol(FlextProtocols.Service, Protocol):
             """Protocol for LDIF file generation."""
 
             def generate_ldif(
-                self, records: list[FlextCore.Types.Dict]
-            ) -> FlextCore.Result[str]: ...
+                self, records: list[FlextTypes.Dict]
+            ) -> FlextResult[str]: ...
 
         @runtime_checkable
-        class DataTransformationProtocol(FlextCore.Protocols.Domain.Service, Protocol):
+        class DataTransformationProtocol(FlextProtocols.Service, Protocol):
             """Protocol for Singer to LDIF transformation."""
 
             def transform_to_ldif(
-                self, record: FlextCore.Types.Dict
-            ) -> FlextCore.Result[str]: ...
+                self, record: FlextTypes.Dict
+            ) -> FlextResult[str]: ...
 
         @runtime_checkable
-        class FileManagementProtocol(FlextCore.Protocols.Domain.Service, Protocol):
+        class FileManagementProtocol(FlextProtocols.Service, Protocol):
             """Protocol for LDIF file management."""
 
             def write_ldif_file(
                 self, file_path: str, content: str
-            ) -> FlextCore.Result[None]: ...
+            ) -> FlextResult[None]: ...
 
         @runtime_checkable
-        class ValidationProtocol(FlextCore.Protocols.Domain.Service, Protocol):
+        class ValidationProtocol(FlextProtocols.Service, Protocol):
             """Protocol for LDIF validation."""
 
-            def validate_ldif(self, ldif_content: str) -> FlextCore.Result[bool]: ...
+            def validate_ldif(self, ldif_content: str) -> FlextResult[bool]: ...
 
         @runtime_checkable
-        class PerformanceProtocol(FlextCore.Protocols.Domain.Service, Protocol):
+        class PerformanceProtocol(FlextProtocols.Service, Protocol):
             """Protocol for LDIF generation performance."""
 
-            def optimize_batch(self, batch_size: int) -> FlextCore.Result[int]: ...
+            def optimize_batch(self, batch_size: int) -> FlextResult[int]: ...
 
         @runtime_checkable
-        class MonitoringProtocol(FlextCore.Protocols.Domain.Service, Protocol):
+        class MonitoringProtocol(FlextProtocols.Service, Protocol):
             """Protocol for LDIF generation monitoring."""
 
-            def track_progress(self, records: int) -> FlextCore.Result[None]: ...
+            def track_progress(self, records: int) -> FlextResult[None]: ...
 
     # ============================================================================
     # BACKWARD COMPATIBILITY ALIASES (100% COMPATIBILITY)

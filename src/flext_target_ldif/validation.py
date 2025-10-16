@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import re
 
-from flext_core import FlextCore
+from flext_core import FlextTypes
 
 from flext_target_ldif.constants import FlextTargetLdifConstants
 
@@ -70,10 +70,10 @@ def sanitize_attribute_name(name: str) -> str:
 
 
 def validate_record(
-    record: FlextCore.Types.Dict,
-) -> dict[str, FlextCore.Types.StringList]:
+    record: FlextTypes.Dict,
+) -> dict[str, FlextTypes.StringList]:
     """Validate a record and return validation errors."""
-    errors: dict[str, FlextCore.Types.StringList] = {}
+    errors: dict[str, FlextTypes.StringList] = {}
 
     if not record:
         errors["record"] = ["Record cannot be empty"]
@@ -91,7 +91,7 @@ def validate_record(
 
     # Validate individual fields
     for field, value in record.items():
-        field_errors: FlextCore.Types.StringList = []
+        field_errors: FlextTypes.StringList = []
 
         # Validate field name
         if not validate_attribute_name(field):
@@ -108,16 +108,16 @@ def validate_record(
 
 
 def validate_schema(
-    schema: FlextCore.Types.Dict,
-) -> dict[str, FlextCore.Types.StringList]:
+    schema: FlextTypes.Dict,
+) -> dict[str, FlextTypes.StringList]:
     """Validate Singer schema for LDIF compatibility."""
-    errors: dict[str, FlextCore.Types.StringList] = {}
+    errors: dict[str, FlextTypes.StringList] = {}
 
     if not schema:
         errors["schema"] = ["Schema cannot be empty"]
         return errors
 
-    properties: FlextCore.Types.Dict = schema.get("properties", {})
+    properties: FlextTypes.Dict = schema.get("properties", {})
     if not properties:
         errors["properties"] = ["Schema must define properties"]
         return errors

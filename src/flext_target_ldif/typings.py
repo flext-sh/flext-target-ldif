@@ -1,11 +1,11 @@
 """FLEXT Target LDIF Types - Domain-specific Singer LDIF target type definitions.
 
-This module provides FLEXT Target LDIF-specific type definitions extending FlextCore.Types.
+This module provides FLEXT Target LDIF-specific type definitions extending FlextTypes.
 Follows FLEXT standards:
 - Domain-specific complex types only
 - No simple aliases to primitive types
 - Python 3.13+ syntax
-- Extends FlextCore.Types properly
+- Extends FlextTypes properly
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from flext_core import FlextCore
+from flext_core import FlextTypes
 
 # =============================================================================
 # FLEXT TARGET LDIF-SPECIFIC TYPE VARIABLES - Domain-specific TypeVars for Singer LDIF target operations
@@ -24,8 +24,8 @@ from flext_core import FlextCore
 
 
 # FLEXT Target LDIF domain TypeVars
-class FlextTargetLdifTypes(FlextCore.Types):
-    """FLEXT Target LDIF-specific type definitions extending FlextCore.Types.
+class FlextTargetLdifTypes(FlextTypes):
+    """FLEXT Target LDIF-specific type definitions extending FlextTypes.
 
     Domain-specific type system for Singer protocol LDIF file export operations.
     Contains ONLY complex Singer target and LDIF-specific types, no simple aliases.
@@ -39,23 +39,17 @@ class FlextTargetLdifTypes(FlextCore.Types):
     class SingerProtocol:
         """Singer protocol complex types."""
 
-        type SingerMessage = dict[str, FlextCore.Types.JsonValue | FlextCore.Types.Dict]
-        type SingerSchema = dict[
-            str, FlextCore.Types.JsonValue | list[FlextCore.Types.Dict]
-        ]
-        type SingerRecord = dict[str, FlextCore.Types.JsonValue | FlextCore.Types.Dict]
+        type SingerMessage = dict[str, FlextTypes.JsonValue | FlextTypes.Dict]
+        type SingerSchema = dict[str, FlextTypes.JsonValue | list[FlextTypes.Dict]]
+        type SingerRecord = dict[str, FlextTypes.JsonValue | FlextTypes.Dict]
         type SingerState = dict[
-            str, FlextCore.Types.JsonValue | dict[str, FlextCore.Types.JsonValue]
+            str, FlextTypes.JsonValue | dict[str, FlextTypes.JsonValue]
         ]
         type StreamConfiguration = dict[
-            str, str | bool | dict[str, FlextCore.Types.JsonValue]
+            str, str | bool | dict[str, FlextTypes.JsonValue]
         ]
-        type TargetConfiguration = dict[
-            str, FlextCore.Types.ConfigValue | FlextCore.Types.Dict
-        ]
-        type MessageProcessing = dict[
-            str, int | str | dict[str, FlextCore.Types.JsonValue]
-        ]
+        type TargetConfiguration = dict[str, FlextTypes.ConfigValue | FlextTypes.Dict]
+        type MessageProcessing = dict[str, int | str | dict[str, FlextTypes.JsonValue]]
 
     # =========================================================================
     # LDIF EXPORT TYPES - LDIF file generation and export types
@@ -65,26 +59,22 @@ class FlextTargetLdifTypes(FlextCore.Types):
         """LDIF export complex types."""
 
         type LdifEntry = dict[
-            str, str | FlextCore.Types.StringList | dict[str, FlextCore.Types.JsonValue]
+            str, str | FlextTypes.StringList | dict[str, FlextTypes.JsonValue]
         ]
         type LdifAttributes = dict[
-            str, str | FlextCore.Types.StringList | bytes | FlextCore.Types.Dict
+            str, str | FlextTypes.StringList | bytes | FlextTypes.Dict
         ]
         type LdifRecord = dict[
             str,
-            FlextCore.Types.JsonValue
-            | FlextCore.Types.StringList
-            | FlextCore.Types.Dict,
+            FlextTypes.JsonValue | FlextTypes.StringList | FlextTypes.Dict,
         ]
         type LdifFileConfig = dict[
-            str, str | int | bool | dict[str, FlextCore.Types.JsonValue]
+            str, str | int | bool | dict[str, FlextTypes.JsonValue]
         ]
-        type LdifFormatting = dict[str, str | int | bool | FlextCore.Types.Dict]
-        type LdifValidation = dict[
-            str, bool | str | dict[str, FlextCore.Types.JsonValue]
-        ]
+        type LdifFormatting = dict[str, str | int | bool | FlextTypes.Dict]
+        type LdifValidation = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
         type ExportResult = dict[
-            str, int | str | FlextCore.Types.StringList | FlextCore.Types.Dict
+            str, int | str | FlextTypes.StringList | FlextTypes.Dict
         ]
 
     # =========================================================================
@@ -94,18 +84,14 @@ class FlextTargetLdifTypes(FlextCore.Types):
     class FileProcessing:
         """File processing complex types."""
 
-        type FileConfiguration = dict[
-            str, str | int | dict[str, FlextCore.Types.JsonValue]
-        ]
-        type StreamWriter = dict[str, str | bool | int | FlextCore.Types.Dict]
+        type FileConfiguration = dict[str, str | int | dict[str, FlextTypes.JsonValue]]
+        type StreamWriter = dict[str, str | bool | int | FlextTypes.Dict]
         type FileOutput = dict[
-            str, str | FlextCore.Types.StringList | dict[str, FlextCore.Types.JsonValue]
+            str, str | FlextTypes.StringList | dict[str, FlextTypes.JsonValue]
         ]
-        type CompressionConfig = dict[str, str | bool | int | FlextCore.Types.Dict]
-        type FileValidation = dict[
-            str, bool | str | dict[str, FlextCore.Types.JsonValue]
-        ]
-        type IOMetrics = dict[str, int | float | FlextCore.Types.Dict]
+        type CompressionConfig = dict[str, str | bool | int | FlextTypes.Dict]
+        type FileValidation = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
+        type IOMetrics = dict[str, int | float | FlextTypes.Dict]
 
     # =========================================================================
     # DATA TRANSFORMATION TYPES - Singer to LDIF transformation types
@@ -114,21 +100,13 @@ class FlextTargetLdifTypes(FlextCore.Types):
     class DataTransformation:
         """Data transformation complex types."""
 
-        type SingerToLdifMapping = dict[str, str | dict[str, FlextCore.Types.JsonValue]]
-        type AttributeMapping = dict[
-            str, str | FlextCore.Types.StringList | FlextCore.Types.Dict
-        ]
-        type SchemaTransformation = dict[
-            str, FlextCore.Types.JsonValue | FlextCore.Types.Dict
-        ]
-        type RecordTransformation = dict[
-            str, FlextCore.Types.JsonValue | FlextCore.Types.Dict
-        ]
-        type DataNormalization = dict[
-            str, bool | str | dict[str, FlextCore.Types.JsonValue]
-        ]
+        type SingerToLdifMapping = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type AttributeMapping = dict[str, str | FlextTypes.StringList | FlextTypes.Dict]
+        type SchemaTransformation = dict[str, FlextTypes.JsonValue | FlextTypes.Dict]
+        type RecordTransformation = dict[str, FlextTypes.JsonValue | FlextTypes.Dict]
+        type DataNormalization = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
         type TransformationRules = dict[
-            str, str | FlextCore.Types.StringList | FlextCore.Types.Dict
+            str, str | FlextTypes.StringList | FlextTypes.Dict
         ]
 
     # =========================================================================
@@ -139,23 +117,17 @@ class FlextTargetLdifTypes(FlextCore.Types):
         """Validation complex types."""
 
         type LdifFormatValidation = dict[
-            str, bool | str | dict[str, FlextCore.Types.JsonValue]
+            str, bool | str | dict[str, FlextTypes.JsonValue]
         ]
-        type SingerCompliance = dict[
-            str, bool | str | dict[str, FlextCore.Types.JsonValue]
-        ]
+        type SingerCompliance = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
         type SchemaValidation = dict[
-            str, bool | FlextCore.Types.StringList | FlextCore.Types.Dict
+            str, bool | FlextTypes.StringList | FlextTypes.Dict
         ]
-        type RecordValidation = dict[
-            str, bool | str | dict[str, FlextCore.Types.JsonValue]
-        ]
+        type RecordValidation = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
         type FormatCompliance = dict[
-            str, bool | str | FlextCore.Types.StringList | FlextCore.Types.Dict
+            str, bool | str | FlextTypes.StringList | FlextTypes.Dict
         ]
-        type ValidationRules = dict[
-            str, bool | str | dict[str, FlextCore.Types.JsonValue]
-        ]
+        type ValidationRules = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
 
     # =========================================================================
     # TARGET CONFIGURATION TYPES - Singer target configuration types
@@ -164,18 +136,14 @@ class FlextTargetLdifTypes(FlextCore.Types):
     class TargetConfiguration:
         """Target configuration complex types."""
 
-        type TargetSettings = dict[
-            str, FlextCore.Types.ConfigValue | FlextCore.Types.Dict
-        ]
+        type TargetSettings = dict[str, FlextTypes.ConfigValue | FlextTypes.Dict]
         type LdifTargetConfig = dict[
-            str, str | int | bool | dict[str, FlextCore.Types.JsonValue]
+            str, str | int | bool | dict[str, FlextTypes.JsonValue]
         ]
-        type OutputConfiguration = dict[str, str | dict[str, FlextCore.Types.JsonValue]]
-        type StreamMapping = dict[str, str | dict[str, FlextCore.Types.JsonValue]]
-        type BatchConfiguration = dict[str, int | bool | FlextCore.Types.Dict]
-        type ErrorHandling = dict[
-            str, str | bool | dict[str, FlextCore.Types.JsonValue]
-        ]
+        type OutputConfiguration = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type StreamMapping = dict[str, str | dict[str, FlextTypes.JsonValue]]
+        type BatchConfiguration = dict[str, int | bool | FlextTypes.Dict]
+        type ErrorHandling = dict[str, str | bool | dict[str, FlextTypes.JsonValue]]
 
     # =========================================================================
     # PERFORMANCE TYPES - Performance optimization and monitoring types
@@ -184,32 +152,30 @@ class FlextTargetLdifTypes(FlextCore.Types):
     class Performance:
         """Performance complex types."""
 
-        type PerformanceMetrics = dict[str, int | float | FlextCore.Types.Dict]
+        type PerformanceMetrics = dict[str, int | float | FlextTypes.Dict]
         type OptimizationConfig = dict[
-            str, int | bool | dict[str, FlextCore.Types.JsonValue]
+            str, int | bool | dict[str, FlextTypes.JsonValue]
         ]
-        type BufferConfiguration = dict[str, int | str | FlextCore.Types.Dict]
-        type StreamingConfig = dict[
-            str, int | bool | dict[str, FlextCore.Types.JsonValue]
-        ]
-        type MemoryManagement = dict[str, int | bool | FlextCore.Types.Dict]
-        type IOOptimization = dict[str, int | bool | str | FlextCore.Types.Dict]
+        type BufferConfiguration = dict[str, int | str | FlextTypes.Dict]
+        type StreamingConfig = dict[str, int | bool | dict[str, FlextTypes.JsonValue]]
+        type MemoryManagement = dict[str, int | bool | FlextTypes.Dict]
+        type IOOptimization = dict[str, int | bool | str | FlextTypes.Dict]
 
     # =========================================================================
-    # FLEXT TARGET LDIF PROJECT TYPES - Domain-specific project types extending FlextCore.Types
+    # FLEXT TARGET LDIF PROJECT TYPES - Domain-specific project types extending FlextTypes
     # =========================================================================
 
-    class Project(FlextCore.Types.Project):
-        """FLEXT Target LDIF-specific project types extending FlextCore.Types.Project.
+    class Project(FlextTypes.Project):
+        """FLEXT Target LDIF-specific project types extending FlextTypes.Project.
 
         Adds FLEXT Target LDIF Singer target-specific project types while inheriting
-        generic types from FlextCore.Types. Follows domain separation principle:
+        generic types from FlextTypes. Follows domain separation principle:
         FLEXT Target LDIF domain owns Singer LDIF target and LDIF export-specific types.
         """
 
         # FLEXT Target LDIF-specific project types extending the generic ones
         type ProjectType = Literal[
-            # Generic types inherited from FlextCore.Types.Project
+            # Generic types inherited from FlextTypes.Project
             "library",
             "application",
             "service",
@@ -236,16 +202,16 @@ class FlextTargetLdifTypes(FlextCore.Types):
         ]
 
         # FLEXT Target LDIF-specific project configurations
-        type FlextTargetLdifConfig = dict[str, FlextCore.Types.ConfigValue | object]
-        type SingerTargetConfig = dict[str, str | int | bool | FlextCore.Types.Dict]
-        type LdifExportConfig = dict[str, FlextCore.Types.ConfigValue | object]
-        type TargetPipelineConfig = dict[str, bool | str | FlextCore.Types.Dict]
+        type FlextTargetLdifConfig = dict[str, FlextTypes.ConfigValue | object]
+        type SingerTargetConfig = dict[str, str | int | bool | FlextTypes.Dict]
+        type LdifExportConfig = dict[str, FlextTypes.ConfigValue | object]
+        type TargetPipelineConfig = dict[str, bool | str | FlextTypes.Dict]
 
 
 # =============================================================================
 # PUBLIC API EXPORTS - FLEXT Target LDIF TypeVars and types
 # =============================================================================
 
-__all__: FlextCore.Types.StringList = [
+__all__: FlextTypes.StringList = [
     "FlextTargetLdifTypes",
 ]
