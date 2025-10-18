@@ -2,7 +2,8 @@
 
 from typing import Protocol, runtime_checkable
 
-from flext_core import FlextProtocols, FlextResult, FlextTypes
+from flext_core import FlextProtocols, FlextResult
+from flext_core.base import FlxBase
 
 
 class FlextTargetLdifProtocols:
@@ -26,46 +27,54 @@ class FlextTargetLdifProtocols:
         """Singer Target LDIF domain protocols for LDIF file generation."""
 
         @runtime_checkable
-        class LdifGenerationProtocol(FlextProtocols.Service, Protocol):
+        class LdifGenerationProtocol(FlextProtocols.Service[object], Protocol):
             """Protocol for LDIF file generation."""
 
             def generate_ldif(
-                self, records: list[FlextTypes.Dict]
-            ) -> FlextResult[str]: ...
+                self, records: list[dict[str, object]]
+            ) -> FlextResult[str]:
+                """Generate LDIF content from records."""
 
         @runtime_checkable
-        class DataTransformationProtocol(FlextProtocols.Service, Protocol):
+        class DataTransformationProtocol(FlextProtocols.Service[object], Protocol):
             """Protocol for Singer to LDIF transformation."""
 
-            def transform_to_ldif(
-                self, record: FlextTypes.Dict
-            ) -> FlextResult[str]: ...
+            def transform_to_ldif(self, record: dict[str, object]) -> FlextResult[str]:
+                """Transform Singer record to LDIF format."""
 
         @runtime_checkable
-        class FileManagementProtocol(FlextProtocols.Service, Protocol):
+        class FileManagementProtocol(FlextProtocols.Service[object], Protocol):
             """Protocol for LDIF file management."""
 
             def write_ldif_file(
                 self, file_path: str, content: str
-            ) -> FlextResult[None]: ...
+            ) -> FlextResult[None]:
+                """Write LDIF content to file."""
 
         @runtime_checkable
-        class ValidationProtocol(FlextProtocols.Service, Protocol):
+        class ValidationProtocol(FlextProtocols.Service[object], Protocol):
             """Protocol for LDIF validation."""
 
-            def validate_ldif(self, ldif_content: str) -> FlextResult[bool]: ...
+            def validate_ldif(self, ldif_content: str) -> FlextResult[bool]:
+                """Validate LDIF content."""
 
         @runtime_checkable
-        class PerformanceProtocol(FlextProtocols.Service, Protocol):
+        class PerformanceProtocol(FlxBase, Protocol):
             """Protocol for LDIF generation performance."""
 
-            def optimize_batch(self, batch_size: int) -> FlextResult[int]: ...
+            def optimize_batch(self, batch_size: int) -> FlextResult[int]:
+                """Optimize batch size for performance."""
+                msg = "Subclasses must implement optimize_batch"
+                raise NotImplementedError(msg)
 
         @runtime_checkable
-        class MonitoringProtocol(FlextProtocols.Service, Protocol):
+        class MonitoringProtocol(FlxBase, Protocol):
             """Protocol for LDIF generation monitoring."""
 
-            def track_progress(self, records: int) -> FlextResult[None]: ...
+            def track_progress(self, records: int) -> FlextResult[None]:
+                """Track progress of LDIF generation."""
+                msg = "Subclasses must implement track_progress"
+                raise NotImplementedError(msg)
 
     # ============================================================================
     # BACKWARD COMPATIBILITY ALIASES (100% COMPATIBILITY)
