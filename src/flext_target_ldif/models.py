@@ -6,9 +6,12 @@ This module provides data models for LDIF target operations.
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from typing import Literal
 
-from flext_core import FlextConfig, FlextModels, FlextResult, FlextTypes
+from flext_core import FlextConfig, FlextModels, FlextResult
 from pydantic import ConfigDict, Field
+
+from flext_target_ldif.utilities import FlextTargetLdifUtilities
 
 # LDIF target constants
 FORMAT_VALIDATION = "FORMAT_VALIDATION"
@@ -58,10 +61,10 @@ class LdifExportConfig(FlextConfig):
     dn_template: str = Field(
         ..., description="DN template for generating LDIF entry DNs"
     )
-    attribute_mappings: FlextTypes.StringDict = Field(
+    attribute_mappings: dict[str, str] = Field(
         default_factory=dict, description="Singer field to LDIF attribute mappings"
     )
-    object_classes: FlextTypes.StringList = Field(
+    object_classes: list[str] = Field(
         default_factory=list, description="Default LDAP object classes for entries"
     )
 
@@ -88,16 +91,16 @@ class LdifEntry(FlextModels.Entity):
     distinguished_name: str = Field(
         ..., description="LDIF Distinguished Name (DN)", min_length=1, max_length=1000
     )
-    attributes: dict[str, FlextTypes.StringList] = Field(
+    attributes: dict[str, list[str]] = Field(
         default_factory=dict, description="LDIF attributes with values"
     )
-    object_classes: FlextTypes.StringList = Field(
+    object_classes: list[str] = Field(
         default_factory=list, description="LDAP object classes"
     )
     change_type: str | None = Field(
         None, description="LDIF change type (add, modify, delete, modrdn)"
     )
-    controls: FlextTypes.StringList = Field(
+    controls: list[str] = Field(
         default_factory=list, description="LDAP controls for the entry"
     )
 
@@ -168,11 +171,13 @@ class LdifFile(FlextModels.Entity):
 class LdifTransformationResult(FlextModels.Entity):
     """Result of Singer to LDIF transformation."""
 
-    original_record: FlextTypes.Dict = Field(..., description="Original Singer record")
+    original_record: dict[str, object] = Field(
+        ..., description="Original Singer record"
+    )
     transformed_entry: FlextTargetLdifModels.LdifEntry = Field(
         ..., description="Resulting LDIF entry"
     )
-    transformation_errors: FlextTypes.StringList = Field(
+    transformation_errors: list[str] = Field(
         default_factory=list, description="Transformation errors"
     )
     processing_time_ms: float = Field(
@@ -278,7 +283,7 @@ class LdifTargetResult(FlextModels.Entity):
     """Result of LDIF target operation processing."""
 
     stream_name: str = Field(..., description="Singer stream name")
-    output_files: FlextTypes.StringList = Field(
+    output_files: list[str] = Field(
         default_factory=list, description="Generated LDIF file paths"
     )
     records_processed: int = Field(
@@ -306,12 +311,10 @@ class LdifTargetResult(FlextModels.Entity):
     )
 
     # Error tracking
-    error_messages: FlextTypes.StringList = Field(
+    error_messages: list[str] = Field(
         default_factory=list, description="Error messages encountered"
     )
-    warnings: FlextTypes.StringList = Field(
-        default_factory=list, description="Warning messages"
-    )
+    warnings: list[str] = Field(default_factory=list, description="Warning messages")
 
     def validate_business_rules(self) -> FlextResult[None]:
         """Validate LDIF target result business rules."""
@@ -376,7 +379,7 @@ class LdifErrorContext(FlextModels.StrictArbitraryTypesModel):
 
 
 # Type aliases for backward compatibility
-LdifRecord = FlextTypes.Dict
+LdifRecord = dict[str, object]
 LdifRecords = list[LdifRecord]
 
 
@@ -432,12 +435,6 @@ class FlextTargetLdifModels(FlextModels):
 # CRITICAL: FlextTargetLdifUtilities was DUPLICATED between models.py and utilities.py.
 # This was a ZERO TOLERANCE violation of the user's explicit requirements.
 #
-# RESOLUTION: Import from utilities.py to eliminate duplication completely.
-
-from typing import Literal
-
-from flext_target_ldif.utilities import FlextTargetLdifUtilities
-
 # Note: This import ensures backward compatibility while eliminating duplication
 
 

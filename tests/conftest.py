@@ -10,7 +10,6 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from flext_core import FlextTypes
 
 
 @pytest.fixture
@@ -32,7 +31,7 @@ def temp_file() -> Generator[Path]:
 
 
 @pytest.fixture
-def sample_config(temp_dir: Path) -> FlextTypes.Dict:
+def sample_config(temp_dir: Path) -> dict[str, object]:
     """Provide a sample configuration for testing."""
     return {
         "output_path": str(temp_dir),
@@ -52,7 +51,7 @@ def sample_config(temp_dir: Path) -> FlextTypes.Dict:
 
 
 @pytest.fixture
-def sample_record() -> FlextTypes.StringDict:
+def sample_record() -> dict[str, str]:
     """Provide a sample record for testing."""
     return {
         "uid": "testuser",
@@ -67,7 +66,7 @@ def sample_record() -> FlextTypes.StringDict:
 
 
 @pytest.fixture
-def sample_schema() -> FlextTypes.Dict:
+def sample_schema() -> dict[str, object]:
     """Provide a sample Singer schema for testing."""
     return {
         "type": "object",
@@ -86,7 +85,7 @@ def sample_schema() -> FlextTypes.Dict:
 
 
 @pytest.fixture
-def multiple_records() -> list[FlextTypes.StringDict]:
+def multiple_records() -> list[dict[str, str]]:
     """Provide multiple sample records for testing."""
     return [
         {
@@ -114,7 +113,7 @@ def multiple_records() -> list[FlextTypes.StringDict]:
 
 
 @pytest.fixture
-def ldif_options() -> FlextTypes.Dict:
+def ldif_options() -> dict[str, object]:
     """Provide sample LDIF options for testing."""
     return {
         "line_length": 78,
@@ -124,7 +123,7 @@ def ldif_options() -> FlextTypes.Dict:
 
 
 @pytest.fixture
-def attribute_mapping() -> FlextTypes.StringDict:
+def attribute_mapping() -> dict[str, str]:
     """Provide sample attribute mapping for testing."""
     return {
         "user_id": "uid",

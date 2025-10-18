@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from flext_core import FlextConstants, FlextTypes
+from flext_core import FlextConstants
 from flext_ldif.constants import FlextLdifConstants
 
 
@@ -18,9 +18,6 @@ class FlextTargetLdifConstants(FlextConstants):
 
     Composes with FlextLdifConstants to avoid duplication and ensure consistency.
     """
-
-    # Import LDIF-specific constants from flext-ldif (composition pattern)
-    from flext_ldif.constants import FlextLdifConstants
 
     # LDIF File Configuration using composition
     DEFAULT_LDIF_ENCODING = FlextLdifConstants.Encoding.DEFAULT_ENCODING
@@ -32,7 +29,7 @@ class FlextTargetLdifConstants(FlextConstants):
     MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
 
     # LDIF Format Options using composition
-    SUPPORTED_ENCODINGS: ClassVar[FlextTypes.StringList] = list(
+    SUPPORTED_ENCODINGS: ClassVar[list[str]] = list(
         FlextLdifConstants.Encoding.SUPPORTED_ENCODINGS
     )
 

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Final
+
 from flext_target_ldif.cli import main as cli_main
 from flext_target_ldif.config import FlextTargetLdifConfig
 from flext_target_ldif.models import FlextTargetLdifModels
