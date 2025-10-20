@@ -16,7 +16,6 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
-
 from flext_target_ldif import FlextTargetLdifWriterError, LdifWriter
 
 # Constants
