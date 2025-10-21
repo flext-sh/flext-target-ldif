@@ -48,10 +48,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Parse Singer message from input line.
 
             Args:
-                line: JSON line from Singer tap
+            line: JSON line from Singer tap
 
             Returns:
-                FlextResult[dict[str, object]]: Parsed message or error
+            FlextResult[dict[str, object]]: Parsed message or error
 
             """
             if not line or not line.strip():
@@ -81,10 +81,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Validate Singer RECORD message structure.
 
             Args:
-                message: Singer message to validate
+            message: Singer message to validate
 
             Returns:
-                FlextResult[dict[str, object]]: Validated record or error
+            FlextResult[dict[str, object]]: Validated record or error
 
             """
             if message.get("type") != "RECORD":
@@ -114,10 +114,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Validate Singer SCHEMA message structure.
 
             Args:
-                message: Singer message to validate
+            message: Singer message to validate
 
             Returns:
-                FlextResult[dict[str, object]]: Validated schema or error
+            FlextResult[dict[str, object]]: Validated schema or error
 
             """
             if message.get("type") != "SCHEMA":
@@ -145,7 +145,7 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Write Singer state message to stdout.
 
             Args:
-                state: State data to write
+            state: State data to write
 
             """
 
@@ -161,12 +161,12 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Build LDIF Distinguished Name from record data.
 
             Args:
-                record: Record data
-                dn_template: DN template with placeholders
-                base_dn: Optional base DN to append
+            record: Record data
+            dn_template: DN template with placeholders
+            base_dn: Optional base DN to append
 
             Returns:
-                FlextResult[str]: Built DN or error
+            FlextResult[str]: Built DN or error
 
             """
             if not record or not dn_template:
@@ -209,10 +209,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Validate LDIF Distinguished Name format.
 
             Args:
-                dn: Distinguished Name to validate
+            dn: Distinguished Name to validate
 
             Returns:
-                bool: True if valid, False otherwise
+            bool: True if valid, False otherwise
 
             """
             if not dn:
@@ -235,13 +235,13 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Convert Singer record to LDIF entry format.
 
             Args:
-                record: Singer record data
-                dn: Distinguished Name for the entry
-                object_classes: Object classes for the entry
-                attribute_mapping: Optional mapping from record keys to LDIF attributes
+            record: Singer record data
+            dn: Distinguished Name for the entry
+            object_classes: Object classes for the entry
+            attribute_mapping: Optional mapping from record keys to LDIF attributes
 
             Returns:
-                FlextResult[str]: LDIF entry or error
+            FlextResult[str]: LDIF entry or error
 
             """
             if not record or not dn:
@@ -295,10 +295,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Format value for LDIF attribute.
 
             Args:
-                value: Value to format
+            value: Value to format
 
             Returns:
-                str: Formatted LDIF value
+            str: Formatted LDIF value
 
             """
             if not value:
@@ -326,10 +326,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Wrap long LDIF lines according to RFC 2849.
 
             Args:
-                value: Value to wrap
+            value: Value to wrap
 
             Returns:
-                str: Wrapped value
+            str: Wrapped value
 
             """
             if len(value) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
@@ -359,10 +359,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Validate LDIF entry format.
 
             Args:
-                entry: LDIF entry to validate
+            entry: LDIF entry to validate
 
             Returns:
-                FlextResult[bool]: Validation result
+            FlextResult[bool]: Validation result
 
             """
             if not entry or not entry.strip():
@@ -403,12 +403,12 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Create LDIF file with entries.
 
             Args:
-                file_path: Path to LDIF file
-                entries: List of LDIF entries
-                overwrite: Whether to overwrite existing file
+            file_path: Path to LDIF file
+            entries: List of LDIF entries
+            overwrite: Whether to overwrite existing file
 
             Returns:
-                FlextResult[str]: Success message or error
+            FlextResult[str]: Success message or error
 
             """
             if not file_path or not entries:
@@ -444,11 +444,11 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Append entries to existing LDIF file.
 
             Args:
-                file_path: Path to LDIF file
-                entries: List of LDIF entries to append
+            file_path: Path to LDIF file
+            entries: List of LDIF entries to append
 
             Returns:
-                FlextResult[str]: Success message or error
+            FlextResult[str]: Success message or error
 
             """
             if not file_path or not entries:
@@ -480,10 +480,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Validate LDIF file path.
 
             Args:
-                file_path: Path to validate
+            file_path: Path to validate
 
             Returns:
-                FlextResult[str]: Validated path or error
+            FlextResult[str]: Validated path or error
 
             """
             if not file_path or not file_path.strip():
@@ -520,11 +520,11 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Calculate optimal batch size for LDIF operations.
 
             Args:
-                record_count: Total number of records
-                target_batches: Target number of batches
+            record_count: Total number of records
+            target_batches: Target number of batches
 
             Returns:
-                int: Optimal batch size
+            int: Optimal batch size
 
             """
             if record_count <= 0:
@@ -541,11 +541,11 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Validate stream compatibility with LDIF operations.
 
             Args:
-                stream_name: Name of the stream
-                schema: Stream schema
+            stream_name: Name of the stream
+            schema: Stream schema
 
             Returns:
-                FlextResult[bool]: Validation result
+            FlextResult[bool]: Validation result
 
             """
             if not stream_name or not schema:
@@ -579,13 +579,13 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Generate metadata for LDIF stream processing.
 
             Args:
-                stream_name: Name of the stream
-                record_count: Number of records processed
-                file_size_bytes: Size of generated LDIF file
-                processing_time: Time taken for processing
+            stream_name: Name of the stream
+            record_count: Number of records processed
+            file_size_bytes: Size of generated LDIF file
+            processing_time: Time taken for processing
 
             Returns:
-                dict[str, object]: Stream metadata
+            dict[str, object]: Stream metadata
 
             """
             return {
@@ -609,10 +609,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Validate LDIF target configuration.
 
             Args:
-                config: Configuration dictionary
+            config: Configuration dictionary
 
             Returns:
-                FlextResult[dict[str, object]]: Validated config or error
+            FlextResult[dict[str, object]]: Validated config or error
 
             """
             required_fields = ["output_file"]
@@ -669,10 +669,10 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Validate LDIF entry configuration.
 
             Args:
-                config: Entry configuration
+            config: Entry configuration
 
             Returns:
-                FlextResult[dict[str, object]]: Validated config or error
+            FlextResult[dict[str, object]]: Validated config or error
 
             """
             # Validate object classes if provided
@@ -715,11 +715,11 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Get state for a specific target stream.
 
             Args:
-                state: Complete state dictionary
-                stream_name: Name of the stream
+            state: Complete state dictionary
+            stream_name: Name of the stream
 
             Returns:
-                dict[str, object]: Stream state
+            dict[str, object]: Stream state
 
             """
             return state.get("bookmarks", {}).get(stream_name, {})
@@ -733,12 +733,12 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Set state for a specific target stream.
 
             Args:
-                state: Complete state dictionary
-                stream_name: Name of the stream
-                stream_state: State data for the stream
+            state: Complete state dictionary
+            stream_name: Name of the stream
+            stream_state: State data for the stream
 
             Returns:
-                dict[str, object]: Updated state
+            dict[str, object]: Updated state
 
             """
             if "bookmarks" not in state:
@@ -758,14 +758,14 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Create processing state for target stream.
 
             Args:
-                stream_name: Name of the stream
-                records_processed: Number of records processed
-                file_path: Path to LDIF file
-                file_size_bytes: Size of LDIF file
-                last_processed_record: Last processed record for checkpointing
+            stream_name: Name of the stream
+            records_processed: Number of records processed
+            file_path: Path to LDIF file
+            file_size_bytes: Size of LDIF file
+            last_processed_record: Last processed record for checkpointing
 
             Returns:
-                dict[str, object]: Processing state
+            dict[str, object]: Processing state
 
             """
             state = {
@@ -800,13 +800,13 @@ class FlextTargetLdifUtilities(FlextUtilities):
             """Update processing progress in state.
 
             Args:
-                state: Current state
-                stream_name: Name of the stream
-                records_count: Number of records processed in this batch
-                file_size_bytes: Current file size
+            state: Current state
+            stream_name: Name of the stream
+            records_count: Number of records processed in this batch
+            file_size_bytes: Current file size
 
             Returns:
-                dict[str, object]: Updated state
+            dict[str, object]: Updated state
 
             """
             stream_state = FlextTargetLdifUtilities.StateManagement.get_target_state(

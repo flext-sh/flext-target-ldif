@@ -25,7 +25,7 @@ ENCODING = "ENCODING"
 
 """LDIF target models extending flext-core FlextModels.
 
-Provides comprehensive models for LDIF file export, Singer protocol
+Provides complete models for LDIF file export, Singer protocol
 compliance, format validation, and target operations following standardized patterns.
 """
 
@@ -430,10 +430,10 @@ class FlextTargetLdifModels(FlextModels):
     LdifErrorContext = LdifErrorContext
 
 
-# ZERO TOLERANCE CONSOLIDATION - FlextTargetLdifUtilities moved to utilities.py
+# Zero Tolerance CONSOLIDATION - FlextTargetLdifUtilities moved to utilities.py
 #
-# CRITICAL: FlextTargetLdifUtilities was DUPLICATED between models.py and utilities.py.
-# This was a ZERO TOLERANCE violation of the user's explicit requirements.
+# Critical: FlextTargetLdifUtilities was DUPLICATED between models.py and utilities.py.
+# This was a Zero Tolerance violation of the user's explicit requirements.
 #
 # Note: This import ensures backward compatibility while eliminating duplication
 

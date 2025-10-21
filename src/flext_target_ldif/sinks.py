@@ -59,7 +59,7 @@ class LDIFSink:
         """Get or create the LDIF writer for this sink.
 
         Returns:
-            LdifWriter: The LDIF writer.
+        LdifWriter: The LDIF writer.
 
         """
         if self._ldif_writer is None:
@@ -102,7 +102,7 @@ class LDIFSink:
         """Process a single record and write to LDIF.
 
         Returns:
-            object: Description of return value.
+        object: Description of return value.
 
         """
         ldif_writer = self._get_ldif_writer()
