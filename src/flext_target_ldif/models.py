@@ -351,7 +351,7 @@ class LdifTargetResult(FlextModels.Entity):
         return (self.entries_failed / self.records_processed) * 100.0
 
 
-class LdifErrorContext(FlextModels.StrictArbitraryTypesModel):
+class LdifErrorContext(FlextModels.ArbitraryTypesModel):
     """Error context for LDIF target error handling."""
 
     error_type: Literal[
