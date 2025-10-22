@@ -23,9 +23,13 @@ class FlextTargetLdifConfig(FlextConfig):
     )
     file_naming_pattern: str = Field(
         default="{stream_name}_{timestamp}.ldif",
-        description="Pattern for LDIF file names. Available variables: {stream_name}, {timestamp}",
+        description=(
+            "Pattern for LDIF file names. Available variables: "
+            "{stream_name}, {timestamp}"
+        ),
     )
     dn_template: str = Field(
+        min_length=1,
         description="Template for generating Distinguished Names (DN) - MUST be configured for production",
         json_schema_extra={"example": "uid={uid},ou=users,dc=company,dc=local"},
     )
@@ -125,11 +129,7 @@ class FlextTargetLdifConfig(FlextConfig):
     @field_validator("dn_template")
     @classmethod
     def validate_dn_template(cls, v: str) -> str:
-        """Validate DN template has proper format."""
-        if not v:
-            msg = "DN template cannot be empty"
-            raise ValueError(msg)
-
+        """Validate DN template has proper format with variable placeholders."""
         if "{" not in v or "}" not in v:
             msg = "DN template must contain at least one variable placeholder"
             raise ValueError(msg)
