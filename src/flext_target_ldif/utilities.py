@@ -194,7 +194,7 @@ class FlextTargetLdifUtilities(FlextUtilities):
                 full_dn = f"{dn_rdn},{base_dn}" if base_dn else dn_rdn
 
                 # Validate DN format
-                if not FlextTargetLdifUtilities.LdifDataProcessing.validate_dn_format(
+                if not FlextTargetLdifUtilities.LdifDataProcessing.FlextLdifUtilities.DN.split(
                     full_dn
                 ):
                     return FlextResult[str].fail(f"Invalid DN format: {full_dn}")
@@ -205,7 +205,7 @@ class FlextTargetLdifUtilities(FlextUtilities):
                 return FlextResult[str].fail(f"Error building DN: {e}")
 
         @staticmethod
-        def validate_dn_format(dn: str) -> bool:
+        def FlextLdifUtilities.DN.split(dn: str) -> bool:
             """Validate LDIF Distinguished Name format.
 
             Args:
@@ -383,7 +383,7 @@ class FlextTargetLdifUtilities(FlextUtilities):
                 return FlextResult[bool].fail("DN cannot be empty")
 
             # Validate DN format
-            if not FlextTargetLdifUtilities.LdifDataProcessing.validate_dn_format(
+            if not FlextTargetLdifUtilities.LdifDataProcessing.FlextLdifUtilities.DN.split(
                 dn_value
             ):
                 return FlextResult[bool].fail(f"Invalid DN format: {dn_value}")
