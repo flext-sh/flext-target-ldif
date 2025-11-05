@@ -205,7 +205,7 @@ class FlextTargetLdifUtilities(FlextUtilities):
                 return FlextResult[str].fail(f"Error building DN: {e}")
 
         @staticmethod
-        def FlextLdifUtilities.DN.split(dn: str) -> bool:
+        def split(dn: str) -> bool:
             """Validate LDIF Distinguished Name format.
 
             Args:
