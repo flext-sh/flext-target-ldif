@@ -6,7 +6,7 @@ from flext_core import FlextResult
 
 
 class FlextTargetLdifProtocols:
-    """Singer Target LDIF protocols with explicit re-exports from FlextProtocols foundation.
+    """Singer Target LDIF protocols with explicit re-exports from p foundation.
 
     Domain Extension Pattern (Phase 3):
     - Explicit re-export of foundation protocols (not inheritance)
