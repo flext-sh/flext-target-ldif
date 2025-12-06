@@ -74,7 +74,8 @@ class LDIFSink:
                 dn_template = None
 
             attribute_mapping: dict[str, object] = self.config.get(
-                "attribute_mapping", {}
+                "attribute_mapping",
+                {},
             )
             if not isinstance(attribute_mapping, dict):
                 attribute_mapping = {}
