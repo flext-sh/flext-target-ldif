@@ -82,7 +82,7 @@ class LdifWriter:
                         entry: dict[str, object] = {
                             "dn": "dn",
                             "attributes": dict[str, object](
-                                attr_dict
+                                attr_dict,
                             ),  # Ensure it's a dict
                         }
                         self._ldif_entries.append(entry)
@@ -106,7 +106,7 @@ class LdifWriter:
                         f.write("\n")  # Blank line between entries
 
                 write_result: FlextResult[object] = FlextResult[str].ok(
-                    "LDIF written successfully"
+                    "LDIF written successfully",
                 )
                 if not write_result.success:
                     return FlextResult[None].fail(

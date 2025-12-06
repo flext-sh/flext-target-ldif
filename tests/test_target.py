@@ -12,13 +12,14 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
+from pydantic import ValidationError
+
 from flext_target_ldif import (
     FlextTargetLdif,
     FlextTargetLdifConfig,
     LDIFSink,
     TargetLDIF,
 )
-from pydantic import ValidationError
 
 
 class TestFlextTargetLdifConfig:

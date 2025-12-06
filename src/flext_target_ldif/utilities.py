@@ -61,12 +61,12 @@ class FlextTargetLdifUtilities(u):
                 message = json.loads(line.strip())
                 if not isinstance(message, dict):
                     return FlextResult[dict[str, object]].fail(
-                        "Message must be a JSON object"
+                        "Message must be a JSON object",
                     )
 
                 if "type" not in message:
                     return FlextResult[dict[str, object]].fail(
-                        "Message missing required 'type' field"
+                        "Message missing required 'type' field",
                     )
 
                 return FlextResult[dict[str, object]].ok(message)
@@ -89,20 +89,20 @@ class FlextTargetLdifUtilities(u):
             """
             if message.get("type") != "RECORD":
                 return FlextResult[dict[str, object]].fail(
-                    "Message type must be RECORD"
+                    "Message type must be RECORD",
                 )
 
             required_fields = ["stream", "record"]
             for field in required_fields:
                 if field not in message:
                     return FlextResult[dict[str, object]].fail(
-                        f"RECORD message missing '{field}' field"
+                        f"RECORD message missing '{field}' field",
                     )
 
             record = message["record"]
             if not isinstance(record, dict):
                 return FlextResult[dict[str, object]].fail(
-                    "Record data must be a dictionary"
+                    "Record data must be a dictionary",
                 )
 
             return FlextResult[dict[str, object]].ok(message)
@@ -122,20 +122,20 @@ class FlextTargetLdifUtilities(u):
             """
             if message.get("type") != "SCHEMA":
                 return FlextResult[dict[str, object]].fail(
-                    "Message type must be SCHEMA"
+                    "Message type must be SCHEMA",
                 )
 
             required_fields = ["stream", "schema"]
             for field in required_fields:
                 if field not in message:
                     return FlextResult[dict[str, object]].fail(
-                        f"SCHEMA message missing '{field}' field"
+                        f"SCHEMA message missing '{field}' field",
                     )
 
             schema = message["schema"]
             if not isinstance(schema, dict):
                 return FlextResult[dict[str, object]].fail(
-                    "Schema data must be a dictionary"
+                    "Schema data must be a dictionary",
                 )
 
             return FlextResult[dict[str, object]].ok(message)
@@ -180,14 +180,14 @@ class FlextTargetLdifUtilities(u):
                     if placeholder in dn_rdn:
                         if value is None:
                             return FlextResult[str].fail(
-                                f"Cannot build DN: {key} is null"
+                                f"Cannot build DN: {key} is null",
                             )
                         dn_rdn = dn_rdn.replace(placeholder, str(value))
 
                 # Check if all placeholders were replaced
                 if "{" in dn_rdn and "}" in dn_rdn:
                     return FlextResult[str].fail(
-                        f"Unresolved placeholders in DN: {dn_rdn}"
+                        f"Unresolved placeholders in DN: {dn_rdn}",
                     )
 
                 # Combine with base DN if provided
@@ -195,7 +195,7 @@ class FlextTargetLdifUtilities(u):
 
                 # Validate DN format
                 if not FlextTargetLdifUtilities.LdifDataProcessing.FlextLdifUtilities.DN.split(
-                    full_dn
+                    full_dn,
                 ):
                     return FlextResult[str].fail(f"Invalid DN format: {full_dn}")
 
@@ -272,13 +272,13 @@ class FlextTargetLdifUtilities(u):
                         for item in value:
                             if item is not None:
                                 ldif_value = FlextTargetLdifUtilities.LdifDataProcessing.format_ldif_value(
-                                    str(item)
+                                    str(item),
                                 )
                                 ldif_lines.append(f"{ldif_attr}: {ldif_value}")
                     else:
                         # Single-value attribute
                         ldif_value = FlextTargetLdifUtilities.LdifDataProcessing.format_ldif_value(
-                            str(value)
+                            str(value),
                         )
                         ldif_lines.append(f"{ldif_attr}: {ldif_value}")
 
@@ -384,7 +384,7 @@ class FlextTargetLdifUtilities(u):
 
             # Validate DN format
             if not FlextTargetLdifUtilities.LdifDataProcessing.FlextLdifUtilities.DN.split(
-                dn_value
+                dn_value,
             ):
                 return FlextResult[bool].fail(f"Invalid DN format: {dn_value}")
 
@@ -469,7 +469,7 @@ class FlextTargetLdifUtilities(u):
                             f.write("\n")
 
                 return FlextResult[str].ok(
-                    f"Entries appended to LDIF file: {file_path}"
+                    f"Entries appended to LDIF file: {file_path}",
                 )
 
             except Exception as e:
@@ -564,7 +564,7 @@ class FlextTargetLdifUtilities(u):
 
             if not has_dn_field and not has_id_fields:
                 return FlextResult[bool].fail(
-                    "Schema must have either 'dn' field or identifier fields (id, uid, cn, username, email)"
+                    "Schema must have either 'dn' field or identifier fields (id, uid, cn, username, email)",
                 )
 
             return FlextResult[bool].ok(True)
@@ -620,19 +620,19 @@ class FlextTargetLdifUtilities(u):
 
             if missing_fields:
                 return FlextResult[dict[str, object]].fail(
-                    f"Missing required LDIF target fields: {', '.join(missing_fields)}"
+                    f"Missing required LDIF target fields: {', '.join(missing_fields)}",
                 )
 
             # Validate output file path
             output_file = config["output_file"]
             file_validation = (
                 FlextTargetLdifUtilities.FileUtilities.validate_ldif_file_path(
-                    output_file
+                    output_file,
                 )
             )
             if file_validation.is_failure:
                 return FlextResult[dict[str, object]].fail(
-                    f"Invalid output file: {file_validation.error}"
+                    f"Invalid output file: {file_validation.error}",
                 )
 
             # Validate operation mode
@@ -640,7 +640,7 @@ class FlextTargetLdifUtilities(u):
             valid_modes = ["append", "overwrite", "create"]
             if operation_mode not in valid_modes:
                 return FlextResult[dict[str, object]].fail(
-                    f"Invalid operation mode: {operation_mode}. Valid modes: {', '.join(valid_modes)}"
+                    f"Invalid operation mode: {operation_mode}. Valid modes: {', '.join(valid_modes)}",
                 )
 
             # Validate DN template if provided
@@ -648,16 +648,17 @@ class FlextTargetLdifUtilities(u):
                 dn_template = config["dn_template"]
                 if not isinstance(dn_template, str) or not dn_template.strip():
                     return FlextResult[dict[str, object]].fail(
-                        "DN template must be a non-empty string"
+                        "DN template must be a non-empty string",
                     )
 
             # Validate batch size
             batch_size = config.get(
-                "batch_size", FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE
+                "batch_size",
+                FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE,
             )
             if not isinstance(batch_size, int) or batch_size <= 0:
                 return FlextResult[dict[str, object]].fail(
-                    "Batch size must be a positive integer"
+                    "Batch size must be a positive integer",
                 )
 
             return FlextResult[dict[str, object]].ok(config)
@@ -680,13 +681,13 @@ class FlextTargetLdifUtilities(u):
                 object_classes = config["object_classes"]
                 if not isinstance(object_classes, list) or not object_classes:
                     return FlextResult[dict[str, object]].fail(
-                        "Object classes must be a non-empty list"
+                        "Object classes must be a non-empty list",
                     )
 
                 for oc in object_classes:
                     if not isinstance(oc, str) or not oc.strip():
                         return FlextResult[dict[str, object]].fail(
-                            "All object classes must be non-empty strings"
+                            "All object classes must be non-empty strings",
                         )
 
             # Validate attribute mapping if provided
@@ -694,13 +695,13 @@ class FlextTargetLdifUtilities(u):
                 attribute_mapping = config["attribute_mapping"]
                 if not isinstance(attribute_mapping, dict):
                     return FlextResult[dict[str, object]].fail(
-                        "Attribute mapping must be a dictionary"
+                        "Attribute mapping must be a dictionary",
                     )
 
                 for key, value in attribute_mapping.items():
                     if not isinstance(key, str) or not isinstance(value, str):
                         return FlextResult[dict[str, object]].fail(
-                            "Attribute mapping keys and values must be strings"
+                            "Attribute mapping keys and values must be strings",
                         )
 
             return FlextResult[dict[str, object]].ok(config)
@@ -710,7 +711,8 @@ class FlextTargetLdifUtilities(u):
 
         @staticmethod
         def get_target_state(
-            state: dict[str, object], stream_name: str
+            state: dict[str, object],
+            stream_name: str,
         ) -> dict[str, object]:
             """Get state for a specific target stream.
 
@@ -810,7 +812,8 @@ class FlextTargetLdifUtilities(u):
 
             """
             stream_state = FlextTargetLdifUtilities.StateManagement.get_target_state(
-                state, stream_name
+                state,
+                stream_name,
             )
 
             current_count = stream_state.get("records_processed", 0)
@@ -825,7 +828,9 @@ class FlextTargetLdifUtilities(u):
             }
 
             return FlextTargetLdifUtilities.StateManagement.set_target_state(
-                state, stream_name, updated_stream_state
+                state,
+                stream_name,
+                updated_stream_state,
             )
 
     # Proxy methods for backward compatibility
@@ -854,7 +859,10 @@ class FlextTargetLdifUtilities(u):
     ) -> FlextResult[str]:
         """Proxy method for LdifDataProcessing.convert_record_to_ldif_entry()."""
         return cls.LdifDataProcessing.convert_record_to_ldif_entry(
-            record, dn, object_classes, attribute_mapping
+            record,
+            dn,
+            object_classes,
+            attribute_mapping,
         )
 
     @classmethod
@@ -870,14 +878,17 @@ class FlextTargetLdifUtilities(u):
 
     @classmethod
     def validate_ldif_target_config(
-        cls, config: dict[str, object]
+        cls,
+        config: dict[str, object],
     ) -> FlextResult[dict[str, object]]:
         """Proxy method for ConfigValidation.validate_ldif_target_config()."""
         return cls.ConfigValidation.validate_ldif_target_config(config)
 
     @classmethod
     def get_target_state(
-        cls, state: dict[str, object], stream_name: str
+        cls,
+        state: dict[str, object],
+        stream_name: str,
     ) -> dict[str, object]:
         """Proxy method for StateManagement.get_target_state()."""
         return cls.StateManagement.get_target_state(state, stream_name)

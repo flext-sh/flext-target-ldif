@@ -30,7 +30,7 @@ class FlextTargetLdifConstants(FlextConstants):
 
     # LDIF Format Options using composition
     SUPPORTED_ENCODINGS: ClassVar[list[str]] = list(
-        FlextLdifConstants.Encoding.SUPPORTED_ENCODINGS
+        FlextLdifConstants.Encoding.SUPPORTED_ENCODINGS,
     )
 
     class Processing:

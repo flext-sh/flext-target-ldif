@@ -77,7 +77,8 @@ class FlextTargetLdifConfig(FlextConfig):
             **overrides,
         }
         return cls.get_or_create_shared_instance(
-            project_name="flext-target-ldif", **dev_overrides
+            project_name="flext-target-ldif",
+            **dev_overrides,
         )
 
     @classmethod
@@ -93,7 +94,8 @@ class FlextTargetLdifConfig(FlextConfig):
             **overrides,
         }
         return cls.get_or_create_shared_instance(
-            project_name="flext-target-ldif", **prod_overrides
+            project_name="flext-target-ldif",
+            **prod_overrides,
         )
 
     @classmethod
@@ -110,7 +112,8 @@ class FlextTargetLdifConfig(FlextConfig):
             **overrides,
         }
         return cls.get_or_create_shared_instance(
-            project_name="flext-target-ldif", **test_overrides
+            project_name="flext-target-ldif",
+            **test_overrides,
         )
 
     @field_validator("output_path")
@@ -119,7 +122,7 @@ class FlextTargetLdifConfig(FlextConfig):
         """Validate output path using centralized FlextModels validation."""
         # Use centralized FlextModels validation instead of duplicate logic
         validation_result: FlextResult[object] = FlextModels.create_validated_file_path(
-            v
+            v,
         )
         if validation_result.is_failure:
             error_msg = f"Invalid output path: {validation_result.error}"

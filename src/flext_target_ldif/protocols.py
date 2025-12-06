@@ -30,7 +30,8 @@ class FlextTargetLdifProtocols:
             """Protocol for LDIF file generation."""
 
             def generate_ldif(
-                self, records: list[dict[str, object]]
+                self,
+                records: list[dict[str, object]],
             ) -> FlextResult[str]:
                 """Generate LDIF content from records."""
 
@@ -46,7 +47,9 @@ class FlextTargetLdifProtocols:
             """Protocol for LDIF file management."""
 
             def write_ldif_file(
-                self, file_path: str, content: str
+                self,
+                file_path: str,
+                content: str,
             ) -> FlextResult[None]:
                 """Write LDIF content to file."""
 
@@ -79,19 +82,53 @@ class FlextTargetLdifProtocols:
     # BACKWARD COMPATIBILITY ALIASES (100% COMPATIBILITY)
     # ============================================================================
 
-    LdifGenerationProtocol = TargetLdif.LdifGenerationProtocol
-    DataTransformationProtocol = TargetLdif.DataTransformationProtocol
-    FileManagementProtocol = TargetLdif.FileManagementProtocol
-    ValidationProtocol = TargetLdif.ValidationProtocol
-    PerformanceProtocol = TargetLdif.PerformanceProtocol
-    MonitoringProtocol = TargetLdif.MonitoringProtocol
+    @runtime_checkable
+    class LdifGenerationProtocol(TargetLdif.LdifGenerationProtocol):
+        """LdifGenerationProtocol - real inheritance."""
 
-    TargetLdifGenerationProtocol = TargetLdif.LdifGenerationProtocol
-    TargetLdifDataTransformationProtocol = TargetLdif.DataTransformationProtocol
-    TargetLdifFileManagementProtocol = TargetLdif.FileManagementProtocol
-    TargetLdifValidationProtocol = TargetLdif.ValidationProtocol
-    TargetLdifPerformanceProtocol = TargetLdif.PerformanceProtocol
-    TargetLdifMonitoringProtocol = TargetLdif.MonitoringProtocol
+    @runtime_checkable
+    class DataTransformationProtocol(TargetLdif.DataTransformationProtocol):
+        """DataTransformationProtocol - real inheritance."""
+
+    @runtime_checkable
+    class FileManagementProtocol(TargetLdif.FileManagementProtocol):
+        """FileManagementProtocol - real inheritance."""
+
+    @runtime_checkable
+    class ValidationProtocol(TargetLdif.ValidationProtocol):
+        """ValidationProtocol - real inheritance."""
+
+    @runtime_checkable
+    class PerformanceProtocol(TargetLdif.PerformanceProtocol):
+        """PerformanceProtocol - real inheritance."""
+
+    @runtime_checkable
+    class MonitoringProtocol(TargetLdif.MonitoringProtocol):
+        """MonitoringProtocol - real inheritance."""
+
+    @runtime_checkable
+    class TargetLdifGenerationProtocol(TargetLdif.LdifGenerationProtocol):
+        """TargetLdifGenerationProtocol - real inheritance."""
+
+    @runtime_checkable
+    class TargetLdifDataTransformationProtocol(TargetLdif.DataTransformationProtocol):
+        """TargetLdifDataTransformationProtocol - real inheritance."""
+
+    @runtime_checkable
+    class TargetLdifFileManagementProtocol(TargetLdif.FileManagementProtocol):
+        """TargetLdifFileManagementProtocol - real inheritance."""
+
+    @runtime_checkable
+    class TargetLdifValidationProtocol(TargetLdif.ValidationProtocol):
+        """TargetLdifValidationProtocol - real inheritance."""
+
+    @runtime_checkable
+    class TargetLdifPerformanceProtocol(TargetLdif.PerformanceProtocol):
+        """TargetLdifPerformanceProtocol - real inheritance."""
+
+    @runtime_checkable
+    class TargetLdifMonitoringProtocol(TargetLdif.MonitoringProtocol):
+        """TargetLdifMonitoringProtocol - real inheritance."""
 
 
 __all__ = [

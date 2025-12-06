@@ -34,19 +34,26 @@ class LdifFormatOptions(FlextConfig):
     """LDIF format configuration with specification compliance."""
 
     line_length: int = Field(
-        default=78, ge=40, le=200, description="Maximum LDIF line length"
+        default=78,
+        ge=40,
+        le=200,
+        description="Maximum LDIF line length",
     )
     fold_lines: bool = Field(
-        default=True, description="Enable line folding for long lines"
+        default=True,
+        description="Enable line folding for long lines",
     )
     base64_encode: bool = Field(
-        default=False, description="Force base64 encoding for all attributes"
+        default=False,
+        description="Force base64 encoding for all attributes",
     )
     include_version: bool = Field(
-        default=True, description="Include LDIF version header"
+        default=True,
+        description="Include LDIF version header",
     )
     encoding: str = Field(
-        default="utf-8", description="Character encoding for LDIF files"
+        default="utf-8",
+        description="Character encoding for LDIF files",
     )
     line_separator: str = Field(default="\n", description="Line separator character")
 
@@ -56,32 +63,40 @@ class LdifExportConfig(FlextConfig):
 
     output_path: str = Field(..., description="Output directory for LDIF files")
     file_naming_pattern: str = Field(
-        default="{stream_name}.ldif", description="File naming pattern template"
+        default="{stream_name}.ldif",
+        description="File naming pattern template",
     )
     dn_template: str = Field(
-        ..., description="DN template for generating LDIF entry DNs"
+        ...,
+        description="DN template for generating LDIF entry DNs",
     )
     attribute_mappings: dict[str, str] = Field(
-        default_factory=dict, description="Singer field to LDIF attribute mappings"
+        default_factory=dict,
+        description="Singer field to LDIF attribute mappings",
     )
     object_classes: list[str] = Field(
-        default_factory=list, description="Default LDAP object classes for entries"
+        default_factory=list,
+        description="Default LDAP object classes for entries",
     )
 
     # File management options
     overwrite_existing: bool = Field(
-        default=False, description="Overwrite existing LDIF files"
+        default=False,
+        description="Overwrite existing LDIF files",
     )
     create_directories: bool = Field(
-        default=True, description="Create output directories if they don't exist"
+        default=True,
+        description="Create output directories if they don't exist",
     )
     compress_output: bool = Field(
-        default=False, description="Compress LDIF files with gzip"
+        default=False,
+        description="Compress LDIF files with gzip",
     )
 
     # Format configuration
     format_options: FlextTargetLdifModels.LdifFormatOptions = Field(
-        default_factory=LdifFormatOptions, description="LDIF format options"
+        default_factory=LdifFormatOptions,
+        description="LDIF format options",
     )
 
 
@@ -89,19 +104,26 @@ class LdifEntry(FlextModels.Entity):
     """LDIF entry representation with format validation."""
 
     distinguished_name: str = Field(
-        ..., description="LDIF Distinguished Name (DN)", min_length=1, max_length=1000
+        ...,
+        description="LDIF Distinguished Name (DN)",
+        min_length=1,
+        max_length=1000,
     )
     attributes: dict[str, list[str]] = Field(
-        default_factory=dict, description="LDIF attributes with values"
+        default_factory=dict,
+        description="LDIF attributes with values",
     )
     object_classes: list[str] = Field(
-        default_factory=list, description="LDAP object classes"
+        default_factory=list,
+        description="LDAP object classes",
     )
     change_type: str | None = Field(
-        None, description="LDIF change type (add, modify, delete, modrdn)"
+        None,
+        description="LDIF change type (add, modify, delete, modrdn)",
     )
     controls: list[str] = Field(
-        default_factory=list, description="LDAP controls for the entry"
+        default_factory=list,
+        description="LDAP controls for the entry",
     )
 
     def validate_business_rules(self) -> FlextResult[None]:
@@ -112,7 +134,7 @@ class LdifEntry(FlextModels.Entity):
             # Validate DN format
             if "=" not in self.distinguished_name or "," not in self.distinguished_name:
                 errors.append(
-                    "DN must contain attribute=value pairs separated by commas"
+                    "DN must contain attribute=value pairs separated by commas",
                 )
 
             # Validate object classes
@@ -136,15 +158,18 @@ class LdifFile(FlextModels.Entity):
     file_path: str = Field(..., description="Path to the LDIF file")
     stream_name: str = Field(..., description="Singer stream name")
     entries: list[FlextTargetLdifModels.LdifEntry] = Field(
-        default_factory=list, description="LDIF entries in the file"
+        default_factory=list,
+        description="LDIF entries in the file",
     )
     format_options: FlextTargetLdifModels.LdifFormatOptions = Field(
-        ..., description="Format options used for the file"
+        ...,
+        description="Format options used for the file",
     )
 
     # File metadata
     created_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC), description="File creation timestamp"
+        default_factory=lambda: datetime.now(UTC),
+        description="File creation timestamp",
     )
     file_size_bytes: int = Field(default=0, ge=0, description="File size in bytes")
     entry_count: int = Field(default=0, ge=0, description="Number of entries in file")
@@ -160,7 +185,7 @@ class LdifFile(FlextModels.Entity):
             # Validate entry count matches actual entries
             if len(self.entries) != self.entry_count:
                 return FlextResult[None].fail(
-                    f"Entry count mismatch: {len(self.entries)} vs {self.entry_count}"
+                    f"Entry count mismatch: {len(self.entries)} vs {self.entry_count}",
                 )
 
             return FlextResult[None].ok(None)
@@ -172,16 +197,21 @@ class LdifTransformationResult(FlextModels.Entity):
     """Result of Singer to LDIF transformation."""
 
     original_record: dict[str, object] = Field(
-        ..., description="Original Singer record"
+        ...,
+        description="Original Singer record",
     )
     transformed_entry: FlextTargetLdifModels.LdifEntry = Field(
-        ..., description="Resulting LDIF entry"
+        ...,
+        description="Resulting LDIF entry",
     )
     transformation_errors: list[str] = Field(
-        default_factory=list, description="Transformation errors"
+        default_factory=list,
+        description="Transformation errors",
     )
     processing_time_ms: float = Field(
-        default=0.0, ge=0.0, description="Processing time in milliseconds"
+        default=0.0,
+        ge=0.0,
+        description="Processing time in milliseconds",
     )
     transformation_timestamp: datetime = Field(
         default_factory=lambda: datetime.now(UTC),
@@ -198,13 +228,13 @@ class LdifTransformationResult(FlextModels.Entity):
             entry_validation = self.transformed_entry.validate_business_rules()
             if entry_validation.is_failure:
                 return FlextResult[None].fail(
-                    f"Transformed entry is invalid: {entry_validation.error}"
+                    f"Transformed entry is invalid: {entry_validation.error}",
                 )
 
             return FlextResult[None].ok(None)
         except Exception as e:
             return FlextResult[None].fail(
-                f"Transformation result validation failed: {e}"
+                f"Transformation result validation failed: {e}",
             )
 
     @property
@@ -223,16 +253,21 @@ class LdifBatchProcessing(FlextModels.Entity):
 
     stream_name: str = Field(..., description="Singer stream name")
     batch_size: int = Field(
-        default=1000, ge=1, le=10000, description="Records per batch"
+        default=1000,
+        ge=1,
+        le=10000,
+        description="Records per batch",
     )
     current_batch: list[FlextTargetLdifModels.LdifEntry] = Field(
-        default_factory=list, description="Current batch of entries"
+        default_factory=list,
+        description="Current batch of entries",
     )
     total_processed: int = Field(default=0, ge=0, description="Total entries processed")
     successful_exports: int = Field(default=0, ge=0, description="Successful exports")
     failed_exports: int = Field(default=0, ge=0, description="Failed exports")
     last_processed_at: datetime | None = Field(
-        None, description="Last processing timestamp"
+        None,
+        description="Last processing timestamp",
     )
 
     def validate_business_rules(self) -> FlextResult[None]:
@@ -240,7 +275,7 @@ class LdifBatchProcessing(FlextModels.Entity):
         try:
             if len(self.current_batch) > self.batch_size:
                 return FlextResult[None].fail(
-                    f"Current batch size exceeds maximum: {len(self.current_batch)} > {self.batch_size}"
+                    f"Current batch size exceeds maximum: {len(self.current_batch)} > {self.batch_size}",
                 )
 
             if self.successful_exports + self.failed_exports > self.total_processed:
@@ -269,13 +304,18 @@ class SingerStreamConfig(FlextConfig):
 
     stream_name: str = Field(..., description="Singer stream name")
     ldif_config: FlextTargetLdifModels.LdifExportConfig = Field(
-        ..., description="LDIF export configuration"
+        ...,
+        description="LDIF export configuration",
     )
     batch_size: int = Field(
-        default=1000, ge=1, le=10000, description="Batch size for processing"
+        default=1000,
+        ge=1,
+        le=10000,
+        description="Batch size for processing",
     )
     enable_validation: bool = Field(
-        default=True, description="Enable LDIF format validation"
+        default=True,
+        description="Enable LDIF format validation",
     )
 
 
@@ -284,35 +324,49 @@ class LdifTargetResult(FlextModels.Entity):
 
     stream_name: str = Field(..., description="Singer stream name")
     output_files: list[str] = Field(
-        default_factory=list, description="Generated LDIF file paths"
+        default_factory=list,
+        description="Generated LDIF file paths",
     )
     records_processed: int = Field(
-        default=0, ge=0, description="Total records processed"
+        default=0,
+        ge=0,
+        description="Total records processed",
     )
     entries_exported: int = Field(default=0, ge=0, description="LDIF entries exported")
     entries_failed: int = Field(
-        default=0, ge=0, description="Entries that failed export"
+        default=0,
+        ge=0,
+        description="Entries that failed export",
     )
 
     # File statistics
     total_file_size_bytes: int = Field(
-        default=0, ge=0, description="Total size of generated files"
+        default=0,
+        ge=0,
+        description="Total size of generated files",
     )
     files_compressed: int = Field(
-        default=0, ge=0, description="Number of compressed files"
+        default=0,
+        ge=0,
+        description="Number of compressed files",
     )
 
     # Performance metrics
     total_duration_ms: float = Field(
-        default=0.0, ge=0.0, description="Total processing duration"
+        default=0.0,
+        ge=0.0,
+        description="Total processing duration",
     )
     average_processing_time_ms: float = Field(
-        default=0.0, ge=0.0, description="Average processing time per record"
+        default=0.0,
+        ge=0.0,
+        description="Average processing time per record",
     )
 
     # Error tracking
     error_messages: list[str] = Field(
-        default_factory=list, description="Error messages encountered"
+        default_factory=list,
+        description="Error messages encountered",
     )
     warnings: list[str] = Field(default_factory=list, description="Warning messages")
 
@@ -323,13 +377,13 @@ class LdifTargetResult(FlextModels.Entity):
             total_entries = self.entries_exported + self.entries_failed
             if total_entries > self.records_processed:
                 return FlextResult[None].fail(
-                    "Total entries cannot exceed records processed"
+                    "Total entries cannot exceed records processed",
                 )
 
             # Validate file count
             if len(self.output_files) == 0 and self.entries_exported > 0:
                 return FlextResult[None].fail(
-                    "No output files but entries were exported"
+                    "No output files but entries were exported",
                 )
 
             return FlextResult[None].ok(None)
