@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from flext_core import FlextTypes, t
+from flext_core import FlextTypes
 
 # =============================================================================
 # FLEXT TARGET LDIF-SPECIFIC TYPE VARIABLES - Domain-specific TypeVars for Singer LDIF target operations
@@ -24,7 +24,7 @@ from flext_core import FlextTypes, t
 
 
 # FLEXT Target LDIF domain TypeVars
-class FlextTargetLdifTypes(t):
+class FlextTargetLdifTypes(FlextTypes):
     """FLEXT Target LDIF-specific type definitions extending t.
 
     Domain-specific type system for Singer protocol LDIF file export operations.

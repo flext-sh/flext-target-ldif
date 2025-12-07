@@ -194,9 +194,7 @@ class FlextTargetLdifUtilities(u):
                 full_dn = f"{dn_rdn},{base_dn}" if base_dn else dn_rdn
 
                 # Validate DN format
-                if not FlextTargetLdifUtilities.LdifDataProcessing.FlextLdifUtilities.DN.split(
-                    full_dn,
-                ):
+                if not FlextTargetLdifUtilities.LdifDataProcessing.split(full_dn):
                     return FlextResult[str].fail(f"Invalid DN format: {full_dn}")
 
                 return FlextResult[str].ok(full_dn)
@@ -383,9 +381,7 @@ class FlextTargetLdifUtilities(u):
                 return FlextResult[bool].fail("DN cannot be empty")
 
             # Validate DN format
-            if not FlextTargetLdifUtilities.LdifDataProcessing.FlextLdifUtilities.DN.split(
-                dn_value,
-            ):
+            if not FlextTargetLdifUtilities.LdifDataProcessing.split(dn_value):
                 return FlextResult[bool].fail(f"Invalid DN format: {dn_value}")
 
             return FlextResult[bool].ok(True)
