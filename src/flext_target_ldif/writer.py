@@ -54,7 +54,9 @@ class LdifWriter:
         except (RuntimeError, ValueError, TypeError) as e:
             return FlextResult[None].fail(f"Failed to prepare LDIF file: {e}")
 
-    def _convert_record_to_entry(self, record: dict[str, object]) -> dict[str, object] | None:
+    def _convert_record_to_entry(
+        self, record: dict[str, object]
+    ) -> dict[str, object] | None:
         """Convert a single record to LDIF entry format."""
         try:
             self._generate_dn(record)
