@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import Final
 
 from flext_core import FlextConstants
 from flext_ldif.constants import FlextLdifConstants
@@ -20,47 +20,67 @@ class FlextTargetLdifConstants(FlextConstants):
     """
 
     # LDIF File Configuration using composition
-    DEFAULT_LDIF_ENCODING = FlextLdifConstants.Encoding.DEFAULT_ENCODING
-    DEFAULT_LINE_LENGTH = FlextLdifConstants.Format.MAX_LINE_LENGTH
-    MAX_LINE_LENGTH = 1024
+    DEFAULT_LDIF_ENCODING: Final[str] = (
+        FlextLdifConstants.Ldif.DEFAULT_ENCODING
+    )
+    DEFAULT_LINE_LENGTH: Final[int] = (
+        FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
+    )
+    MAX_LINE_LENGTH: Final[int] = 1024
 
     # Singer Target Configuration - using FlextConstants composition
-    DEFAULT_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE
-    MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
-
-    # LDIF Format Options using composition
-    SUPPORTED_ENCODINGS: ClassVar[list[str]] = list(
-        FlextLdifConstants.Encoding.SUPPORTED_ENCODINGS,
+    # Note: DEFAULT_BATCH_SIZE inherited from FlextConstants (Final, cannot override)
+    MAX_BATCH_SIZE: Final[int] = (
+        FlextConstants.Performance.BatchProcessing.MAX_ITEMS
     )
 
-    class Processing:
-        """LDIF target processing configuration."""
+    # LDIF Format Options using composition
+    SUPPORTED_ENCODINGS: Final[frozenset[str]] = (
+        FlextLdifConstants.Ldif.SUPPORTED_ENCODINGS
+    )
 
-        MIN_WORKERS_FOR_PARALLEL = (
-            FlextLdifConstants.Processing.MIN_WORKERS_FOR_PARALLEL
+    class TargetLdifProcessing:
+        """LDIF target processing configuration.
+
+        Note: Does not override parent Processing class to avoid inheritance conflicts.
+        """
+
+        MIN_WORKERS_FOR_PARALLEL: Final[int] = (
+            FlextLdifConstants.Ldif.LdifProcessing.MIN_WORKERS_FOR_PARALLEL
         )
-        MAX_WORKERS_LIMIT = FlextLdifConstants.Processing.MAX_WORKERS_LIMIT
-        PERFORMANCE_MIN_CHUNK_SIZE = (
-            FlextLdifConstants.Processing.PERFORMANCE_MIN_CHUNK_SIZE
+        MAX_WORKERS_LIMIT: Final[int] = (
+            FlextLdifConstants.Ldif.LdifProcessing.MAX_WORKERS_LIMIT
+        )
+        PERFORMANCE_MIN_CHUNK_SIZE: Final[int] = (
+            FlextLdifConstants.Ldif.LdifProcessing.PERFORMANCE_MIN_CHUNK_SIZE
         )
 
     class Format:
         """LDIF format specifications."""
 
-        DN_ATTRIBUTE = FlextLdifConstants.Format.DN_ATTRIBUTE
-        ATTRIBUTE_SEPARATOR = FlextLdifConstants.Format.ATTRIBUTE_SEPARATOR
-        BASE64_PREFIX = FlextLdifConstants.Format.BASE64_PREFIX
-        COMMENT_PREFIX = FlextLdifConstants.Format.COMMENT_PREFIX
-
-    class Validation:
-        """LDIF validation constants."""
-
-        MIN_DN_COMPONENTS = FlextLdifConstants.LdifValidation.MIN_DN_COMPONENTS
-        MAX_DN_LENGTH = FlextLdifConstants.LdifValidation.MAX_DN_LENGTH
-        MAX_ATTRIBUTES_PER_ENTRY = (
-            FlextLdifConstants.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
+        DN_ATTRIBUTE: Final[str] = FlextLdifConstants.Ldif.Format.DN_ATTRIBUTE
+        ATTRIBUTE_SEPARATOR: Final[str] = (
+            FlextLdifConstants.Ldif.Format.ATTRIBUTE_SEPARATOR
         )
-        MAX_ATTRIBUTE_VALUE_LENGTH = 1000
+        BASE64_PREFIX: Final[str] = FlextLdifConstants.Ldif.Format.BASE64_PREFIX
+        COMMENT_PREFIX: Final[str] = FlextLdifConstants.Ldif.Format.COMMENT_PREFIX
+
+    class TargetLdifValidation:
+        """LDIF validation constants.
+
+        Note: Does not override parent Validation class to avoid inheritance conflicts.
+        """
+
+        MIN_DN_COMPONENTS: Final[int] = (
+            FlextLdifConstants.Ldif.LdifValidation.MIN_DN_COMPONENTS
+        )
+        MAX_DN_LENGTH: Final[int] = FlextLdifConstants.Ldif.LdifValidation.MAX_DN_LENGTH
+        MAX_ATTRIBUTES_PER_ENTRY: Final[int] = (
+            FlextLdifConstants.Ldif.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
+        )
+        MAX_ATTRIBUTE_VALUE_LENGTH: Final[int] = 1000
 
 
-__all__ = ["FlextTargetLdifConstants"]
+c = FlextTargetLdifConstants
+
+__all__ = ["FlextTargetLdifConstants", "c"]
