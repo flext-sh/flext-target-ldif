@@ -26,13 +26,13 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
     service: p.Service[str]
 
     # LDIF protocols (inherited)
-    entry: p.Ldif.Models.EntryProtocol
+    entry: p.Models.EntryProtocol
 
     # Meltano protocols (inherited)
     target: p.Meltano.TargetProtocol
 
     # Target LDIF-specific protocols
-    ldif_generation: p.Target.Ldif.LdifGenerationProtocol
+    ldif_generation: p.Target.LdifGenerationProtocol
     """
 
     class Target:
