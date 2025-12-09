@@ -20,19 +20,13 @@ class FlextTargetLdifConstants(FlextConstants):
     """
 
     # LDIF File Configuration using composition
-    DEFAULT_LDIF_ENCODING: Final[str] = (
-        FlextLdifConstants.Ldif.DEFAULT_ENCODING
-    )
-    DEFAULT_LINE_LENGTH: Final[int] = (
-        FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
-    )
+    DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.DEFAULT_ENCODING
+    DEFAULT_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
     MAX_LINE_LENGTH: Final[int] = 1024
 
     # Singer Target Configuration - using FlextConstants composition
     # Note: DEFAULT_BATCH_SIZE inherited from FlextConstants (Final, cannot override)
-    MAX_BATCH_SIZE: Final[int] = (
-        FlextConstants.Performance.BatchProcessing.MAX_ITEMS
-    )
+    MAX_BATCH_SIZE: Final[int] = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
 
     # LDIF Format Options using composition
     SUPPORTED_ENCODINGS: Final[frozenset[str]] = (
