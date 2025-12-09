@@ -14,10 +14,11 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
 
-from flext_core import FlextResult, u
+from flext_core import FlextResult
+from flext_core.utilities import FlextUtilities as u_core
 
 
-class FlextTargetLdifUtilities(u):
+class FlextTargetLdifUtilities(u_core):
     """Single unified utilities class for Singer target LDIF operations.
 
     Follows FLEXT unified class pattern with nested helper classes for

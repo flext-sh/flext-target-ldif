@@ -9,6 +9,7 @@ from datetime import UTC, datetime
 from typing import Literal
 
 from flext_core import FlextConfig, FlextModels, FlextResult
+from flext_core.utilities import u
 from pydantic import ConfigDict, Field
 
 from flext_target_ldif.utilities import FlextTargetLdifUtilities
@@ -94,7 +95,7 @@ class LdifExportConfig(FlextConfig):
     )
 
     # Format configuration
-    format_options: FlextTargetLdifModels.LdifFormatOptions = Field(
+    format_options: LdifFormatOptions = Field(
         default_factory=LdifFormatOptions,
         description="LDIF format options",
     )
@@ -157,11 +158,11 @@ class LdifFile(FlextModels.Entity):
 
     file_path: str = Field(..., description="Path to the LDIF file")
     stream_name: str = Field(..., description="Singer stream name")
-    entries: list[FlextTargetLdifModels.LdifEntry] = Field(
+    entries: list[LdifEntry] = Field(
         default_factory=list,
         description="LDIF entries in the file",
     )
-    format_options: FlextTargetLdifModels.LdifFormatOptions = Field(
+    format_options: LdifFormatOptions = Field(
         ...,
         description="Format options used for the file",
     )
@@ -200,7 +201,7 @@ class LdifTransformationResult(FlextModels.Entity):
         ...,
         description="Original Singer record",
     )
-    transformed_entry: FlextTargetLdifModels.LdifEntry = Field(
+    transformed_entry: LdifEntry = Field(
         ...,
         description="Resulting LDIF entry",
     )
@@ -258,7 +259,7 @@ class LdifBatchProcessing(FlextModels.Entity):
         le=10000,
         description="Records per batch",
     )
-    current_batch: list[FlextTargetLdifModels.LdifEntry] = Field(
+    current_batch: list[LdifEntry] = Field(
         default_factory=list,
         description="Current batch of entries",
     )
@@ -303,7 +304,7 @@ class SingerStreamConfig(FlextConfig):
     """Singer stream configuration for LDIF export."""
 
     stream_name: str = Field(..., description="Singer stream name")
-    ldif_config: FlextTargetLdifModels.LdifExportConfig = Field(
+    ldif_config: LdifExportConfig = Field(
         ...,
         description="LDIF export configuration",
     )
@@ -409,14 +410,14 @@ class LdifErrorContext(FlextModels.ArbitraryTypesModel):
     """Error context for LDIF target error handling."""
 
     error_type: Literal[
-        FORMAT_VALIDATION,
-        FILE_IO,
-        TRANSFORMATION,
-        SINGER_PROTOCOL,
-        CONFIGURATION,
-        DISK_SPACE,
-        PERMISSION,
-        ENCODING,
+        "FORMAT_VALIDATION",
+        "FILE_IO",
+        "TRANSFORMATION",
+        "SINGER_PROTOCOL",
+        "CONFIGURATION",
+        "DISK_SPACE",
+        "PERMISSION",
+        "ENCODING",
     ] = Field(..., description="Error category")
 
     # Context information
@@ -450,6 +451,14 @@ class FlextTargetLdifModels(FlextModels):
     - Processing: Batch processing and transformation models
     - Results: Operation results and error context models
     """
+
+    def __init_subclass__(cls, **kwargs: object) -> None:
+        """Warn when FlextTargetLdifModels is subclassed directly."""
+        super().__init_subclass__(**kwargs)
+        u.Deprecation.warn_once(
+            f"subclass:{cls.__name__}",
+            "Subclassing FlextTargetLdifModels is deprecated. Use FlextModels directly with composition instead.",
+        )
 
     model_config = ConfigDict(
         validate_assignment=True,
@@ -492,8 +501,14 @@ class FlextTargetLdifModels(FlextModels):
 # Note: This import ensures backward compatibility while eliminating duplication
 
 
+# Short aliases
+m = FlextTargetLdifModels
+m_target_ldif = FlextTargetLdifModels
+
 # Export the unified models class
 __all__ = [
     "FlextTargetLdifModels",  # Unified models class
     "FlextTargetLdifUtilities",  # Standardized [Project]Utilities pattern
+    "m",  # Short alias
+    "m_target_ldif",  # Domain-specific alias
 ]
