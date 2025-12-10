@@ -65,7 +65,7 @@ class FlextTargetLdifTypes(FlextTypes):
         type LdifEntry = dict[
             str, str | list[str] | dict[str, FlextTypes.Json.JsonValue]
         ]
-        type LdifAttributes = dict[str, str | list[str] | bytes | dict[str, object]]
+        type Attributes = dict[str, str | list[str] | bytes | dict[str, object]]
         type LdifRecord = dict[
             str,
             FlextTypes.Json.JsonValue | list[str] | dict[str, object],
