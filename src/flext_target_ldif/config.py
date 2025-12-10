@@ -127,7 +127,7 @@ class FlextTargetLdifConfig(FlextConfig):
         if validation_result.is_failure:
             error_msg = f"Invalid output path: {validation_result.error}"
             raise ValueError(error_msg)
-        return validation_result.unwrap()
+        return validation_result.value
 
     @field_validator("dn_template")
     @classmethod
