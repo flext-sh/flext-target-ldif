@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Final
 
 from flext_target_ldif.cli import main as cli_main
-from flext_target_ldif.config import FlextTargetLdifConfig
+from flext_target_ldif.config import FlextTargetLdifSettings
 from flext_target_ldif.models import FlextTargetLdifModels, m, m_target_ldif
 from flext_target_ldif.protocols import FlextTargetLdifProtocols
 from flext_target_ldif.sinks import LDIFSink, LDIFSink as _LDIFSink
@@ -38,23 +38,22 @@ __version__: str = VERSION.version
 __version_info__: tuple[int | str, ...] = VERSION.version_info
 
 FlextLdifTarget = _TargetLDIF
-_FlextTargetLdifConfig = FlextTargetLdifConfig
+_FlextTargetLdifSettings = FlextTargetLdifSettings
 FlextTargetLDIF = _TargetLDIF
-FlextTargetLDIFConfig = _FlextTargetLdifConfig
+FlextTargetLDIFSettings = _FlextTargetLdifSettings
 LDIFTarget = _TargetLDIF
-TargetLDIFConfig = _FlextTargetLdifConfig
+TargetLDIFConfig = _FlextTargetLdifSettings
 
 __all__ = [
     "FlextLdifTarget",
     "FlextLogger",
     "FlextMeltanoBridge",
-    "FlextMeltanoConfig",
+    "FlextMeltanoSettings",
     "FlextMeltanoTargetAbstractions",
     "FlextMeltanoTypes",
     "FlextResult",
     "FlextTargetLDIF",
-    "FlextTargetLDIFConfig",
-    "FlextTargetLdifConfig",
+    "FlextTargetLDIFSettings",
     "FlextTargetLdifError",
     "FlextTargetLdifErrorDetails",
     "FlextTargetLdifFileError",
@@ -62,6 +61,7 @@ __all__ = [
     "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
     "FlextTargetLdifSchemaError",
+    "FlextTargetLdifSettings",
     "FlextTargetLdifTransformationError",
     "FlextTargetLdifUtilities",
     "LDIFSink",

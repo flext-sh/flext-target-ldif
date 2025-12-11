@@ -9,13 +9,13 @@ from __future__ import annotations
 
 from typing import Self, cast
 
-from flext_core import FlextConfig, FlextConstants, FlextModels, FlextResult
+from flext_core import FlextConstants, FlextModels, FlextResult, FlextSettings
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
 
 
-class FlextTargetLdifConfig(FlextConfig):
-    """Configuration for FLEXT Target LDIF using FlextConfig patterns."""
+class FlextTargetLdifSettings(FlextSettings):
+    """Configuration for FLEXT Target LDIF using FlextSettings patterns."""
 
     output_path: str = Field(
         default="./output",
@@ -61,7 +61,7 @@ class FlextTargetLdifConfig(FlextConfig):
 
     @classmethod
     def get_global_instance(cls) -> Self:
-        """Get the global singleton instance using enhanced FlextConfig pattern."""
+        """Get the global singleton instance using enhanced FlextSettings pattern."""
         return cls.get_or_create_shared_instance(project_name="flext-target-ldif")
 
     @classmethod
@@ -140,7 +140,7 @@ class FlextTargetLdifConfig(FlextConfig):
         return v
 
     def validate_business_rules(self: object) -> FlextResult[None]:
-        """Validate LDIF target configuration business rules using FlextConfig pattern."""
+        """Validate LDIF target configuration business rules using FlextSettings pattern."""
         try:
             # Use centralized FlextModels validation instead of duplicate path logic
             path_validation_result = FlextModels.create_validated_file_path(
@@ -172,5 +172,5 @@ class FlextTargetLdifConfig(FlextConfig):
 
 
 __all__: list[str] = [
-    "FlextTargetLdifConfig",
+    "FlextTargetLdifSettings",
 ]

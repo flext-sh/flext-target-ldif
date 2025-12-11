@@ -16,18 +16,18 @@ from pydantic import ValidationError
 
 from flext_target_ldif import (
     FlextTargetLdif,
-    FlextTargetLdifConfig,
+    FlextTargetLdifSettings,
     LDIFSink,
     TargetLDIF,
 )
 
 
-class TestFlextTargetLdifConfig:
-    """Test FlextTargetLdifConfig value object."""
+class TestFlextTargetLdifSettings:
+    """Test FlextTargetLdifSettings value object."""
 
     def test_config_creation_with_defaults(self) -> None:
         """Test creating config with default values."""
-        config = FlextTargetLdifConfig(output_file="test.ldif")
+        config = FlextTargetLdifSettings(output_file="test.ldif")
         if config.output_file != "test.ldif":
             msg: str = f"Expected {'test.ldif'}, got {config.output_file}"
             raise AssertionError(msg)
@@ -48,7 +48,7 @@ class TestFlextTargetLdifConfig:
         """Test creating config with custom values."""
         with tempfile.TemporaryDirectory() as temp_dir:
             custom_file = f"{temp_dir}/custom.ldif"
-            config = FlextTargetLdifConfig(
+            config = FlextTargetLdifSettings(
                 output_file=custom_file,
                 schema_validation=False,
                 dn_template="cn={name},ou=people,dc=test,dc=com",
@@ -77,20 +77,20 @@ class TestFlextTargetLdifConfig:
 
     def test_config_immutability(self) -> None:
         """Test that config is immutable."""
-        config = FlextTargetLdifConfig(output_file="test.ldif")
+        config = FlextTargetLdifSettings(output_file="test.ldif")
 
         with pytest.raises(ValidationError):
             config.output_file = "modified.ldif"
 
     def test_config_validation_empty_output_file(self) -> None:
         """Test validation with empty output file."""
-        config = FlextTargetLdifConfig(output_file="")
+        config = FlextTargetLdifSettings(output_file="")
         with pytest.raises(ValueError, match="Output file cannot be empty"):
             config.validate_domain_rules()
 
     def test_config_validation_empty_dn_template(self) -> None:
         """Test validation with empty DN template."""
-        config = FlextTargetLdifConfig(
+        config = FlextTargetLdifSettings(
             output_file="test.ldif",
             dn_template="",
         )
@@ -99,7 +99,7 @@ class TestFlextTargetLdifConfig:
 
     def test_config_validation_invalid_line_length(self) -> None:
         """Test validation with invalid line length."""
-        config = FlextTargetLdifConfig(
+        config = FlextTargetLdifSettings(
             output_file="test.ldif",
             line_length=0,
         )
@@ -108,7 +108,7 @@ class TestFlextTargetLdifConfig:
 
     def test_config_validation_valid_config(self) -> None:
         """Test validation with valid config."""
-        config = FlextTargetLdifConfig(
+        config = FlextTargetLdifSettings(
             output_file="test.ldif",
             dn_template="uid={uid},ou=users,dc=example,dc=com",
             line_length=78,
@@ -320,7 +320,7 @@ class TestIntegration:
             tmp_path = Path(tmp.name)
 
         # Create config
-        config = FlextTargetLdifConfig(
+        config = FlextTargetLdifSettings(
             output_file=str(tmp_path),
             schema_validation=True,
             dn_template="uid={uid},ou=users,dc=example,dc=com",
@@ -366,7 +366,7 @@ class TestIntegration:
 
     def test_config_to_dict_conversion(self) -> None:
         """Test config can be converted to dict[str, object] for Singer SDK."""
-        config = FlextTargetLdifConfig(
+        config = FlextTargetLdifSettings(
             output_file="test.ldif",
             schema_validation=True,
             dn_template="uid={uid},ou=users,dc=example,dc=com",
@@ -405,7 +405,7 @@ class TestIntegration:
     def test_error_handling_integration(self) -> None:
         """Test error handling across the system."""
         # Test config validation error propagation
-        invalid_config = FlextTargetLdifConfig(
+        invalid_config = FlextTargetLdifSettings(
             output_file="",  # Invalid empty file
         )
 
