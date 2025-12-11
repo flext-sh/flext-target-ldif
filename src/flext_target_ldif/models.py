@@ -8,7 +8,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Literal
 
-from flext_core import FlextConfig, FlextModels, FlextResult
+from flext_core import FlextModels, FlextResult, FlextSettings
 from flext_core.utilities import u
 from pydantic import ConfigDict, Field
 
@@ -31,7 +31,7 @@ compliance, format validation, and target operations following standardized patt
 """
 
 
-class LdifFormatOptions(FlextConfig):
+class LdifFormatOptions(FlextSettings):
     """LDIF format configuration with specification compliance."""
 
     line_length: int = Field(
@@ -59,7 +59,7 @@ class LdifFormatOptions(FlextConfig):
     line_separator: str = Field(default="\n", description="Line separator character")
 
 
-class LdifExportConfig(FlextConfig):
+class LdifExportConfig(FlextSettings):
     """LDIF export configuration with file management."""
 
     output_path: str = Field(..., description="Output directory for LDIF files")
@@ -300,7 +300,7 @@ class LdifBatchProcessing(FlextModels.Entity):
         return (self.successful_exports / total) * 100.0
 
 
-class SingerStreamConfig(FlextConfig):
+class SingerStreamConfig(FlextSettings):
     """Singer stream configuration for LDIF export."""
 
     stream_name: str = Field(..., description="Singer stream name")
