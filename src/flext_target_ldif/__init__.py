@@ -5,9 +5,9 @@ from __future__ import annotations
 from typing import Final
 
 from flext_target_ldif.cli import main as cli_main
-from flext_target_ldif.config import FlextTargetLdifSettings
 from flext_target_ldif.models import FlextTargetLdifModels, m, m_target_ldif
 from flext_target_ldif.protocols import FlextTargetLdifProtocols
+from flext_target_ldif.settings import FlextTargetLdifSettings
 from flext_target_ldif.sinks import LDIFSink, LDIFSink as _LDIFSink
 from flext_target_ldif.target import TargetLDIF, TargetLDIF as _TargetLDIF
 from flext_target_ldif.transformers import (

@@ -2,8 +2,8 @@
 
 from typing import Protocol, runtime_checkable
 
-from flext_ldif.protocols import FlextLdifProtocols as p_ldif
-from flext_meltano.protocols import FlextMeltanoProtocols as p_meltano
+from flext_ldif.protocols import p_ldif
+from flext_meltano.protocols import p_meltano
 
 
 class FlextTargetLdifProtocols(p_meltano, p_ldif):
