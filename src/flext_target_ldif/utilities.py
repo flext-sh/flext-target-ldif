@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import ClassVar, override
 
 from flext_core import FlextResult
-from flext_core.utilities import FlextUtilities as u_core
+from flext_core.utilities import u_core
 
 
 class FlextTargetLdifUtilities(u_core):
