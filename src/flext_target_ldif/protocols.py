@@ -2,8 +2,8 @@
 
 from typing import Protocol, runtime_checkable
 
-from flext_ldif.protocols import p_ldif
-from flext_meltano.protocols import p_meltano
+from flext_ldif.protocols import p as p_ldif
+from flext_meltano.protocols import p as p_meltano
 
 
 class FlextTargetLdifProtocols(p_meltano, p_ldif):
@@ -19,20 +19,20 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
     - PROVIDES: Root-level alias `p` for convenient access
 
     Usage:
-    from flext_target_ldif.protocols import p
+        from flext_target_ldif.protocols import p
 
-    # Foundation protocols (inherited)
-    result: p.Result[str]
-    service: p.Service[str]
+        # Foundation protocols (inherited)
+        result: p.Result[str]
+        service: p.Service[str]
 
-    # LDIF protocols (inherited)
-    entry: p.Models.EntryProtocol
+        # LDIF protocols (inherited)
+        entry: p.Models.EntryProtocol
 
-    # Meltano protocols (inherited)
-    target: p.Meltano.TargetProtocol
+        # Meltano protocols (inherited)
+        target: p.Meltano.TargetProtocol
 
-    # Target LDIF-specific protocols
-    ldif_generation: p.Target.LdifGenerationProtocol
+        # Target LDIF-specific protocols
+        ldif_generation: p.Target.Ldif.LdifGenerationProtocol
     """
 
     class Target:
@@ -74,7 +74,8 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                 """
 
                 def transform_to_ldif(
-                    self, record: dict[str, object]
+                    self,
+                    record: dict[str, object],
                 ) -> p_meltano.Result[str]:
                     """Transform Singer record to LDIF format.
 
@@ -116,7 +117,10 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                 Defines the interface for validating LDIF content.
                 """
 
-                def validate_ldif(self, ldif_content: str) -> p_meltano.Result[bool]:
+                def validate_ldif(
+                    self,
+                    ldif_content: str,
+                ) -> p_meltano.Result[bool]:
                     """Validate LDIF content.
 
                     Args:
@@ -134,7 +138,10 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                 Defines the interface for optimizing LDIF generation performance.
                 """
 
-                def optimize_batch(self, batch_size: int) -> p_meltano.Result[int]:
+                def optimize_batch(
+                    self,
+                    batch_size: int,
+                ) -> p_meltano.Result[int]:
                     """Optimize batch size for performance.
 
                     Args:
@@ -144,7 +151,6 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                         Result containing the optimized batch size.
 
                     """
-                    ...
 
             @runtime_checkable
             class MonitoringProtocol(p_ldif.Service[object], Protocol):
@@ -153,7 +159,10 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                 Defines the interface for monitoring LDIF generation progress.
                 """
 
-                def track_progress(self, records: int) -> p_meltano.Result[bool]:
+                def track_progress(
+                    self,
+                    records: int,
+                ) -> p_meltano.Result[bool]:
                     """Track progress of LDIF generation.
 
                     Args:
@@ -163,12 +172,10 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                         Result indicating success or failure of tracking.
 
                     """
-                    ...
 
 
 # Runtime alias for simplified usage
 p = FlextTargetLdifProtocols
-
 __all__ = [
     "FlextTargetLdifProtocols",
     "p",

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Final
 
+from flext_target_ldif.__version__ import VERSION, FlextTargetLdifVersion
 from flext_target_ldif.cli import main as cli_main
 from flext_target_ldif.models import FlextTargetLdifModels, m, m_target_ldif
 from flext_target_ldif.protocols import FlextTargetLdifProtocols
@@ -29,7 +30,6 @@ from flext_target_ldif.validation import (
     validate_record,
     validate_schema,
 )
-from flext_target_ldif.version import VERSION, FlextTargetLdifVersion
 from flext_target_ldif.writer import LdifWriter, LdifWriter as _LdifWriter
 
 PROJECT_VERSION: Final[FlextTargetLdifVersion] = VERSION
