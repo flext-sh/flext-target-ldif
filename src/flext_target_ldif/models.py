@@ -8,10 +8,10 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Literal
 
-from flext_core import FlextModels, FlextResult, FlextSettings
 from flext_core.utilities import u
 from pydantic import ConfigDict, Field
 
+from flext import FlextModels, FlextResult, FlextSettings
 from flext_target_ldif.utilities import FlextTargetLdifUtilities
 
 # LDIF target constants

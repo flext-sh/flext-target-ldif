@@ -9,9 +9,10 @@ from __future__ import annotations
 
 from typing import Self, cast
 
-from flext_core import FlextConstants, FlextModels, FlextResult, FlextSettings
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
+
+from flext import FlextConstants, FlextModels, FlextResult, FlextSettings
 
 
 class FlextTargetLdifSettings(FlextSettings):

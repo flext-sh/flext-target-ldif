@@ -13,9 +13,9 @@ import types
 from pathlib import Path
 from typing import Self, override
 
-from flext_core import FlextLogger, FlextResult
 from flext_ldif import FlextLdif
 
+from flext import FlextLogger, FlextResult
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError
 
 logger = FlextLogger(__name__)
@@ -55,7 +55,7 @@ class LdifWriter:
             return FlextResult[None].fail(f"Failed to prepare LDIF file: {e}")
 
     def _convert_record_to_entry(
-        self, record: dict[str, object]
+        self, record: dict[str, object],
     ) -> dict[str, object] | None:
         """Convert a single record to LDIF entry format."""
         try:
