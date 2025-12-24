@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from flext_core import FlextTypes
+from flext import FlextTypes
 
 # =============================================================================
 # FLEXT TARGET LDIF-SPECIFIC TYPE VARIABLES - Domain-specific TypeVars for Singer LDIF target operations
@@ -43,10 +43,10 @@ class FlextTargetLdifTypes(FlextTypes):
         type SingerSchema = dict[str, FlextTypes.JsonValue | list[dict[str, object]]]
         type SingerRecord = dict[str, FlextTypes.JsonValue | dict[str, object]]
         type SingerState = dict[
-            str, FlextTypes.JsonValue | dict[str, FlextTypes.JsonValue]
+            str, FlextTypes.JsonValue | dict[str, FlextTypes.JsonValue],
         ]
         type StreamConfiguration = dict[
-            str, str | bool | dict[str, FlextTypes.JsonValue]
+            str, str | bool | dict[str, FlextTypes.JsonValue],
         ]
         type TargetConfiguration = dict[str, object | dict[str, object]]
         type MessageProcessing = dict[str, int | str | dict[str, FlextTypes.JsonValue]]
@@ -65,7 +65,7 @@ class FlextTargetLdifTypes(FlextTypes):
             FlextTypes.JsonValue | list[str] | dict[str, object],
         ]
         type LdifFileConfig = dict[
-            str, str | int | bool | dict[str, FlextTypes.JsonValue]
+            str, str | int | bool | dict[str, FlextTypes.JsonValue],
         ]
         type LdifFormatting = dict[str, str | int | bool | dict[str, object]]
         type LdifValidation = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
@@ -107,7 +107,7 @@ class FlextTargetLdifTypes(FlextTypes):
         """Validation complex types."""
 
         type LdifFormatValidation = dict[
-            str, bool | str | dict[str, FlextTypes.JsonValue]
+            str, bool | str | dict[str, FlextTypes.JsonValue],
         ]
         type SingerCompliance = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
         type SchemaValidation = dict[str, bool | list[str] | dict[str, object]]
@@ -124,7 +124,7 @@ class FlextTargetLdifTypes(FlextTypes):
 
         type TargetSettings = dict[str, object | dict[str, object]]
         type LdifTargetConfig = dict[
-            str, str | int | bool | dict[str, FlextTypes.JsonValue]
+            str, str | int | bool | dict[str, FlextTypes.JsonValue],
         ]
         type OutputConfiguration = dict[str, str | dict[str, FlextTypes.JsonValue]]
         type StreamMapping = dict[str, str | dict[str, FlextTypes.JsonValue]]
@@ -140,7 +140,7 @@ class FlextTargetLdifTypes(FlextTypes):
 
         type PerformanceMetrics = dict[str, int | float | dict[str, object]]
         type OptimizationConfig = dict[
-            str, int | bool | dict[str, FlextTypes.JsonValue]
+            str, int | bool | dict[str, FlextTypes.JsonValue],
         ]
         type BufferConfiguration = dict[str, int | str | dict[str, object]]
         type StreamingConfig = dict[str, int | bool | dict[str, FlextTypes.JsonValue]]

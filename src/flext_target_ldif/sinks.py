@@ -10,8 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextResult
-
+from flext import FlextResult
 from flext_target_ldif.writer import LdifWriter
 
 

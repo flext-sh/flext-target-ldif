@@ -15,6 +15,7 @@
 **Python**: 3.13+
 
 **CRITICAL INTEGRATION DEPENDENCIES**:
+
 - **flext-meltano**: MANDATORY for ALL Singer operations (ZERO TOLERANCE for direct singer-sdk without flext-meltano)
 - **flext-ldif**: MANDATORY for ALL LDIF operations (ZERO TOLERANCE for direct LDIF processing)
 - **flext-core**: Foundation patterns (FlextResult, FlextService, FlextContainer)
@@ -61,12 +62,14 @@ if result.is_success:
 ### ZERO TOLERANCE Policies
 
 **ABSOLUTELY FORBIDDEN**:
+
 - ❌ Direct singer-sdk imports (use flext-meltano)
 - ❌ Direct LDIF processing (use flext-ldif)
 - ❌ Exception-based error handling (use FlextResult)
 - ❌ Type ignores or `Any` types
 
 **MANDATORY**:
+
 - ✅ Use `FlextResult[T]` for all operations
 - ✅ Use flext-meltano for Singer operations
 - ✅ Use flext-ldif for LDIF operations
@@ -76,6 +79,7 @@ if result.is_success:
 ---
 
 **See Also**:
+
 - [Workspace Standards](../CLAUDE.md)
 - [flext-core Patterns](../flext-core/CLAUDE.md)
 - [flext-ldif Patterns](../flext-ldif/CLAUDE.md)
