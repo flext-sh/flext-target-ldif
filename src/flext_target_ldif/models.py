@@ -8,7 +8,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Literal
 
-from flext_core import FlextModels, FlextResult, FlextSettings
+from flext_core import FlextModels, FlextResult, FlextSettings, FlextTypes as t
 from flext_core.utilities import u
 from pydantic import ConfigDict, Field
 
@@ -197,7 +197,7 @@ class LdifFile(FlextModels.Entity):
 class LdifTransformationResult(FlextModels.Entity):
     """Result of Singer to LDIF transformation."""
 
-    original_record: dict[str, object] = Field(
+    original_record: dict[str, t.GeneralValueType] = Field(
         ...,
         description="Original Singer record",
     )
@@ -434,7 +434,7 @@ class LdifErrorContext(FlextModels.ArbitraryTypesModel):
 
 
 # Type aliases for backward compatibility
-LdifRecord = dict[str, object]
+LdifRecord = dict[str, t.GeneralValueType]
 LdifRecords = list[LdifRecord]
 
 

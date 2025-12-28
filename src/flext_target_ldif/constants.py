@@ -29,9 +29,14 @@ class FlextTargetLdifConstants(FlextConstants):
     MAX_BATCH_SIZE: Final[int] = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
 
     # LDIF Format Options using composition
-    SUPPORTED_ENCODINGS: Final[frozenset[str]] = (
-        FlextLdifConstants.Ldif.SUPPORTED_ENCODINGS
-    )
+    SUPPORTED_ENCODINGS: Final[frozenset[str]] = frozenset([
+        "utf-8",
+        "utf-16",
+        "utf-32",
+        "ascii",
+        "latin-1",
+        "cp1252",
+    ])
 
     class TargetLdifProcessing:
         """LDIF target processing configuration.

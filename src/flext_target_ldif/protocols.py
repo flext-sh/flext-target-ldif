@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
+from flext_core import FlextTypes as t
 from flext_ldif.protocols import p as p_ldif
 from flext_meltano.protocols import p as p_meltano
 
@@ -60,7 +61,7 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
 
                 def generate_ldif(
                     self,
-                    records: list[dict[str, object]],
+                    records: list[dict[str, t.GeneralValueType]],
                 ) -> p_meltano.Result[str]:
                     """Generate LDIF content from records.
 
@@ -81,7 +82,7 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
 
                 def transform_to_ldif(
                     self,
-                    record: dict[str, object],
+                    record: dict[str, t.GeneralValueType],
                 ) -> p_meltano.Result[str]:
                     """Transform Singer record to LDIF format.
 

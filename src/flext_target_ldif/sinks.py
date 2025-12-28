@@ -10,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextResult
+from flext_core import FlextResult, FlextTypes as t
 
 from flext_target_ldif.writer import LdifWriter
 
@@ -21,13 +21,13 @@ class LDIFSink:
     @override
     def __init__(
         self,
-        target_config: dict[str, object],
+        target_config: dict[str, t.GeneralValueType],
         stream_name: str,
-        schema: dict[str, object],
+        schema: dict[str, t.GeneralValueType],
         key_properties: list[str] | None = None,
     ) -> None:
         """Initialize the LDIF sink."""
-        self.config: dict[str, object] = target_config
+        self.config: dict[str, t.GeneralValueType] = target_config
         self.stream_name = stream_name
         self.schema = schema
         self.key_properties = key_properties or []
@@ -65,7 +65,9 @@ class LDIFSink:
         if self._ldif_writer is None:
             output_file = self._get_output_file()
 
-            ldif_options: dict[str, object] = self.config.get("ldif_options", {})
+            ldif_options: dict[str, t.GeneralValueType] = self.config.get(
+                "ldif_options", {}
+            )
             if not isinstance(ldif_options, dict):
                 ldif_options = {}
 
@@ -73,7 +75,7 @@ class LDIFSink:
             if dn_template is not None and not isinstance(dn_template, str):
                 dn_template = None
 
-            attribute_mapping: dict[str, object] = self.config.get(
+            attribute_mapping: dict[str, t.GeneralValueType] = self.config.get(
                 "attribute_mapping",
                 {},
             )
@@ -90,15 +92,15 @@ class LDIFSink:
 
         return self._ldif_writer
 
-    def process_batch(self, _context: dict[str, object]) -> None:
+    def process_batch(self, _context: dict[str, t.GeneralValueType]) -> None:
         """Process a batch of records."""
         # BatchSink handles the batching, we just need to ensure writer is ready
         self._get_ldif_writer()
 
     def process_record(
         self,
-        record: dict[str, object],
-        _context: dict[str, object],
+        record: dict[str, t.GeneralValueType],
+        _context: dict[str, t.GeneralValueType],
     ) -> None:
         """Process a single record and write to LDIF.
 
