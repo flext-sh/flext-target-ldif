@@ -235,6 +235,18 @@ class FlextTargetLdifTypes(FlextTypes):
             "singer-file-target",
         ]
 
+        # Error type literal - references ErrorType StrEnum from constants
+        type ErrorTypeLiteral = Literal[
+            "FORMAT_VALIDATION",
+            "FILE_IO",
+            "TRANSFORMATION",
+            "SINGER_PROTOCOL",
+            "CONFIGURATION",
+            "DISK_SPACE",
+            "PERMISSION",
+            "ENCODING",
+        ]
+
         # FLEXT Target LDIF-specific project configurations
         type FlextTargetLdifSettings = dict[str, FlextTypes.GeneralValueType]
         type SingerTargetConfig = dict[

@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from enum import StrEnum
 from typing import Final
 
 from flext_core import FlextConstants
@@ -37,6 +38,23 @@ class FlextTargetLdifConstants(FlextConstants):
         "latin-1",
         "cp1252",
     ])
+
+    class ErrorType(StrEnum):
+        """LDIF target error types using StrEnum for type safety.
+
+        DRY Pattern:
+            StrEnum is the single source of truth. Use ErrorType.FORMAT_VALIDATION.value
+            or ErrorType.FORMAT_VALIDATION directly - no base strings needed.
+        """
+
+        FORMAT_VALIDATION = "FORMAT_VALIDATION"
+        FILE_IO = "FILE_IO"
+        TRANSFORMATION = "TRANSFORMATION"
+        SINGER_PROTOCOL = "SINGER_PROTOCOL"
+        CONFIGURATION = "CONFIGURATION"
+        DISK_SPACE = "DISK_SPACE"
+        PERMISSION = "PERMISSION"
+        ENCODING = "ENCODING"
 
     class TargetLdifProcessing:
         """LDIF target processing configuration.
