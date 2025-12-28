@@ -6,23 +6,12 @@ This module provides data models for LDIF target operations.
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from typing import Literal
 
 from flext_core import FlextModels, FlextResult, FlextSettings, FlextTypes as t
 from flext_core.utilities import u
 from pydantic import ConfigDict, Field
 
 from flext_target_ldif.utilities import FlextTargetLdifUtilities
-
-# LDIF target constants
-FORMAT_VALIDATION = "FORMAT_VALIDATION"
-FILE_IO = "FILE_IO"
-TRANSFORMATION = "TRANSFORMATION"
-SINGER_PROTOCOL = "SINGER_PROTOCOL"
-CONFIGURATION = "CONFIGURATION"
-DISK_SPACE = "DISK_SPACE"
-PERMISSION = "PERMISSION"
-ENCODING = "ENCODING"
 
 """LDIF target models extending flext-core FlextModels.
 
@@ -409,16 +398,7 @@ class LdifTargetResult(FlextModels.Entity):
 class LdifErrorContext(FlextModels.ArbitraryTypesModel):
     """Error context for LDIF target error handling."""
 
-    error_type: Literal[
-        "FORMAT_VALIDATION",
-        "FILE_IO",
-        "TRANSFORMATION",
-        "SINGER_PROTOCOL",
-        "CONFIGURATION",
-        "DISK_SPACE",
-        "PERMISSION",
-        "ENCODING",
-    ] = Field(..., description="Error category")
+    error_type: t.Project.ErrorTypeLiteral = Field(..., description="Error category")
 
     # Context information
     file_path: str | None = Field(None, description="File path that caused error")
