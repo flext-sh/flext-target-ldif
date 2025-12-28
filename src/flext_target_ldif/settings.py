@@ -7,11 +7,18 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Self, cast
+from typing import Self
 
-from flext_core import FlextConstants, FlextModels, FlextResult, FlextSettings
+from flext_core import (
+    FlextModels,
+    FlextResult,
+    FlextSettings,
+    FlextTypes as t,
+)
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
+
+from flext_target_ldif.constants import c
 
 
 class FlextTargetLdifSettings(FlextSettings):
@@ -37,15 +44,12 @@ class FlextTargetLdifSettings(FlextSettings):
         default_factory=dict,
         description="Mapping of stream fields to LDAP attributes",
     )
-    ldif_options: dict[str, object] = Field(
-        default_factory=lambda: cast(
-            "dict[str, object]",
-            {
-                "line_length": FlextConstants.Limits.MAX_LINE_LENGTH,
-                "base64_encode": "False",
-                "include_timestamps": "True",
-            },
-        ),
+    ldif_options: dict[str, t.GeneralValueType] = Field(
+        default_factory=lambda: {
+            "line_length": c.MAX_LINE_LENGTH,
+            "base64_encode": "False",
+            "include_timestamps": "True",
+        },
         description="LDIF format options",
     )
 
@@ -67,10 +71,10 @@ class FlextTargetLdifSettings(FlextSettings):
     @classmethod
     def create_for_development(cls, **overrides: object) -> Self:
         """Create configuration for development environment."""
-        dev_overrides: dict[str, object] = {
+        dev_overrides: dict[str, t.GeneralValueType] = {
             "file_naming_pattern": "dev_{stream_name}_{timestamp}.ldif",
             "ldif_options": {
-                "line_length": FlextConstants.Limits.MAX_LINE_LENGTH + 42,
+                "line_length": c.MAX_LINE_LENGTH + 42,
                 "base64_encode": "False",
                 "include_timestamps": "True",
             },
@@ -84,7 +88,7 @@ class FlextTargetLdifSettings(FlextSettings):
     @classmethod
     def create_for_production(cls, **overrides: object) -> Self:
         """Create configuration for production environment."""
-        prod_overrides: dict[str, object] = {
+        prod_overrides: dict[str, t.GeneralValueType] = {
             "file_naming_pattern": "prod_{stream_name}_{timestamp}.ldif",
             "ldif_options": {
                 "line_length": 78,
@@ -101,7 +105,7 @@ class FlextTargetLdifSettings(FlextSettings):
     @classmethod
     def create_for_testing(cls, **overrides: object) -> Self:
         """Create configuration for testing environment."""
-        test_overrides: dict[str, object] = {
+        test_overrides: dict[str, t.GeneralValueType] = {
             "output_path": "./test-output",
             "file_naming_pattern": "test_{stream_name}.ldif",
             "ldif_options": {

@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import re
 
+from flext_core import FlextTypes as t
+
 from flext_target_ldif.constants import FlextTargetLdifConstants
 
 
@@ -38,7 +40,8 @@ def validate_attribute_value(value: object) -> bool:
         return False
     if isinstance(value, str):
         return (
-            len(value) <= FlextTargetLdifConstants.Validation.MAX_ATTRIBUTE_VALUE_LENGTH
+            len(value)
+            <= FlextTargetLdifConstants.TargetLdifValidation.MAX_ATTRIBUTE_VALUE_LENGTH
         )
     return True
 
@@ -59,7 +62,7 @@ def sanitize_attribute_name(name: str) -> str:
 
 
 def validate_record(
-    record: dict[str, object],
+    record: dict[str, t.GeneralValueType],
 ) -> dict[str, list[str]]:
     """Validate a record and return validation errors."""
     errors: dict[str, list[str]] = {}
@@ -91,7 +94,7 @@ def validate_record(
 
 
 def validate_schema(
-    schema: dict[str, object],
+    schema: dict[str, t.GeneralValueType],
 ) -> dict[str, list[str]]:
     """Validate Singer schema for LDIF compatibility."""
     errors: dict[str, list[str]] = {}
@@ -100,7 +103,7 @@ def validate_schema(
         errors["schema"] = ["Schema cannot be empty"]
         return errors
 
-    properties: dict[str, object] = schema.get("properties", {})
+    properties: dict[str, t.GeneralValueType] = schema.get("properties", {})
     if not properties:
         errors["properties"] = ["Schema must define properties"]
 

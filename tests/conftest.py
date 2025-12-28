@@ -10,6 +10,7 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
+from flext_core import FlextTypes as t
 
 
 @pytest.fixture
@@ -31,7 +32,7 @@ def temp_file() -> Generator[Path]:
 
 
 @pytest.fixture
-def sample_config(temp_dir: Path) -> dict[str, object]:
+def sample_config(temp_dir: Path) -> dict[str, t.GeneralValueType]:
     """Provide a sample configuration for testing."""
     return {
         "output_path": str(temp_dir),
@@ -66,7 +67,7 @@ def sample_record() -> dict[str, str]:
 
 
 @pytest.fixture
-def sample_schema() -> dict[str, object]:
+def sample_schema() -> dict[str, t.GeneralValueType]:
     """Provide a sample Singer schema for testing."""
     return {
         "type": "object",
@@ -113,7 +114,7 @@ def multiple_records() -> list[dict[str, str]]:
 
 
 @pytest.fixture
-def ldif_options() -> dict[str, object]:
+def ldif_options() -> dict[str, t.GeneralValueType]:
     """Provide sample LDIF options for testing."""
     return {
         "line_length": 78,
