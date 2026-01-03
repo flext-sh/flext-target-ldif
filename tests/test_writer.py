@@ -118,7 +118,7 @@ class TestLdifWriterFileOperations:
         writer = LdifWriter(output_file=tmp_path)
         result = writer.open()
 
-        assert result.success
+        assert result.is_success
         assert writer._file_handle is not None
 
         # Clean up
@@ -132,7 +132,7 @@ class TestLdifWriterFileOperations:
         writer = LdifWriter(output_file=invalid_path)
         result = writer.open()
 
-        assert not result.success
+        assert not result.is_success
         if "Failed to open LDIF file" not in result.error:
             msg: str = f"Expected {'Failed to open LDIF file'} in {result.error}"
             raise AssertionError(
@@ -152,7 +152,7 @@ class TestLdifWriterFileOperations:
         writer.open()
         result = writer.close()
 
-        assert result.success
+        assert result.is_success
         assert writer._file_handle is None
 
         tmp_path.unlink()
@@ -161,7 +161,7 @@ class TestLdifWriterFileOperations:
         """Test closing when file is not open."""
         writer = LdifWriter()
         result = writer.close()
-        assert result.success
+        assert result.is_success
 
     @patch("pathlib.Path.open")
     def test_self(self, mock_open_method: Mock) -> None:
@@ -174,7 +174,7 @@ class TestLdifWriterFileOperations:
         writer.open()
         result = writer.close()
 
-        assert not result.success
+        assert not result.is_success
         if "Failed to close LDIF file" not in result.error:
             msg: str = f"Expected {'Failed to close LDIF file'} in {result.error}"
             raise AssertionError(
@@ -198,7 +198,7 @@ class TestLdifWriterRecordWriting:
         record = {"uid": "jdoe", "cn": "John Doe", "mail": "john@example.com"}
 
         result = writer.write_record(record)
-        assert result.success
+        assert result.is_success
         if writer.record_count != 1:
             msg: str = f"Expected {1}, got {writer.record_count}"
             raise AssertionError(msg)
@@ -263,7 +263,7 @@ class TestLdifWriterRecordWriting:
         record = {"uid": "jdoe", "cn": "John Doe"}
         result = writer.write_record(record)
 
-        assert result.success
+        assert result.is_success
         assert writer._file_handle is not None
 
         writer.close()
@@ -277,7 +277,7 @@ class TestLdifWriterRecordWriting:
         record = {"cn": "John Doe", "mail": "john@example.com"}
         result = writer.write_record(record)
 
-        assert not result.success
+        assert not result.is_success
         if "Failed to write record" not in result.error:
             msg: str = f"Expected {'Failed to write record'} in {result.error}"
             raise AssertionError(
@@ -303,7 +303,7 @@ class TestLdifWriterRecordWriting:
 
         for record in records:
             result = writer.write_record(record)
-            assert result.success
+            assert result.is_success
 
         if writer.record_count != EXPECTED_DATA_COUNT:
             msg: str = f"Expected {3}, got {writer.record_count}"
@@ -570,7 +570,7 @@ class TestLdifWriterContextManager:
 
         with LdifWriter(output_file=tmp_path) as writer:
             result = writer.write_record(record)
-            assert result.success
+            assert result.is_success
             assert writer._file_handle is not None
 
         # File should be closed after context manager exit

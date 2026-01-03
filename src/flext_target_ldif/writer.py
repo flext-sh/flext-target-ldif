@@ -45,7 +45,7 @@ class LdifWriter:
         self._record_count = 0
         self._ldif_entries: list[dict[str, t.GeneralValueType]] = []
 
-    def open(self: object) -> FlextResult[None]:
+    def open(self) -> FlextResult[None]:
         """Open the output file for writing."""
         try:
             # Create output directory if needed
@@ -112,7 +112,7 @@ class LdifWriter:
                 self._write_entry_attributes(f, attributes_obj)
                 f.write("\n")
 
-    def close(self: object) -> FlextResult[None]:
+    def close(self) -> FlextResult[None]:
         """Close the output file and write all collected records."""
         try:
             if self._records:
@@ -128,7 +128,7 @@ class LdifWriter:
                 write_result: FlextResult[object] = FlextResult[str].ok(
                     "LDIF written successfully",
                 )
-                if not write_result.success:
+                if not write_result.is_success:
                     return FlextResult[None].fail(
                         f"LDIF write failed: {write_result.error}",
                     )
@@ -158,11 +158,11 @@ class LdifWriter:
             raise FlextTargetLdifWriterError(msg) from e
 
     @property
-    def record_count(self: object) -> int:
+    def record_count(self) -> int:
         """Get the number of records written."""
         return self._record_count
 
-    def __enter__(self: object) -> Self:
+    def __enter__(self) -> Self:
         """Context manager entry."""
         self.open()
         return self
