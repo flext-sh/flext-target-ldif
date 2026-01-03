@@ -35,7 +35,7 @@ class LDIFSink:
         self._ldif_writer: LdifWriter | None = None
         self._output_file: Path | None = None
 
-    def _get_output_file(self: object) -> Path:
+    def _get_output_file(self) -> Path:
         """Get the output file path for this stream."""
         if self._output_file is None:
             output_path_str = self.config.get("output_path", "./output")
@@ -55,7 +55,7 @@ class LDIFSink:
 
         return self._output_file
 
-    def _get_ldif_writer(self: object) -> LdifWriter:
+    def _get_ldif_writer(self) -> LdifWriter:
         """Get or create the LDIF writer for this sink.
 
         Returns:
@@ -110,20 +110,20 @@ class LDIFSink:
         """
         ldif_writer = self._get_ldif_writer()
         result: FlextResult[object] = ldif_writer.write_record(record)
-        if not result.success:
+        if not result.is_success:
             msg: str = f"Failed to write LDIF record: {result.error}"
             raise RuntimeError(msg)
 
-    def clean_up(self: object) -> None:
+    def clean_up(self) -> None:
         """Clean up resources when sink is finished."""
         if self._ldif_writer:
             result: FlextResult[object] = self._ldif_writer.close()
-            if not result.success and hasattr(self, "logger"):
+            if not result.is_success and hasattr(self, "logger"):
                 self.logger.error("Failed to close LDIF writer: %s", result.error)
             elif hasattr(self, "logger"):
                 self.logger.info("LDIF file written: %s", self._output_file)
 
     @property
-    def ldif_writer(self: object) -> LdifWriter:
+    def ldif_writer(self) -> LdifWriter:
         """Get the LDIF writer (for testing)."""
         return self._get_ldif_writer()

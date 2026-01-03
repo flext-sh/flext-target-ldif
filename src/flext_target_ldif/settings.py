@@ -143,7 +143,7 @@ class FlextTargetLdifSettings(FlextSettings):
 
         return v
 
-    def validate_business_rules(self: object) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextResult[None]:
         """Validate LDIF target configuration business rules using FlextSettings pattern."""
         try:
             # Use centralized FlextModels validation instead of duplicate path logic
