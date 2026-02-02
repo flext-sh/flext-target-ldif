@@ -20,7 +20,7 @@ from flext_target_ldif.transformers import (
     transform_phone,
     transform_timestamp,
 )
-from flext_target_ldif.utilities import FlextTargetLdifUtilities
+from flext_target_ldif.utilities import FlextTargetLdifUtilities as u
 from flext_target_ldif.validation import (
     ValidationError,
     sanitize_attribute_name,
@@ -32,7 +32,7 @@ from flext_target_ldif.validation import (
 )
 from flext_target_ldif.writer import LdifWriter, LdifWriter as _LdifWriter
 
-PROJECT_VERSION: Final[FlextTargetLdifVersion] = VERSION
+PROJECT_VERSION: Final[type[FlextTargetLdifVersion]] = VERSION
 
 __version__: str = VERSION.version
 __version_info__: tuple[int | str, ...] = VERSION.version_info
@@ -46,29 +46,15 @@ TargetLDIFConfig = _FlextTargetLdifSettings
 
 __all__ = [
     "FlextLdifTarget",
-    "FlextLogger",
-    "FlextMeltanoBridge",
-    "FlextMeltanoSettings",
-    "FlextMeltanoTargetAbstractions",
-    "FlextMeltanoTypes",
-    "FlextResult",
     "FlextTargetLDIF",
     "FlextTargetLDIFSettings",
-    "FlextTargetLdifError",
-    "FlextTargetLdifErrorDetails",
-    "FlextTargetLdifFileError",
-    "FlextTargetLdifInfrastructureError",
     "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
-    "FlextTargetLdifSchemaError",
     "FlextTargetLdifSettings",
-    "FlextTargetLdifTransformationError",
-    "FlextTargetLdifUtilities",
     "LDIFSink",
     "LDIFTarget",
     "LdifWriter",
     "RecordTransformer",
-    "StreamDefinition",
     "TargetLDIF",
     "TargetLDIFConfig",
     "ValidationError",

@@ -1,7 +1,7 @@
-"""Version and package metadata using importlib.metadata.
+"""Package version and metadata information.
 
-Single source of truth pattern following flext-core standards.
-All metadata comes from pyproject.toml via importlib.metadata.
+Provides version information and package metadata for the flext-target-ldif package
+using standard library metadata extraction.
 
 Copyright (c) 2025 client-a Telecom. Todos os direitos reservados.
 SPDX-License-Identifier: Proprietary
@@ -9,22 +9,56 @@ SPDX-License-Identifier: Proprietary
 
 from __future__ import annotations
 
-from importlib.metadata import metadata
+from importlib.metadata import PackageMetadata, PackageNotFoundError, metadata
 
-_metadata = metadata("flext_target_ldif")
 
-__version__ = _metadata["Version"]
-__version_info__ = tuple(
-    int(part) if part.isdigit() else part for part in __version__.split(".")
-)
-__title__ = _metadata["Name"]
-__description__ = _metadata["Summary"]
-__author__ = _metadata["Author"]
-__author_email__ = _metadata["Author-Email"]
-__license__ = _metadata["License"]
-__url__ = _metadata.get("Home-Page", "")
+class FlextTargetLdifVersion:
+    """Package version and metadata information.
+
+    Provides version information and package metadata using standard library
+    metadata extraction with graceful fallback handling.
+    """
+
+    _metadata: PackageMetadata | dict[str, str]
+    try:
+        _metadata = metadata("flext-target-ldif")
+    except PackageNotFoundError:
+        _metadata = {
+            "Version": "0.0.0-dev",
+            "Name": "flext-target-ldif",
+            "Summary": "FLEXT Target LDIF (metadata fallback)",
+            "Author": "",
+            "Author-Email": "",
+            "License": "",
+            "Home-Page": "",
+        }
+
+    version = _metadata["Version"]
+    version_info = tuple(
+        int(part) if part.isdigit() else part for part in version.split(".")
+    )
+
+    __title__ = _metadata["Name"]
+    __description__ = _metadata.get("Summary", "")
+    __author__ = _metadata.get("Author", "")
+    __author_email__ = _metadata.get("Author-Email", "")
+    __license__ = _metadata.get("License", "")
+    __url__ = _metadata.get("Home-Page", "")
+
+
+VERSION = FlextTargetLdifVersion
+__version__ = FlextTargetLdifVersion.version
+__version_info__ = FlextTargetLdifVersion.version_info
+__title__ = FlextTargetLdifVersion.__title__
+__description__ = FlextTargetLdifVersion.__description__
+__author__ = FlextTargetLdifVersion.__author__
+__author_email__ = FlextTargetLdifVersion.__author_email__
+__license__ = FlextTargetLdifVersion.__license__
+__url__ = FlextTargetLdifVersion.__url__
 
 __all__ = [
+    "VERSION",
+    "FlextTargetLdifVersion",
     "__author__",
     "__author_email__",
     "__description__",

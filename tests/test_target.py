@@ -6,7 +6,6 @@ SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
-from flext_core import FlextTypes as t
 
 import tempfile
 from pathlib import Path
@@ -15,9 +14,7 @@ from unittest.mock import Mock, patch
 import pytest
 from pydantic import ValidationError
 
-
-
-    FlextTargetLdif,
+from flext_target_ldif import (
     FlextTargetLdifSettings,
     LDIFSink,
     TargetLDIF,
@@ -120,11 +117,11 @@ class TestFlextTargetLdifSettings:
 
 
 class TestFlextTargetLdif:
-    """Test FlextTargetLdif main class."""
+    """Test FlextTargetLDIF main class."""
 
     def test_target_inheritance(self) -> None:
-        """Test that FlextTargetLdif inherits from TargetLDIF."""
-        target = FlextTargetLdif()
+        """Test that FlextTargetLDIF inherits from TargetLDIF."""
+        target = FlextTargetLDIF()
         assert isinstance(target, TargetLDIF)
 
     def test_target_creation_with_defaults(self) -> None:

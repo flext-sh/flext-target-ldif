@@ -6,11 +6,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import typing as t
+from collections.abc import Callable
 from datetime import datetime
 from typing import override
 
-from flext_core import FlextTypes as ft
+from flext_core import FlextTypes as t
 
 
 def transform_timestamp(value: object) -> str:
@@ -36,12 +36,13 @@ def transform_boolean(value: object) -> str:
     """Transform boolean values to LDAP boolean format."""
     if isinstance(value, bool):
         return "TRUE" if value else "FALSE"
+    if isinstance(value, str):
         lower_val = value.lower()
         if lower_val in {"true", "yes", "1", "on"}:
             return "TRUE"
         if lower_val in {"false", "no", "0", "off"}:
             return "FALSE"
-    return None
+    return ""
 
 
 def transform_email(value: object) -> str:
@@ -67,7 +68,7 @@ def transform_name(value: object) -> str:
     return " ".join(word.capitalize() for word in name_str.split())
 
 
-def _get_builtin_transformer(attr_name: str) -> t.Callable[[object], str] | None:
+def _get_builtin_transformer(attr_name: str) -> Callable[[object], str] | None:
     """Get built-in transformer function for attribute name."""
     attr_lower = attr_name.lower()
     if attr_lower in {"mail", "email"}:
@@ -86,7 +87,7 @@ def _get_builtin_transformer(attr_name: str) -> t.Callable[[object], str] | None
 def normalize_attribute_value(
     attr_name: str,
     value: object,
-    transformers: dict[str, t.Callable[[object], str]] | None = None,
+    transformers: dict[str, Callable[[object], str]] | None = None,
 ) -> str:
     """Normalize attribute value based on attribute type."""
     # Use custom transformers if provided
@@ -107,14 +108,14 @@ class RecordTransformer:
     def __init__(
         self,
         attribute_mapping: dict[str, str] | None = None,
-        custom_transformers: dict[str, t.Callable[[object], str]] | None = None,
+        custom_transformers: dict[str, Callable[[object], str]] | None = None,
     ) -> None:
         """Initialize the record transformer."""
         self.attribute_mapping = attribute_mapping or {}
         self.custom_transformers = custom_transformers or {}
 
     def transform_record(
-        self, record: dict[str, ft.GeneralValueType]
+        self, record: dict[str, t.GeneralValueType]
     ) -> dict[str, str]:
         """Transform a Singer record to LDAP-compatible format."""
         transformed = {}
@@ -141,9 +142,9 @@ class RecordTransformer:
 
     def add_required_attributes(
         record: dict[str, str],
-    ) -> dict[str, ft.GeneralValueType]:
+    ) -> dict[str, t.GeneralValueType]:
         """Add required LDAP attributes to the record."""
-        result: dict[str, ft.GeneralValueType] = dict[str, ft.GeneralValueType](record)
+        result: dict[str, t.GeneralValueType] = dict(record)
         # Ensure objectClass is present
         if "objectclass" not in result:
             result["objectclass"] = ["inetOrgPerson", "person"]
@@ -161,7 +162,7 @@ class RecordTransformer:
         if "sn" not in result and "cn" in result:
             # Use last word of cn as surname
             cn_value = result["cn"]
-            words: list[t.GeneralValueType] = (
+            words: list[str] = (
                 cn_value.split() if isinstance(cn_value, str) else []
             )
             result["sn"] = words[-1] if words else "Unknown"

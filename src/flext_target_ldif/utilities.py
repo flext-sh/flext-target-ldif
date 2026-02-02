@@ -41,7 +41,7 @@ class FlextTargetLdifUtilities(u_core):
         """Initialize LDIF target utilities."""
         super().__init__()
 
-    class SingerUtilities:
+    class TargetLdif:
         """Singer protocol utilities for target operations."""
 
         @staticmethod
@@ -773,7 +773,7 @@ class FlextTargetLdifUtilities(u_core):
             dict[str, t.GeneralValueType]: Processing state
 
             """
-            state = {
+            state: dict[str, t.GeneralValueType] = {
                 "stream_name": stream_name,
                 "records_processed": records_processed,
                 "output_file": file_path,
@@ -784,7 +784,7 @@ class FlextTargetLdifUtilities(u_core):
 
             if last_processed_record:
                 # Store minimal checkpoint information
-                checkpoint_data = {
+                checkpoint_data: dict[str, t.GeneralValueType] = {
                     "id": last_processed_record.get("id"),
                     "dn": last_processed_record.get("dn"),
                     "timestamp": last_processed_record.get("_timestamp"),
@@ -842,7 +842,7 @@ class FlextTargetLdifUtilities(u_core):
         cls, line: str
     ) -> FlextResult[dict[str, t.GeneralValueType]]:
         """Proxy method for SingerUtilities.parse_singer_message()."""
-        return cls.SingerUtilities.parse_singer_message(line)
+        return cls.TargetLdif.parse_singer_message(line)
 
     @classmethod
     def build_ldif_dn(
@@ -879,7 +879,7 @@ class FlextTargetLdifUtilities(u_core):
         overwrite: bool = False,
     ) -> FlextResult[str]:
         """Proxy method for FileUtilities.create_ldif_file()."""
-        return cls.FileUtilities.create_ldif_file(file_path, entries, overwrite)
+        return cls.FileUtilities.create_ldif_file(file_path, entries, overwrite=overwrite)
 
     @classmethod
     def validate_ldif_target_config(
