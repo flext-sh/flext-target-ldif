@@ -56,7 +56,7 @@ class FlextTargetLdifConstants(FlextConstants):
         PERMISSION = "PERMISSION"
         ENCODING = "ENCODING"
 
-    class TargetLdifProcessing:
+    class TargetLdif:
         """LDIF target processing configuration.
 
         Note: Does not override parent Processing class to avoid inheritance conflicts.

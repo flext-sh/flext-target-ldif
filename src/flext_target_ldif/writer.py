@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import types
 from pathlib import Path
-from typing import Self, override
+from typing import Self, TextIO, override
 
 from flext_core import FlextLogger, FlextResult, FlextTypes as t
 from flext_ldif import FlextLdif
@@ -87,15 +87,14 @@ class LdifWriter:
 
     def _write_entry_attributes(
         self,
-        f: object,
+        f: TextIO,
         attributes_obj: dict[str, t.GeneralValueType],
     ) -> None:
         """Write entry attributes to file."""
         if isinstance(attributes_obj, dict):
             for attr, values in attributes_obj.items():
                 if isinstance(values, list):
-                    for value in values:
-                        f.write(f"{attr}: {value}\n")
+                    f.writelines(f"{attr}: {value}\n" for value in values)
                 else:
                     f.write(f"{attr}: {values}\n")
 
@@ -124,17 +123,6 @@ class LdifWriter:
                         self._ldif_entries.append(entry)
                 # Write LDIF entries to file
                 self._write_entries_to_file()
-
-                write_result: FlextResult[object] = FlextResult[str].ok(
-                    "LDIF written successfully",
-                )
-                if not write_result.is_success:
-                    return FlextResult[None].fail(
-                        f"LDIF write failed: {write_result.error}",
-                    )
-                ldif_content = write_result.data or ""
-                # Write to file
-                self.output_file.write_text(ldif_content, encoding="utf-8")
             return FlextResult[None].ok(None)
         except (RuntimeError, ValueError, TypeError) as e:
             return FlextResult[None].fail(f"Failed to close LDIF file: {e}")

@@ -10,7 +10,6 @@ from __future__ import annotations
 from typing import Self
 
 from flext_core import (
-    FlextModels,
     FlextResult,
     FlextSettings,
     FlextTypes as t,
@@ -65,8 +64,8 @@ class FlextTargetLdifSettings(FlextSettings):
 
     @classmethod
     def get_global_instance(cls) -> Self:
-        """Get the global singleton instance using enhanced FlextSettings pattern."""
-        return cls.get_or_create_shared_instance(project_name="flext-target-ldif")
+        """Get the global singleton instance using FlextSettings pattern."""
+        return cls()
 
     @classmethod
     def create_for_development(cls, **overrides: object) -> Self:
@@ -80,10 +79,7 @@ class FlextTargetLdifSettings(FlextSettings):
             },
             **overrides,
         }
-        return cls.get_or_create_shared_instance(
-            project_name="flext-target-ldif",
-            **dev_overrides,
-        )
+        return cls.materialize(config_overrides=dev_overrides)
 
     @classmethod
     def create_for_production(cls, **overrides: object) -> Self:
@@ -97,10 +93,7 @@ class FlextTargetLdifSettings(FlextSettings):
             },
             **overrides,
         }
-        return cls.get_or_create_shared_instance(
-            project_name="flext-target-ldif",
-            **prod_overrides,
-        )
+        return cls.materialize(config_overrides=prod_overrides)
 
     @classmethod
     def create_for_testing(cls, **overrides: object) -> Self:
@@ -115,23 +108,16 @@ class FlextTargetLdifSettings(FlextSettings):
             },
             **overrides,
         }
-        return cls.get_or_create_shared_instance(
-            project_name="flext-target-ldif",
-            **test_overrides,
-        )
+        return cls.materialize(config_overrides=test_overrides)
 
     @field_validator("output_path")
     @classmethod
     def validate_output_path(cls, v: str) -> str:
-        """Validate output path using centralized FlextModels validation."""
-        # Use centralized FlextModels validation instead of duplicate logic
-        validation_result: FlextResult[object] = FlextModels.create_validated_file_path(
-            v,
-        )
-        if validation_result.is_failure:
-            error_msg = f"Invalid output path: {validation_result.error}"
+        """Validate output path is non-empty."""
+        if not v or not v.strip():
+            error_msg = "Invalid output path: path cannot be empty"
             raise ValueError(error_msg)
-        return validation_result.value
+        return v.strip()
 
     @field_validator("dn_template")
     @classmethod
@@ -146,16 +132,11 @@ class FlextTargetLdifSettings(FlextSettings):
     def validate_business_rules(self) -> FlextResult[None]:
         """Validate LDIF target configuration business rules using FlextSettings pattern."""
         try:
-            # Use centralized FlextModels validation instead of duplicate path logic
-            path_validation_result = FlextModels.create_validated_file_path(
-                self.output_path,
-            )
-            if path_validation_result.is_failure:
-                return FlextResult[None].fail(
-                    f"Output path validation failed: {path_validation_result.error}",
-                )
+            # Validate output path is non-empty
+            if not self.output_path or not self.output_path.strip():
+                return FlextResult[None].fail("Output path cannot be empty")
 
-            # Use flext-ldap for DN validation - NO local duplication
+            # Validate DN template is non-empty
             if not self.dn_template:
                 return FlextResult[None].fail("DN template cannot be empty")
 

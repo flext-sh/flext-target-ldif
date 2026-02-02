@@ -36,7 +36,7 @@ class FlextTargetLdifTypes(FlextTypes):
     # SINGER PROTOCOL TYPES - Singer target implementation types
     # =========================================================================
 
-    class SingerProtocol:
+    class TargetLdif:
         """Singer protocol complex types."""
 
         type SingerMessage = dict[
@@ -256,23 +256,6 @@ class FlextTargetLdifTypes(FlextTypes):
         type TargetPipelineConfig = dict[
             str, bool | str | dict[str, FlextTypes.GeneralValueType]
         ]
-
-    class TargetLdif:
-        """Target LDIF types namespace for cross-project access.
-
-        Provides organized access to all Target LDIF types for other FLEXT projects.
-        Usage: Other projects can reference `t.TargetLdif.SingerProtocol.*`, `t.TargetLdif.Project.*`, etc.
-        This enables consistent namespace patterns for cross-project type access.
-
-        Examples:
-            from flext_target_ldif.typings import t
-            config: t.TargetLdif.Project.FlextTargetLdifSettings = ...
-            message: t.TargetLdif.SingerProtocol.SingerMessage = ...
-
-        Note: Namespace composition via inheritance - no aliases needed.
-        Access parent namespaces directly through inheritance.
-
-        """
 
 
 # Alias for simplified usage

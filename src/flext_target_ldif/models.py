@@ -7,7 +7,12 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from flext_core import FlextModels, FlextResult, FlextSettings, FlextTypes as t
+from flext_core import (
+    FlextModels,
+    FlextResult,
+    FlextSettings,
+    FlextTypes as t,
+)
 from flext_core.utilities import u
 from pydantic import ConfigDict, Field
 
@@ -398,7 +403,7 @@ class LdifTargetResult(FlextModels.Entity):
 class LdifErrorContext(FlextModels.ArbitraryTypesModel):
     """Error context for LDIF target error handling."""
 
-    error_type: t.Project.ErrorTypeLiteral = Field(..., description="Error category")
+    error_type: str = Field(..., description="Error category")
 
     # Context information
     file_path: str | None = Field(None, description="File path that caused error")
@@ -431,6 +436,9 @@ class FlextTargetLdifModels(FlextModels):
     - Processing: Batch processing and transformation models
     - Results: Operation results and error context models
     """
+
+    class TargetLdif:
+        """TargetLdif domain namespace."""
 
     def __init_subclass__(cls, **kwargs: object) -> None:
         """Warn when FlextTargetLdifModels is subclassed directly."""

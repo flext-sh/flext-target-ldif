@@ -24,6 +24,7 @@
         "flext-observability",
         "pydantic (>=2.12.3)",
         "pydantic-core (>=2.41.4)",
+        "pydantic-settings (>=2.10.1)",
     ]
     description = "FLEXT Target LDIF - Singer Target for LDAP Data Interchange Format (LDIF) output"
     keywords = [
@@ -73,7 +74,32 @@
 [tool.deptry]
     known_first_party = [
         "flext_target_ldif",
+        "flext_core",
+        "flext_meltano",
+        "flext_ldif",
+        "flext_observability",
     ]
+    pep621_dev_dependency_groups = [
+        "dev",
+        "test",
+        "typings",
+        "security",
+    ]
+
+    [tool.deptry.per_rule_ignores]
+        DEP002 = [
+            # CLI tools (invoked from command line, not imported)
+            "autoflake", "bandit", "black", "codespell", "commitizen",
+            "detect-secrets", "isort", "pip-audit", "pre-commit", "pylint",
+            "pyrefly", "pyupgrade", "radon", "ruff", "vulture",
+            # Type stubs
+            "types-psutil", "types-python-dateutil", "types-pyyaml",
+            "types-redis", "types-requests", "types-setuptools", "types-toml",
+            # Runtime deps used indirectly (via pydantic, flext)
+            "faker", "pydantic-core", "pytest", "pytest-cov",
+            # Transitive deps (used via flext-core for observability)
+            "flext-core", "flext-ldif", "flext-meltano", "flext-observability",
+        ]
 
     [tool.poetry.dependencies]
         pydantic = ">=2.12.3"

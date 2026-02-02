@@ -42,7 +42,7 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
         ldif_generation: p.Target.Ldif.LdifGenerationProtocol
     """
 
-    class Target:
+    class TargetLdif:
         """Singer Target domain protocols."""
 
         class Ldif:
@@ -72,6 +72,7 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                         Result containing the generated LDIF content as a string.
 
                     """
+                    ...
 
             @runtime_checkable
             class DataTransformationProtocol(p_ldif.Service[object], Protocol):
@@ -93,6 +94,7 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                         Result containing the transformed LDIF content as a string.
 
                     """
+                    ...
 
             @runtime_checkable
             class FileManagementProtocol(p_ldif.Service[object], Protocol):
@@ -116,6 +118,7 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                         Result indicating success or failure of the write operation.
 
                     """
+                    ...
 
             @runtime_checkable
             class ValidationProtocol(p_ldif.Service[object], Protocol):
@@ -137,6 +140,7 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                         Result indicating whether the content is valid.
 
                     """
+                    ...
 
             @runtime_checkable
             class PerformanceProtocol(p_ldif.Service[object], Protocol):
@@ -158,6 +162,7 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                         Result containing the optimized batch size.
 
                     """
+                    ...
 
             @runtime_checkable
             class MonitoringProtocol(p_ldif.Service[object], Protocol):
@@ -179,6 +184,7 @@ class FlextTargetLdifProtocols(p_meltano, p_ldif):
                         Result indicating success or failure of tracking.
 
                     """
+                    ...
 
 
 # Runtime alias for simplified usage
