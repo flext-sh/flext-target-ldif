@@ -879,7 +879,9 @@ class FlextTargetLdifUtilities(u_core):
         overwrite: bool = False,
     ) -> FlextResult[str]:
         """Proxy method for FileUtilities.create_ldif_file()."""
-        return cls.FileUtilities.create_ldif_file(file_path, entries, overwrite=overwrite)
+        return cls.FileUtilities.create_ldif_file(
+            file_path, entries, overwrite=overwrite
+        )
 
     @classmethod
     def validate_ldif_target_config(
