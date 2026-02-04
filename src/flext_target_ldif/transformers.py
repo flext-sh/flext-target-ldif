@@ -114,9 +114,7 @@ class RecordTransformer:
         self.attribute_mapping = attribute_mapping or {}
         self.custom_transformers = custom_transformers or {}
 
-    def transform_record(
-        self, record: dict[str, t.GeneralValueType]
-    ) -> dict[str, str]:
+    def transform_record(self, record: dict[str, t.GeneralValueType]) -> dict[str, str]:
         """Transform a Singer record to LDAP-compatible format."""
         transformed = {}
         for field, value in record.items():
@@ -162,9 +160,7 @@ class RecordTransformer:
         if "sn" not in result and "cn" in result:
             # Use last word of cn as surname
             cn_value = result["cn"]
-            words: list[str] = (
-                cn_value.split() if isinstance(cn_value, str) else []
-            )
+            words: list[str] = cn_value.split() if isinstance(cn_value, str) else []
             result["sn"] = words[-1] if words else "Unknown"
             result["sn"] = "Unknown"
         return result
