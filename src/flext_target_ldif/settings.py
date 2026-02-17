@@ -129,16 +129,16 @@ class FlextTargetLdifSettings(FlextSettings):
 
         return v
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextResult[bool]:
         """Validate LDIF target configuration business rules using FlextSettings pattern."""
         try:
             # Validate output path is non-empty
             if not self.output_path or not self.output_path.strip():
-                return FlextResult[None].fail("Output path cannot be empty")
+                return FlextResult[bool].fail("Output path cannot be empty")
 
             # Validate DN template is non-empty
             if not self.dn_template:
-                return FlextResult[None].fail("DN template cannot be empty")
+                return FlextResult[bool].fail("DN template cannot be empty")
 
             # For template validation, create a sample DN with dummy values
             sample_dn = self.dn_template.replace("{uid}", "testuser").replace(
@@ -147,13 +147,13 @@ class FlextTargetLdifSettings(FlextSettings):
             )
             # Basic DN validation - check if contains = and ,
             if "=" not in sample_dn or not sample_dn.strip():
-                return FlextResult[None].fail(
+                return FlextResult[bool].fail(
                     "DN template format is invalid - must follow LDAP DN structure",
                 )
 
-            return FlextResult[None].ok(None)
+            return FlextResult[bool].ok(value=True)
         except Exception as e:
-            return FlextResult[None].fail(f"Configuration validation failed: {e}")
+            return FlextResult[bool].fail(f"Configuration validation failed: {e}")
 
 
 __all__: list[str] = [

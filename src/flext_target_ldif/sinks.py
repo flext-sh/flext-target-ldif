@@ -109,7 +109,7 @@ class LDIFSink:
 
         """
         ldif_writer = self._get_ldif_writer()
-        result: FlextResult[None] = ldif_writer.write_record(record)
+        result: FlextResult[bool] = ldif_writer.write_record(record)
         if not result.is_success:
             msg: str = f"Failed to write LDIF record: {result.error}"
             raise RuntimeError(msg)
@@ -117,7 +117,7 @@ class LDIFSink:
     def clean_up(self) -> None:
         """Clean up resources when sink is finished."""
         if self._ldif_writer:
-            result: FlextResult[None] = self._ldif_writer.close()
+            result: FlextResult[bool] = self._ldif_writer.close()
             if not result.is_success and hasattr(self, "logger"):
                 self.logger.error("Failed to close LDIF writer: %s", result.error)
             elif hasattr(self, "logger"):

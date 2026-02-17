@@ -391,7 +391,7 @@ class FlextTargetLdifUtilities(u_core):
             if not FlextTargetLdifUtilities.LdifDataProcessing.split(dn_value):
                 return FlextResult[bool].fail(f"Invalid DN format: {dn_value}")
 
-            return FlextResult[bool].ok(True)
+            return FlextResult[bool].ok(value=True)
 
     class FileUtilities:
         """File handling utilities for LDIF operations."""
@@ -570,7 +570,7 @@ class FlextTargetLdifUtilities(u_core):
                     "Schema must have either 'dn' field or identifier fields (id, uid, cn, username, email)",
                 )
 
-            return FlextResult[bool].ok(True)
+            return FlextResult[bool].ok(value=True)
 
         @staticmethod
         def generate_ldif_stream_metadata(

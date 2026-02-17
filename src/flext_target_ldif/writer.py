@@ -45,14 +45,14 @@ class LdifWriter:
         self._record_count = 0
         self._ldif_entries: list[dict[str, t.GeneralValueType]] = []
 
-    def open(self) -> FlextResult[None]:
+    def open(self) -> FlextResult[bool]:
         """Open the output file for writing."""
         try:
             # Create output directory if needed
             self.output_file.parent.mkdir(parents=True, exist_ok=True)
-            return FlextResult[None].ok(None)
+            return FlextResult[bool].ok(value=True)
         except (RuntimeError, ValueError, TypeError) as e:
-            return FlextResult[None].fail(f"Failed to prepare LDIF file: {e}")
+            return FlextResult[bool].fail(f"Failed to prepare LDIF file: {e}")
 
     def _convert_record_to_entry(
         self,
@@ -111,7 +111,7 @@ class LdifWriter:
                 self._write_entry_attributes(f, attributes_obj)
                 f.write("\n")
 
-    def close(self) -> FlextResult[None]:
+    def close(self) -> FlextResult[bool]:
         """Close the output file and write all collected records."""
         try:
             if self._records:
@@ -123,19 +123,19 @@ class LdifWriter:
                         self._ldif_entries.append(entry)
                 # Write LDIF entries to file
                 self._write_entries_to_file()
-            return FlextResult[None].ok(None)
+            return FlextResult[bool].ok(value=True)
         except (RuntimeError, ValueError, TypeError) as e:
-            return FlextResult[None].fail(f"Failed to close LDIF file: {e}")
+            return FlextResult[bool].fail(f"Failed to close LDIF file: {e}")
 
-    def write_record(self, record: dict[str, t.GeneralValueType]) -> FlextResult[None]:
+    def write_record(self, record: dict[str, t.GeneralValueType]) -> FlextResult[bool]:
         """Write a record to the LDIF file buffer."""
         try:
             # Buffer the record for batch writing
             self._records.append(record.copy())
             self._record_count += 1
-            return FlextResult[None].ok(None)
+            return FlextResult[bool].ok(value=True)
         except (RuntimeError, ValueError, TypeError) as e:
-            return FlextResult[None].fail(f"Failed to buffer record: {e}")
+            return FlextResult[bool].fail(f"Failed to buffer record: {e}")
 
     def _generate_dn(self, record: dict[str, t.GeneralValueType]) -> str:
         """Generate DN from record using template."""

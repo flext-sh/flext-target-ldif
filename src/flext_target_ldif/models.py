@@ -121,7 +121,7 @@ class LdifEntry(FlextModels.Entity):
         description="LDAP controls for the entry",
     )
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextResult[bool]:
         """Validate LDIF entry business rules."""
         try:
             errors = []
@@ -141,10 +141,10 @@ class LdifEntry(FlextModels.Entity):
                 errors.append("Entry must have at least one attribute")
 
             if errors:
-                return FlextResult[None].fail("; ".join(errors))
-            return FlextResult[None].ok(None)
+                return FlextResult[bool].fail("; ".join(errors))
+            return FlextResult[bool].ok(value=True)
         except Exception as e:
-            return FlextResult[None].fail(f"LDIF entry validation failed: {e}")
+            return FlextResult[bool].fail(f"LDIF entry validation failed: {e}")
 
 
 class LdifFile(FlextModels.Entity):
@@ -170,22 +170,22 @@ class LdifFile(FlextModels.Entity):
     entry_count: int = Field(default=0, ge=0, description="Number of entries in file")
     is_compressed: bool = Field(default=False, description="Whether file is compressed")
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextResult[bool]:
         """Validate LDIF file business rules."""
         try:
             # Validate file path
             if not self.file_path.strip():
-                return FlextResult[None].fail("File path cannot be empty")
+                return FlextResult[bool].fail("File path cannot be empty")
 
             # Validate entry count matches actual entries
             if len(self.entries) != self.entry_count:
-                return FlextResult[None].fail(
+                return FlextResult[bool].fail(
                     f"Entry count mismatch: {len(self.entries)} vs {self.entry_count}",
                 )
 
-            return FlextResult[None].ok(None)
+            return FlextResult[bool].ok(value=True)
         except Exception as e:
-            return FlextResult[None].fail(f"LDIF file validation failed: {e}")
+            return FlextResult[bool].fail(f"LDIF file validation failed: {e}")
 
 
 class LdifTransformationResult(FlextModels.Entity):
@@ -213,22 +213,22 @@ class LdifTransformationResult(FlextModels.Entity):
         description="Transformation timestamp",
     )
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextResult[bool]:
         """Validate transformation result business rules."""
         try:
             if not self.original_record:
-                return FlextResult[None].fail("Original record cannot be empty")
+                return FlextResult[bool].fail("Original record cannot be empty")
 
             # Validate transformed entry
             entry_validation = self.transformed_entry.validate_business_rules()
             if entry_validation.is_failure:
-                return FlextResult[None].fail(
+                return FlextResult[bool].fail(
                     f"Transformed entry is invalid: {entry_validation.error}",
                 )
 
-            return FlextResult[None].ok(None)
+            return FlextResult[bool].ok(value=True)
         except Exception as e:
-            return FlextResult[None].fail(
+            return FlextResult[bool].fail(
                 f"Transformation result validation failed: {e}",
             )
 
@@ -265,20 +265,20 @@ class LdifBatchProcessing(FlextModels.Entity):
         description="Last processing timestamp",
     )
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextResult[bool]:
         """Validate batch processing business rules."""
         try:
             if len(self.current_batch) > self.batch_size:
-                return FlextResult[None].fail(
+                return FlextResult[bool].fail(
                     f"Current batch size exceeds maximum: {len(self.current_batch)} > {self.batch_size}",
                 )
 
             if self.successful_exports + self.failed_exports > self.total_processed:
-                return FlextResult[None].fail("Export counts exceed total processed")
+                return FlextResult[bool].fail("Export counts exceed total processed")
 
-            return FlextResult[None].ok(None)
+            return FlextResult[bool].ok(value=True)
         except Exception as e:
-            return FlextResult[None].fail(f"Batch processing validation failed: {e}")
+            return FlextResult[bool].fail(f"Batch processing validation failed: {e}")
 
     @property
     def is_batch_full(self) -> bool:
@@ -365,25 +365,25 @@ class LdifTargetResult(FlextModels.Entity):
     )
     warnings: list[str] = Field(default_factory=list, description="Warning messages")
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextResult[bool]:
         """Validate LDIF target result business rules."""
         try:
             # Validate entry counts
             total_entries = self.entries_exported + self.entries_failed
             if total_entries > self.records_processed:
-                return FlextResult[None].fail(
+                return FlextResult[bool].fail(
                     "Total entries cannot exceed records processed",
                 )
 
             # Validate file count
             if len(self.output_files) == 0 and self.entries_exported > 0:
-                return FlextResult[None].fail(
+                return FlextResult[bool].fail(
                     "No output files but entries were exported",
                 )
 
-            return FlextResult[None].ok(None)
+            return FlextResult[bool].ok(value=True)
         except Exception as e:
-            return FlextResult[None].fail(f"Target result validation failed: {e}")
+            return FlextResult[bool].fail(f"Target result validation failed: {e}")
 
     @property
     def success_rate(self) -> float:
