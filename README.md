@@ -6,7 +6,7 @@
 
 **FLEXT-Target-LDIF** allows you to export Singer streams directly to LDIF (LDAP Data Interchange Format) files. It serves as a bridge for scenarios requiring offline data loading or migrations to LDAP-compliant systems.
 
-Part of the [FLEXT](https://github.com/flext/flext) ecosystem.
+Part of the [FLEXT](https://github.com/flext-sh/flext) ecosystem.
 
 ## 🚀 Key Features
 
