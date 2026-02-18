@@ -60,6 +60,14 @@
         flext-target-ldif = "flext_target_ldif.target:TargetLDIF.cli"
         target-ldif       = "flext_target_ldif.target:TargetLDIF.cli"
 
+    [tool.pyrefly]
+        search-path = [
+            "../typings",
+            "../typings/generated",
+            "src",
+            "tests",
+        ]
+
 [tool.ruff]
     extend = "../ruff-shared.toml"
     [tool.ruff.lint.isort]
