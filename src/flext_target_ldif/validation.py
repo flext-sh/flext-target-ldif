@@ -103,14 +103,14 @@ def validate_schema(
         errors["schema"] = ["Schema cannot be empty"]
         return errors
 
-    properties: dict[str, t.GeneralValueType] = schema.get("properties", {})
-    if not properties:
-        errors["properties"] = ["Schema must define properties"]
-
-    # Ensure properties is a dictionary for type safety
-    if not isinstance(properties, dict):
+    properties_raw = schema.get("properties", {})
+    if not isinstance(properties_raw, dict):
         errors["properties"] = ["Properties must be a dictionary"]
         return errors
+    if not properties_raw:
+        errors["properties"] = ["Schema must define properties"]
+        return errors
+    properties: dict[str, t.GeneralValueType] = properties_raw
 
     # Check for ID-like fields
     id_fields = [

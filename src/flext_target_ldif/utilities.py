@@ -555,9 +555,10 @@ class FlextTargetLdifUtilities(u_core):
                 return FlextResult[bool].fail("Stream name and schema are required")
 
             # Check if schema has required properties
-            properties = schema.get("properties", {})
-            if not properties:
+            properties_raw = schema.get("properties", {})
+            if not isinstance(properties_raw, dict) or not properties_raw:
                 return FlextResult[bool].fail("Schema must have properties")
+            properties: dict[str, t.GeneralValueType] = properties_raw
 
             # Check for DN building capability
             has_dn_field = "dn" in properties
@@ -628,6 +629,10 @@ class FlextTargetLdifUtilities(u_core):
 
             # Validate output file path
             output_file = config["output_file"]
+            if not isinstance(output_file, str):
+                return FlextResult[dict[str, t.GeneralValueType]].fail(
+                    "Invalid output file: output_file must be a string",
+                )
             file_validation = (
                 FlextTargetLdifUtilities.FileUtilities.validate_ldif_file_path(
                     output_file,
@@ -727,7 +732,11 @@ class FlextTargetLdifUtilities(u_core):
             dict[str, t.GeneralValueType]: Stream state
 
             """
-            return state.get("bookmarks", {}).get(stream_name, {})
+            bookmarks = state.get("bookmarks", {})
+            if not isinstance(bookmarks, dict):
+                return {}
+            stream_state = bookmarks.get(stream_name, {})
+            return stream_state if isinstance(stream_state, dict) else {}
 
         @staticmethod
         def set_target_state(
@@ -746,10 +755,12 @@ class FlextTargetLdifUtilities(u_core):
             dict[str, t.GeneralValueType]: Updated state
 
             """
-            if "bookmarks" not in state:
-                state["bookmarks"] = {}
+            bookmarks = state.get("bookmarks")
+            if not isinstance(bookmarks, dict):
+                bookmarks = {}
+                state["bookmarks"] = bookmarks
 
-            state["bookmarks"][stream_name] = stream_state
+            bookmarks[stream_name] = stream_state
             return state
 
         @staticmethod
@@ -819,15 +830,21 @@ class FlextTargetLdifUtilities(u_core):
                 stream_name,
             )
 
-            current_count = stream_state.get("records_processed", 0)
+            current_count_raw = stream_state.get("records_processed", 0)
+            current_count = (
+                current_count_raw if isinstance(current_count_raw, int) else 0
+            )
             new_count = current_count + records_count
 
-            updated_stream_state = {
+            batch_count_raw = stream_state.get("batch_count", 0)
+            batch_count = batch_count_raw if isinstance(batch_count_raw, int) else 0
+
+            updated_stream_state: dict[str, t.GeneralValueType] = {
                 **stream_state,
                 "records_processed": new_count,
                 "file_size_bytes": file_size_bytes,
                 "last_updated": datetime.now(UTC).isoformat(),
-                "batch_count": stream_state.get("batch_count", 0) + 1,
+                "batch_count": batch_count + 1,
             }
 
             return FlextTargetLdifUtilities.StateManagement.set_target_state(

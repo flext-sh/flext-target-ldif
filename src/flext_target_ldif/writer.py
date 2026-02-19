@@ -69,7 +69,7 @@ class LdifWriter:
                     attributes[mapped_key] = value
             # Create FlextLdifEntry using the real API
             # Convert dict[str, t.GeneralValueType] to list format expected by FlextLdifAttributes
-            attr_dict = {}
+            attr_dict: dict[str, list[str]] = {}
             for key, value in attributes.items():
                 attr_dict[key] = (
                     [str(value)]
@@ -79,10 +79,10 @@ class LdifWriter:
             # Create simple entry dict[str, t.GeneralValueType] for LDIF writing
             return {
                 "dn": "dn",
-                "attributes": dict[str, t.GeneralValueType](attr_dict),
+                "attributes": attr_dict,
             }
         except (RuntimeError, ValueError, TypeError) as e:
-            logger.warning("Skipping invalid record: %s", e)
+            logger.warning(f"Skipping invalid record: {e}")
             return None
 
     def _write_entry_attributes(
@@ -104,8 +104,9 @@ class LdifWriter:
             for entry in self._ldif_entries:
                 dn_obj = entry.get("dn", "")
                 dn_str = str(dn_obj) if dn_obj else ""
-                attributes_obj: dict[str, t.GeneralValueType] = entry.get(
-                    "attributes", {}
+                raw_attributes = entry.get("attributes", {})
+                attributes_obj: dict[str, t.GeneralValueType] = (
+                    raw_attributes if isinstance(raw_attributes, dict) else {}
                 )
                 f.write(f"dn: {dn_str}\n")
                 self._write_entry_attributes(f, attributes_obj)

@@ -65,22 +65,27 @@ class LDIFSink:
         if self._ldif_writer is None:
             output_file = self._get_output_file()
 
-            ldif_options: dict[str, t.GeneralValueType] = self.config.get(
-                "ldif_options", {}
+            raw_ldif_options = self.config.get("ldif_options", {})
+            ldif_options: dict[str, t.GeneralValueType] = (
+                {str(key): value for key, value in raw_ldif_options.items()}
+                if isinstance(raw_ldif_options, dict)
+                else {}
             )
-            if not isinstance(ldif_options, dict):
-                ldif_options = {}
 
             dn_template = self.config.get("dn_template")
             if dn_template is not None and not isinstance(dn_template, str):
                 dn_template = None
 
-            attribute_mapping: dict[str, t.GeneralValueType] = self.config.get(
-                "attribute_mapping",
-                {},
+            raw_attribute_mapping = self.config.get("attribute_mapping", {})
+            attribute_mapping: dict[str, str] = (
+                {
+                    str(key): value
+                    for key, value in raw_attribute_mapping.items()
+                    if isinstance(value, str)
+                }
+                if isinstance(raw_attribute_mapping, dict)
+                else {}
             )
-            if not isinstance(attribute_mapping, dict):
-                attribute_mapping = {}
 
             self._ldif_writer = LdifWriter(
                 output_file=output_file,

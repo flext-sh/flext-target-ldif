@@ -68,7 +68,7 @@ class FlextTargetLdifSettings(FlextSettings):
         return cls()
 
     @classmethod
-    def create_for_development(cls, **overrides: object) -> Self:
+    def create_for_development(cls, **overrides: t.GeneralValueType) -> Self:
         """Create configuration for development environment."""
         dev_overrides: dict[str, t.GeneralValueType] = {
             "file_naming_pattern": "dev_{stream_name}_{timestamp}.ldif",
@@ -79,10 +79,10 @@ class FlextTargetLdifSettings(FlextSettings):
             },
             **overrides,
         }
-        return cls.materialize(config_overrides=dev_overrides)
+        return cls(**dev_overrides)
 
     @classmethod
-    def create_for_production(cls, **overrides: object) -> Self:
+    def create_for_production(cls, **overrides: t.GeneralValueType) -> Self:
         """Create configuration for production environment."""
         prod_overrides: dict[str, t.GeneralValueType] = {
             "file_naming_pattern": "prod_{stream_name}_{timestamp}.ldif",
@@ -93,10 +93,10 @@ class FlextTargetLdifSettings(FlextSettings):
             },
             **overrides,
         }
-        return cls.materialize(config_overrides=prod_overrides)
+        return cls(**prod_overrides)
 
     @classmethod
-    def create_for_testing(cls, **overrides: object) -> Self:
+    def create_for_testing(cls, **overrides: t.GeneralValueType) -> Self:
         """Create configuration for testing environment."""
         test_overrides: dict[str, t.GeneralValueType] = {
             "output_path": "./test-output",
@@ -108,7 +108,7 @@ class FlextTargetLdifSettings(FlextSettings):
             },
             **overrides,
         }
-        return cls.materialize(config_overrides=test_overrides)
+        return cls(**test_overrides)
 
     @field_validator("output_path")
     @classmethod
@@ -156,6 +156,12 @@ class FlextTargetLdifSettings(FlextSettings):
             return FlextResult[bool].fail(f"Configuration validation failed: {e}")
 
 
+FlextTargetLDIFSettings = FlextTargetLdifSettings
+TargetLDIFConfig = FlextTargetLdifSettings
+
+
 __all__: list[str] = [
+    "FlextTargetLDIFSettings",
     "FlextTargetLdifSettings",
+    "TargetLDIFConfig",
 ]
