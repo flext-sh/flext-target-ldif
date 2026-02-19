@@ -1,8 +1,5 @@
 # flext-target-ldif - LDIF Singer Target
 PROJECT_NAME := flext-target-ldif
-COV_DIR := flext_target_ldif
-MIN_COVERAGE := 90
-
 include ../base.mk
 
 # === PROJECT-SPECIFIC TARGETS ===

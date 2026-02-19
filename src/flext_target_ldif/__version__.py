@@ -3,7 +3,7 @@
 Provides version information and package metadata for the flext-target-ldif package
 using standard library metadata extraction.
 
-Copyright (c) 2025 client-a Telecom. Todos os direitos reservados.
+Copyright (c) 2025 Flext Telecom. Todos os direitos reservados.
 SPDX-License-Identifier: Proprietary
 """
 
