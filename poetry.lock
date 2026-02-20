@@ -1445,7 +1445,7 @@ url = "../flext-core"
 
 [[package]]
 name = "flext-ldif"
-version = "0.10.0-dev"
+version = "0.10.0"
 description = "FLEXT LDIF - Enterprise LDIF Processing Library"
 optional = false
 python-versions = ">=3.13,<3.14"
@@ -1468,7 +1468,7 @@ url = "../flext-ldif"
 
 [[package]]
 name = "flext-meltano"
-version = "0.10.0-dev"
+version = "0.10.0"
 description = "FLEXT Meltano - Enterprise Data Integration Platform"
 optional = false
 python-versions = ">=3.13,<3.14"
@@ -1507,7 +1507,7 @@ url = "../flext-meltano"
 
 [[package]]
 name = "flext-observability"
-version = "0.10.0-dev"
+version = "0.10.0"
 description = "FLEXT Observability - Enterprise Monitoring, Metrics & Telemetry"
 optional = false
 python-versions = ">=3.13,<3.14"
