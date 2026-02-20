@@ -4,7 +4,7 @@ requires = [ "poetry-core>=2.0", "poetry-core>=2" ]
 
 [project]
 name = "flext-target-ldif"
-version = "0.10.0"
+version = "0.11.0"
 description = "FLEXT Target LDIF - Singer Target for LDAP Data Interchange Format (LDIF) output"
 readme = "README.md"
 keywords = [
