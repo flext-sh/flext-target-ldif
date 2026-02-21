@@ -44,11 +44,11 @@ class FlextTargetLdifSettings(FlextSettings):
         description="Mapping of stream fields to LDAP attributes",
     )
     ldif_options: dict[str, t.GeneralValueType] = Field(
-        default_factory=lambda: {
-            "line_length": c.MAX_LINE_LENGTH,
-            "base64_encode": "False",
-            "include_timestamps": "True",
-        },
+        default_factory=lambda: dict[str, t.GeneralValueType](
+            line_length=c.MAX_LINE_LENGTH,
+            base64_encode="False",
+            include_timestamps="True",
+        ),
         description="LDIF format options",
     )
 

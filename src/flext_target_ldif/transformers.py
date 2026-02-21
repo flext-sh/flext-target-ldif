@@ -138,6 +138,7 @@ class RecordTransformer:
                 transformed[attr_name] = transformed_value
         return transformed
 
+    @staticmethod
     def add_required_attributes(
         record: dict[str, str],
     ) -> dict[str, t.GeneralValueType]:

@@ -7,12 +7,15 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 from typing import override
 
 from flext_core import FlextResult, FlextTypes as t
 
 from flext_target_ldif.writer import LdifWriter
+
+_log = logging.getLogger(__name__)
 
 
 class LDIFSink:
@@ -123,10 +126,10 @@ class LDIFSink:
         """Clean up resources when sink is finished."""
         if self._ldif_writer:
             result: FlextResult[bool] = self._ldif_writer.close()
-            if not result.is_success and hasattr(self, "logger"):
-                self.logger.error("Failed to close LDIF writer: %s", result.error)
-            elif hasattr(self, "logger"):
-                self.logger.info("LDIF file written: %s", self._output_file)
+            if not result.is_success:
+                _log.error("Failed to close LDIF writer: %s", result.error)
+            else:
+                _log.info("LDIF file written: %s", self._output_file)
 
     @property
     def ldif_writer(self) -> LdifWriter:
