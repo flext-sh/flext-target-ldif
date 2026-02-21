@@ -9,9 +9,8 @@ from __future__ import annotations
 
 import re
 
-from flext_core import FlextTypes as t
-
 from flext_target_ldif.constants import FlextTargetLdifConstants
+from flext_target_ldif.typings import t
 
 
 class ValidationError(Exception):

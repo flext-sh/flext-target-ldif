@@ -13,7 +13,7 @@ import types
 from pathlib import Path
 from typing import Self, TextIO, override
 
-from flext_core import FlextLogger, FlextResult, FlextTypes as t
+from flext_core import FlextLogger, FlextResult, t
 from flext_ldif import FlextLdif
 
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError

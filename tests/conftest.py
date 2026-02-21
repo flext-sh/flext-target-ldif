@@ -10,7 +10,7 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from flext_core import FlextTypes as t
+from flext_target_ldif import t
 
 
 @pytest.fixture

@@ -8,9 +8,10 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from flext_core import FlextTypes as t
 from flext_ldif.protocols import p as p_ldif
 from flext_meltano.protocols import p as p_meltano
+
+from flext_target_ldif.typings import t
 
 
 class FlextTargetLdifProtocols(p_meltano, p_ldif):

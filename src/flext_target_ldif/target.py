@@ -10,9 +10,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextTypes as t
-
 from flext_target_ldif.sinks import LDIFSink
+from flext_target_ldif.typings import t
 
 
 class TargetLDIF:

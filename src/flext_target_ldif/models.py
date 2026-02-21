@@ -11,7 +11,7 @@ from flext_core import (
     FlextModels,
     FlextResult,
     FlextSettings,
-    FlextTypes as t,
+    t,
 )
 from flext_core.utilities import u
 from pydantic import ConfigDict, Field

@@ -12,7 +12,7 @@ from typing import Self
 from flext_core import (
     FlextResult,
     FlextSettings,
-    FlextTypes as t,
+    t,
 )
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
