@@ -13,10 +13,7 @@ from flext_core import (
     FlextSettings,
     t,
 )
-from flext_core.utilities import u
 from pydantic import ConfigDict, Field
-
-from flext_target_ldif.utilities import FlextTargetLdifUtilities
 
 """LDIF target models extending flext-core FlextModels.
 
@@ -440,13 +437,22 @@ class FlextTargetLdifModels(FlextModels):
     class TargetLdif:
         """TargetLdif domain namespace."""
 
-    def __init_subclass__(cls, **kwargs: object) -> None:
-        """Warn when FlextTargetLdifModels is subclassed directly."""
-        super().__init_subclass__(**kwargs)
-        u.Deprecation.warn_once(
-            f"subclass:{cls.__name__}",
-            "Subclassing FlextTargetLdifModels is deprecated. Use FlextModels directly with composition instead.",
-        )
+        # Configuration models
+        LdifFormatOptions = LdifFormatOptions
+        LdifExportConfig = LdifExportConfig
+        SingerStreamConfig = SingerStreamConfig
+
+        # Entity models
+        LdifEntry = LdifEntry
+        LdifFile = LdifFile
+
+        # Processing models
+        LdifTransformationResult = LdifTransformationResult
+        LdifBatchProcessing = LdifBatchProcessing
+
+        # Result models
+        LdifTargetResult = LdifTargetResult
+        LdifErrorContext = LdifErrorContext
 
     model_config = ConfigDict(
         validate_assignment=True,
@@ -463,23 +469,6 @@ class FlextTargetLdifModels(FlextModels):
         hide_input_in_errors=True,
     )
 
-    # Configuration models
-    LdifFormatOptions = LdifFormatOptions
-    LdifExportConfig = LdifExportConfig
-    SingerStreamConfig = SingerStreamConfig
-
-    # Entity models
-    LdifEntry = LdifEntry
-    LdifFile = LdifFile
-
-    # Processing models
-    LdifTransformationResult = LdifTransformationResult
-    LdifBatchProcessing = LdifBatchProcessing
-
-    # Result models
-    LdifTargetResult = LdifTargetResult
-    LdifErrorContext = LdifErrorContext
-
 
 # Zero Tolerance CONSOLIDATION - FlextTargetLdifUtilities moved to utilities.py
 #
@@ -491,12 +480,5 @@ class FlextTargetLdifModels(FlextModels):
 
 # Short aliases
 m = FlextTargetLdifModels
-m_target_ldif = FlextTargetLdifModels
 
-# Export the unified models class
-__all__ = [
-    "FlextTargetLdifModels",  # Unified models class
-    "FlextTargetLdifUtilities",  # Standardized [Project]Utilities pattern
-    "m",  # Short alias
-    "m_target_ldif",  # Domain-specific alias
-]
+__all__ = ["FlextTargetLdifModels", "m"]
