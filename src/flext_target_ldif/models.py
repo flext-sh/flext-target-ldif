@@ -415,11 +415,6 @@ class LdifErrorContext(FlextModels.ArbitraryTypesModel):
     max_retry_attempts: int | None = Field(None, description="Maximum retry attempts")
 
 
-# Type aliases for backward compatibility
-LdifRecord = dict[str, t.GeneralValueType]
-LdifRecords = list[LdifRecord]
-
-
 class FlextTargetLdifModels(FlextModels):
     """Unified models collection for FLEXT Target LDIF following [Project]Models standard.
 
@@ -469,13 +464,6 @@ class FlextTargetLdifModels(FlextModels):
         hide_input_in_errors=True,
     )
 
-
-# Zero Tolerance CONSOLIDATION - FlextTargetLdifUtilities moved to utilities.py
-#
-# Critical: FlextTargetLdifUtilities was DUPLICATED between models.py and utilities.py.
-# This was a Zero Tolerance violation of the user's explicit requirements.
-#
-# Note: This import ensures backward compatibility while eliminating duplication
 
 
 # Short aliases
