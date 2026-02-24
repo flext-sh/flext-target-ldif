@@ -8,9 +8,9 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import base64
-from collections.abc import Mapping
 import json
 import re
+from collections.abc import Mapping
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
@@ -65,7 +65,7 @@ class FlextTargetLdifUtilities(u):
 
             try:
                 message = json.loads(line.strip())
-                if not u.Guards._is_dict(message):
+                if not u.is_dict_like(message):
                     return FlextResult[dict[str, t.GeneralValueType]].fail(
                         "Message must be a JSON object",
                     )
@@ -108,7 +108,7 @@ class FlextTargetLdifUtilities(u):
                     )
 
             record = message["record"]
-            if not u.Guards._is_dict(record):
+            if not u.is_dict_like(record):
                 return FlextResult[dict[str, t.GeneralValueType]].fail(
                     "Record data must be a dictionary",
                 )
@@ -141,7 +141,7 @@ class FlextTargetLdifUtilities(u):
                     )
 
             schema = message["schema"]
-            if not u.Guards._is_dict(schema):
+            if not u.is_dict_like(schema):
                 return FlextResult[dict[str, t.GeneralValueType]].fail(
                     "Schema data must be a dictionary",
                 )
@@ -557,7 +557,7 @@ class FlextTargetLdifUtilities(u):
 
             # Check if schema has required properties
             properties_raw = schema.get("properties", {})
-            if not u.Guards._is_dict(properties_raw) or not properties_raw:
+            if not u.is_dict_like(properties_raw) or not properties_raw:
                 return FlextResult[bool].fail("Schema must have properties")
             properties: dict[str, t.GeneralValueType] = properties_raw
 
@@ -630,7 +630,7 @@ class FlextTargetLdifUtilities(u):
 
             # Validate output file path
             output_file = config["output_file"]
-            if not u.Guards._is_str(output_file):
+            if not u.Guards.is_type(output_file, str):
                 return FlextResult[dict[str, t.GeneralValueType]].fail(
                     "Invalid output file: output_file must be a string",
                 )
@@ -655,17 +655,20 @@ class FlextTargetLdifUtilities(u):
             # Validate DN template if provided
             if "dn_template" in config:
                 dn_template = config["dn_template"]
-                if not u.Guards._is_str(dn_template) or not dn_template.strip():
-                    return FlextResult[dict[str, t.GeneralValueType]].fail(
-                        "DN template must be a non-empty string",
-                    )
+                match dn_template:
+                    case str() as template if template.strip():
+                        pass
+                    case _:
+                        return FlextResult[dict[str, t.GeneralValueType]].fail(
+                            "DN template must be a non-empty string",
+                        )
 
             # Validate batch size
             batch_size = config.get(
                 "batch_size",
                 FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE,
             )
-            if not u.Guards._is_int(batch_size) or batch_size <= 0:
+            if not u.Guards.is_type(batch_size, int) or batch_size <= 0:
                 return FlextResult[dict[str, t.GeneralValueType]].fail(
                     "Batch size must be a positive integer",
                 )
@@ -694,21 +697,27 @@ class FlextTargetLdifUtilities(u):
                     )
 
                 for oc in object_classes:
-                    if not u.Guards._is_str(oc) or not oc.strip():
-                        return FlextResult[dict[str, t.GeneralValueType]].fail(
-                            "All object classes must be non-empty strings",
-                        )
+                    match oc:
+                        case str() as object_class if object_class.strip():
+                            pass
+                        case _:
+                            return FlextResult[dict[str, t.GeneralValueType]].fail(
+                                "All object classes must be non-empty strings",
+                            )
 
             # Validate attribute mapping if provided
             if "attribute_mapping" in config:
                 attribute_mapping = config["attribute_mapping"]
-                if not u.Guards._is_dict(attribute_mapping):
+                if not u.is_dict_like(attribute_mapping):
                     return FlextResult[dict[str, t.GeneralValueType]].fail(
                         "Attribute mapping must be a dictionary",
                     )
 
                 for key, value in attribute_mapping.items():
-                    if not u.Guards._is_str(key) or not u.Guards._is_str(value):
+                    if not u.Guards.is_type(key, str) or not u.Guards.is_type(
+                        value,
+                        str,
+                    ):
                         return FlextResult[dict[str, t.GeneralValueType]].fail(
                             "Attribute mapping keys and values must be strings",
                         )
@@ -734,10 +743,10 @@ class FlextTargetLdifUtilities(u):
 
             """
             bookmarks = state.get("bookmarks", {})
-            if not u.Guards._is_dict(bookmarks):
+            if not u.is_dict_like(bookmarks):
                 return {}
             stream_state = bookmarks.get(stream_name, {})
-            return stream_state if u.Guards._is_dict(stream_state) else {}
+            return stream_state if u.is_dict_like(stream_state) else {}
 
         @staticmethod
         def set_target_state(
@@ -758,7 +767,7 @@ class FlextTargetLdifUtilities(u):
             """
             updated_state = dict(state)
             bookmarks_raw = updated_state.get("bookmarks")
-            bookmarks = dict(bookmarks_raw) if u.Guards._is_dict(bookmarks_raw) else {}
+            bookmarks = dict(bookmarks_raw) if u.is_dict_like(bookmarks_raw) else {}
             bookmarks[stream_name] = dict(stream_state)
             updated_state["bookmarks"] = bookmarks
             return updated_state
@@ -832,12 +841,14 @@ class FlextTargetLdifUtilities(u):
 
             current_count_raw = stream_state.get("records_processed", 0)
             current_count = (
-                current_count_raw if u.Guards._is_int(current_count_raw) else 0
+                current_count_raw if u.Guards.is_type(current_count_raw, int) else 0
             )
             new_count = current_count + records_count
 
             batch_count_raw = stream_state.get("batch_count", 0)
-            batch_count = batch_count_raw if u.Guards._is_int(batch_count_raw) else 0
+            batch_count = (
+                batch_count_raw if u.Guards.is_type(batch_count_raw, int) else 0
+            )
 
             updated_stream_state: dict[str, t.GeneralValueType] = {
                 **stream_state,

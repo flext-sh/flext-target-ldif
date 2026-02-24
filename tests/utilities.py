@@ -26,6 +26,6 @@ class TestsFlextTargetLdifUtilities(FlextTestsUtilities, FlextTargetLdifUtilitie
 
 
 u = TestsFlextTargetLdifUtilities
-tu = TestsFlextTargetLdifUtilities
+u = TestsFlextTargetLdifUtilities
 
-__all__ = ["TestsFlextTargetLdifUtilities", "tu", "u"]
+__all__ = ["TestsFlextTargetLdifUtilities", "u"]

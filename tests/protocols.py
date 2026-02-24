@@ -17,9 +17,9 @@ class TestsFlextTargetLdifProtocols(FlextTestsProtocols, FlextTargetLdifProtocol
     """Test protocols combining FlextTestsProtocols and FlextTargetLdifProtocols.
 
     Provides access to:
-    - tp.Tests.Docker.* (from FlextTestsProtocols)
-    - tp.Tests.Factory.* (from FlextTestsProtocols)
-    - tp.TargetLdif.* (from FlextTargetLdifProtocols)
+    - p.Tests.Docker.* (from FlextTestsProtocols)
+    - p.Tests.Factory.* (from FlextTestsProtocols)
+    - p.TargetLdif.* (from FlextTargetLdifProtocols)
     """
 
     class Tests:
@@ -34,6 +34,6 @@ class TestsFlextTargetLdifProtocols(FlextTestsProtocols, FlextTargetLdifProtocol
 
 # Runtime aliases
 p = TestsFlextTargetLdifProtocols
-tp = TestsFlextTargetLdifProtocols
+p = TestsFlextTargetLdifProtocols
 
-__all__ = ["TestsFlextTargetLdifProtocols", "p", "tp"]
+__all__ = ["TestsFlextTargetLdifProtocols", "p"]

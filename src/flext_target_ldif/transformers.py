@@ -10,9 +10,9 @@ from collections.abc import Callable, Mapping
 from datetime import datetime
 from typing import override
 
+from flext_core import u
 
 from flext_target_ldif.typings import t
-from flext_core import u
 
 
 def transform_timestamp(value: object) -> str:
@@ -22,7 +22,7 @@ def transform_timestamp(value: object) -> str:
     if value.__class__ is datetime:
         # ISO 8601 representation compatible with many systems
         return value.isoformat()
-    if u.Guards._is_str(value):
+    if u.Guards.is_type(value, str):
         try:
             # Try to parse ISO format first, then use flext-ldap parsing
             dt = datetime.fromisoformat(value.removesuffix("Z") + "+00:00")
@@ -36,9 +36,9 @@ def transform_timestamp(value: object) -> str:
 
 def transform_boolean(value: object) -> str:
     """Transform boolean values to LDAP boolean format."""
-    if u.Guards._is_bool(value):
+    if u.Guards.is_type(value, bool):
         return "TRUE" if value else "FALSE"
-    if u.Guards._is_str(value):
+    if u.Guards.is_type(value, str):
         lower_val = value.lower()
         if lower_val in {"true", "yes", "1", "on"}:
             return "TRUE"
@@ -165,7 +165,9 @@ class RecordTransformer:
         if "sn" not in result and "cn" in result:
             # Use last word of cn as surname
             cn_value = result["cn"]
-            words: list[str] = cn_value.split() if u.Guards._is_str(cn_value) else []
+            words: list[str] = (
+                cn_value.split() if u.Guards.is_type(cn_value, str) else []
+            )
             result["sn"] = words[-1] if words else "Unknown"
             result["sn"] = "Unknown"
         return result

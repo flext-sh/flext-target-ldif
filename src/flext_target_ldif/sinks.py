@@ -7,8 +7,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 import logging
+from collections.abc import Mapping
 from pathlib import Path
 from typing import override
 
@@ -43,7 +43,7 @@ class LDIFSink:
         """Get the output file path for this stream."""
         if self._output_file is None:
             output_path_str = self.config.get("output_path", "./output")
-            if not u.Guards._is_str(output_path_str):
+            if not u.Guards.is_type(output_path_str, str):
                 output_path_str = "./output"
             output_path = Path(output_path_str)
 
@@ -72,13 +72,14 @@ class LDIFSink:
             raw_ldif_options = self.config.get("ldif_options", {})
             ldif_options: dict[str, t.GeneralValueType] = (
                 {str(key): value for key, value in raw_ldif_options.items()}
-                if u.Guards._is_dict(raw_ldif_options)
+                if u.is_dict_like(raw_ldif_options)
                 else {}
             )
 
             dn_template = self.config.get("dn_template")
-            if dn_template is not None and not u.Guards._is_str(
+            if dn_template is not None and not u.Guards.is_type(
                 dn_template,
+                str,
             ):
                 dn_template = None
 
@@ -87,9 +88,9 @@ class LDIFSink:
                 {
                     str(key): value
                     for key, value in raw_attribute_mapping.items()
-                    if u.Guards._is_str(value)
+                    if u.Guards.is_type(value, str)
                 }
-                if u.Guards._is_dict(raw_attribute_mapping)
+                if u.is_dict_like(raw_attribute_mapping)
                 else {}
             )
 

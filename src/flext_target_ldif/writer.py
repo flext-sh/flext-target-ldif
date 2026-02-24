@@ -9,8 +9,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 import types
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Self, TextIO, override
 
@@ -92,7 +92,7 @@ class LdifWriter:
         attributes_obj: Mapping[str, t.GeneralValueType],
     ) -> None:
         """Write entry attributes to file."""
-        if u.Guards._is_dict(attributes_obj):
+        if u.is_dict_like(attributes_obj):
             for attr, values in attributes_obj.items():
                 if u.Guards.is_list(values):
                     f.writelines(f"{attr}: {value}\n" for value in values)
@@ -107,7 +107,7 @@ class LdifWriter:
                 dn_str = str(dn_obj) if dn_obj else ""
                 raw_attributes = entry.get("attributes", {})
                 attributes_obj: dict[str, t.GeneralValueType] = (
-                    raw_attributes if u.Guards._is_dict(raw_attributes) else {}
+                    raw_attributes if u.is_dict_like(raw_attributes) else {}
                 )
                 f.write(f"dn: {dn_str}\n")
                 self._write_entry_attributes(f, attributes_obj)

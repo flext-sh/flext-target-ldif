@@ -7,12 +7,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 import re
+from collections.abc import Mapping
 
 from .constants import FlextTargetLdifConstants
 
-type AttributeValue = str | int | float | bool | None | list[str]
+type AttributeValue = str | int | float | bool | list[str] | None
 
 
 class ValidationError(Exception):

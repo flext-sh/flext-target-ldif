@@ -1,6 +1,6 @@
 """Test protocols module for flext-target-ldif.
 
-Provides tp alias for test protocols with namespace p.Ldif.Tests.* pattern.
+Provides p alias for test protocols with namespace p.Ldif.Tests.* pattern.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
