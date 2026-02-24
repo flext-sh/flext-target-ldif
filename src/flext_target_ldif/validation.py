@@ -9,8 +9,9 @@ from __future__ import annotations
 
 import re
 
-from flext_target_ldif.constants import FlextTargetLdifConstants
-from flext_target_ldif.typings import t
+from .constants import FlextTargetLdifConstants
+
+type AttributeValue = str | int | float | bool | None | list[str]
 
 
 class ValidationError(Exception):
@@ -33,16 +34,12 @@ def validate_attribute_name(name: str) -> bool:
     return bool(re.match(r"^[a-zA-Z][a-zA-Z0-9\-]*$", name))
 
 
-def validate_attribute_value(value: object) -> bool:
+def validate_attribute_value(value: str) -> bool:
     """Validate LDAP attribute value."""
-    if value is None:
-        return False
-    if isinstance(value, str):
-        return (
-            len(value)
-            <= FlextTargetLdifConstants.TargetLdifValidation.MAX_ATTRIBUTE_VALUE_LENGTH
-        )
-    return True
+    return (
+        len(value)
+        <= FlextTargetLdifConstants.TargetLdifValidation.MAX_ATTRIBUTE_VALUE_LENGTH
+    )
 
 
 def sanitize_attribute_name(name: str) -> str:
@@ -60,9 +57,7 @@ def sanitize_attribute_name(name: str) -> str:
     return sanitized
 
 
-def validate_record(
-    record: dict[str, t.GeneralValueType],
-) -> dict[str, list[str]]:
+def validate_record(record: dict[str, AttributeValue]) -> dict[str, list[str]]:
     """Validate a record and return validation errors."""
     errors: dict[str, list[str]] = {}
     if not record:
@@ -85,15 +80,24 @@ def validate_record(
         if not validate_attribute_name(field):
             field_errors.append(f"Invalid attribute name: {field}")
         # Validate field value
-        if not validate_attribute_value(value):
-            field_errors.append(f"Invalid attribute value for {field}")
+        match value:
+            case None:
+                field_errors.append(f"Invalid attribute value for {field}")
+            case str() as text_value:
+                if not validate_attribute_value(text_value):
+                    field_errors.append(f"Invalid attribute value for {field}")
+            case list() as list_value:
+                if not all(validate_attribute_value(item) for item in list_value):
+                    field_errors.append(f"Invalid attribute value for {field}")
+            case _:
+                field_errors.append(f"Invalid attribute value for {field}")
         if field_errors:
             errors[field] = field_errors
     return errors
 
 
 def validate_schema(
-    schema: dict[str, t.GeneralValueType],
+    schema: dict[str, dict[str, str]],
 ) -> dict[str, list[str]]:
     """Validate Singer schema for LDIF compatibility."""
     errors: dict[str, list[str]] = {}
@@ -102,14 +106,10 @@ def validate_schema(
         errors["schema"] = ["Schema cannot be empty"]
         return errors
 
-    properties_raw = schema.get("properties", {})
-    if not isinstance(properties_raw, dict):
-        errors["properties"] = ["Properties must be a dictionary"]
-        return errors
-    if not properties_raw:
+    properties = schema.get("properties", {})
+    if not properties:
         errors["properties"] = ["Schema must define properties"]
         return errors
-    properties: dict[str, t.GeneralValueType] = properties_raw
 
     # Check for ID-like fields
     id_fields = [

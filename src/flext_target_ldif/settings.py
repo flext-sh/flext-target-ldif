@@ -43,8 +43,8 @@ class FlextTargetLdifSettings(FlextSettings):
         default_factory=dict,
         description="Mapping of stream fields to LDAP attributes",
     )
-    ldif_options: dict[str, t.GeneralValueType] = Field(
-        default_factory=lambda: dict[str, t.GeneralValueType](
+    ldif_options: dict[str, t.JsonValue] = Field(
+        default_factory=lambda: dict[str, t.JsonValue](
             line_length=c.MAX_LINE_LENGTH,
             base64_encode="False",
             include_timestamps="True",
@@ -68,9 +68,9 @@ class FlextTargetLdifSettings(FlextSettings):
         return cls()
 
     @classmethod
-    def create_for_development(cls, **overrides: t.GeneralValueType) -> Self:
+    def create_for_development(cls, **overrides: t.JsonValue) -> Self:
         """Create configuration for development environment."""
-        dev_overrides: dict[str, t.GeneralValueType] = {
+        dev_overrides: dict[str, t.JsonValue] = {
             "file_naming_pattern": "dev_{stream_name}_{timestamp}.ldif",
             "ldif_options": {
                 "line_length": c.MAX_LINE_LENGTH + 42,
@@ -82,9 +82,9 @@ class FlextTargetLdifSettings(FlextSettings):
         return cls(**dev_overrides)
 
     @classmethod
-    def create_for_production(cls, **overrides: t.GeneralValueType) -> Self:
+    def create_for_production(cls, **overrides: t.JsonValue) -> Self:
         """Create configuration for production environment."""
-        prod_overrides: dict[str, t.GeneralValueType] = {
+        prod_overrides: dict[str, t.JsonValue] = {
             "file_naming_pattern": "prod_{stream_name}_{timestamp}.ldif",
             "ldif_options": {
                 "line_length": 78,
@@ -96,9 +96,9 @@ class FlextTargetLdifSettings(FlextSettings):
         return cls(**prod_overrides)
 
     @classmethod
-    def create_for_testing(cls, **overrides: t.GeneralValueType) -> Self:
+    def create_for_testing(cls, **overrides: t.JsonValue) -> Self:
         """Create configuration for testing environment."""
-        test_overrides: dict[str, t.GeneralValueType] = {
+        test_overrides: dict[str, t.JsonValue] = {
             "output_path": "./test-output",
             "file_naming_pattern": "test_{stream_name}.ldif",
             "ldif_options": {
