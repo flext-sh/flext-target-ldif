@@ -9,11 +9,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 import types
 from pathlib import Path
 from typing import Self, TextIO, override
 
-from flext_core import FlextLogger, FlextResult, t
+from flext_core import FlextLogger, FlextResult, t, u
 from flext_ldif import FlextLdif
 
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError
@@ -28,10 +29,10 @@ class LdifWriter:
     def __init__(
         self,
         output_file: Path | str | None = None,
-        ldif_options: dict[str, t.GeneralValueType] | None = None,
+        ldif_options: Mapping[str, t.GeneralValueType] | None = None,
         dn_template: str | None = None,
-        attribute_mapping: dict[str, str] | None = None,
-        schema: dict[str, t.GeneralValueType] | None = None,
+        attribute_mapping: Mapping[str, str] | None = None,
+        schema: Mapping[str, t.GeneralValueType] | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure."""
         self.output_file = Path(output_file) if output_file else Path("output.ldif")
@@ -56,8 +57,8 @@ class LdifWriter:
 
     def _convert_record_to_entry(
         self,
-        record: dict[str, t.GeneralValueType],
-    ) -> dict[str, t.GeneralValueType] | None:
+        record: Mapping[str, t.GeneralValueType],
+    ) -> Mapping[str, t.GeneralValueType] | None:
         """Convert a single record to LDIF entry format."""
         try:
             self._generate_dn(record)
@@ -73,7 +74,7 @@ class LdifWriter:
             for key, value in attributes.items():
                 attr_dict[key] = (
                     [str(value)]
-                    if not isinstance(value, list)
+                    if not u.Guards.is_list(value)
                     else [str(v) for v in value]
                 )
             # Create simple entry dict[str, t.GeneralValueType] for LDIF writing
@@ -88,12 +89,12 @@ class LdifWriter:
     def _write_entry_attributes(
         self,
         f: TextIO,
-        attributes_obj: dict[str, t.GeneralValueType],
+        attributes_obj: Mapping[str, t.GeneralValueType],
     ) -> None:
         """Write entry attributes to file."""
-        if isinstance(attributes_obj, dict):
+        if u.Guards._is_dict(attributes_obj):
             for attr, values in attributes_obj.items():
-                if isinstance(values, list):
+                if u.Guards.is_list(values):
                     f.writelines(f"{attr}: {value}\n" for value in values)
                 else:
                     f.write(f"{attr}: {values}\n")
@@ -106,7 +107,7 @@ class LdifWriter:
                 dn_str = str(dn_obj) if dn_obj else ""
                 raw_attributes = entry.get("attributes", {})
                 attributes_obj: dict[str, t.GeneralValueType] = (
-                    raw_attributes if isinstance(raw_attributes, dict) else {}
+                    raw_attributes if u.Guards._is_dict(raw_attributes) else {}
                 )
                 f.write(f"dn: {dn_str}\n")
                 self._write_entry_attributes(f, attributes_obj)
@@ -128,17 +129,19 @@ class LdifWriter:
         except (RuntimeError, ValueError, TypeError) as e:
             return FlextResult[bool].fail(f"Failed to close LDIF file: {e}")
 
-    def write_record(self, record: dict[str, t.GeneralValueType]) -> FlextResult[bool]:
+    def write_record(
+        self, record: Mapping[str, t.GeneralValueType]
+    ) -> FlextResult[bool]:
         """Write a record to the LDIF file buffer."""
         try:
             # Buffer the record for batch writing
-            self._records.append(record.copy())
+            self._records.append(dict(record))
             self._record_count += 1
             return FlextResult[bool].ok(value=True)
         except (RuntimeError, ValueError, TypeError) as e:
             return FlextResult[bool].fail(f"Failed to buffer record: {e}")
 
-    def _generate_dn(self, record: dict[str, t.GeneralValueType]) -> str:
+    def _generate_dn(self, record: Mapping[str, t.GeneralValueType]) -> str:
         """Generate DN from record using template."""
         try:
             return self.dn_template.format(**record)

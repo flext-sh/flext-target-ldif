@@ -7,11 +7,14 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from pathlib import Path
 from typing import override
 
+
 from flext_target_ldif.sinks import LDIFSink
 from flext_target_ldif.typings import t
+from flext_core import u
 
 
 class TargetLDIF:
@@ -22,21 +25,21 @@ class TargetLDIF:
     @override
     def __init__(
         self,
-        config: dict[str, t.GeneralValueType] | None = None,
+        config: Mapping[str, t.GeneralValueType] | None = None,
     ) -> None:
         """Initialize the LDIF target."""
-        self.config: dict[str, t.GeneralValueType] = config or {}
+        self.config: Mapping[str, t.GeneralValueType] = config or {}
         self.sinks: dict[str, LDIFSink] = {}
 
         # Ensure output directory exists
         output_path_str = self.config.get("output_path", "./output")
-        if not isinstance(output_path_str, str):
+        if not u.Guards._is_str(output_path_str):
             output_path_str = "./output"
         output_path = Path(output_path_str)
         output_path.mkdir(parents=True, exist_ok=True)
 
     def get_sink(
-        self, stream_name: str, schema: dict[str, t.GeneralValueType]
+        self, stream_name: str, schema: Mapping[str, t.GeneralValueType]
     ) -> LDIFSink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:

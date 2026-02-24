@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 import re
 
 from .constants import FlextTargetLdifConstants
@@ -57,7 +58,7 @@ def sanitize_attribute_name(name: str) -> str:
     return sanitized
 
 
-def validate_record(record: dict[str, AttributeValue]) -> dict[str, list[str]]:
+def validate_record(record: Mapping[str, AttributeValue]) -> Mapping[str, list[str]]:
     """Validate a record and return validation errors."""
     errors: dict[str, list[str]] = {}
     if not record:
@@ -97,8 +98,8 @@ def validate_record(record: dict[str, AttributeValue]) -> dict[str, list[str]]:
 
 
 def validate_schema(
-    schema: dict[str, dict[str, str]],
-) -> dict[str, list[str]]:
+    schema: Mapping[str, Mapping[str, str]],
+) -> Mapping[str, list[str]]:
     """Validate Singer schema for LDIF compatibility."""
     errors: dict[str, list[str]] = {}
 
