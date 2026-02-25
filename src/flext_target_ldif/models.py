@@ -140,7 +140,15 @@ class LdifEntry(FlextModels.Entity):
             if errors:
                 return FlextResult[bool].fail("; ".join(errors))
             return FlextResult[bool].ok(value=True)
-        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             return FlextResult[bool].fail(f"LDIF entry validation failed: {e}")
 
 
@@ -181,7 +189,15 @@ class LdifFile(FlextModels.Entity):
                 )
 
             return FlextResult[bool].ok(value=True)
-        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             return FlextResult[bool].fail(f"LDIF file validation failed: {e}")
 
 
@@ -224,7 +240,15 @@ class LdifTransformationResult(FlextModels.Entity):
                 )
 
             return FlextResult[bool].ok(value=True)
-        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             return FlextResult[bool].fail(
                 f"Transformation result validation failed: {e}",
             )
@@ -274,7 +298,15 @@ class LdifBatchProcessing(FlextModels.Entity):
                 return FlextResult[bool].fail("Export counts exceed total processed")
 
             return FlextResult[bool].ok(value=True)
-        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             return FlextResult[bool].fail(f"Batch processing validation failed: {e}")
 
     @property
@@ -379,7 +411,15 @@ class LdifTargetResult(FlextModels.Entity):
                 )
 
             return FlextResult[bool].ok(value=True)
-        except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RuntimeError,
+            ImportError,
+        ) as e:
             return FlextResult[bool].fail(f"Target result validation failed: {e}")
 
     @property
