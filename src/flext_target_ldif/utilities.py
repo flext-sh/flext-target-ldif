@@ -207,7 +207,7 @@ class FlextTargetLdifUtilities(u):
 
                 return FlextResult[str].ok(full_dn)
 
-            except Exception as e:
+            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
                 return FlextResult[str].fail(f"Error building DN: {e}")
 
         @staticmethod
@@ -293,7 +293,7 @@ class FlextTargetLdifUtilities(u):
 
                 return FlextResult[str].ok("\n".join(ldif_lines))
 
-            except Exception as e:
+            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
                 return FlextResult[str].fail(f"Error converting to LDIF entry: {e}")
 
         @staticmethod
@@ -437,7 +437,7 @@ class FlextTargetLdifUtilities(u):
 
                 return FlextResult[str].ok(f"LDIF file created: {file_path}")
 
-            except Exception as e:
+            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
                 return FlextResult[str].fail(f"Error creating LDIF file: {e}")
 
         @staticmethod
@@ -476,7 +476,7 @@ class FlextTargetLdifUtilities(u):
                     f"Entries appended to LDIF file: {file_path}",
                 )
 
-            except Exception as e:
+            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
                 return FlextResult[str].fail(f"Error appending to LDIF file: {e}")
 
         @staticmethod
@@ -510,7 +510,7 @@ class FlextTargetLdifUtilities(u):
 
                 return FlextResult[str].ok(str(path.resolve()))
 
-            except Exception as e:
+            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
                 return FlextResult[str].fail(f"Invalid file path: {e}")
 
     class StreamUtilities:

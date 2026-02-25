@@ -24,7 +24,7 @@ class FlextTargetLdifVersion:
         _metadata = metadata("flext-target-ldif")
     except PackageNotFoundError:
         _metadata = {
-            "Version": "0.0.0-dev",
+            "Version": "0.12.0-dev",
             "Name": "flext-target-ldif",
             "Summary": "FLEXT Target LDIF (metadata fallback)",
             "Author": "",
