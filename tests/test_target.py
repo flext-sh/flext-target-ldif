@@ -12,13 +12,13 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
-from pydantic import ValidationError
-
 from flext_target_ldif import (
+    FlextTargetLDIF,
     FlextTargetLdifSettings,
     LDIFSink,
     TargetLDIF,
 )
+from pydantic import ValidationError
 
 
 class TestFlextTargetLdifSettings:
@@ -126,7 +126,7 @@ class TestFlextTargetLdif:
 
     def test_target_creation_with_defaults(self) -> None:
         """Test creating target with default configuration."""
-        target = FlextTargetLdif()
+        target = FlextTargetLDIF()
 
         # Should have default configuration
         assert hasattr(target, "config")
@@ -136,12 +136,12 @@ class TestFlextTargetLdif:
         """Test target initialization calls parent."""
         mock_init.return_value = None
 
-        FlextTargetLdif()
+        FlextTargetLDIF()
         mock_init.assert_called_once()
 
     def test_target_validate_config_success(self) -> None:
         """Test successful config validation."""
-        target = FlextTargetLdif()
+        target = FlextTargetLDIF()
 
         # Set test config
         target._test_config = {
@@ -158,7 +158,7 @@ class TestFlextTargetLdif:
 
     def test_target_validate_config_missing_output_file(self) -> None:
         """Test config validation with missing output file."""
-        target = FlextTargetLdif()
+        target = FlextTargetLDIF()
         target._test_config = {"schema_validation": True}
 
         with pytest.raises(ValueError) as exc_info:
@@ -172,7 +172,7 @@ class TestFlextTargetLdif:
 
     def test_target_validate_config_invalid_output_file(self) -> None:
         """Test config validation with invalid output file."""
-        target = FlextTargetLdif()
+        target = FlextTargetLDIF()
         target._test_config = {
             "output_file": "",
             "schema_validation": True,
@@ -189,7 +189,7 @@ class TestFlextTargetLdif:
 
     def test_target_validate_config_invalid_dn_template(self) -> None:
         """Test config validation with invalid DN template."""
-        target = FlextTargetLdif()
+        target = FlextTargetLDIF()
         target._test_config = {
             "output_file": "test.ldif",
             "dn_template": "",
@@ -329,7 +329,7 @@ class TestIntegration:
         config.validate_domain_rules()
 
         # Create target (would be used by Singer SDK)
-        target = FlextTargetLdif()
+        target = FlextTargetLDIF()
 
         # Set test configuration
         target._test_config = {
@@ -347,19 +347,19 @@ class TestIntegration:
         tmp_path.unlink()
 
     def test_flext_target_ldif_alias_compatibility(self) -> None:
-        """Test that FlextTargetLdif maintains compatibility."""
+        """Test that FlextTargetLDIF maintains compatibility."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             config = {"output_path": tmp_dir}
 
             # Test that both classes can be instantiated
             original_target = TargetLDIF(config=config)
-            flext_target = FlextTargetLdif()
+            flext_target = FlextTargetLDIF()
 
             # Both should be instances of TargetLDIF
             assert isinstance(original_target, TargetLDIF)
             assert isinstance(flext_target, TargetLDIF)
 
-            # FlextTargetLdif should maintain the same interface
+            # FlextTargetLDIF should maintain the same interface
             assert hasattr(flext_target, "cli")
             assert hasattr(flext_target, "validate_config")
 
@@ -412,7 +412,7 @@ class TestIntegration:
             invalid_config.validate_domain_rules()
 
         # Test target validation error
-        target = FlextTargetLdif()
+        target = FlextTargetLDIF()
         target._test_config = {"output_file": ""}  # Invalid
 
         with pytest.raises(ValueError):
