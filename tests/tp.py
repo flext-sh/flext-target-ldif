@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_target_ldif.tests.protocols import TestsFlextTargetLdifProtocols
+from .protocols import TestsFlextTargetLdifProtocols
 
 # Runtime alias for test protocols
 p = TestsFlextTargetLdifProtocols

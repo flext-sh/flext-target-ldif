@@ -140,7 +140,7 @@ def attribute_mapping() -> dict[str, str]:
 
 
 # Pytest markers for test categorization
-def pytest_configure(config: object) -> None:
+def pytest_configure(config: pytest.Config) -> None:
     """Configure pytest markers."""
     config.addinivalue_line("markers", "unit: mark test as a unit test")
     config.addinivalue_line("markers", "integration: mark test as an integration test")

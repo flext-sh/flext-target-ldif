@@ -17,7 +17,7 @@ from flext_core import (
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
 
-from flext_target_ldif.constants import c
+from .constants import c
 
 
 class FlextTargetLdifSettings(FlextSettings):
@@ -68,9 +68,9 @@ class FlextTargetLdifSettings(FlextSettings):
         return cls()
 
     @classmethod
-    def create_for_development(cls, **overrides: t.JsonValue) -> Self:
+    def create_for_development(cls, **overrides: t.GeneralValueType) -> Self:
         """Create configuration for development environment."""
-        dev_overrides: dict[str, t.JsonValue] = {
+        dev_overrides: dict[str, t.GeneralValueType] = {
             "file_naming_pattern": "dev_{stream_name}_{timestamp}.ldif",
             "ldif_options": {
                 "line_length": c.MAX_LINE_LENGTH + 42,
@@ -79,12 +79,13 @@ class FlextTargetLdifSettings(FlextSettings):
             },
             **overrides,
         }
-        return cls(**dev_overrides)
+        base = cls()
+        return base.model_copy(update=dev_overrides)
 
     @classmethod
-    def create_for_production(cls, **overrides: t.JsonValue) -> Self:
+    def create_for_production(cls, **overrides: t.GeneralValueType) -> Self:
         """Create configuration for production environment."""
-        prod_overrides: dict[str, t.JsonValue] = {
+        prod_overrides: dict[str, t.GeneralValueType] = {
             "file_naming_pattern": "prod_{stream_name}_{timestamp}.ldif",
             "ldif_options": {
                 "line_length": 78,
@@ -93,12 +94,13 @@ class FlextTargetLdifSettings(FlextSettings):
             },
             **overrides,
         }
-        return cls(**prod_overrides)
+        base = cls()
+        return base.model_copy(update=prod_overrides)
 
     @classmethod
-    def create_for_testing(cls, **overrides: t.JsonValue) -> Self:
+    def create_for_testing(cls, **overrides: t.GeneralValueType) -> Self:
         """Create configuration for testing environment."""
-        test_overrides: dict[str, t.JsonValue] = {
+        test_overrides: dict[str, t.GeneralValueType] = {
             "output_path": "./test-output",
             "file_naming_pattern": "test_{stream_name}.ldif",
             "ldif_options": {
@@ -108,7 +110,8 @@ class FlextTargetLdifSettings(FlextSettings):
             },
             **overrides,
         }
-        return cls(**test_overrides)
+        base = cls()
+        return base.model_copy(update=test_overrides)
 
     @field_validator("output_path")
     @classmethod

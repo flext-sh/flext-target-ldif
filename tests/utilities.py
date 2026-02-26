@@ -18,14 +18,9 @@ from flext_tests import FlextTestsUtilities
 class TestsFlextTargetLdifUtilities(FlextTestsUtilities, FlextTargetLdifUtilities):
     """Test utilities for flext-target-ldif extending both test and project utilities."""
 
-    class TargetLdif(FlextTargetLdifUtilities.TargetLdif):
-        """TargetLdif test namespace."""
-
-        class Tests:
-            """Internal tests declarations."""
+    pass
 
 
-u = TestsFlextTargetLdifUtilities
 u = TestsFlextTargetLdifUtilities
 
 __all__ = ["TestsFlextTargetLdifUtilities", "u"]

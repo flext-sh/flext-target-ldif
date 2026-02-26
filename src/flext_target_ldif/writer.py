@@ -44,7 +44,7 @@ class LdifWriter:
         self._ldif_api = FlextLdif()
         self._records: list[dict[str, t.GeneralValueType]] = []
         self._record_count = 0
-        self._ldif_entries: list[dict[str, t.GeneralValueType]] = []
+        self._ldif_entries: list[Mapping[str, t.GeneralValueType]] = []
 
     def open(self) -> FlextResult[bool]:
         """Open the output file for writing."""
@@ -106,9 +106,11 @@ class LdifWriter:
                 dn_obj = entry.get("dn", "")
                 dn_str = str(dn_obj) if dn_obj else ""
                 raw_attributes = entry.get("attributes", {})
-                attributes_obj: dict[str, t.GeneralValueType] = (
-                    raw_attributes if u.is_dict_like(raw_attributes) else {}
-                )
+                attributes_obj: dict[str, t.GeneralValueType] = {}
+                if isinstance(raw_attributes, Mapping):
+                    attributes_obj = {
+                        str(key): value for key, value in raw_attributes.items()
+                    }
                 f.write(f"dn: {dn_str}\n")
                 self._write_entry_attributes(f, attributes_obj)
                 f.write("\n")

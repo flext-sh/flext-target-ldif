@@ -12,7 +12,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextResult, t, u
+from flext_core import FlextResult, t
 
 from flext_target_ldif.writer import LdifWriter
 
@@ -42,9 +42,10 @@ class LDIFSink:
     def _get_output_file(self) -> Path:
         """Get the output file path for this stream."""
         if self._output_file is None:
-            output_path_str = self.config.get("output_path", "./output")
-            if not u.Guards.is_type(output_path_str, str):
-                output_path_str = "./output"
+            output_path_raw = self.config.get("output_path", "./output")
+            output_path_str = (
+                output_path_raw if isinstance(output_path_raw, str) else "./output"
+            )
             output_path = Path(output_path_str)
 
             # Create safe filename from stream name
@@ -70,29 +71,24 @@ class LDIFSink:
             output_file = self._get_output_file()
 
             raw_ldif_options = self.config.get("ldif_options", {})
-            ldif_options: dict[str, t.GeneralValueType] = (
-                {str(key): value for key, value in raw_ldif_options.items()}
-                if u.is_dict_like(raw_ldif_options)
-                else {}
-            )
+            ldif_options: dict[str, t.GeneralValueType] = {}
+            if isinstance(raw_ldif_options, Mapping):
+                ldif_options = {
+                    str(key): value for key, value in raw_ldif_options.items()
+                }
 
             dn_template = self.config.get("dn_template")
-            if dn_template is not None and not u.Guards.is_type(
-                dn_template,
-                str,
-            ):
+            if dn_template is not None and not isinstance(dn_template, str):
                 dn_template = None
 
             raw_attribute_mapping = self.config.get("attribute_mapping", {})
-            attribute_mapping: dict[str, str] = (
-                {
+            attribute_mapping: dict[str, str] = {}
+            if isinstance(raw_attribute_mapping, Mapping):
+                attribute_mapping = {
                     str(key): value
                     for key, value in raw_attribute_mapping.items()
-                    if u.Guards.is_type(value, str)
+                    if isinstance(value, str)
                 }
-                if u.is_dict_like(raw_attribute_mapping)
-                else {}
-            )
 
             self._ldif_writer = LdifWriter(
                 output_file=output_file,

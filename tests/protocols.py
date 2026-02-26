@@ -22,18 +22,9 @@ class TestsFlextTargetLdifProtocols(FlextTestsProtocols, FlextTargetLdifProtocol
     - p.TargetLdif.* (from FlextTargetLdifProtocols)
     """
 
-    class Tests:
-        """Project-specific test protocols.
-
-        Extends FlextTestsProtocols.Tests with TargetLdif-specific protocols.
-        """
-
-        class TargetLdif:
-            """TargetLdif-specific test protocols."""
+    pass
 
 
-# Runtime aliases
-p = TestsFlextTargetLdifProtocols
 p = TestsFlextTargetLdifProtocols
 
 __all__ = ["TestsFlextTargetLdifProtocols", "p"]

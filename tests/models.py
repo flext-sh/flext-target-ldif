@@ -26,11 +26,7 @@ class TestsFlextTargetLdifModels(FlextTestsModels, FlextTargetLdifModels):
     - m.* (production models via alternative alias)
     """
 
-    class Tests:
-        """Project-specific test fixtures namespace."""
-
-        class TargetLdif:
-            """Target LDIF-specific test fixtures."""
+    pass
 
 
 # Short aliases per FLEXT convention

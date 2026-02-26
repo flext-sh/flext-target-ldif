@@ -13,7 +13,7 @@ import re
 from collections.abc import Mapping
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import ClassVar, override
+from typing import ClassVar, cast, override
 
 from flext_core import FlextResult, t
 from flext_core.utilities import u
@@ -75,7 +75,8 @@ class FlextTargetLdifUtilities(u):
                         "Message missing required 'type' field",
                     )
 
-                return FlextResult[dict[str, t.GeneralValueType]].ok(message)
+                parsed_message = {str(key): value for key, value in message.items()}
+                return FlextResult[dict[str, t.GeneralValueType]].ok(parsed_message)
 
             except json.JSONDecodeError as e:
                 return FlextResult[dict[str, t.GeneralValueType]].fail(
@@ -597,9 +598,12 @@ class FlextTargetLdifUtilities(u):
 
             # Check if schema has required properties
             properties_raw = schema.get("properties", {})
-            if not u.is_dict_like(properties_raw) or not properties_raw:
+            if not isinstance(properties_raw, Mapping) or not properties_raw:
                 return FlextResult[bool].fail("Schema must have properties")
-            properties: dict[str, t.GeneralValueType] = properties_raw
+            properties_map = cast("Mapping[str, t.GeneralValueType]", properties_raw)
+            properties: dict[str, t.GeneralValueType] = {
+                str(key): value for key, value in properties_map.items()
+            }
 
             # Check for DN building capability
             has_dn_field = "dn" in properties
@@ -669,11 +673,12 @@ class FlextTargetLdifUtilities(u):
                 )
 
             # Validate output file path
-            output_file = config["output_file"]
-            if not u.Guards.is_type(output_file, str):
+            output_file_raw = config["output_file"]
+            if not isinstance(output_file_raw, str):
                 return FlextResult[dict[str, t.GeneralValueType]].fail(
                     "Invalid output file: output_file must be a string",
                 )
+            output_file = output_file_raw
             file_validation = (
                 FlextTargetLdifUtilities.FileUtilities.validate_ldif_file_path(
                     output_file,
@@ -704,11 +709,15 @@ class FlextTargetLdifUtilities(u):
                         )
 
             # Validate batch size
-            batch_size = config.get(
+            batch_size_raw = config.get(
                 "batch_size",
                 FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE,
             )
-            if not u.Guards.is_type(batch_size, int) or batch_size <= 0:
+            if not isinstance(batch_size_raw, int):
+                return FlextResult[dict[str, t.GeneralValueType]].fail(
+                    "Batch size must be a positive integer",
+                )
+            if batch_size_raw <= 0:
                 return FlextResult[dict[str, t.GeneralValueType]].fail(
                     "Batch size must be a positive integer",
                 )
@@ -748,12 +757,17 @@ class FlextTargetLdifUtilities(u):
             # Validate attribute mapping if provided
             if "attribute_mapping" in config:
                 attribute_mapping = config["attribute_mapping"]
-                if not u.is_dict_like(attribute_mapping):
+                if not isinstance(attribute_mapping, Mapping):
                     return FlextResult[dict[str, t.GeneralValueType]].fail(
                         "Attribute mapping must be a dictionary",
                     )
 
-                for key, value in attribute_mapping.items():
+                attribute_mapping_map = cast(
+                    "Mapping[str, t.GeneralValueType]",
+                    attribute_mapping,
+                )
+
+                for key, value in attribute_mapping_map.items():
                     if not u.Guards.is_type(key, str) or not u.Guards.is_type(
                         value,
                         str,
@@ -783,10 +797,14 @@ class FlextTargetLdifUtilities(u):
 
             """
             bookmarks = state.get("bookmarks", {})
-            if not u.is_dict_like(bookmarks):
+            if not isinstance(bookmarks, Mapping):
                 return {}
-            stream_state = bookmarks.get(stream_name, {})
-            return stream_state if u.is_dict_like(stream_state) else {}
+            bookmarks_map = cast("Mapping[str, t.GeneralValueType]", bookmarks)
+            stream_state = bookmarks_map.get(stream_name, {})
+            if not isinstance(stream_state, Mapping):
+                return {}
+            stream_state_map = cast("Mapping[str, t.GeneralValueType]", stream_state)
+            return {str(key): value for key, value in stream_state_map.items()}
 
         @staticmethod
         def set_target_state(
@@ -807,7 +825,9 @@ class FlextTargetLdifUtilities(u):
             """
             updated_state = dict(state)
             bookmarks_raw = updated_state.get("bookmarks")
-            bookmarks = dict(bookmarks_raw) if u.is_dict_like(bookmarks_raw) else {}
+            bookmarks: dict[str, t.GeneralValueType] = {}
+            if isinstance(bookmarks_raw, Mapping):
+                bookmarks = {str(key): value for key, value in bookmarks_raw.items()}
             bookmarks[stream_name] = dict(stream_state)
             updated_state["bookmarks"] = bookmarks
             return updated_state
@@ -881,14 +901,12 @@ class FlextTargetLdifUtilities(u):
 
             current_count_raw = stream_state.get("records_processed", 0)
             current_count = (
-                current_count_raw if u.Guards.is_type(current_count_raw, int) else 0
+                current_count_raw if isinstance(current_count_raw, int) else 0
             )
             new_count = current_count + records_count
 
             batch_count_raw = stream_state.get("batch_count", 0)
-            batch_count = (
-                batch_count_raw if u.Guards.is_type(batch_count_raw, int) else 0
-            )
+            batch_count = batch_count_raw if isinstance(batch_count_raw, int) else 0
 
             updated_stream_state: dict[str, t.GeneralValueType] = {
                 **stream_state,

@@ -11,8 +11,6 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import u
-
 from flext_target_ldif.sinks import LDIFSink
 from flext_target_ldif.typings import t
 
@@ -32,9 +30,10 @@ class TargetLDIF:
         self.sinks: dict[str, LDIFSink] = {}
 
         # Ensure output directory exists
-        output_path_str = self.config.get("output_path", "./output")
-        if not u.Guards.is_type(output_path_str, str):
-            output_path_str = "./output"
+        output_path_raw = self.config.get("output_path", "./output")
+        output_path_str = (
+            output_path_raw if isinstance(output_path_raw, str) else "./output"
+        )
         output_path = Path(output_path_str)
         output_path.mkdir(parents=True, exist_ok=True)
 

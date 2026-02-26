@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_target_ldif.tests.models import TestsFlextTargetLdifModels
+from .models import TestsFlextTargetLdifModels
 
 # Runtime alias for test models
 m = TestsFlextTargetLdifModels

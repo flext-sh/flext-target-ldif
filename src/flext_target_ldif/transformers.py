@@ -10,8 +10,6 @@ from collections.abc import Callable, Mapping
 from datetime import datetime
 from typing import override
 
-from flext_core import u
-
 from flext_target_ldif.typings import t
 
 
@@ -19,10 +17,10 @@ def transform_timestamp(value: object) -> str:
     """Transform timestamp values to LDAP timestamp format using flext-ldap."""
     if value is None:
         return ""
-    if value.__class__ is datetime:
+    if isinstance(value, datetime):
         # ISO 8601 representation compatible with many systems
         return value.isoformat()
-    if u.Guards.is_type(value, str):
+    if isinstance(value, str):
         try:
             # Try to parse ISO format first, then use flext-ldap parsing
             dt = datetime.fromisoformat(value.removesuffix("Z") + "+00:00")
@@ -36,9 +34,9 @@ def transform_timestamp(value: object) -> str:
 
 def transform_boolean(value: object) -> str:
     """Transform boolean values to LDAP boolean format."""
-    if u.Guards.is_type(value, bool):
+    if isinstance(value, bool):
         return "TRUE" if value else "FALSE"
-    if u.Guards.is_type(value, str):
+    if isinstance(value, str):
         lower_val = value.lower()
         if lower_val in {"true", "yes", "1", "on"}:
             return "TRUE"
@@ -160,14 +158,12 @@ class RecordTransformer:
                 result["cn"] = result["displayname"]
             elif "uid" in result:
                 result["cn"] = result["uid"]
+            else:
                 result["cn"] = "Unknown User"
         # Ensure sn (surname) is present for person objectClass
         if "sn" not in result and "cn" in result:
             # Use last word of cn as surname
             cn_value = result["cn"]
-            words: list[str] = (
-                cn_value.split() if u.Guards.is_type(cn_value, str) else []
-            )
+            words: list[str] = cn_value.split() if isinstance(cn_value, str) else []
             result["sn"] = words[-1] if words else "Unknown"
-            result["sn"] = "Unknown"
         return result
