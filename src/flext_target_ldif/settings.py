@@ -7,6 +7,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from typing import override
+
 from typing import Self
 
 from flext_core import (
@@ -63,6 +65,8 @@ class FlextTargetLdifSettings(FlextSettings):
     )
 
     @classmethod
+    @override
+
     def get_global_instance(cls) -> Self:
         """Get the global singleton instance using FlextSettings pattern."""
         return cls()
