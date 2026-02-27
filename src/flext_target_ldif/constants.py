@@ -10,11 +10,11 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import Final
 
-from flext_core import FlextConstants
 from flext_ldif.constants import FlextLdifConstants
+from flext_meltano.constants import FlextMeltanoConstants
 
 
-class FlextTargetLdifConstants(FlextConstants):
+class FlextMeltanoTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """LDIF target export-specific constants following flext-core patterns.
 
     Composes with FlextLdifConstants to avoid duplication and ensure consistency.
@@ -98,6 +98,6 @@ class FlextTargetLdifConstants(FlextConstants):
         MAX_ATTRIBUTE_VALUE_LENGTH: Final[int] = 1000
 
 
-c = FlextTargetLdifConstants
+c = FlextMeltanoTargetLdifConstants
 
-__all__ = ["FlextTargetLdifConstants", "c"]
+__all__ = ["FlextMeltanoTargetLdifConstants", "c"]
