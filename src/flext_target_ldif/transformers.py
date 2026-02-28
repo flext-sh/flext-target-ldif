@@ -13,7 +13,7 @@ from typing import override
 from flext_target_ldif.typings import t
 
 
-def transform_timestamp(value: object) -> str:
+def transform_timestamp(value: t.GeneralValueType) -> str:
     """Transform timestamp values to LDAP timestamp format using flext-ldap."""
     if value is None:
         return ""
@@ -32,7 +32,7 @@ def transform_timestamp(value: object) -> str:
     return str(value)
 
 
-def transform_boolean(value: object) -> str:
+def transform_boolean(value: t.GeneralValueType) -> str:
     """Transform boolean values to LDAP boolean format."""
     if isinstance(value, bool):
         return "TRUE" if value else "FALSE"
@@ -45,7 +45,7 @@ def transform_boolean(value: object) -> str:
     return ""
 
 
-def transform_email(value: object) -> str:
+def transform_email(value: t.GeneralValueType) -> str:
     """Transform email values to ensure LDAP compatibility."""
     email_str = str(value).strip().lower()
     # Basic email validation and cleanup
@@ -54,21 +54,21 @@ def transform_email(value: object) -> str:
     return ""
 
 
-def transform_phone(value: object) -> str:
+def transform_phone(value: t.GeneralValueType) -> str:
     """Transform phone numbers to standard format."""
     phone_str = str(value)
     # Remove common formatting characters
     return "".join(c for c in phone_str if c.isdigit() or c in "+- ()")
 
 
-def transform_name(value: object) -> str:
+def transform_name(value: t.GeneralValueType) -> str:
     """Transform name fields to ensure proper formatting."""
     name_str = str(value).strip()
     # Capitalize first letter of each word
     return " ".join(word.capitalize() for word in name_str.split())
 
 
-def _get_builtin_transformer(attr_name: str) -> Callable[[object], str] | None:
+def _get_builtin_transformer(attr_name: str) -> Callable[[t.GeneralValueType], str] | None:
     """Get built-in transformer function for attribute name."""
     attr_lower = attr_name.lower()
     if attr_lower in {"mail", "email"}:
@@ -86,8 +86,8 @@ def _get_builtin_transformer(attr_name: str) -> Callable[[object], str] | None:
 
 def normalize_attribute_value(
     attr_name: str,
-    value: object,
-    transformers: Mapping[str, Callable[[object], str]] | None = None,
+    value: t.GeneralValueType,
+    transformers: Mapping[str, Callable[[t.GeneralValueType], str]] | None = None,
 ) -> str:
     """Normalize attribute value based on attribute type."""
     # Use custom transformers if provided
