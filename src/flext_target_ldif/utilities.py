@@ -15,10 +15,12 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, cast, override
 
-from flext_core import FlextResult, t, u
+from flext_core import FlextResult, t
+from flext_ldif import FlextLdifUtilities
+from flext_meltano import FlextMeltanoUtilities
 
 
-class FlextTargetLdifUtilities(u):
+class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     """Single unified utilities class for Singer target LDIF operations.
 
     Follows FLEXT unified class pattern with nested helper classes for
@@ -1004,6 +1006,8 @@ class FlextTargetLdifUtilities(u):
         )
 
 
+u = FlextTargetLdifUtilities
 __all__ = [
     "FlextTargetLdifUtilities",
+    "u",
 ]
