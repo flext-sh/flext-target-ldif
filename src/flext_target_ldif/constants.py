@@ -32,10 +32,6 @@ class FlextMeltanoTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants)
     # Singer Target Configuration - using FlextConstants composition
     # Note: DEFAULT_BATCH_SIZE inherited from FlextConstants (Final, cannot override)
     MAX_BATCH_SIZE: Final[int] = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
-    DEFAULT_BATCH_SIZE: Final[int] = 1000
-    MAX_BATCH_SIZE_LIMIT: Final[int] = 10000
-    DEFAULT_TIMEOUT_SECONDS: Final[int] = 30
-    MAX_RETRIES: Final[int] = 3
 
     # LDIF Format Options using composition
     SUPPORTED_ENCODINGS: Final[frozenset[str]] = frozenset([
@@ -122,5 +118,6 @@ class FlextMeltanoTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants)
 
 
 c = FlextMeltanoTargetLdifConstants
+FlextTargetLdifConstants = FlextMeltanoTargetLdifConstants
 
-__all__ = ["FlextMeltanoTargetLdifConstants", "c"]
+__all__ = ["FlextMeltanoTargetLdifConstants", "FlextTargetLdifConstants", "c"]

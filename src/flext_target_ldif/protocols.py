@@ -55,7 +55,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             """
 
             @runtime_checkable
-            class LdifGenerationProtocol(FlextLdifProtocols.Service[object], Protocol):
+            class LdifGenerationProtocol(FlextLdifProtocols.Service[t.GeneralValueType], Protocol):
                 """Protocol for LDIF file generation.
 
                 Defines the interface for generating LDIF content from records.
@@ -77,7 +77,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                     ...
 
             @runtime_checkable
-            class DataTransformationProtocol(FlextLdifProtocols.Service[object], Protocol):
+            class DataTransformationProtocol(FlextLdifProtocols.Service[t.GeneralValueType], Protocol):
                 """Protocol for Singer to LDIF transformation.
 
                 Defines the interface for transforming Singer records to LDIF format.
@@ -99,7 +99,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                     ...
 
             @runtime_checkable
-            class FileManagementProtocol(FlextLdifProtocols.Service[object], Protocol):
+            class FileManagementProtocol(FlextLdifProtocols.Service[t.GeneralValueType], Protocol):
                 """Protocol for LDIF file management.
 
                 Defines the interface for managing LDIF files, including writing content.
@@ -123,7 +123,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                     ...
 
             @runtime_checkable
-            class ValidationProtocol(FlextLdifProtocols.Service[object], Protocol):
+            class ValidationProtocol(FlextLdifProtocols.Service[t.GeneralValueType], Protocol):
                 """Protocol for LDIF validation.
 
                 Defines the interface for validating LDIF content.
@@ -145,7 +145,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                     ...
 
             @runtime_checkable
-            class PerformanceProtocol(FlextLdifProtocols.Service[object], Protocol):
+            class PerformanceProtocol(FlextLdifProtocols.Service[t.GeneralValueType], Protocol):
                 """Protocol for LDIF generation performance.
 
                 Defines the interface for optimizing LDIF generation performance.
@@ -167,7 +167,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                     ...
 
             @runtime_checkable
-            class MonitoringProtocol(FlextLdifProtocols.Service[object], Protocol):
+            class MonitoringProtocol(FlextLdifProtocols.Service[t.GeneralValueType], Protocol):
                 """Protocol for LDIF generation monitoring.
 
                 Defines the interface for monitoring LDIF generation progress.
