@@ -8,12 +8,13 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 from flext_core import (
-    FlextModels,
     FlextResult,
     FlextSettings,
     t,
 )
-from pydantic import ConfigDict, Field
+from flext_ldif import FlextLdifModels
+from flext_meltano import FlextMeltanoModels
+from pydantic import Field
 
 """LDIF target models extending flext-core FlextModels.
 
@@ -92,7 +93,7 @@ class LdifExportConfig(FlextSettings):
     )
 
 
-class LdifEntry(FlextModels.Entity):
+class LdifEntry(FlextMeltanoModels.Entity):
     """LDIF entry representation with format validation."""
 
     distinguished_name: str = Field(
@@ -152,7 +153,7 @@ class LdifEntry(FlextModels.Entity):
             return FlextResult[bool].fail(f"LDIF entry validation failed: {e}")
 
 
-class LdifFile(FlextModels.Entity):
+class LdifFile(FlextMeltanoModels.Entity):
     """LDIF file representation with metadata."""
 
     file_path: str = Field(..., description="Path to the LDIF file")
@@ -201,7 +202,7 @@ class LdifFile(FlextModels.Entity):
             return FlextResult[bool].fail(f"LDIF file validation failed: {e}")
 
 
-class LdifTransformationResult(FlextModels.Entity):
+class LdifTransformationResult(FlextMeltanoModels.Entity):
     """Result of Singer to LDIF transformation."""
 
     original_record: dict[str, t.GeneralValueType] = Field(
@@ -264,7 +265,7 @@ class LdifTransformationResult(FlextModels.Entity):
         return 0.0 if self.has_errors else 100.0
 
 
-class LdifBatchProcessing(FlextModels.Entity):
+class LdifBatchProcessing(FlextMeltanoModels.Entity):
     """LDIF batch processing configuration and state."""
 
     stream_name: str = Field(..., description="Singer stream name")
@@ -343,7 +344,7 @@ class SingerStreamConfig(FlextSettings):
     )
 
 
-class LdifTargetResult(FlextModels.Entity):
+class LdifTargetResult(FlextMeltanoModels.Entity):
     """Result of LDIF target operation processing."""
 
     stream_name: str = Field(..., description="Singer stream name")
@@ -437,7 +438,7 @@ class LdifTargetResult(FlextModels.Entity):
         return (self.entries_failed / self.records_processed) * 100.0
 
 
-class LdifErrorContext(FlextModels.ArbitraryTypesModel):
+class LdifErrorContext(FlextMeltanoModels.ArbitraryTypesModel):
     """Error context for LDIF target error handling."""
 
     error_type: str = Field(..., description="Error category")
@@ -455,12 +456,12 @@ class LdifErrorContext(FlextModels.ArbitraryTypesModel):
     max_retry_attempts: int | None = Field(None, description="Maximum retry attempts")
 
 
-class FlextTargetLdifModels(FlextModels):
+class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
     """Unified models collection for FLEXT Target LDIF following [Project]Models standard.
 
-    This class extends FlextModels and provides a centralized access point for all
-    LDIF target-related model classes, ensuring consistency with the FLEXT ecosystem
-    patterns and enabling reusable model composition across the project.
+    This class extends FlextMeltanoModels and FlextLdifModels and provides a centralized
+    access point for all LDIF target-related model classes, ensuring consistency with
+    the FLEXT ecosystem patterns and enabling reusable model composition across the project.
 
     Model Categories:
     - Configuration: LDIF format and export configuration models
@@ -488,21 +489,6 @@ class FlextTargetLdifModels(FlextModels):
         # Result models
         LdifTargetResult = LdifTargetResult
         LdifErrorContext = LdifErrorContext
-
-    model_config = ConfigDict(
-        validate_assignment=True,
-        validate_return=True,
-        validate_default=True,
-        use_enum_values=True,
-        arbitrary_types_allowed=True,
-        extra="forbid",
-        frozen=False,
-        strict=True,
-        str_strip_whitespace=True,
-        ser_json_timedelta="iso8601",
-        ser_json_bytes="base64",
-        hide_input_in_errors=True,
-    )
 
 
 # Short aliases
