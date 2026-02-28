@@ -19,6 +19,8 @@ from flext_core import FlextResult, t
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
 
+from .constants import c
+
 
 class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     """Single unified utilities class for Singer target LDIF operations.
@@ -29,14 +31,14 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     """
 
     # Configuration constants
-    DEFAULT_BATCH_SIZE: ClassVar[int] = 1000
-    DEFAULT_TIMEOUT: ClassVar[int] = 30
-    MAX_RETRIES: ClassVar[int] = 3
-    LDIF_LINE_WRAP_LENGTH: ClassVar[int] = 76
+    DEFAULT_BATCH_SIZE: ClassVar[int] = c.DEFAULT_BATCH_SIZE
+    DEFAULT_TIMEOUT: ClassVar[int] = c.DEFAULT_TIMEOUT_SECONDS
+    MAX_RETRIES: ClassVar[int] = c.MAX_RETRIES
+    LDIF_LINE_WRAP_LENGTH: ClassVar[int] = c.LDIF_LINE_WRAP_LENGTH
 
     # ASCII character constants for LDIF encoding
-    ASCII_SPACE: ClassVar[int] = 32
-    ASCII_TILDE: ClassVar[int] = 126
+    ASCII_SPACE: ClassVar[int] = c.ASCII_SPACE
+    ASCII_TILDE: ClassVar[int] = c.ASCII_TILDE
 
     @override
     def __init__(self) -> None:

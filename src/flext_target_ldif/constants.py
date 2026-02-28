@@ -25,10 +25,17 @@ class FlextMeltanoTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants)
     DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.DEFAULT_ENCODING
     DEFAULT_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
     MAX_LINE_LENGTH: Final[int] = 1024
+    MIN_LINE_LENGTH: Final[int] = 40
+    STANDARD_LINE_LENGTH: Final[int] = 78
+    MAX_DN_LENGTH: Final[int] = 1000
 
     # Singer Target Configuration - using FlextConstants composition
     # Note: DEFAULT_BATCH_SIZE inherited from FlextConstants (Final, cannot override)
     MAX_BATCH_SIZE: Final[int] = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
+    DEFAULT_BATCH_SIZE: Final[int] = 1000
+    MAX_BATCH_SIZE_LIMIT: Final[int] = 10000
+    DEFAULT_TIMEOUT_SECONDS: Final[int] = 30
+    MAX_RETRIES: Final[int] = 3
 
     # LDIF Format Options using composition
     SUPPORTED_ENCODINGS: Final[frozenset[str]] = frozenset([
@@ -39,6 +46,20 @@ class FlextMeltanoTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants)
         "latin-1",
         "cp1252",
     ])
+    
+    # File naming patterns for different environments
+    DEV_FILE_PATTERN: Final[str] = "dev_{stream_name}_{timestamp}.ldif"
+    PROD_FILE_PATTERN: Final[str] = "prod_{stream_name}_{timestamp}.ldif"
+    TEST_FILE_PATTERN: Final[str] = "test_{stream_name}.ldif"
+    DEFAULT_FILE_PATTERN: Final[str] = "{stream_name}_{timestamp}.ldif"
+    
+    # Development environment offset for line length
+    DEV_LINE_LENGTH_OFFSET: Final[int] = 42
+    
+    # ASCII character constants for LDIF encoding
+    ASCII_SPACE: Final[int] = 32
+    ASCII_TILDE: Final[int] = 126
+    LDIF_LINE_WRAP_LENGTH: Final[int] = 76
 
     class ErrorType(StrEnum):
         """LDIF target error types using StrEnum for type safety.
@@ -97,6 +118,7 @@ class FlextMeltanoTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants)
             FlextLdifConstants.Ldif.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
         )
         MAX_ATTRIBUTE_VALUE_LENGTH: Final[int] = 1000
+        MAX_DN_COMPONENTS: Final[int] = 10
 
 
 c = FlextMeltanoTargetLdifConstants

@@ -72,9 +72,9 @@ class FlextTargetLdifSettings(FlextSettings):
     def create_for_development(cls, **overrides: t.GeneralValueType) -> Self:
         """Create configuration for development environment."""
         dev_overrides: dict[str, t.GeneralValueType] = {
-            "file_naming_pattern": "dev_{stream_name}_{timestamp}.ldif",
+            "file_naming_pattern": c.DEV_FILE_PATTERN,
             "ldif_options": {
-                "line_length": c.MAX_LINE_LENGTH + 42,
+                "line_length": c.MAX_LINE_LENGTH + c.DEV_LINE_LENGTH_OFFSET,
                 "base64_encode": "False",
                 "include_timestamps": "True",
             },
@@ -87,9 +87,9 @@ class FlextTargetLdifSettings(FlextSettings):
     def create_for_production(cls, **overrides: t.GeneralValueType) -> Self:
         """Create configuration for production environment."""
         prod_overrides: dict[str, t.GeneralValueType] = {
-            "file_naming_pattern": "prod_{stream_name}_{timestamp}.ldif",
+            "file_naming_pattern": c.PROD_FILE_PATTERN,
             "ldif_options": {
-                "line_length": 78,
+                "line_length": c.STANDARD_LINE_LENGTH,
                 "base64_encode": "False",
                 "include_timestamps": "True",
             },
@@ -103,9 +103,9 @@ class FlextTargetLdifSettings(FlextSettings):
         """Create configuration for testing environment."""
         test_overrides: dict[str, t.GeneralValueType] = {
             "output_path": "./test-output",
-            "file_naming_pattern": "test_{stream_name}.ldif",
+            "file_naming_pattern": c.TEST_FILE_PATTERN,
             "ldif_options": {
-                "line_length": 78,
+                "line_length": c.STANDARD_LINE_LENGTH,
                 "base64_encode": "True",
                 "include_timestamps": "False",
             },

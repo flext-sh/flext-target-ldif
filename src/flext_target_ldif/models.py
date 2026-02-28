@@ -16,6 +16,8 @@ from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 from pydantic import Field
 
+from .constants import c
+
 """LDIF target models extending flext-core FlextModels.
 
 Provides complete models for LDIF file export, Singer protocol
@@ -27,9 +29,9 @@ class LdifFormatOptions(FlextSettings):
     """LDIF format configuration with specification compliance."""
 
     line_length: int = Field(
-        default=78,
-        ge=40,
-        le=200,
+        default=c.STANDARD_LINE_LENGTH,
+        ge=c.MIN_LINE_LENGTH,
+        le=c.MAX_LINE_LENGTH,
         description="Maximum LDIF line length",
     )
     fold_lines: bool = Field(
@@ -100,7 +102,7 @@ class LdifEntry(FlextMeltanoModels.Entity):
         ...,
         description="LDIF Distinguished Name (DN)",
         min_length=1,
-        max_length=1000,
+        max_length=c.MAX_DN_LENGTH,
     )
     attributes: dict[str, list[str]] = Field(
         default_factory=dict,
@@ -270,9 +272,9 @@ class LdifBatchProcessing(FlextMeltanoModels.Entity):
 
     stream_name: str = Field(..., description="Singer stream name")
     batch_size: int = Field(
-        default=1000,
+        default=c.DEFAULT_BATCH_SIZE,
         ge=1,
-        le=10000,
+        le=c.MAX_BATCH_SIZE_LIMIT,
         description="Records per batch",
     )
     current_batch: list[LdifEntry] = Field(
@@ -333,9 +335,9 @@ class SingerStreamConfig(FlextSettings):
         description="LDIF export configuration",
     )
     batch_size: int = Field(
-        default=1000,
+        default=c.DEFAULT_BATCH_SIZE,
         ge=1,
-        le=10000,
+        le=c.MAX_BATCH_SIZE_LIMIT,
         description="Batch size for processing",
     )
     enable_validation: bool = Field(
