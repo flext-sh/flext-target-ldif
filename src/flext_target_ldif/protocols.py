@@ -38,7 +38,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
         entry: p.Models.EntryProtocol
 
         # Meltano protocols (inherited)
-        target: p.Meltano.TargetProtocol
+        target: p.Meltano.Target
 
         # Target LDIF-specific protocols
         ldif_generation: p.Target.Ldif.LdifGenerationProtocol

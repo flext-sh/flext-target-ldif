@@ -36,8 +36,14 @@ if TYPE_CHECKING:
         transform_phone,
         transform_timestamp,
     )
-    from flext_target_ldif.typings import t
-    from flext_target_ldif.utilities import u
+    from flext_target_ldif.typings import (
+        FlextTargetLdifTypes,
+        FlextTargetLdifTypes as t,
+    )
+    from flext_target_ldif.utilities import (
+        FlextTargetLdifUtilities,
+        FlextTargetLdifUtilities as u,
+    )
     from flext_target_ldif.writer import LdifWriter, LdifWriter as _LdifWriter
 
 # Lazy import mapping: export_name -> (module_path, attr_name)
@@ -48,6 +54,8 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextTargetLdifModels": ("flext_target_ldif.models", "FlextTargetLdifModels"),
     "FlextTargetLdifProtocols": ("flext_target_ldif.protocols", "FlextTargetLdifProtocols"),
     "FlextTargetLdifSettings": ("flext_target_ldif.settings", "FlextTargetLdifSettings"),
+    "FlextTargetLdifTypes": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
+    "FlextTargetLdifUtilities": ("flext_target_ldif.utilities", "FlextTargetLdifUtilities"),
     "FlextTargetLdifWriterError": ("flext_target_ldif.exceptions", "FlextTargetLdifWriterError"),
     "LDIFSink": ("flext_target_ldif.sinks", "LDIFSink"),
     "LDIFTarget": ("flext_target_ldif.target", "TargetLDIF"),
@@ -62,13 +70,13 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "cli_main": ("flext_target_ldif.cli", "main"),
     "m": ("flext_target_ldif.models", "FlextTargetLdifModels"),
     "normalize_attribute_value": ("flext_target_ldif.transformers", "normalize_attribute_value"),
-    "t": ("flext_target_ldif.typings", "t"),
+    "t": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
     "transform_boolean": ("flext_target_ldif.transformers", "transform_boolean"),
     "transform_email": ("flext_target_ldif.transformers", "transform_email"),
     "transform_name": ("flext_target_ldif.transformers", "transform_name"),
     "transform_phone": ("flext_target_ldif.transformers", "transform_phone"),
     "transform_timestamp": ("flext_target_ldif.transformers", "transform_timestamp"),
-    "u": ("flext_target_ldif.utilities", "u"),
+    "u": ("flext_target_ldif.utilities", "FlextTargetLdifUtilities"),
 }
 
 __all__ = [
@@ -78,6 +86,8 @@ __all__ = [
     "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
     "FlextTargetLdifSettings",
+    "FlextTargetLdifTypes",
+    "FlextTargetLdifUtilities",
     "FlextTargetLdifWriterError",
     "LDIFSink",
     "LDIFTarget",

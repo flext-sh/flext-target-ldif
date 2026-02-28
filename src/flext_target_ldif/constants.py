@@ -15,7 +15,7 @@ from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
 
-class FlextMeltanoTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
+class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """LDIF target export-specific constants following flext-core patterns.
 
     Composes with FlextLdifConstants to avoid duplication and ensure consistency.
@@ -117,7 +117,7 @@ class FlextMeltanoTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants)
         MAX_DN_COMPONENTS: Final[int] = 10
 
 
-c = FlextMeltanoTargetLdifConstants
-FlextTargetLdifConstants = FlextMeltanoTargetLdifConstants
+c = FlextTargetLdifConstants
+FlextTargetLdifConstants = FlextTargetLdifConstants
 
-__all__ = ["FlextMeltanoTargetLdifConstants", "FlextTargetLdifConstants", "c"]
+__all__ = ["FlextTargetLdifConstants", "FlextTargetLdifConstants", "c"]
