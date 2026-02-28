@@ -15,8 +15,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, cast, override
 
-from flext_core import FlextResult, t
-from flext_core.utilities import u
+from flext_core import FlextResult, t, u
 
 
 class FlextTargetLdifUtilities(u):

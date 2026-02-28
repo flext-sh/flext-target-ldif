@@ -8,8 +8,7 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core.exceptions import e
-from flext_core.typings import t
+from flext_core import e, t
 
 
 class FlextTargetLdifWriterError(e.OperationError):

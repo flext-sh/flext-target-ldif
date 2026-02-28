@@ -6,8 +6,6 @@ from flext_target_ldif.__version__ import __version__, __version_info__
 from flext_target_ldif.cli import main as cli_main
 from flext_target_ldif.constants import FlextTargetLdifConstants, c
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError
-from flext_target_ldif.cli import main as cli_main
-from flext_target_ldif.exceptions import FlextTargetLdifWriterError
 from flext_target_ldif.models import FlextTargetLdifModels, m
 from flext_target_ldif.protocols import FlextTargetLdifProtocols
 from flext_target_ldif.settings import (
