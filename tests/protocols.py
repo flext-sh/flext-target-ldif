@@ -22,8 +22,6 @@ class TestsFlextTargetLdifProtocols(FlextTestsProtocols, FlextTargetLdifProtocol
     - p.TargetLdif.* (from FlextTargetLdifProtocols)
     """
 
-    pass
-
 
 p = TestsFlextTargetLdifProtocols
 

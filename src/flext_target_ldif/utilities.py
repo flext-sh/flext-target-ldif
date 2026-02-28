@@ -63,7 +63,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if not line or not line.strip():
                 return FlextResult[dict[str, t.GeneralValueType]].fail(
-                    "Empty input line"
+                    "Empty input line",
                 )
 
             try:
@@ -83,7 +83,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             except json.JSONDecodeError as e:
                 return FlextResult[dict[str, t.GeneralValueType]].fail(
-                    f"Invalid JSON: {e}"
+                    f"Invalid JSON: {e}",
                 )
 
         @staticmethod

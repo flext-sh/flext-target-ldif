@@ -18,8 +18,6 @@ from flext_tests import FlextTestsUtilities
 class TestsFlextTargetLdifUtilities(FlextTestsUtilities, FlextTargetLdifUtilities):
     """Test utilities for flext-target-ldif extending both test and project utilities."""
 
-    pass
-
 
 u = TestsFlextTargetLdifUtilities
 

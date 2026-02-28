@@ -38,7 +38,9 @@ class TargetLDIF:
         output_path.mkdir(parents=True, exist_ok=True)
 
     def get_sink(
-        self, stream_name: str, schema: Mapping[str, t.GeneralValueType]
+        self,
+        stream_name: str,
+        schema: Mapping[str, t.GeneralValueType],
     ) -> LDIFSink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:

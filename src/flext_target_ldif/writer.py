@@ -83,7 +83,7 @@ class LdifWriter:
                 "attributes": attr_dict,
             }
         except (RuntimeError, ValueError, TypeError) as e:
-            logger.warning(f"Skipping invalid record: {e}")
+            logger.warning("Skipping invalid record: %s", e)
             return None
 
     def _write_entry_attributes(
@@ -132,7 +132,8 @@ class LdifWriter:
             return FlextResult[bool].fail(f"Failed to close LDIF file: {e}")
 
     def write_record(
-        self, record: Mapping[str, t.GeneralValueType]
+        self,
+        record: Mapping[str, t.GeneralValueType],
     ) -> FlextResult[bool]:
         """Write a record to the LDIF file buffer."""
         try:

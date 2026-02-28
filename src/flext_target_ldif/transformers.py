@@ -116,7 +116,8 @@ class RecordTransformer:
         self.custom_transformers = custom_transformers or {}
 
     def transform_record(
-        self, record: Mapping[str, t.GeneralValueType]
+        self,
+        record: Mapping[str, t.GeneralValueType],
     ) -> Mapping[str, str]:
         """Transform a Singer record to LDAP-compatible format."""
         transformed = {}

@@ -26,8 +26,6 @@ class TestsFlextTargetLdifModels(FlextTestsModels, FlextTargetLdifModels):
     - m.* (production models via alternative alias)
     """
 
-    pass
-
 
 # Short aliases per FLEXT convention
 tm = TestsFlextTargetLdifModels
