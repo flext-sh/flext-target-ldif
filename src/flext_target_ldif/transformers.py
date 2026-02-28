@@ -67,7 +67,9 @@ def transform_name(value: t.GeneralValueType) -> str:
     return " ".join(word.capitalize() for word in name_str.split())
 
 
-def _get_builtin_transformer(attr_name: str) -> Callable[[t.GeneralValueType], str] | None:
+def _get_builtin_transformer(
+    attr_name: str,
+) -> Callable[[t.GeneralValueType], str] | None:
     """Get built-in transformer function for attribute name."""
     attr_lower = attr_name.lower()
     if attr_lower in {"mail", "email"}:

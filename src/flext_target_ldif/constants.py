@@ -11,8 +11,8 @@ from enum import StrEnum
 from typing import Final
 
 from flext_core import FlextConstants
-from flext_ldif.constants import FlextLdifConstants
-from flext_meltano.constants import FlextMeltanoConstants
+from flext_ldif import FlextLdifConstants
+from flext_meltano import FlextMeltanoConstants
 
 
 class FlextMeltanoTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
@@ -42,16 +42,16 @@ class FlextMeltanoTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants)
         "latin-1",
         "cp1252",
     ])
-    
+
     # File naming patterns for different environments
     DEV_FILE_PATTERN: Final[str] = "dev_{stream_name}_{timestamp}.ldif"
     PROD_FILE_PATTERN: Final[str] = "prod_{stream_name}_{timestamp}.ldif"
     TEST_FILE_PATTERN: Final[str] = "test_{stream_name}.ldif"
     DEFAULT_FILE_PATTERN: Final[str] = "{stream_name}_{timestamp}.ldif"
-    
+
     # Development environment offset for line length
     DEV_LINE_LENGTH_OFFSET: Final[int] = 42
-    
+
     # ASCII character constants for LDIF encoding
     ASCII_SPACE: Final[int] = 32
     ASCII_TILDE: Final[int] = 126
