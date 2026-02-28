@@ -18,7 +18,6 @@ def transform_timestamp(value: t.GeneralValueType) -> str:
     if value is None:
         return ""
     if isinstance(value, datetime):
-        # ISO 8601 representation compatible with many systems
         return value.isoformat()
     if isinstance(value, str):
         try:
