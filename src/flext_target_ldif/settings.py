@@ -168,12 +168,6 @@ class FlextTargetLdifSettings(FlextSettings):
             return FlextResult[bool].fail(f"Configuration validation failed: {e}")
 
 
-FlextTargetLDIFSettings = FlextTargetLdifSettings
-TargetLDIFConfig = FlextTargetLdifSettings
-
-
 __all__: list[str] = [
-    "FlextTargetLDIFSettings",
     "FlextTargetLdifSettings",
-    "TargetLDIFConfig",
 ]

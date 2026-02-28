@@ -124,7 +124,7 @@ class LdifEntry(FlextMeltanoModels.Entity):
     def validate_business_rules(self) -> FlextResult[bool]:
         """Validate LDIF entry business rules."""
         try:
-            errors = []
+            errors: list[str] = []
 
             # Validate DN format
             if "=" not in self.distinguished_name or "," not in self.distinguished_name:

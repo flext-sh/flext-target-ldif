@@ -46,7 +46,6 @@ class FlextTargetLdifVersion:
     __url__ = _metadata.get("Home-Page", "")
 
 
-VERSION = FlextTargetLdifVersion
 __version__ = FlextTargetLdifVersion.version
 __version_info__ = FlextTargetLdifVersion.version_info
 __title__ = FlextTargetLdifVersion.__title__
@@ -57,7 +56,6 @@ __license__ = FlextTargetLdifVersion.__license__
 __url__ = FlextTargetLdifVersion.__url__
 
 __all__ = [
-    "VERSION",
     "FlextTargetLdifVersion",
     "__author__",
     "__author_email__",

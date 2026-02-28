@@ -19,11 +19,7 @@ if TYPE_CHECKING:
         FlextTargetLdifModels as m,
     )
     from flext_target_ldif.protocols import FlextTargetLdifProtocols
-    from flext_target_ldif.settings import (
-        FlextTargetLDIFSettings,
-        FlextTargetLdifSettings,
-        TargetLDIFConfig,
-    )
+    from flext_target_ldif.settings import FlextTargetLdifSettings
     from flext_target_ldif.sinks import LDIFSink, LDIFSink as _LDIFSink
     from flext_target_ldif.target import (
         TargetLDIF,
@@ -48,10 +44,6 @@ if TYPE_CHECKING:
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextLdifTarget": ("flext_target_ldif.target", "TargetLDIF"),
     "FlextTargetLDIF": ("flext_target_ldif.target", "TargetLDIF"),
-    "FlextTargetLDIFSettings": (
-        "flext_target_ldif.settings",
-        "FlextTargetLDIFSettings",
-    ),
     "FlextTargetLdifConstants": (
         "flext_target_ldif.constants",
         "FlextTargetLdifConstants",
@@ -74,7 +66,6 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "LdifWriter": ("flext_target_ldif.writer", "LdifWriter"),
     "RecordTransformer": ("flext_target_ldif.transformers", "RecordTransformer"),
     "TargetLDIF": ("flext_target_ldif.target", "TargetLDIF"),
-    "TargetLDIFConfig": ("flext_target_ldif.settings", "TargetLDIFConfig"),
     "_LDIFSink": ("flext_target_ldif.sinks", "LDIFSink"),
     "_LdifWriter": ("flext_target_ldif.writer", "LdifWriter"),
     "__version__": ("flext_target_ldif.__version__", "__version__"),
@@ -98,7 +89,6 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
 __all__ = [
     "FlextLdifTarget",
     "FlextTargetLDIF",
-    "FlextTargetLDIFSettings",
     "FlextTargetLdifConstants",
     "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
@@ -109,7 +99,6 @@ __all__ = [
     "LdifWriter",
     "RecordTransformer",
     "TargetLDIF",
-    "TargetLDIFConfig",
     "_LDIFSink",
     "_LdifWriter",
     "__version__",
