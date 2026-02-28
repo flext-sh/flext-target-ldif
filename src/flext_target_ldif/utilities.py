@@ -13,7 +13,7 @@ import re
 from collections.abc import Mapping
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import ClassVar, cast, override
+from typing import ClassVar, override
 
 from flext_core import FlextResult, t
 from flext_ldif import FlextLdifUtilities
@@ -603,7 +603,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             properties_raw = schema.get("properties", {})
             if not isinstance(properties_raw, Mapping) or not properties_raw:
                 return FlextResult[bool].fail("Schema must have properties")
-            properties_map = cast("Mapping[str, t.GeneralValueType]", properties_raw)
+            properties_map = properties_raw
             properties: dict[str, t.GeneralValueType] = {
                 str(key): value for key, value in properties_map.items()
             }
@@ -765,10 +765,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         "Attribute mapping must be a dictionary",
                     )
 
-                attribute_mapping_map = cast(
-                    "Mapping[str, t.GeneralValueType]",
-                    attribute_mapping,
-                )
+                attribute_mapping_map = attribute_mapping
 
                 for key, value in attribute_mapping_map.items():
                     if not u.Guards.is_type(key, str) or not u.Guards.is_type(
@@ -802,11 +799,11 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             bookmarks = state.get("bookmarks", {})
             if not isinstance(bookmarks, Mapping):
                 return {}
-            bookmarks_map = cast("Mapping[str, t.GeneralValueType]", bookmarks)
+            bookmarks_map = bookmarks
             stream_state = bookmarks_map.get(stream_name, {})
             if not isinstance(stream_state, Mapping):
                 return {}
-            stream_state_map = cast("Mapping[str, t.GeneralValueType]", stream_state)
+            stream_state_map = stream_state
             return {str(key): value for key, value in stream_state_map.items()}
 
         @staticmethod
