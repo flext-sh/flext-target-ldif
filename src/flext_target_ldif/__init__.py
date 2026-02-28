@@ -48,12 +48,27 @@ if TYPE_CHECKING:
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextLdifTarget": ("flext_target_ldif.target", "TargetLDIF"),
     "FlextTargetLDIF": ("flext_target_ldif.target", "TargetLDIF"),
-    "FlextTargetLDIFSettings": ("flext_target_ldif.settings", "FlextTargetLDIFSettings"),
-    "FlextTargetLdifConstants": ("flext_target_ldif.constants", "FlextTargetLdifConstants"),
+    "FlextTargetLDIFSettings": (
+        "flext_target_ldif.settings",
+        "FlextTargetLDIFSettings",
+    ),
+    "FlextTargetLdifConstants": (
+        "flext_target_ldif.constants",
+        "FlextTargetLdifConstants",
+    ),
     "FlextTargetLdifModels": ("flext_target_ldif.models", "FlextTargetLdifModels"),
-    "FlextTargetLdifProtocols": ("flext_target_ldif.protocols", "FlextTargetLdifProtocols"),
-    "FlextTargetLdifSettings": ("flext_target_ldif.settings", "FlextTargetLdifSettings"),
-    "FlextTargetLdifWriterError": ("flext_target_ldif.exceptions", "FlextTargetLdifWriterError"),
+    "FlextTargetLdifProtocols": (
+        "flext_target_ldif.protocols",
+        "FlextTargetLdifProtocols",
+    ),
+    "FlextTargetLdifSettings": (
+        "flext_target_ldif.settings",
+        "FlextTargetLdifSettings",
+    ),
+    "FlextTargetLdifWriterError": (
+        "flext_target_ldif.exceptions",
+        "FlextTargetLdifWriterError",
+    ),
     "LDIFSink": ("flext_target_ldif.sinks", "LDIFSink"),
     "LDIFTarget": ("flext_target_ldif.target", "TargetLDIF"),
     "LdifWriter": ("flext_target_ldif.writer", "LdifWriter"),
@@ -67,7 +82,10 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "c": ("flext_target_ldif.constants", "FlextTargetLdifConstants"),
     "cli_main": ("flext_target_ldif.cli", "main"),
     "m": ("flext_target_ldif.models", "FlextTargetLdifModels"),
-    "normalize_attribute_value": ("flext_target_ldif.transformers", "normalize_attribute_value"),
+    "normalize_attribute_value": (
+        "flext_target_ldif.transformers",
+        "normalize_attribute_value",
+    ),
     "t": ("flext_target_ldif.typings", "t"),
     "transform_boolean": ("flext_target_ldif.transformers", "transform_boolean"),
     "transform_email": ("flext_target_ldif.transformers", "transform_email"),
