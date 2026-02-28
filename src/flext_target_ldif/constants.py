@@ -118,6 +118,5 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
 
 c = FlextTargetLdifConstants
-FlextTargetLdifConstants = FlextTargetLdifConstants
 
-__all__ = ["FlextTargetLdifConstants", "FlextTargetLdifConstants", "c"]
+__all__ = ["FlextTargetLdifConstants", "c"]

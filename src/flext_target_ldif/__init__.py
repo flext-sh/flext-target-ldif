@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from flext_core import cleanup_submodule_namespace, lazy_getattr
+from flext_core._utilities.lazy import cleanup_submodule_namespace, lazy_getattr
 
 if TYPE_CHECKING:
     from flext_target_ldif.__version__ import __version__, __version_info__
@@ -18,7 +18,10 @@ if TYPE_CHECKING:
         FlextTargetLdifModels,
         FlextTargetLdifModels as m,
     )
-    from flext_target_ldif.protocols import FlextTargetLdifProtocols
+    from flext_target_ldif.protocols import (
+        FlextTargetLdifProtocols,
+        FlextTargetLdifProtocols as p,
+    )
     from flext_target_ldif.settings import FlextTargetLdifSettings
     from flext_target_ldif.sinks import LDIFSink, LDIFSink as _LDIFSink
     from flext_target_ldif.target import (
@@ -70,6 +73,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "cli_main": ("flext_target_ldif.cli", "main"),
     "m": ("flext_target_ldif.models", "FlextTargetLdifModels"),
     "normalize_attribute_value": ("flext_target_ldif.transformers", "normalize_attribute_value"),
+    "p": ("flext_target_ldif.protocols", "FlextTargetLdifProtocols"),
     "t": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
     "transform_boolean": ("flext_target_ldif.transformers", "transform_boolean"),
     "transform_email": ("flext_target_ldif.transformers", "transform_email"),
@@ -102,6 +106,7 @@ __all__ = [
     "cli_main",
     "m",
     "normalize_attribute_value",
+    "p",
     "t",
     "transform_boolean",
     "transform_email",
