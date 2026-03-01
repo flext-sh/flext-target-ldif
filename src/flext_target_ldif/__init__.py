@@ -53,13 +53,28 @@ if TYPE_CHECKING:
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextLdifTarget": ("flext_target_ldif.target", "TargetLDIF"),
     "FlextTargetLDIF": ("flext_target_ldif.target", "TargetLDIF"),
-    "FlextTargetLdifConstants": ("flext_target_ldif.constants", "FlextTargetLdifConstants"),
+    "FlextTargetLdifConstants": (
+        "flext_target_ldif.constants",
+        "FlextTargetLdifConstants",
+    ),
     "FlextTargetLdifModels": ("flext_target_ldif.models", "FlextTargetLdifModels"),
-    "FlextTargetLdifProtocols": ("flext_target_ldif.protocols", "FlextTargetLdifProtocols"),
-    "FlextTargetLdifSettings": ("flext_target_ldif.settings", "FlextTargetLdifSettings"),
+    "FlextTargetLdifProtocols": (
+        "flext_target_ldif.protocols",
+        "FlextTargetLdifProtocols",
+    ),
+    "FlextTargetLdifSettings": (
+        "flext_target_ldif.settings",
+        "FlextTargetLdifSettings",
+    ),
     "FlextTargetLdifTypes": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
-    "FlextTargetLdifUtilities": ("flext_target_ldif.utilities", "FlextTargetLdifUtilities"),
-    "FlextTargetLdifWriterError": ("flext_target_ldif.exceptions", "FlextTargetLdifWriterError"),
+    "FlextTargetLdifUtilities": (
+        "flext_target_ldif.utilities",
+        "FlextTargetLdifUtilities",
+    ),
+    "FlextTargetLdifWriterError": (
+        "flext_target_ldif.exceptions",
+        "FlextTargetLdifWriterError",
+    ),
     "LDIFSink": ("flext_target_ldif.sinks", "LDIFSink"),
     "LDIFTarget": ("flext_target_ldif.target", "TargetLDIF"),
     "LdifWriter": ("flext_target_ldif.writer", "LdifWriter"),
@@ -72,7 +87,10 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "c": ("flext_target_ldif.constants", "FlextTargetLdifConstants"),
     "cli_main": ("flext_target_ldif.cli", "main"),
     "m": ("flext_target_ldif.models", "FlextTargetLdifModels"),
-    "normalize_attribute_value": ("flext_target_ldif.transformers", "normalize_attribute_value"),
+    "normalize_attribute_value": (
+        "flext_target_ldif.transformers",
+        "normalize_attribute_value",
+    ),
     "p": ("flext_target_ldif.protocols", "FlextTargetLdifProtocols"),
     "t": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
     "transform_boolean": ("flext_target_ldif.transformers", "transform_boolean"),
