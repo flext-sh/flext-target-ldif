@@ -23,6 +23,10 @@ from .constants import c
 class FlextTargetLdifSettings(FlextSettings):
     """Configuration for FLEXT Target LDIF using FlextSettings patterns."""
 
+    output_file: str = Field(
+        default="output.ldif",
+        description="Output LDIF file name",
+    )
     output_path: str = Field(
         default="./output",
         description="Directory path for LDIF output files",
@@ -42,6 +46,24 @@ class FlextTargetLdifSettings(FlextSettings):
     attribute_mapping: dict[str, str] = Field(
         default_factory=dict,
         description="Mapping of stream fields to LDAP attributes",
+    )
+    schema_validation: bool = Field(
+        default=True,
+        description="Enable schema validation for LDIF output",
+    )
+    line_length: int = Field(
+        default=78,
+        ge=40,
+        le=1000,
+        description="Maximum line length for LDIF output",
+    )
+    base64_encode: bool = Field(
+        default=False,
+        description="Enable base64 encoding for attribute values",
+    )
+    include_timestamps: bool = Field(
+        default=True,
+        description="Include timestamps in LDIF output",
     )
     ldif_options: dict[str, t.JsonValue] = Field(
         default_factory=lambda: dict[str, t.JsonValue](
@@ -133,7 +155,7 @@ class FlextTargetLdifSettings(FlextSettings):
 
         return v
 
-    def validate_business_rules(self) -> FlextResult[bool]:
+    def validate_domain_rules(self) -> FlextResult[bool]:
         """Validate LDIF target configuration business rules using FlextSettings pattern."""
         try:
             # Validate output path is non-empty

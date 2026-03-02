@@ -9,6 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+import base64
 import types
 from collections.abc import Mapping
 from pathlib import Path
@@ -40,20 +41,34 @@ class LdifWriter:
         self.dn_template = dn_template or "uid={uid},ou=users,dc=example,dc=com"
         self.attribute_mapping = attribute_mapping or {}
         self.schema = schema or {}
+        # Extract LDIF options with defaults
+        line_length_val = self.ldif_options.get("line_length", 78)
+        if isinstance(line_length_val, int):
+            self.line_length: int = line_length_val
+        elif isinstance(line_length_val, (str, float)):
+            self.line_length = int(line_length_val)
+        else:
+            self.line_length = 78
+        base64_val = self.ldif_options.get("base64_encode", False)
+        self.base64_encode: bool = bool(base64_val) if base64_val is not None else False
+        timestamps_val = self.ldif_options.get("include_timestamps", True)
+        self.include_timestamps: bool = bool(timestamps_val) if timestamps_val is not None else True
         # Use flext-ldif API for writing
         self._ldif_api = FlextLdif()
         self._records: list[dict[str, t.GeneralValueType]] = []
         self._record_count = 0
         self._ldif_entries: list[Mapping[str, t.GeneralValueType]] = []
+        self._file_handle: TextIO | None = None
 
     def open(self) -> FlextResult[bool]:
         """Open the output file for writing."""
         try:
             # Create output directory if needed
             self.output_file.parent.mkdir(parents=True, exist_ok=True)
+            self._file_handle = self.output_file.open("w", encoding="utf-8")
             return FlextResult[bool].ok(value=True)
-        except (RuntimeError, ValueError, TypeError) as e:
-            return FlextResult[bool].fail(f"Failed to prepare LDIF file: {e}")
+        except (RuntimeError, ValueError, TypeError, OSError) as e:
+            return FlextResult[bool].fail(f"Failed to open LDIF file: {e}")
 
     def _convert_record_to_entry(
         self,
@@ -83,7 +98,7 @@ class LdifWriter:
                 "attributes": attr_dict,
             }
         except (RuntimeError, ValueError, TypeError) as e:
-            logger.warning("Skipping invalid record: %s", e)
+            logger.warning("Skipping invalid record: %s", str(e))  # noqa: RUF065
             return None
 
     def _write_entry_attributes(
@@ -127,8 +142,11 @@ class LdifWriter:
                         self._ldif_entries.append(entry)
                 # Write LDIF entries to file
                 self._write_entries_to_file()
+            if self._file_handle is not None:
+                self._file_handle.close()
+                self._file_handle = None
             return FlextResult[bool].ok(value=True)
-        except (RuntimeError, ValueError, TypeError) as e:
+        except (RuntimeError, ValueError, TypeError, OSError) as e:
             return FlextResult[bool].fail(f"Failed to close LDIF file: {e}")
 
     def write_record(
@@ -151,6 +169,46 @@ class LdifWriter:
         except KeyError as e:
             msg: str = f"Missing required field for DN generation: {e}"
             raise FlextTargetLdifWriterError(msg) from e
+
+    def _needs_base64_encoding(self, value: str) -> bool:
+        """Check if a value needs base64 encoding."""
+        # Check for leading space or colon
+        if value and value[0] in {" ", ":"}:
+            return True
+        # Check for non-ASCII characters
+        try:
+            value.encode("ascii")
+        except UnicodeEncodeError:
+            return True
+        # Check for newlines or carriage returns
+        return "\n" in value or "\r" in value
+
+    def _write_attribute(self, attr_name: str, value: str) -> None:
+        """Write an attribute to the file handle."""
+        if self._file_handle is None:
+            msg = "File handle is not open"
+            raise ValueError(msg)
+        if self._needs_base64_encoding(value):
+            encoded = base64.b64encode(value.encode("utf-8")).decode("ascii")
+            self._file_handle.write(f"{attr_name}:: {encoded}\n")
+        else:
+            self._file_handle.write(f"{attr_name}: {value}\n")
+
+    def _write_line(self, line: str) -> None:
+        """Write a line to the file handle, wrapping if necessary."""
+        if self._file_handle is None:
+            msg = "File handle is not open"
+            raise ValueError(msg)
+        if len(line) <= self.line_length:
+            self._file_handle.write(line + "\n")
+        else:
+            # Wrap long lines according to LDIF spec
+            self._file_handle.write(line[:self.line_length] + "\n")
+            remaining = line[self.line_length:]
+            while remaining:
+                chunk = remaining[:self.line_length - 1]
+                self._file_handle.write(" " + chunk + "\n")
+                remaining = remaining[self.line_length - 1:]
 
     @property
     def record_count(self) -> int:

@@ -30,27 +30,18 @@ class TestLdifWriterInitialization:
         """Test initialization with default values."""
         writer = LdifWriter()
         if writer.output_file != Path("output.ldif"):
-            msg: str = f"Expected {Path('output.ldif')}, got {writer.output_file}"
-            raise AssertionError(
-                msg,
-            )
+            raise AssertionError(f"Expected {Path('output.ldif')}, got {writer.output_file}")
         assert writer.ldif_options == {}
         if writer.dn_template != "uid={uid},ou=users,dc=example,dc=com":
-            msg: str = f"Expected {'uid={uid},ou=users,dc=example,dc=com'}, got {writer.dn_template}"
-            raise AssertionError(
-                msg,
-            )
+            raise AssertionError(f"Expected {'uid={uid},ou=users,dc=example,dc=com'}, got {writer.dn_template}")
         assert writer.attribute_mapping == {}
         if writer.schema != {}:
-            msg: str = f"Expected {{}}, got {writer.schema}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {{}}, got {writer.schema}")
         assert writer.line_length == 78
         if writer.base64_encode:
-            msg: str = f"Expected False, got {writer.base64_encode}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected False, got {writer.base64_encode}")
         if not (writer.include_timestamps):
-            msg: str = f"Expected True, got {writer.include_timestamps}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected True, got {writer.include_timestamps}")
 
     def test_init_with_custom_values(self) -> None:
         """Test initialization with custom values."""
@@ -74,23 +65,18 @@ class TestLdifWriterInitialization:
             )
 
             if writer.output_file != output_file:
-                msg: str = f"Expected {output_file}, got {writer.output_file}"
-                raise AssertionError(msg)
+                raise AssertionError(f"Expected {output_file}, got {writer.output_file}")
             assert writer.ldif_options == ldif_options
             if writer.dn_template != dn_template:
-                msg: str = f"Expected {dn_template}, got {writer.dn_template}"
-                raise AssertionError(msg)
+                raise AssertionError(f"Expected {dn_template}, got {writer.dn_template}")
             assert writer.attribute_mapping == attribute_mapping
             if writer.schema != schema:
-                msg: str = f"Expected {schema}, got {writer.schema}"
-                raise AssertionError(msg)
+                raise AssertionError(f"Expected {schema}, got {writer.schema}")
             assert writer.line_length == 100
             if not writer.base64_encode:
-                msg: str = f"Expected True, got {writer.base64_encode}"
-                raise AssertionError(msg)
+                raise AssertionError(f"Expected True, got {writer.base64_encode}")
             if writer.include_timestamps:
-                msg: str = f"Expected False, got {writer.include_timestamps}"
-                raise AssertionError(msg)
+                raise AssertionError(f"Expected False, got {writer.include_timestamps}")
 
     def test_init_with_string_path(self) -> None:
         """Test initialization with string path."""
@@ -98,8 +84,7 @@ class TestLdifWriterInitialization:
             test_file = f"{temp_dir}/test.ldif"
             writer = LdifWriter(output_file=test_file)
             if writer.output_file != Path(test_file):
-                msg: str = f"Expected {Path(test_file)}, got {writer.output_file}"
-                raise AssertionError(msg)
+                raise AssertionError(f"Expected {Path(test_file)}, got {writer.output_file}")
 
 
 class TestLdifWriterFileOperations:
@@ -132,11 +117,8 @@ class TestLdifWriterFileOperations:
         result = writer.open()
 
         assert not result.is_success
-        if "Failed to open LDIF file" not in result.error:
-            msg: str = f"Expected {'Failed to open LDIF file'} in {result.error}"
-            raise AssertionError(
-                msg,
-            )
+        if result.error is not None and "Failed to open LDIF file" not in result.error:
+            raise AssertionError(f"Expected {'Failed to open LDIF file'} in {result.error}")
 
     def test_close_success(self) -> None:
         """Test successful file closing."""
@@ -174,11 +156,8 @@ class TestLdifWriterFileOperations:
         result = writer.close()
 
         assert not result.is_success
-        if "Failed to close LDIF file" not in result.error:
-            msg: str = f"Expected {'Failed to close LDIF file'} in {result.error}"
-            raise AssertionError(
-                msg,
-            )
+        if result.error is not None and "Failed to close LDIF file" not in result.error:
+            raise AssertionError(f"Expected {'Failed to close LDIF file'} in {result.error}")
 
 
 class TestLdifWriterRecordWriting:
@@ -199,24 +178,20 @@ class TestLdifWriterRecordWriting:
         result = writer.write_record(record)
         assert result.is_success
         if writer.record_count != 1:
-            msg: str = f"Expected {1}, got {writer.record_count}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {1}, got {writer.record_count}")
 
         writer.close()
 
         # Verify file contents
         content = tmp_path.read_text(encoding="utf-8")
         if "version: 1" not in content:
-            msg: str = f"Expected {'version: 1'} in {content}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {'version: 1'} in {content}")
         assert "dn: uid=jdoe,ou=users,dc=example,dc=com" in content
         if "uid: jdoe" not in content:
-            msg: str = f"Expected {'uid: jdoe'} in {content}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {'uid: jdoe'} in {content}")
         assert "cn: John Doe" in content
         if "mail: john@example.com" not in content:
-            msg: str = f"Expected {'mail: john@example.com'} in {content}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {'mail: john@example.com'} in {content}")
 
         tmp_path.unlink()
 
@@ -241,8 +216,7 @@ class TestLdifWriterRecordWriting:
 
         content = tmp_path.read_text(encoding="utf-8")
         if "cn: John Doe" not in content:  # name mapped to cn:
-            msg: str = f"Expected {'cn: John Doe'} in {content}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {'cn: John Doe'} in {content}")
         assert "mail: john@example.com" in content  # email mapped to mail
 
         tmp_path.unlink()
@@ -277,11 +251,8 @@ class TestLdifWriterRecordWriting:
         result = writer.write_record(record)
 
         assert not result.is_success
-        if "Failed to write record" not in result.error:
-            msg: str = f"Expected {'Failed to write record'} in {result.error}"
-            raise AssertionError(
-                msg,
-            )
+        if result.error is not None and "Failed to write record" not in result.error:
+            raise AssertionError(f"Expected {'Failed to write record'} in {result.error}")
 
     def test_write_multiple_records(self) -> None:
         """Test writing multiple records."""
@@ -305,25 +276,18 @@ class TestLdifWriterRecordWriting:
             assert result.is_success
 
         if writer.record_count != EXPECTED_DATA_COUNT:
-            msg: str = f"Expected {3}, got {writer.record_count}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {3}, got {writer.record_count}")
         writer.close()
 
         content = tmp_path.read_text(encoding="utf-8")
         if "dn: uid=jdoe,ou=users,dc=example,dc=com" not in content:
-            msg: str = (
-                f"Expected {'dn: uid=jdoe,ou=users,dc=example,dc=com'} in {content}"
-            )
             raise AssertionError(
-                msg,
+                f"Expected {'dn: uid=jdoe,ou=users,dc=example,dc=com'} in {content}"
             )
         assert "dn: uid=jsmith,ou=users,dc=example,dc=com" in content
         if "dn: uid=bob,ou=users,dc=example,dc=com" not in content:
-            msg: str = (
-                f"Expected {'dn: uid=bob,ou=users,dc=example,dc=com'} in {content}"
-            )
             raise AssertionError(
-                msg,
+                f"Expected {'dn: uid=bob,ou=users,dc=example,dc=com'} in {content}"
             )
 
         tmp_path.unlink()
@@ -381,8 +345,7 @@ class TestLdifWriterBase64Encoding:
 
         # Check base64 encoded values (:: indicates base64)
         if "description:: " not in content:
-            msg: str = f"Expected {'description:: '} in {content}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {'description:: '} in {content}")
         assert "cn:: " in content
 
         # Verify base64 decoding
@@ -391,16 +354,12 @@ class TestLdifWriterBase64Encoding:
                 encoded = line.split(":: ")[1]
                 decoded = base64.b64decode(encoded).decode("utf-8")
                 if decoded != " starts with space":
-                    msg: str = f"Expected {' starts with space'}, got {decoded}"
-                    raise AssertionError(
-                        msg,
-                    )
+                    raise AssertionError(f"Expected {' starts with space'}, got {decoded}")
             elif line.startswith("cn:: "):
                 encoded = line.split(":: ")[1]
                 decoded = base64.b64decode(encoded).decode("utf-8")
                 if decoded != "José":
-                    msg: str = f"Expected {'José'}, got {decoded}"
-                    raise AssertionError(msg)
+                    raise AssertionError(f"Expected {'José'}, got {decoded}")
 
         tmp_path.unlink()
 
@@ -425,8 +384,7 @@ class TestLdifWriterBase64Encoding:
         content = tmp_path.read_text(encoding="utf-8")
         # All attributes should be base64 encoded
         if "uid:: " not in content:
-            msg: str = f"Expected {'uid:: '} in {content}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {'uid:: '} in {content}")
         assert "cn:: " in content
 
         tmp_path.unlink()
@@ -452,8 +410,7 @@ class TestLdifWriterLineWrapping:
         content = tmp_path.read_text(encoding="utf-8")
         lines = content.strip().split("\n")
         if "short line" not in lines:
-            msg: str = f"Expected {'short line'} in {lines}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {'short line'} in {lines}")
 
         tmp_path.unlink()
 
@@ -492,8 +449,7 @@ class TestLdifWriterLineWrapping:
         if wrapped_lines:
             # First part should be exactly 20 characters
             if len(wrapped_lines[0]) != 20:
-                msg: str = f"Expected {20}, got {len(wrapped_lines[0])}"
-                raise AssertionError(msg)
+                raise AssertionError(f"Expected {20}, got {len(wrapped_lines[0])}")
             # Continuation lines should start with space
             for line in wrapped_lines[1:]:
                 if line:  # Skip empty lines
@@ -505,8 +461,7 @@ class TestLdifWriterLineWrapping:
         """Test custom line length setting."""
         writer = LdifWriter(ldif_options={"line_length": 100})
         if writer.line_length != 100:
-            msg: str = f"Expected {100}, got {writer.line_length}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {100}, got {writer.line_length}")
 
 
 class TestLdifWriterDnGeneration:
@@ -535,10 +490,7 @@ class TestLdifWriterDnGeneration:
             writer._generate_dn(record)
 
         if "Missing required field for DN generation" not in str(exc_info.value):
-            msg: str = f"Expected {'Missing required field for DN generation'} in {exc_info.value!s}"
-            raise AssertionError(
-                msg,
-            )
+            raise AssertionError(f"Expected {'Missing required field for DN generation'} in {exc_info.value!s}")
 
     def test_custom_dn_template(self) -> None:
         """Test custom DN template."""
@@ -547,10 +499,7 @@ class TestLdifWriterDnGeneration:
 
         dn = writer._generate_dn(record)
         if dn != "cn=John Doe,ou=people,dc=test,dc=org":
-            msg: str = f"Expected {'cn=John Doe,ou=people,dc=test,dc=org'}, got {dn}"
-            raise AssertionError(
-                msg,
-            )
+            raise AssertionError(f"Expected {'cn=John Doe,ou=people,dc=test,dc=org'}, got {dn}")
 
 
 class TestLdifWriterContextManager:
@@ -600,6 +549,7 @@ class TestLdifWriterContextManager:
             msg = "Test exception"
             raise ValueError(msg)
 
+        writer: LdifWriter | None = None
         try:
             with LdifWriter(output_file=tmp_path) as writer:
                 writer.write_record({"uid": "jdoe", "cn": "John Doe"})
@@ -608,6 +558,7 @@ class TestLdifWriterContextManager:
             pass
 
         # File should still be closed
+        assert writer is not None
         assert writer._file_handle is None
 
         tmp_path.unlink()
@@ -634,8 +585,7 @@ class TestLdifWriterHeaderGeneration:
 
         content = tmp_path.read_text(encoding="utf-8")
         if "version: 1" not in content:
-            msg: str = f"Expected {'version: 1'} in {content}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {'version: 1'} in {content}")
         assert "# Generated on:" in content
 
         tmp_path.unlink()
@@ -658,8 +608,7 @@ class TestLdifWriterHeaderGeneration:
 
         content = tmp_path.read_text(encoding="utf-8")
         if "version: 1" not in content:
-            msg: str = f"Expected {'version: 1'} in {content}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {'version: 1'} in {content}")
         assert "# Generated on:" not in content
 
         tmp_path.unlink()
@@ -679,18 +628,15 @@ class TestLdifWriterProperties:
 
         writer = LdifWriter(output_file=tmp_path)
         if writer.record_count != 0:
-            msg: str = f"Expected {0}, got {writer.record_count}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {0}, got {writer.record_count}")
 
         writer.write_record({"uid": "user1", "cn": "User One"})
         if writer.record_count != 1:
-            msg: str = f"Expected {1}, got {writer.record_count}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {1}, got {writer.record_count}")
 
         writer.write_record({"uid": "user2", "cn": "User Two"})
         if writer.record_count != EXPECTED_BULK_SIZE:
-            msg: str = f"Expected {2}, got {writer.record_count}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {2}, got {writer.record_count}")
 
         writer.close()
         tmp_path.unlink()
@@ -709,7 +655,6 @@ class TestLdifWriterProperties:
         writer.close()
 
         if writer.record_count != 1:
-            msg: str = f"Expected {1}, got {writer.record_count}"
-            raise AssertionError(msg)
+            raise AssertionError(f"Expected {1}, got {writer.record_count}")
 
         tmp_path.unlink()
