@@ -207,7 +207,7 @@ class LdifFile(FlextMeltanoModels.Entity):
 class LdifTransformationResult(FlextMeltanoModels.Entity):
     """Result of Singer to LDIF transformation."""
 
-    original_record: dict[str, t.GeneralValueType] = Field(
+    original_record: dict[str, t.ContainerValue] = Field(
         ...,
         description="Original Singer record",
     )

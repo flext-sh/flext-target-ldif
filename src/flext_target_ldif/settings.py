@@ -91,9 +91,9 @@ class FlextTargetLdifSettings(FlextSettings):
         return cls()
 
     @classmethod
-    def create_for_development(cls, **overrides: t.GeneralValueType) -> Self:
+    def create_for_development(cls, **overrides: t.ContainerValue) -> Self:
         """Create configuration for development environment."""
-        dev_overrides: dict[str, t.GeneralValueType] = {
+        dev_overrides: dict[str, t.ContainerValue] = {
             "file_naming_pattern": c.DEV_FILE_PATTERN,
             "ldif_options": {
                 "line_length": c.MAX_LINE_LENGTH + c.DEV_LINE_LENGTH_OFFSET,
@@ -106,9 +106,9 @@ class FlextTargetLdifSettings(FlextSettings):
         return base.model_copy(update=dev_overrides)
 
     @classmethod
-    def create_for_production(cls, **overrides: t.GeneralValueType) -> Self:
+    def create_for_production(cls, **overrides: t.ContainerValue) -> Self:
         """Create configuration for production environment."""
-        prod_overrides: dict[str, t.GeneralValueType] = {
+        prod_overrides: dict[str, t.ContainerValue] = {
             "file_naming_pattern": c.PROD_FILE_PATTERN,
             "ldif_options": {
                 "line_length": c.STANDARD_LINE_LENGTH,
@@ -121,9 +121,9 @@ class FlextTargetLdifSettings(FlextSettings):
         return base.model_copy(update=prod_overrides)
 
     @classmethod
-    def create_for_testing(cls, **overrides: t.GeneralValueType) -> Self:
+    def create_for_testing(cls, **overrides: t.ContainerValue) -> Self:
         """Create configuration for testing environment."""
-        test_overrides: dict[str, t.GeneralValueType] = {
+        test_overrides: dict[str, t.ContainerValue] = {
             "output_path": "./test-output",
             "file_naming_pattern": c.TEST_FILE_PATTERN,
             "ldif_options": {

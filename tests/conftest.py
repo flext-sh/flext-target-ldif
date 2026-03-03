@@ -33,7 +33,7 @@ def temp_file() -> Generator[Path]:
 
 
 @pytest.fixture
-def sample_config(temp_dir: Path) -> dict[str, t.GeneralValueType]:
+def sample_config(temp_dir: Path) -> dict[str, t.ContainerValue]:
     """Provide a sample configuration for testing."""
     return {
         "output_path": str(temp_dir),
@@ -68,7 +68,7 @@ def sample_record() -> dict[str, str]:
 
 
 @pytest.fixture
-def sample_schema() -> dict[str, t.GeneralValueType]:
+def sample_schema() -> dict[str, t.ContainerValue]:
     """Provide a sample Singer schema for testing."""
     return {
         "type": "object",
@@ -115,7 +115,7 @@ def multiple_records() -> list[dict[str, str]]:
 
 
 @pytest.fixture
-def ldif_options() -> dict[str, t.GeneralValueType]:
+def ldif_options() -> dict[str, t.ContainerValue]:
     """Provide sample LDIF options for testing."""
     return {
         "line_length": 78,

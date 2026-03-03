@@ -30,10 +30,10 @@ class LdifWriter:
     def __init__(
         self,
         output_file: Path | str | None = None,
-        ldif_options: Mapping[str, t.GeneralValueType] | None = None,
+        ldif_options: Mapping[str, t.ContainerValue] | None = None,
         dn_template: str | None = None,
         attribute_mapping: Mapping[str, str] | None = None,
-        schema: Mapping[str, t.GeneralValueType] | None = None,
+        schema: Mapping[str, t.ContainerValue] | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure."""
         self.output_file = Path(output_file) if output_file else Path("output.ldif")
@@ -57,9 +57,9 @@ class LdifWriter:
         )
         # Use flext-ldif API for writing
         self._ldif_api = FlextLdif()
-        self._records: list[dict[str, t.GeneralValueType]] = []
+        self._records: list[dict[str, t.ContainerValue]] = []
         self._record_count = 0
-        self._ldif_entries: list[Mapping[str, t.GeneralValueType]] = []
+        self._ldif_entries: list[Mapping[str, t.ContainerValue]] = []
         self._file_handle: TextIO | None = None
 
     def open(self) -> FlextResult[bool]:
@@ -74,8 +74,8 @@ class LdifWriter:
 
     def _convert_record_to_entry(
         self,
-        record: Mapping[str, t.GeneralValueType],
-    ) -> Mapping[str, t.GeneralValueType] | None:
+        record: Mapping[str, t.ContainerValue],
+    ) -> Mapping[str, t.ContainerValue] | None:
         """Convert a single record to LDIF entry format."""
         try:
             self._generate_dn(record)
@@ -86,7 +86,7 @@ class LdifWriter:
                     mapped_key = self.attribute_mapping.get(key, key)
                     attributes[mapped_key] = value
             # Create FlextLdifEntry using the real API
-            # Convert dict[str, t.GeneralValueType] to list format expected by FlextLdifAttributes
+            # Convert dict[str, t.ContainerValue] to list format expected by FlextLdifAttributes
             attr_dict: dict[str, list[str]] = {}
             for key, value in attributes.items():
                 attr_dict[key] = (
@@ -94,7 +94,7 @@ class LdifWriter:
                     if not u.Guards.is_list(value)
                     else [str(v) for v in value]
                 )
-            # Create simple entry dict[str, t.GeneralValueType] for LDIF writing
+            # Create simple entry dict[str, t.ContainerValue] for LDIF writing
             return {
                 "dn": "dn",
                 "attributes": attr_dict,
@@ -106,7 +106,7 @@ class LdifWriter:
     def _write_entry_attributes(
         self,
         f: TextIO,
-        attributes_obj: Mapping[str, t.GeneralValueType],
+        attributes_obj: Mapping[str, t.ContainerValue],
     ) -> None:
         """Write entry attributes to file."""
         if u.is_dict_like(attributes_obj):
@@ -123,7 +123,7 @@ class LdifWriter:
                 dn_obj = entry.get("dn", "")
                 dn_str = str(dn_obj) if dn_obj else ""
                 raw_attributes = entry.get("attributes", {})
-                attributes_obj: dict[str, t.GeneralValueType] = {}
+                attributes_obj: dict[str, t.ContainerValue] = {}
                 if isinstance(raw_attributes, Mapping):
                     attributes_obj = {
                         str(key): value for key, value in raw_attributes.items()
@@ -153,7 +153,7 @@ class LdifWriter:
 
     def write_record(
         self,
-        record: Mapping[str, t.GeneralValueType],
+        record: Mapping[str, t.ContainerValue],
     ) -> FlextResult[bool]:
         """Write a record to the LDIF file buffer."""
         try:
@@ -164,7 +164,7 @@ class LdifWriter:
         except (RuntimeError, ValueError, TypeError) as e:
             return FlextResult[bool].fail(f"Failed to buffer record: {e}")
 
-    def _generate_dn(self, record: Mapping[str, t.GeneralValueType]) -> str:
+    def _generate_dn(self, record: Mapping[str, t.ContainerValue]) -> str:
         """Generate DN from record using template."""
         try:
             return self.dn_template.format(**record)

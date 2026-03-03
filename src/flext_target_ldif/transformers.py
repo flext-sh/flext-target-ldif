@@ -13,7 +13,7 @@ from typing import override
 from flext_target_ldif.typings import t
 
 
-def transform_timestamp(value: t.GeneralValueType) -> str:
+def transform_timestamp(value: t.ContainerValue) -> str:
     """Transform timestamp values to LDAP timestamp format using flext-ldap."""
     if value is None:
         return ""
@@ -31,7 +31,7 @@ def transform_timestamp(value: t.GeneralValueType) -> str:
     return str(value)
 
 
-def transform_boolean(value: t.GeneralValueType) -> str:
+def transform_boolean(value: t.ContainerValue) -> str:
     """Transform boolean values to LDAP boolean format."""
     if isinstance(value, bool):
         return "TRUE" if value else "FALSE"
@@ -44,7 +44,7 @@ def transform_boolean(value: t.GeneralValueType) -> str:
     return ""
 
 
-def transform_email(value: t.GeneralValueType) -> str:
+def transform_email(value: t.ContainerValue) -> str:
     """Transform email values to ensure LDAP compatibility."""
     email_str = str(value).strip().lower()
     # Basic email validation and cleanup
@@ -53,14 +53,14 @@ def transform_email(value: t.GeneralValueType) -> str:
     return ""
 
 
-def transform_phone(value: t.GeneralValueType) -> str:
+def transform_phone(value: t.ContainerValue) -> str:
     """Transform phone numbers to standard format."""
     phone_str = str(value)
     # Remove common formatting characters
     return "".join(c for c in phone_str if c.isdigit() or c in "+- ()")
 
 
-def transform_name(value: t.GeneralValueType) -> str:
+def transform_name(value: t.ContainerValue) -> str:
     """Transform name fields to ensure proper formatting."""
     name_str = str(value).strip()
     # Capitalize first letter of each word
@@ -69,7 +69,7 @@ def transform_name(value: t.GeneralValueType) -> str:
 
 def _get_builtin_transformer(
     attr_name: str,
-) -> Callable[[t.GeneralValueType], str] | None:
+) -> Callable[[t.ContainerValue], str] | None:
     """Get built-in transformer function for attribute name."""
     attr_lower = attr_name.lower()
     if attr_lower in {"mail", "email"}:
@@ -87,8 +87,8 @@ def _get_builtin_transformer(
 
 def normalize_attribute_value(
     attr_name: str,
-    value: t.GeneralValueType,
-    transformers: Mapping[str, Callable[[t.GeneralValueType], str]] | None = None,
+    value: t.ContainerValue,
+    transformers: Mapping[str, Callable[[t.ContainerValue], str]] | None = None,
 ) -> str:
     """Normalize attribute value based on attribute type."""
     # Use custom transformers if provided
@@ -117,7 +117,7 @@ class RecordTransformer:
 
     def transform_record(
         self,
-        record: Mapping[str, t.GeneralValueType],
+        record: Mapping[str, t.ContainerValue],
     ) -> Mapping[str, str]:
         """Transform a Singer record to LDAP-compatible format."""
         transformed = {}
@@ -145,9 +145,9 @@ class RecordTransformer:
     @staticmethod
     def add_required_attributes(
         record: Mapping[str, str],
-    ) -> Mapping[str, t.GeneralValueType]:
+    ) -> Mapping[str, t.ContainerValue]:
         """Add required LDAP attributes to the record."""
-        result: dict[str, t.GeneralValueType] = dict(record)
+        result: dict[str, t.ContainerValue] = dict(record)
         # Ensure objectClass is present
         if "objectclass" not in result:
             result["objectclass"] = ["inetOrgPerson", "person"]

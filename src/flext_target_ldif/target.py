@@ -25,13 +25,13 @@ class TargetLDIF:
     @override
     def __init__(
         self,
-        config: Mapping[str, t.GeneralValueType] | None = None,
+        config: Mapping[str, t.ContainerValue] | None = None,
         validate_config: bool = False,
     ) -> None:
         """Initialize the LDIF target."""
-        self.config: Mapping[str, t.GeneralValueType] = config or {}
+        self.config: Mapping[str, t.ContainerValue] = config or {}
         self.sinks: dict[str, LDIFSink] = {}
-        self._test_config: dict[str, t.GeneralValueType] | None = None
+        self._test_config: dict[str, t.ContainerValue] | None = None
 
         # Validate config if requested
         if validate_config:
@@ -48,7 +48,7 @@ class TargetLDIF:
     def get_sink(
         self,
         stream_name: str,
-        schema: Mapping[str, t.GeneralValueType],
+        schema: Mapping[str, t.ContainerValue],
     ) -> LDIFSink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
@@ -65,7 +65,7 @@ class TargetLDIF:
         return LDIFSink
 
     @property
-    def config_jsonschema(self) -> dict[str, t.GeneralValueType]:
+    def config_jsonschema(self) -> dict[str, t.ContainerValue]:
         """Return JSON schema for configuration."""
         return FlextTargetLdifSettings.model_json_schema()
 
@@ -92,7 +92,7 @@ class TargetLDIF:
             "base64_encode",
             "include_timestamps",
         }
-        filtered_config: dict[str, t.GeneralValueType] = {
+        filtered_config: dict[str, t.ContainerValue] = {
             k: v for k, v in config_dict.items() if k in allowed_fields
         }
         settings = FlextTargetLdifSettings.model_validate(filtered_config)

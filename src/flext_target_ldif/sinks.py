@@ -23,13 +23,13 @@ class LDIFSink:
     @override
     def __init__(
         self,
-        target_config: Mapping[str, t.GeneralValueType],
+        target_config: Mapping[str, t.ContainerValue],
         stream_name: str,
-        schema: Mapping[str, t.GeneralValueType],
+        schema: Mapping[str, t.ContainerValue],
         key_properties: list[str] | None = None,
     ) -> None:
         """Initialize the LDIF sink."""
-        self.config: Mapping[str, t.GeneralValueType] = target_config
+        self.config: Mapping[str, t.ContainerValue] = target_config
         self.stream_name = stream_name
         self.schema = schema
         self.key_properties = key_properties or []
@@ -77,7 +77,7 @@ class LDIFSink:
             output_file = self._get_output_file()
 
             raw_ldif_options = self.config.get("ldif_options", {})
-            ldif_options: dict[str, t.GeneralValueType] = {}
+            ldif_options: dict[str, t.ContainerValue] = {}
             if isinstance(raw_ldif_options, Mapping):
                 ldif_options = {
                     str(key): value for key, value in raw_ldif_options.items()
@@ -106,15 +106,15 @@ class LDIFSink:
 
         return self._ldif_writer
 
-    def process_batch(self, _context: Mapping[str, t.GeneralValueType]) -> None:
+    def process_batch(self, _context: Mapping[str, t.ContainerValue]) -> None:
         """Process a batch of records."""
         # BatchSink handles the batching, we just need to ensure writer is ready
         self._get_ldif_writer()
 
     def process_record(
         self,
-        record: Mapping[str, t.GeneralValueType],
-        _context: Mapping[str, t.GeneralValueType],
+        record: Mapping[str, t.ContainerValue],
+        _context: Mapping[str, t.ContainerValue],
     ) -> None:
         """Process a single record and write to LDIF.
 

@@ -43,15 +43,15 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type SingerMessage = dict[
             str,
-            FlextTypes.JsonValue | dict[str, FlextTypes.GeneralValueType],
+            FlextTypes.JsonValue | dict[str, FlextTypes.ContainerValue],
         ]
         type SingerSchema = dict[
             str,
-            FlextTypes.JsonValue | list[dict[str, FlextTypes.GeneralValueType]],
+            FlextTypes.JsonValue | list[dict[str, FlextTypes.ContainerValue]],
         ]
         type SingerRecord = dict[
             str,
-            FlextTypes.JsonValue | dict[str, FlextTypes.GeneralValueType],
+            FlextTypes.JsonValue | dict[str, FlextTypes.ContainerValue],
         ]
         type SingerState = dict[
             str,
@@ -63,7 +63,7 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         ]
         type TargetConfiguration = dict[
             str,
-            FlextTypes.GeneralValueType | dict[str, FlextTypes.GeneralValueType],
+            FlextTypes.ContainerValue | dict[str, FlextTypes.ContainerValue],
         ]
         type MessageProcessing = dict[str, int | str | dict[str, FlextTypes.JsonValue]]
 
@@ -77,11 +77,11 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type LdifEntry = dict[str, str | list[str] | dict[str, FlextTypes.JsonValue]]
         type Attributes = dict[
             str,
-            str | list[str] | bytes | dict[str, FlextTypes.GeneralValueType],
+            str | list[str] | bytes | dict[str, FlextTypes.ContainerValue],
         ]
         type LdifRecord = dict[
             str,
-            FlextTypes.JsonValue | list[str] | dict[str, FlextTypes.GeneralValueType],
+            FlextTypes.JsonValue | list[str] | dict[str, FlextTypes.ContainerValue],
         ]
         type LdifFileConfig = dict[
             str,
@@ -89,12 +89,12 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         ]
         type LdifFormatting = dict[
             str,
-            str | int | bool | dict[str, FlextTypes.GeneralValueType],
+            str | int | bool | dict[str, FlextTypes.ContainerValue],
         ]
         type LdifValidation = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
         type ExportResult = dict[
             str,
-            int | str | list[str] | dict[str, FlextTypes.GeneralValueType],
+            int | str | list[str] | dict[str, FlextTypes.ContainerValue],
         ]
 
     # =========================================================================
@@ -107,15 +107,15 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type FileConfiguration = dict[str, str | int | dict[str, FlextTypes.JsonValue]]
         type StreamWriter = dict[
             str,
-            str | bool | int | dict[str, FlextTypes.GeneralValueType],
+            str | bool | int | dict[str, FlextTypes.ContainerValue],
         ]
         type FileOutput = dict[str, str | list[str] | dict[str, FlextTypes.JsonValue]]
         type CompressionConfig = dict[
             str,
-            str | bool | int | dict[str, FlextTypes.GeneralValueType],
+            str | bool | int | dict[str, FlextTypes.ContainerValue],
         ]
         type FileValidation = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
-        type IOMetrics = dict[str, int | float | dict[str, FlextTypes.GeneralValueType]]
+        type IOMetrics = dict[str, int | float | dict[str, FlextTypes.ContainerValue]]
 
     # =========================================================================
     # DATA TRANSFORMATION TYPES - Singer to LDIF transformation types
@@ -127,20 +127,20 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type SingerToLdifMapping = dict[str, str | dict[str, FlextTypes.JsonValue]]
         type AttributeMapping = dict[
             str,
-            str | list[str] | dict[str, FlextTypes.GeneralValueType],
+            str | list[str] | dict[str, FlextTypes.ContainerValue],
         ]
         type SchemaTransformation = dict[
             str,
-            FlextTypes.JsonValue | dict[str, FlextTypes.GeneralValueType],
+            FlextTypes.JsonValue | dict[str, FlextTypes.ContainerValue],
         ]
         type RecordTransformation = dict[
             str,
-            FlextTypes.JsonValue | dict[str, FlextTypes.GeneralValueType],
+            FlextTypes.JsonValue | dict[str, FlextTypes.ContainerValue],
         ]
         type DataNormalization = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
         type TransformationRules = dict[
             str,
-            str | list[str] | dict[str, FlextTypes.GeneralValueType],
+            str | list[str] | dict[str, FlextTypes.ContainerValue],
         ]
 
     # =========================================================================
@@ -157,12 +157,12 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type SingerCompliance = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
         type SchemaValidation = dict[
             str,
-            bool | list[str] | dict[str, FlextTypes.GeneralValueType],
+            bool | list[str] | dict[str, FlextTypes.ContainerValue],
         ]
         type RecordValidation = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
         type FormatCompliance = dict[
             str,
-            bool | str | list[str] | dict[str, FlextTypes.GeneralValueType],
+            bool | str | list[str] | dict[str, FlextTypes.ContainerValue],
         ]
         type ValidationRules = dict[str, bool | str | dict[str, FlextTypes.JsonValue]]
 
@@ -175,7 +175,7 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type TargetSettings = dict[
             str,
-            FlextTypes.GeneralValueType | dict[str, FlextTypes.GeneralValueType],
+            FlextTypes.ContainerValue | dict[str, FlextTypes.ContainerValue],
         ]
         type LdifTargetConfig = dict[
             str,
@@ -185,7 +185,7 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type StreamMapping = dict[str, str | dict[str, FlextTypes.JsonValue]]
         type BatchConfiguration = dict[
             str,
-            int | bool | dict[str, FlextTypes.GeneralValueType],
+            int | bool | dict[str, FlextTypes.ContainerValue],
         ]
         type ErrorHandling = dict[str, str | bool | dict[str, FlextTypes.JsonValue]]
 
@@ -198,7 +198,7 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type PerformanceMetrics = dict[
             str,
-            int | float | dict[str, FlextTypes.GeneralValueType],
+            int | float | dict[str, FlextTypes.ContainerValue],
         ]
         type OptimizationConfig = dict[
             str,
@@ -206,16 +206,16 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         ]
         type BufferConfiguration = dict[
             str,
-            int | str | dict[str, FlextTypes.GeneralValueType],
+            int | str | dict[str, FlextTypes.ContainerValue],
         ]
         type StreamingConfig = dict[str, int | bool | dict[str, FlextTypes.JsonValue]]
         type MemoryManagement = dict[
             str,
-            int | bool | dict[str, FlextTypes.GeneralValueType],
+            int | bool | dict[str, FlextTypes.ContainerValue],
         ]
         type IOOptimization = dict[
             str,
-            int | bool | str | dict[str, FlextTypes.GeneralValueType],
+            int | bool | str | dict[str, FlextTypes.ContainerValue],
         ]
 
     # =========================================================================
@@ -271,15 +271,15 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         ]
 
         # FLEXT Target LDIF-specific project configurations
-        type FlextTargetLdifSettings = dict[str, FlextTypes.GeneralValueType]
+        type FlextTargetLdifSettings = dict[str, FlextTypes.ContainerValue]
         type SingerTargetConfig = dict[
             str,
-            str | int | bool | dict[str, FlextTypes.GeneralValueType],
+            str | int | bool | dict[str, FlextTypes.ContainerValue],
         ]
-        type LdifExportConfig = dict[str, FlextTypes.GeneralValueType]
+        type LdifExportConfig = dict[str, FlextTypes.ContainerValue]
         type TargetPipelineConfig = dict[
             str,
-            bool | str | dict[str, FlextTypes.GeneralValueType],
+            bool | str | dict[str, FlextTypes.ContainerValue],
         ]
 
 
