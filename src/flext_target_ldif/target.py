@@ -32,11 +32,11 @@ class TargetLDIF:
         self.config: Mapping[str, t.GeneralValueType] = config or {}
         self.sinks: dict[str, LDIFSink] = {}
         self._test_config: dict[str, t.GeneralValueType] | None = None
-        
+
         # Validate config if requested
         if validate_config:
             self.validate_config()
-        
+
         # Ensure output directory exists
         output_path_raw = self.config.get("output_path", "./output")
         output_path_str = (
@@ -76,12 +76,21 @@ class TargetLDIF:
 
     def validate_config(self) -> None:
         """Validate the target configuration."""
-        config_dict = dict(self._test_config) if self._test_config else dict(self.config)
+        config_dict = (
+            dict(self._test_config) if self._test_config else dict(self.config)
+        )
         # Filter to only include FlextTargetLdifSettings fields
         allowed_fields: set[str] = {
-            "output_file", "output_path", "file_naming_pattern", "dn_template",
-            "attribute_mapping", "ldif_options", "schema_validation", "line_length",
-            "base64_encode", "include_timestamps",
+            "output_file",
+            "output_path",
+            "file_naming_pattern",
+            "dn_template",
+            "attribute_mapping",
+            "ldif_options",
+            "schema_validation",
+            "line_length",
+            "base64_encode",
+            "include_timestamps",
         }
         filtered_config: dict[str, t.GeneralValueType] = {
             k: v for k, v in config_dict.items() if k in allowed_fields

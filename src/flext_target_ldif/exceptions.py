@@ -17,10 +17,14 @@ class FlextTargetLdifWriterError(e.OperationError):
 
     details: FlextModelsContainers.ConfigMap
 
-    def __init__(self, message: str, details: FlextModelsContainers.ConfigMap | None = None) -> None:
+    def __init__(
+        self, message: str, details: FlextModelsContainers.ConfigMap | None = None
+    ) -> None:
         """Initialize writer error with message and optional details."""
         super().__init__(message, reason=str(details) if details else None)
-        self.details = details if details is not None else FlextModelsContainers.ConfigMap(root={})
+        self.details = (
+            details if details is not None else FlextModelsContainers.ConfigMap(root={})
+        )
 
     @override
     def __str__(self) -> str:

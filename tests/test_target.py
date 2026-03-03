@@ -12,13 +12,14 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
+from pydantic import ValidationError
+
 from flext_target_ldif import (
     FlextTargetLDIF,
     FlextTargetLdifSettings,
     LDIFSink,
     TargetLDIF,
 )
-from pydantic import ValidationError
 
 
 class TestFlextTargetLdifSettings:
@@ -32,7 +33,9 @@ class TestFlextTargetLdifSettings:
         if not (config.schema_validation):
             raise AssertionError(f"Expected True, got {config.schema_validation}")
         if config.dn_template != "uid={uid},ou=users,dc=example,dc=com":
-            raise AssertionError(f"Expected {'uid={uid},ou=users,dc=example,dc=com'}, got {config.dn_template}")
+            raise AssertionError(
+                f"Expected {'uid={uid},ou=users,dc=example,dc=com'}, got {config.dn_template}"
+            )
         assert config.line_length == 78
         if config.base64_encode:
             raise AssertionError(f"Expected False, got {config.base64_encode}")
@@ -50,7 +53,9 @@ class TestFlextTargetLdifSettings:
                 attribute_mapping={"email": "mail"},
             )
             if config.output_file != custom_file:
-                raise AssertionError(f"Expected {custom_file}, got {config.output_file}")
+                raise AssertionError(
+                    f"Expected {custom_file}, got {config.output_file}"
+                )
             if config.schema_validation:
                 raise AssertionError(f"Expected False, got {config.schema_validation}")
             assert config.dn_template == "cn={name},ou=people,dc=test,dc=com"
@@ -154,7 +159,9 @@ class TestFlextTargetLdif:
             target.validate_config()
 
         if "Output file is required" not in str(exc_info.value):
-            raise AssertionError(f"Expected {'Output file is required'} in {exc_info.value!s}")
+            raise AssertionError(
+                f"Expected {'Output file is required'} in {exc_info.value!s}"
+            )
 
     def test_target_validate_config_invalid_output_file(self) -> None:
         """Test config validation with invalid output file."""
@@ -168,7 +175,9 @@ class TestFlextTargetLdif:
             target.validate_config()
 
         if "Output file cannot be empty" not in str(exc_info.value):
-            raise AssertionError(f"Expected {'Output file cannot be empty'} in {exc_info.value!s}")
+            raise AssertionError(
+                f"Expected {'Output file cannot be empty'} in {exc_info.value!s}"
+            )
 
     def test_target_validate_config_invalid_dn_template(self) -> None:
         """Test config validation with invalid DN template."""
@@ -183,7 +192,9 @@ class TestFlextTargetLdif:
             target.validate_config()
 
         if "DN template cannot be empty" not in str(exc_info.value):
-            raise AssertionError(f"Expected {'DN template cannot be empty'} in {exc_info.value!s}")
+            raise AssertionError(
+                f"Expected {'DN template cannot be empty'} in {exc_info.value!s}"
+            )
 
 
 class TestTargetLDIF:
@@ -225,7 +236,9 @@ class TestTargetLDIF:
         """Test target has proper default sink class."""
         target = TargetLDIF()
         if target.default_sink_class != LDIFSink:
-            raise AssertionError(f"Expected {LDIFSink}, got {target.default_sink_class}")
+            raise AssertionError(
+                f"Expected {LDIFSink}, got {target.default_sink_class}"
+            )
 
     def test_target_ldif_output_directory_creation(self) -> None:
         """Test target creates output directory."""
@@ -259,7 +272,9 @@ class TestTargetLDIF:
             target = TargetLDIF(config=config)
 
             if target.config["output_path"] != tmp_dir:
-                raise AssertionError(f"Expected {tmp_dir}, got {target.config['output_path']}")
+                raise AssertionError(
+                    f"Expected {tmp_dir}, got {target.config['output_path']}"
+                )
             assert target.config["dn_template"] == "cn={name},ou=people,dc=test,dc=com"
 
     def test_target_ldif_default_config_values(self) -> None:
@@ -349,16 +364,24 @@ class TestIntegration:
         config_dict = config.model_dump()
 
         if config_dict["output_file"] != "test.ldif":
-            raise AssertionError(f"Expected {'test.ldif'}, got {config_dict['output_file']}")
+            raise AssertionError(
+                f"Expected {'test.ldif'}, got {config_dict['output_file']}"
+            )
         if not (config_dict["schema_validation"]):
-            raise AssertionError(f"Expected True, got {config_dict['schema_validation']}")
+            raise AssertionError(
+                f"Expected True, got {config_dict['schema_validation']}"
+            )
         if config_dict["dn_template"] != "uid={uid},ou=users,dc=example,dc=com":
-            raise AssertionError(f"Expected {'uid={uid},ou=users,dc=example,dc=com'}, got {config_dict['dn_template']}")
+            raise AssertionError(
+                f"Expected {'uid={uid},ou=users,dc=example,dc=com'}, got {config_dict['dn_template']}"
+            )
         assert config_dict["line_length"] == 100
         if not (config_dict["base64_encode"]):
             raise AssertionError(f"Expected True, got {config_dict['base64_encode']}")
         if config_dict["attribute_mapping"] != {"email": "mail", "name": "cn"}:
-            raise AssertionError(f"Expected {{'email': 'mail', 'name': 'cn'}}, got {config_dict['attribute_mapping']}")
+            raise AssertionError(
+                f"Expected {{'email': 'mail', 'name': 'cn'}}, got {config_dict['attribute_mapping']}"
+            )
 
     def test_error_handling_integration(self) -> None:
         """Test error handling across the system."""
@@ -397,7 +420,9 @@ class TestIntegration:
 
             # Config should be accessible
             if target.config["output_path"] != tmp_dir:
-                raise AssertionError(f"Expected {tmp_dir}, got {target.config['output_path']}")
+                raise AssertionError(
+                    f"Expected {tmp_dir}, got {target.config['output_path']}"
+                )
             assert (
                 target.config["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
             )

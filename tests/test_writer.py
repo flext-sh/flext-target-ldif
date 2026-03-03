@@ -16,6 +16,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
+
 from flext_target_ldif import FlextTargetLdifWriterError, LdifWriter
 
 # Constants
@@ -30,10 +31,14 @@ class TestLdifWriterInitialization:
         """Test initialization with default values."""
         writer = LdifWriter()
         if writer.output_file != Path("output.ldif"):
-            raise AssertionError(f"Expected {Path('output.ldif')}, got {writer.output_file}")
+            raise AssertionError(
+                f"Expected {Path('output.ldif')}, got {writer.output_file}"
+            )
         assert writer.ldif_options == {}
         if writer.dn_template != "uid={uid},ou=users,dc=example,dc=com":
-            raise AssertionError(f"Expected {'uid={uid},ou=users,dc=example,dc=com'}, got {writer.dn_template}")
+            raise AssertionError(
+                f"Expected {'uid={uid},ou=users,dc=example,dc=com'}, got {writer.dn_template}"
+            )
         assert writer.attribute_mapping == {}
         if writer.schema != {}:
             raise AssertionError(f"Expected {{}}, got {writer.schema}")
@@ -65,10 +70,14 @@ class TestLdifWriterInitialization:
             )
 
             if writer.output_file != output_file:
-                raise AssertionError(f"Expected {output_file}, got {writer.output_file}")
+                raise AssertionError(
+                    f"Expected {output_file}, got {writer.output_file}"
+                )
             assert writer.ldif_options == ldif_options
             if writer.dn_template != dn_template:
-                raise AssertionError(f"Expected {dn_template}, got {writer.dn_template}")
+                raise AssertionError(
+                    f"Expected {dn_template}, got {writer.dn_template}"
+                )
             assert writer.attribute_mapping == attribute_mapping
             if writer.schema != schema:
                 raise AssertionError(f"Expected {schema}, got {writer.schema}")
@@ -84,7 +93,9 @@ class TestLdifWriterInitialization:
             test_file = f"{temp_dir}/test.ldif"
             writer = LdifWriter(output_file=test_file)
             if writer.output_file != Path(test_file):
-                raise AssertionError(f"Expected {Path(test_file)}, got {writer.output_file}")
+                raise AssertionError(
+                    f"Expected {Path(test_file)}, got {writer.output_file}"
+                )
 
 
 class TestLdifWriterFileOperations:
@@ -118,7 +129,9 @@ class TestLdifWriterFileOperations:
 
         assert not result.is_success
         if result.error is not None and "Failed to open LDIF file" not in result.error:
-            raise AssertionError(f"Expected {'Failed to open LDIF file'} in {result.error}")
+            raise AssertionError(
+                f"Expected {'Failed to open LDIF file'} in {result.error}"
+            )
 
     def test_close_success(self) -> None:
         """Test successful file closing."""
@@ -157,7 +170,9 @@ class TestLdifWriterFileOperations:
 
         assert not result.is_success
         if result.error is not None and "Failed to close LDIF file" not in result.error:
-            raise AssertionError(f"Expected {'Failed to close LDIF file'} in {result.error}")
+            raise AssertionError(
+                f"Expected {'Failed to close LDIF file'} in {result.error}"
+            )
 
 
 class TestLdifWriterRecordWriting:
@@ -252,7 +267,9 @@ class TestLdifWriterRecordWriting:
 
         assert not result.is_success
         if result.error is not None and "Failed to write record" not in result.error:
-            raise AssertionError(f"Expected {'Failed to write record'} in {result.error}")
+            raise AssertionError(
+                f"Expected {'Failed to write record'} in {result.error}"
+            )
 
     def test_write_multiple_records(self) -> None:
         """Test writing multiple records."""
@@ -354,7 +371,9 @@ class TestLdifWriterBase64Encoding:
                 encoded = line.split(":: ")[1]
                 decoded = base64.b64decode(encoded).decode("utf-8")
                 if decoded != " starts with space":
-                    raise AssertionError(f"Expected {' starts with space'}, got {decoded}")
+                    raise AssertionError(
+                        f"Expected {' starts with space'}, got {decoded}"
+                    )
             elif line.startswith("cn:: "):
                 encoded = line.split(":: ")[1]
                 decoded = base64.b64decode(encoded).decode("utf-8")
@@ -490,7 +509,9 @@ class TestLdifWriterDnGeneration:
             writer._generate_dn(record)
 
         if "Missing required field for DN generation" not in str(exc_info.value):
-            raise AssertionError(f"Expected {'Missing required field for DN generation'} in {exc_info.value!s}")
+            raise AssertionError(
+                f"Expected {'Missing required field for DN generation'} in {exc_info.value!s}"
+            )
 
     def test_custom_dn_template(self) -> None:
         """Test custom DN template."""
@@ -499,7 +520,9 @@ class TestLdifWriterDnGeneration:
 
         dn = writer._generate_dn(record)
         if dn != "cn=John Doe,ou=people,dc=test,dc=org":
-            raise AssertionError(f"Expected {'cn=John Doe,ou=people,dc=test,dc=org'}, got {dn}")
+            raise AssertionError(
+                f"Expected {'cn=John Doe,ou=people,dc=test,dc=org'}, got {dn}"
+            )
 
 
 class TestLdifWriterContextManager:
