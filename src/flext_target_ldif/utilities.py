@@ -223,27 +223,6 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 return FlextResult[str].fail(f"Error building DN: {e}")
 
         @staticmethod
-        def split(dn: str) -> bool:
-            """Validate LDIF Distinguished Name format.
-
-            Args:
-            dn: Distinguished Name to validate
-
-            Returns:
-            bool: True if valid, False otherwise
-
-            """
-            if not dn:
-                return False
-
-            # Basic DN format validation
-            # Should contain at least one RDN component (attr=value)
-            dn_pattern = (
-                r"^[a-zA-Z][\w\-]*\s*=\s*[^,]+(?:\s*,\s*[a-zA-Z][\w\-]*\s*=\s*[^,]+)*$"
-            )
-            return bool(re.match(dn_pattern, dn.strip()))
-
-        @staticmethod
         def convert_record_to_ldif_entry(
             record: Mapping[str, t.ContainerValue],
             dn: str,
@@ -348,37 +327,25 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             return value
 
         @staticmethod
-        def wrap_ldif_line(value: str) -> str:
-            """Wrap long LDIF lines according to RFC 2849.
+        def split(dn: str) -> bool:
+            """Validate LDIF Distinguished Name format.
 
             Args:
-            value: Value to wrap
+            dn: Distinguished Name to validate
 
             Returns:
-            str: Wrapped value
+            bool: True if valid, False otherwise
 
             """
-            if len(value) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
-                return value
+            if not dn:
+                return False
 
-            lines = []
-            remaining = value
-
-            while remaining:
-                if len(remaining) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
-                    lines.append(remaining)
-                    break
-                # Find a good break point (prefer space)
-                break_point = FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH
-                if " " in remaining[:break_point]:
-                    break_point = remaining[:break_point].rfind(" ")
-
-                lines.append(remaining[:break_point])
-                remaining = (
-                    " " + remaining[break_point:].lstrip()
-                )  # Continuation with space
-
-            return "\n".join(lines)
+            # Basic DN format validation
+            # Should contain at least one RDN component (attr=value)
+            dn_pattern = (
+                r"^[a-zA-Z][\w\-]*\s*=\s*[^,]+(?:\s*,\s*[a-zA-Z][\w\-]*\s*=\s*[^,]+)*$"
+            )
+            return bool(re.match(dn_pattern, dn.strip()))
 
         @staticmethod
         def validate_ldif_entry(entry: str) -> FlextResult[bool]:
@@ -414,8 +381,88 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             return FlextResult[bool].ok(value=True)
 
+        @staticmethod
+        def wrap_ldif_line(value: str) -> str:
+            """Wrap long LDIF lines according to RFC 2849.
+
+            Args:
+            value: Value to wrap
+
+            Returns:
+            str: Wrapped value
+
+            """
+            if len(value) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
+                return value
+
+            lines = []
+            remaining = value
+
+            while remaining:
+                if len(remaining) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
+                    lines.append(remaining)
+                    break
+                # Find a good break point (prefer space)
+                break_point = FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH
+                if " " in remaining[:break_point]:
+                    break_point = remaining[:break_point].rfind(" ")
+
+                lines.append(remaining[:break_point])
+                remaining = (
+                    " " + remaining[break_point:].lstrip()
+                )  # Continuation with space
+
+            return "\n".join(lines)
+
     class FileUtilities:
         """File handling utilities for LDIF operations."""
+
+        @staticmethod
+        def append_to_ldif_file(
+            file_path: str,
+            entries: list[str],
+        ) -> FlextResult[str]:
+            """Append entries to existing LDIF file.
+
+            Args:
+            file_path: Path to LDIF file
+            entries: List of LDIF entries to append
+
+            Returns:
+            FlextResult[str]: Success message or error
+
+            """
+            if not file_path or not entries:
+                return FlextResult[str].fail("File path and entries are required")
+
+            try:
+                path = Path(file_path)
+
+                # Create file if it doesn't exist
+                if not path.exists():
+                    path.parent.mkdir(parents=True, exist_ok=True)
+
+                # Append LDIF content
+                with Path(path).open("a", encoding="utf-8") as f:
+                    for entry in entries:
+                        f.write(entry)
+                        if not entry.endswith("\n"):
+                            f.write("\n")
+
+                return FlextResult[str].ok(
+                    f"Entries appended to LDIF file: {file_path}",
+                )
+
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ) as e:
+                return FlextResult[str].fail(f"Error appending to LDIF file: {e}")
 
         @staticmethod
         def create_ldif_file(
@@ -467,53 +514,6 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 ImportError,
             ) as e:
                 return FlextResult[str].fail(f"Error creating LDIF file: {e}")
-
-        @staticmethod
-        def append_to_ldif_file(
-            file_path: str,
-            entries: list[str],
-        ) -> FlextResult[str]:
-            """Append entries to existing LDIF file.
-
-            Args:
-            file_path: Path to LDIF file
-            entries: List of LDIF entries to append
-
-            Returns:
-            FlextResult[str]: Success message or error
-
-            """
-            if not file_path or not entries:
-                return FlextResult[str].fail("File path and entries are required")
-
-            try:
-                path = Path(file_path)
-
-                # Create file if it doesn't exist
-                if not path.exists():
-                    path.parent.mkdir(parents=True, exist_ok=True)
-
-                # Append LDIF content
-                with Path(path).open("a", encoding="utf-8") as f:
-                    for entry in entries:
-                        f.write(entry)
-                        if not entry.endswith("\n"):
-                            f.write("\n")
-
-                return FlextResult[str].ok(
-                    f"Entries appended to LDIF file: {file_path}",
-                )
-
-            except (
-                ValueError,
-                TypeError,
-                KeyError,
-                AttributeError,
-                OSError,
-                RuntimeError,
-                ImportError,
-            ) as e:
-                return FlextResult[str].fail(f"Error appending to LDIF file: {e}")
 
         @staticmethod
         def validate_ldif_file_path(file_path: str) -> FlextResult[str]:
@@ -582,6 +582,36 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             return min(calculated_size, FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE)
 
         @staticmethod
+        def generate_ldif_stream_metadata(
+            stream_name: str,
+            record_count: int,
+            file_size_bytes: int,
+            processing_time: float,
+        ) -> Mapping[str, t.ContainerValue]:
+            """Generate metadata for LDIF stream processing.
+
+            Args:
+            stream_name: Name of the stream
+            record_count: Number of records processed
+            file_size_bytes: Size of generated LDIF file
+            processing_time: Time taken for processing
+
+            Returns:
+            dict[str, t.ContainerValue]: Stream metadata
+
+            """
+            return {
+                "stream_name": stream_name,
+                "records_processed": record_count,
+                "file_size_bytes": file_size_bytes,
+                "file_size_mb": round(file_size_bytes / (1024 * 1024), 2),
+                "processing_time_seconds": processing_time,
+                "records_per_second": record_count / max(processing_time, 0.001),
+                "processing_timestamp": datetime.now(UTC).isoformat(),
+                "target_type": "ldif",
+            }
+
+        @staticmethod
         def validate_stream_compatibility(
             stream_name: str,
             schema: Mapping[str, t.ContainerValue],
@@ -621,38 +651,59 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             return FlextResult[bool].ok(value=True)
 
-        @staticmethod
-        def generate_ldif_stream_metadata(
-            stream_name: str,
-            record_count: int,
-            file_size_bytes: int,
-            processing_time: float,
-        ) -> Mapping[str, t.ContainerValue]:
-            """Generate metadata for LDIF stream processing.
-
-            Args:
-            stream_name: Name of the stream
-            record_count: Number of records processed
-            file_size_bytes: Size of generated LDIF file
-            processing_time: Time taken for processing
-
-            Returns:
-            dict[str, t.ContainerValue]: Stream metadata
-
-            """
-            return {
-                "stream_name": stream_name,
-                "records_processed": record_count,
-                "file_size_bytes": file_size_bytes,
-                "file_size_mb": round(file_size_bytes / (1024 * 1024), 2),
-                "processing_time_seconds": processing_time,
-                "records_per_second": record_count / max(processing_time, 0.001),
-                "processing_timestamp": datetime.now(UTC).isoformat(),
-                "target_type": "ldif",
-            }
-
     class ConfigValidation:
         """Configuration validation utilities."""
+
+        @staticmethod
+        def validate_ldif_entry_config(
+            config: Mapping[str, t.ContainerValue],
+        ) -> FlextResult[Mapping[str, t.ContainerValue]]:
+            """Validate LDIF entry configuration.
+
+            Args:
+            config: Entry configuration
+
+            Returns:
+            FlextResult[dict[str, t.ContainerValue]]: Validated config or error
+
+            """
+            # Validate object classes if provided
+            if "object_classes" in config:
+                object_classes = config["object_classes"]
+                if not u.Guards.is_list(object_classes) or not object_classes:
+                    return FlextResult[t.ConfigurationMapping].fail(
+                        "Object classes must be a non-empty list",
+                    )
+
+                for oc in object_classes:
+                    match oc:
+                        case str() as object_class if object_class.strip():
+                            pass
+                        case _:
+                            return FlextResult[t.ConfigurationMapping].fail(
+                                "All object classes must be non-empty strings",
+                            )
+
+            # Validate attribute mapping if provided
+            if "attribute_mapping" in config:
+                attribute_mapping = config["attribute_mapping"]
+                if not isinstance(attribute_mapping, Mapping):
+                    return FlextResult[t.ConfigurationMapping].fail(
+                        "Attribute mapping must be a dictionary",
+                    )
+
+                attribute_mapping_map = attribute_mapping
+
+                for key, value in attribute_mapping_map.items():
+                    if not u.Guards.is_type(key, str) or not u.Guards.is_type(
+                        value,
+                        str,
+                    ):
+                        return FlextResult[t.ConfigurationMapping].fail(
+                            "Attribute mapping keys and values must be strings",
+                        )
+
+            return FlextResult[t.ConfigurationMapping].ok(config)
 
         @staticmethod
         def validate_ldif_target_config(
@@ -727,59 +778,51 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             return FlextResult[t.ConfigurationMapping].ok(config)
 
-        @staticmethod
-        def validate_ldif_entry_config(
-            config: Mapping[str, t.ContainerValue],
-        ) -> FlextResult[Mapping[str, t.ContainerValue]]:
-            """Validate LDIF entry configuration.
-
-            Args:
-            config: Entry configuration
-
-            Returns:
-            FlextResult[dict[str, t.ContainerValue]]: Validated config or error
-
-            """
-            # Validate object classes if provided
-            if "object_classes" in config:
-                object_classes = config["object_classes"]
-                if not u.Guards.is_list(object_classes) or not object_classes:
-                    return FlextResult[t.ConfigurationMapping].fail(
-                        "Object classes must be a non-empty list",
-                    )
-
-                for oc in object_classes:
-                    match oc:
-                        case str() as object_class if object_class.strip():
-                            pass
-                        case _:
-                            return FlextResult[t.ConfigurationMapping].fail(
-                                "All object classes must be non-empty strings",
-                            )
-
-            # Validate attribute mapping if provided
-            if "attribute_mapping" in config:
-                attribute_mapping = config["attribute_mapping"]
-                if not isinstance(attribute_mapping, Mapping):
-                    return FlextResult[t.ConfigurationMapping].fail(
-                        "Attribute mapping must be a dictionary",
-                    )
-
-                attribute_mapping_map = attribute_mapping
-
-                for key, value in attribute_mapping_map.items():
-                    if not u.Guards.is_type(key, str) or not u.Guards.is_type(
-                        value,
-                        str,
-                    ):
-                        return FlextResult[t.ConfigurationMapping].fail(
-                            "Attribute mapping keys and values must be strings",
-                        )
-
-            return FlextResult[t.ConfigurationMapping].ok(config)
-
     class StateManagement:
         """State management utilities for target operations."""
+
+        @staticmethod
+        def create_processing_state(
+            stream_name: str,
+            records_processed: int,
+            file_path: str,
+            file_size_bytes: int,
+            last_processed_record: Mapping[str, t.ContainerValue] | None = None,
+        ) -> Mapping[str, t.ContainerValue]:
+            """Create processing state for target stream.
+
+            Args:
+            stream_name: Name of the stream
+            records_processed: Number of records processed
+            file_path: Path to LDIF file
+            file_size_bytes: Size of LDIF file
+            last_processed_record: Last processed record for checkpointing
+
+            Returns:
+            dict[str, t.ContainerValue]: Processing state
+
+            """
+            state: dict[str, t.ContainerValue] = {
+                "stream_name": stream_name,
+                "records_processed": records_processed,
+                "output_file": file_path,
+                "file_size_bytes": file_size_bytes,
+                "last_updated": datetime.now(UTC).isoformat(),
+                "target_type": "ldif",
+            }
+
+            if last_processed_record:
+                # Store minimal checkpoint information
+                checkpoint_data: dict[str, t.ContainerValue] = {
+                    "id": last_processed_record.get("id"),
+                    "dn": last_processed_record.get("dn"),
+                    "timestamp": last_processed_record.get("_timestamp"),
+                }
+                state["checkpoint"] = {
+                    k: v for k, v in checkpoint_data.items() if v is not None
+                }
+
+            return state
 
         @staticmethod
         def get_target_state(
@@ -831,49 +874,6 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             bookmarks[stream_name] = dict(stream_state)
             updated_state["bookmarks"] = bookmarks
             return updated_state
-
-        @staticmethod
-        def create_processing_state(
-            stream_name: str,
-            records_processed: int,
-            file_path: str,
-            file_size_bytes: int,
-            last_processed_record: Mapping[str, t.ContainerValue] | None = None,
-        ) -> Mapping[str, t.ContainerValue]:
-            """Create processing state for target stream.
-
-            Args:
-            stream_name: Name of the stream
-            records_processed: Number of records processed
-            file_path: Path to LDIF file
-            file_size_bytes: Size of LDIF file
-            last_processed_record: Last processed record for checkpointing
-
-            Returns:
-            dict[str, t.ContainerValue]: Processing state
-
-            """
-            state: dict[str, t.ContainerValue] = {
-                "stream_name": stream_name,
-                "records_processed": records_processed,
-                "output_file": file_path,
-                "file_size_bytes": file_size_bytes,
-                "last_updated": datetime.now(UTC).isoformat(),
-                "target_type": "ldif",
-            }
-
-            if last_processed_record:
-                # Store minimal checkpoint information
-                checkpoint_data: dict[str, t.ContainerValue] = {
-                    "id": last_processed_record.get("id"),
-                    "dn": last_processed_record.get("dn"),
-                    "timestamp": last_processed_record.get("_timestamp"),
-                }
-                state["checkpoint"] = {
-                    k: v for k, v in checkpoint_data.items() if v is not None
-                }
-
-            return state
 
         @staticmethod
         def update_processing_progress(

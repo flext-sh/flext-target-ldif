@@ -115,33 +115,6 @@ class RecordTransformer:
         self.attribute_mapping = attribute_mapping or {}
         self.custom_transformers = custom_transformers or {}
 
-    def transform_record(
-        self,
-        record: Mapping[str, t.ContainerValue],
-    ) -> Mapping[str, str]:
-        """Transform a Singer record to LDAP-compatible format."""
-        transformed = {}
-        for field, value in record.items():
-            # Skip None values
-            if value is None:
-                continue
-            # Map field name if needed
-            if field in self.attribute_mapping:
-                attr_name = self.attribute_mapping[field]
-            else:
-                # Default mapping: convert to lowercase, remove underscores
-                attr_name = field.lower().replace("_", "")
-            # Transform value
-            transformed_value = normalize_attribute_value(
-                attr_name,
-                value,
-                self.custom_transformers,
-            )
-            # Only include non-empty values
-            if transformed_value:
-                transformed[attr_name] = transformed_value
-        return transformed
-
     @staticmethod
     def add_required_attributes(
         record: Mapping[str, str],
@@ -169,3 +142,30 @@ class RecordTransformer:
             words: list[str] = cn_value.split() if isinstance(cn_value, str) else []
             result["sn"] = words[-1] if words else "Unknown"
         return result
+
+    def transform_record(
+        self,
+        record: Mapping[str, t.ContainerValue],
+    ) -> Mapping[str, str]:
+        """Transform a Singer record to LDAP-compatible format."""
+        transformed = {}
+        for field, value in record.items():
+            # Skip None values
+            if value is None:
+                continue
+            # Map field name if needed
+            if field in self.attribute_mapping:
+                attr_name = self.attribute_mapping[field]
+            else:
+                # Default mapping: convert to lowercase, remove underscores
+                attr_name = field.lower().replace("_", "")
+            # Transform value
+            transformed_value = normalize_attribute_value(
+                attr_name,
+                value,
+                self.custom_transformers,
+            )
+            # Only include non-empty values
+            if transformed_value:
+                transformed[attr_name] = transformed_value
+        return transformed

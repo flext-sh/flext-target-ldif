@@ -229,6 +229,16 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
         description="Transformation timestamp",
     )
 
+    @property
+    def has_errors(self) -> bool:
+        """Check if transformation has any errors."""
+        return bool(self.transformation_errors)
+
+    @property
+    def success_rate(self) -> float:
+        """Calculate transformation success rate."""
+        return 0.0 if self.has_errors else 100.0
+
     def validate_business_rules(self) -> FlextResult[bool]:
         """Validate transformation result business rules."""
         try:
@@ -256,16 +266,6 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
                 f"Transformation result validation failed: {e}",
             )
 
-    @property
-    def has_errors(self) -> bool:
-        """Check if transformation has any errors."""
-        return bool(self.transformation_errors)
-
-    @property
-    def success_rate(self) -> float:
-        """Calculate transformation success rate."""
-        return 0.0 if self.has_errors else 100.0
-
 
 class LdifBatchProcessing(FlextMeltanoModels.Entity):
     """LDIF batch processing configuration and state."""
@@ -289,6 +289,19 @@ class LdifBatchProcessing(FlextMeltanoModels.Entity):
         description="Last processing timestamp",
     )
 
+    @property
+    def is_batch_full(self) -> bool:
+        """Check if current batch is full."""
+        return len(self.current_batch) >= self.batch_size
+
+    @property
+    def success_rate(self) -> float:
+        """Calculate success rate percentage."""
+        total = self.successful_exports + self.failed_exports
+        if total == 0:
+            return 0.0
+        return (self.successful_exports / total) * 100.0
+
     def validate_business_rules(self) -> FlextResult[bool]:
         """Validate batch processing business rules."""
         try:
@@ -311,19 +324,6 @@ class LdifBatchProcessing(FlextMeltanoModels.Entity):
             ImportError,
         ) as e:
             return FlextResult[bool].fail(f"Batch processing validation failed: {e}")
-
-    @property
-    def is_batch_full(self) -> bool:
-        """Check if current batch is full."""
-        return len(self.current_batch) >= self.batch_size
-
-    @property
-    def success_rate(self) -> float:
-        """Calculate success rate percentage."""
-        total = self.successful_exports + self.failed_exports
-        if total == 0:
-            return 0.0
-        return (self.successful_exports / total) * 100.0
 
 
 class SingerStreamConfig(FlextSettings):
@@ -397,6 +397,20 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
     )
     warnings: list[str] = Field(default_factory=list, description="Warning messages")
 
+    @property
+    def failure_rate(self) -> float:
+        """Calculate failure rate percentage."""
+        if self.records_processed == 0:
+            return 0.0
+        return (self.entries_failed / self.records_processed) * 100.0
+
+    @property
+    def success_rate(self) -> float:
+        """Calculate success rate percentage."""
+        if self.records_processed == 0:
+            return 0.0
+        return (self.entries_exported / self.records_processed) * 100.0
+
     def validate_business_rules(self) -> FlextResult[bool]:
         """Validate LDIF target result business rules."""
         try:
@@ -424,20 +438,6 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
             ImportError,
         ) as e:
             return FlextResult[bool].fail(f"Target result validation failed: {e}")
-
-    @property
-    def success_rate(self) -> float:
-        """Calculate success rate percentage."""
-        if self.records_processed == 0:
-            return 0.0
-        return (self.entries_exported / self.records_processed) * 100.0
-
-    @property
-    def failure_rate(self) -> float:
-        """Calculate failure rate percentage."""
-        if self.records_processed == 0:
-            return 0.0
-        return (self.entries_failed / self.records_processed) * 100.0
 
 
 class LdifErrorContext(FlextMeltanoModels.ArbitraryTypesModel):

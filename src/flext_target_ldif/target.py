@@ -45,6 +45,21 @@ class TargetLDIF:
         output_path = Path(output_path_str)
         output_path.mkdir(parents=True, exist_ok=True)
 
+    @property
+    def cli(self) -> Callable[..., None]:
+        """Return the CLI entry point for this target."""
+        return cli_main
+
+    @property
+    def config_jsonschema(self) -> dict[str, t.ContainerValue]:
+        """Return JSON schema for configuration."""
+        return FlextTargetLdifSettings.model_json_schema()
+
+    @property
+    def default_sink_class(self) -> type[LDIFSink]:
+        """Return the default sink class for this target."""
+        return LDIFSink
+
     def get_sink(
         self,
         stream_name: str,
@@ -58,21 +73,6 @@ class TargetLDIF:
                 schema=schema,
             )
         return self.sinks[stream_name]
-
-    @property
-    def default_sink_class(self) -> type[LDIFSink]:
-        """Return the default sink class for this target."""
-        return LDIFSink
-
-    @property
-    def config_jsonschema(self) -> dict[str, t.ContainerValue]:
-        """Return JSON schema for configuration."""
-        return FlextTargetLdifSettings.model_json_schema()
-
-    @property
-    def cli(self) -> Callable[..., None]:
-        """Return the CLI entry point for this target."""
-        return cli_main
 
     def validate_config(self) -> None:
         """Validate the target configuration."""

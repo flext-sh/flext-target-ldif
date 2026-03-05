@@ -86,12 +86,6 @@ class FlextTargetLdifSettings(FlextSettings):
     )
 
     @classmethod
-    @override
-    def get_global_instance(cls) -> Self:
-        """Get the global singleton instance using FlextSettings pattern."""
-        return cls()
-
-    @classmethod
     def create_for_development(cls, **overrides: t.ContainerValue) -> Self:
         """Create configuration for development environment."""
         dev_overrides: dict[str, t.ContainerValue] = {
@@ -137,14 +131,11 @@ class FlextTargetLdifSettings(FlextSettings):
         base = cls()
         return base.model_copy(update=test_overrides)
 
-    @field_validator("output_path")
     @classmethod
-    def validate_output_path(cls, v: str) -> str:
-        """Validate output path is non-empty."""
-        if not v or not v.strip():
-            error_msg = "Invalid output path: path cannot be empty"
-            raise ValueError(error_msg)
-        return v.strip()
+    @override
+    def get_global_instance(cls) -> Self:
+        """Get the global singleton instance using FlextSettings pattern."""
+        return cls()
 
     @field_validator("dn_template")
     @classmethod
@@ -155,6 +146,15 @@ class FlextTargetLdifSettings(FlextSettings):
             raise ValueError(msg)
 
         return v
+
+    @field_validator("output_path")
+    @classmethod
+    def validate_output_path(cls, v: str) -> str:
+        """Validate output path is non-empty."""
+        if not v or not v.strip():
+            error_msg = "Invalid output path: path cannot be empty"
+            raise ValueError(error_msg)
+        return v.strip()
 
     def validate_domain_rules(self) -> FlextResult[bool]:
         """Validate LDIF target configuration business rules using FlextSettings pattern."""
