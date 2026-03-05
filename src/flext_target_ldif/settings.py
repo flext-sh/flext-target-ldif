@@ -20,6 +20,7 @@ from pydantic_settings import SettingsConfigDict
 from .constants import c
 
 
+@FlextSettings.auto_register("target_ldif")
 class FlextTargetLdifSettings(FlextSettings):
     """Configuration for FLEXT Target LDIF using FlextSettings patterns."""
 
