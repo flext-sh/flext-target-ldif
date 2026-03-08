@@ -21,13 +21,10 @@ def transform_timestamp(value: t.ContainerValue) -> str:
         return value.isoformat()
     if isinstance(value, str):
         try:
-            # Try to parse ISO format first, then use flext-ldap parsing
             dt = datetime.fromisoformat(value.removesuffix("Z") + "+00:00")
             return dt.isoformat()
         except ValueError:
-            # Return as-is if not parseable
             return value
-    # Fallback - convert to string for other types
     return str(value)
 
 
@@ -47,7 +44,6 @@ def transform_boolean(value: t.ContainerValue) -> str:
 def transform_email(value: t.ContainerValue) -> str:
     """Transform email values to ensure LDAP compatibility."""
     email_str = str(value).strip().lower()
-    # Basic email validation and cleanup
     if "@" in email_str and "." in email_str:
         return email_str
     return ""
@@ -56,14 +52,12 @@ def transform_email(value: t.ContainerValue) -> str:
 def transform_phone(value: t.ContainerValue) -> str:
     """Transform phone numbers to standard format."""
     phone_str = str(value)
-    # Remove common formatting characters
     return "".join(c for c in phone_str if c.isdigit() or c in "+- ()")
 
 
 def transform_name(value: t.ContainerValue) -> str:
     """Transform name fields to ensure proper formatting."""
     name_str = str(value).strip()
-    # Capitalize first letter of each word
     return " ".join(word.capitalize() for word in name_str.split())
 
 
@@ -91,14 +85,11 @@ def normalize_attribute_value(
     transformers: Mapping[str, Callable[[t.ContainerValue], str]] | None = None,
 ) -> str:
     """Normalize attribute value based on attribute type."""
-    # Use custom transformers if provided
     if transformers and attr_name in transformers:
         return transformers[attr_name](value)
-    # Try built-in transformations
     builtin_transformer = _get_builtin_transformer(attr_name)
     if builtin_transformer:
         return builtin_transformer(value)
-    # Default: convert to string and strip whitespace
     return str(value).strip()
 
 
@@ -121,12 +112,9 @@ class RecordTransformer:
     ) -> Mapping[str, t.ContainerValue]:
         """Add required LDAP attributes to the record."""
         result: dict[str, t.ContainerValue] = dict(record)
-        # Ensure objectClass is present
         if "objectclass" not in result:
             result["objectclass"] = ["inetOrgPerson", "person"]
-        # Ensure cn (common name) is present
         if "cn" not in result:
-            # Try to build from other name fields
             if "givenname" in result and "sn" in result:
                 result["cn"] = f"{result['givenname']} {result['sn']}"
             elif "displayname" in result:
@@ -135,37 +123,27 @@ class RecordTransformer:
                 result["cn"] = result["uid"]
             else:
                 result["cn"] = "Unknown User"
-        # Ensure sn (surname) is present for person objectClass
         if "sn" not in result and "cn" in result:
-            # Use last word of cn as surname
             cn_value = result["cn"]
             words: list[str] = cn_value.split() if isinstance(cn_value, str) else []
             result["sn"] = words[-1] if words else "Unknown"
         return result
 
     def transform_record(
-        self,
-        record: Mapping[str, t.ContainerValue],
+        self, record: Mapping[str, t.ContainerValue]
     ) -> Mapping[str, str]:
         """Transform a Singer record to LDAP-compatible format."""
         transformed = {}
         for field, value in record.items():
-            # Skip None values
             if value is None:
                 continue
-            # Map field name if needed
             if field in self.attribute_mapping:
                 attr_name = self.attribute_mapping[field]
             else:
-                # Default mapping: convert to lowercase, remove underscores
                 attr_name = field.lower().replace("_", "")
-            # Transform value
             transformed_value = normalize_attribute_value(
-                attr_name,
-                value,
-                self.custom_transformers,
+                attr_name, value, self.custom_transformers
             )
-            # Only include non-empty values
             if transformed_value:
                 transformed[attr_name] = transformed_value
         return transformed

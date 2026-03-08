@@ -25,5 +25,4 @@ class TestsFlextTargetLdifProtocols(FlextTestsProtocols, FlextTargetLdifProtocol
 
 
 p = TestsFlextTargetLdifProtocols
-
 __all__ = ["TestsFlextTargetLdifProtocols", "p"]

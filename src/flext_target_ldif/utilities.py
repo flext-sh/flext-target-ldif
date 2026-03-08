@@ -30,13 +30,10 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     Extends urget-specific operations.
     """
 
-    # Configuration constants
     DEFAULT_BATCH_SIZE: ClassVar[int] = c.DEFAULT_BATCH_SIZE
     DEFAULT_TIMEOUT: ClassVar[int] = c.DEFAULT_TIMEOUT_SECONDS
     MAX_RETRIES: ClassVar[int] = c.MAX_RETRIES
     LDIF_LINE_WRAP_LENGTH: ClassVar[int] = c.LDIF_LINE_WRAP_LENGTH
-
-    # ASCII character constants for LDIF encoding
     ASCII_SPACE: ClassVar[int] = c.ASCII_SPACE
     ASCII_TILDE: ClassVar[int] = c.ASCII_TILDE
 
@@ -62,29 +59,21 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             if not line or not line.strip():
-                return FlextResult[t.ConfigurationMapping].fail(
-                    "Empty input line",
-                )
-
+                return FlextResult[t.ConfigurationMapping].fail("Empty input line")
             try:
                 message = json.loads(line.strip())
                 if not u.is_dict_like(message):
                     return FlextResult[t.ConfigurationMapping].fail(
-                        "Message must be a JSON object",
+                        "Message must be a JSON object"
                     )
-
                 if "type" not in message:
                     return FlextResult[t.ConfigurationMapping].fail(
-                        "Message missing required 'type' field",
+                        "Message missing required 'type' field"
                     )
-
                 parsed_message = {str(key): value for key, value in message.items()}
                 return FlextResult[t.ConfigurationMapping].ok(parsed_message)
-
             except json.JSONDecodeError as e:
-                return FlextResult[t.ConfigurationMapping].fail(
-                    f"Invalid JSON: {e}",
-                )
+                return FlextResult[t.ConfigurationMapping].fail(f"Invalid JSON: {e}")
 
         @staticmethod
         def validate_record_message(
@@ -101,22 +90,19 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if message.get("type") != "RECORD":
                 return FlextResult[t.ConfigurationMapping].fail(
-                    "Message type must be RECORD",
+                    "Message type must be RECORD"
                 )
-
             required_fields = ["stream", "record"]
             for field in required_fields:
                 if field not in message:
                     return FlextResult[t.ConfigurationMapping].fail(
-                        f"RECORD message missing '{field}' field",
+                        f"RECORD message missing '{field}' field"
                     )
-
             record = message["record"]
             if not u.is_dict_like(record):
                 return FlextResult[t.ConfigurationMapping].fail(
-                    "Record data must be a dictionary",
+                    "Record data must be a dictionary"
                 )
-
             return FlextResult[t.ConfigurationMapping].ok(message)
 
         @staticmethod
@@ -134,22 +120,19 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if message.get("type") != "SCHEMA":
                 return FlextResult[t.ConfigurationMapping].fail(
-                    "Message type must be SCHEMA",
+                    "Message type must be SCHEMA"
                 )
-
             required_fields = ["stream", "schema"]
             for field in required_fields:
                 if field not in message:
                     return FlextResult[t.ConfigurationMapping].fail(
-                        f"SCHEMA message missing '{field}' field",
+                        f"SCHEMA message missing '{field}' field"
                     )
-
             schema = message["schema"]
             if not u.is_dict_like(schema):
                 return FlextResult[t.ConfigurationMapping].fail(
-                    "Schema data must be a dictionary",
+                    "Schema data must be a dictionary"
                 )
-
             return FlextResult[t.ConfigurationMapping].ok(message)
 
         @staticmethod
@@ -183,34 +166,24 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if not record or not dn_template:
                 return FlextResult[str].fail("Record and DN template are required")
-
             try:
-                # Replace placeholders in DN template
                 dn_rdn = dn_template
                 for key, value in record.items():
                     placeholder = f"{{{key}}}"
                     if placeholder in dn_rdn:
                         if value is None:
                             return FlextResult[str].fail(
-                                f"Cannot build DN: {key} is null",
+                                f"Cannot build DN: {key} is null"
                             )
                         dn_rdn = dn_rdn.replace(placeholder, str(value))
-
-                # Check if all placeholders were replaced
                 if "{" in dn_rdn and "}" in dn_rdn:
                     return FlextResult[str].fail(
-                        f"Unresolved placeholders in DN: {dn_rdn}",
+                        f"Unresolved placeholders in DN: {dn_rdn}"
                     )
-
-                # Combine with base DN if provided
                 full_dn = f"{dn_rdn},{base_dn}" if base_dn else dn_rdn
-
-                # Validate DN format
                 if not FlextTargetLdifUtilities.LdifDataProcessing.split(full_dn):
                     return FlextResult[str].fail(f"Invalid DN format: {full_dn}")
-
                 return FlextResult[str].ok(full_dn)
-
             except (
                 ValueError,
                 TypeError,
@@ -243,47 +216,30 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if not record or not dn:
                 return FlextResult[str].fail("Record and DN are required")
-
             try:
                 ldif_lines = []
                 mapping = attribute_mapping or {}
-
-                # Add DN
                 ldif_lines.append(f"dn: {dn}")
-
-                # Add object classes
                 if object_classes:
                     ldif_lines.extend(f"objectClass: {oc}" for oc in object_classes)
-
-                # Add attributes
                 for key, value in record.items():
                     if value is None:
-                        continue  # Skip null values
-
-                    # Get LDIF attribute name (use mapping or original key)
+                        continue
                     ldif_attr = mapping.get(key, key)
-
-                    # Convert value to LDIF format
                     if u.Guards.is_list(value):
-                        # Multi-value attribute
                         for item in value:
                             if item is not None:
                                 ldif_value = FlextTargetLdifUtilities.LdifDataProcessing.format_ldif_value(
-                                    str(item),
+                                    str(item)
                                 )
                                 ldif_lines.append(f"{ldif_attr}: {ldif_value}")
                     else:
-                        # Single-value attribute
                         ldif_value = FlextTargetLdifUtilities.LdifDataProcessing.format_ldif_value(
-                            str(value),
+                            str(value)
                         )
                         ldif_lines.append(f"{ldif_attr}: {ldif_value}")
-
-                # Add empty line to separate entries
                 ldif_lines.append("")
-
                 return FlextResult[str].ok("\n".join(ldif_lines))
-
             except (
                 ValueError,
                 TypeError,
@@ -308,10 +264,6 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if not value:
                 return ""
-
-            # Check if value needs base64 encoding
-            # LDIF requires base64 for values that start with space, colon, or less-than
-            # or contain non-printable characters
             if value.startswith((" ", ":", "<")) or any(
                 ord(c) < FlextTargetLdifUtilities.ASCII_SPACE
                 or ord(c) > FlextTargetLdifUtilities.ASCII_TILDE
@@ -319,11 +271,8 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             ):
                 encoded = base64.b64encode(value.encode("utf-8")).decode("ascii")
                 return f":: {encoded}"
-
-            # Handle line wrapping for long values
             if len(value) > FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
                 return FlextTargetLdifUtilities.LdifDataProcessing.wrap_ldif_line(value)
-
             return value
 
         @staticmethod
@@ -339,12 +288,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if not dn:
                 return False
-
-            # Basic DN format validation
-            # Should contain at least one RDN component (attr=value)
-            dn_pattern = (
-                r"^[a-zA-Z][\w\-]*\s*=\s*[^,]+(?:\s*,\s*[a-zA-Z][\w\-]*\s*=\s*[^,]+)*$"
-            )
+            dn_pattern = "^[a-zA-Z][\\w\\-]*\\s*=\\s*[^,]+(?:\\s*,\\s*[a-zA-Z][\\w\\-]*\\s*=\\s*[^,]+)*$"
             return bool(re.match(dn_pattern, dn.strip()))
 
         @staticmethod
@@ -360,25 +304,17 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if not entry or not entry.strip():
                 return FlextResult[bool].fail("LDIF entry cannot be empty")
-
             lines = entry.strip().split("\n")
             if not lines:
                 return FlextResult[bool].fail("LDIF entry must have at least one line")
-
-            # First line must be DN
             first_line = lines[0].strip()
             if not first_line.startswith("dn:"):
                 return FlextResult[bool].fail("LDIF entry must start with DN")
-
-            # Extract DN value
             dn_value = first_line[3:].strip()
             if not dn_value:
                 return FlextResult[bool].fail("DN cannot be empty")
-
-            # Validate DN format
             if not FlextTargetLdifUtilities.LdifDataProcessing.split(dn_value):
                 return FlextResult[bool].fail(f"Invalid DN format: {dn_value}")
-
             return FlextResult[bool].ok(value=True)
 
         @staticmethod
@@ -394,34 +330,24 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if len(value) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
                 return value
-
             lines = []
             remaining = value
-
             while remaining:
                 if len(remaining) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
                     lines.append(remaining)
                     break
-                # Find a good break point (prefer space)
                 break_point = FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH
                 if " " in remaining[:break_point]:
                     break_point = remaining[:break_point].rfind(" ")
-
                 lines.append(remaining[:break_point])
-                remaining = (
-                    " " + remaining[break_point:].lstrip()
-                )  # Continuation with space
-
+                remaining = " " + remaining[break_point:].lstrip()
             return "\n".join(lines)
 
     class FileUtilities:
         """File handling utilities for LDIF operations."""
 
         @staticmethod
-        def append_to_ldif_file(
-            file_path: str,
-            entries: list[str],
-        ) -> FlextResult[str]:
+        def append_to_ldif_file(file_path: str, entries: list[str]) -> FlextResult[str]:
             """Append entries to existing LDIF file.
 
             Args:
@@ -434,25 +360,18 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if not file_path or not entries:
                 return FlextResult[str].fail("File path and entries are required")
-
             try:
                 path = Path(file_path)
-
-                # Create file if it doesn't exist
                 if not path.exists():
                     path.parent.mkdir(parents=True, exist_ok=True)
-
-                # Append LDIF content
                 with Path(path).open("a", encoding="utf-8") as f:
                     for entry in entries:
                         f.write(entry)
                         if not entry.endswith("\n"):
                             f.write("\n")
-
                 return FlextResult[str].ok(
-                    f"Entries appended to LDIF file: {file_path}",
+                    f"Entries appended to LDIF file: {file_path}"
                 )
-
             except (
                 ValueError,
                 TypeError,
@@ -466,10 +385,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def create_ldif_file(
-            file_path: str,
-            entries: list[str],
-            *,
-            overwrite: bool = False,
+            file_path: str, entries: list[str], *, overwrite: bool = False
         ) -> FlextResult[str]:
             """Create LDIF file with entries.
 
@@ -484,26 +400,17 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if not file_path or not entries:
                 return FlextResult[str].fail("File path and entries are required")
-
             try:
                 path = Path(file_path)
-
-                # Check if file exists and overwrite flag
-                if path.exists() and not overwrite:
+                if path.exists() and (not overwrite):
                     return FlextResult[str].fail(f"File already exists: {file_path}")
-
-                # Create parent directories if needed
                 path.parent.mkdir(parents=True, exist_ok=True)
-
-                # Write LDIF content
                 with Path(path).open("w", encoding="utf-8") as f:
                     for entry in entries:
                         f.write(entry)
                         if not entry.endswith("\n"):
                             f.write("\n")
-
                 return FlextResult[str].ok(f"LDIF file created: {file_path}")
-
             except (
                 ValueError,
                 TypeError,
@@ -528,24 +435,15 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if not file_path or not file_path.strip():
                 return FlextResult[str].fail("File path cannot be empty")
-
             try:
                 path = Path(file_path)
-
-                # Check if path is valid
                 if not path.name:
                     return FlextResult[str].fail("Invalid file path")
-
-                # Check file extension
                 if path.suffix.lower() != ".ldif":
                     return FlextResult[str].fail("File must have .ldif extension")
-
-                # Check if parent directory is writable (if it exists)
-                if path.parent.exists() and not path.parent.is_dir():
+                if path.parent.exists() and (not path.parent.is_dir()):
                     return FlextResult[str].fail("Parent path is not a directory")
-
                 return FlextResult[str].ok(str(path.resolve()))
-
             except (
                 ValueError,
                 TypeError,
@@ -562,8 +460,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def calculate_ldif_batch_size(
-            record_count: int,
-            target_batches: int = 10,
+            record_count: int, target_batches: int = 10
         ) -> int:
             """Calculate optimal batch size for LDIF operations.
 
@@ -577,7 +474,6 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if record_count <= 0:
                 return FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE
-
             calculated_size = max(1, record_count // target_batches)
             return min(calculated_size, FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE)
 
@@ -613,8 +509,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def validate_stream_compatibility(
-            stream_name: str,
-            schema: Mapping[str, t.ContainerValue],
+            stream_name: str, schema: Mapping[str, t.ContainerValue]
         ) -> FlextResult[bool]:
             """Validate stream compatibility with LDIF operations.
 
@@ -628,8 +523,6 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if not stream_name or not schema:
                 return FlextResult[bool].fail("Stream name and schema are required")
-
-            # Check if schema has required properties
             properties_raw = schema.get("properties", {})
             if not isinstance(properties_raw, Mapping) or not properties_raw:
                 return FlextResult[bool].fail("Schema must have properties")
@@ -637,18 +530,14 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             properties: dict[str, t.ContainerValue] = {
                 str(key): value for key, value in properties_map.items()
             }
-
-            # Check for DN building capability
             has_dn_field = "dn" in properties
             has_id_fields = any(
                 key in properties for key in ["id", "uid", "cn", "username", "email"]
             )
-
-            if not has_dn_field and not has_id_fields:
+            if not has_dn_field and (not has_id_fields):
                 return FlextResult[bool].fail(
-                    "Schema must have either 'dn' field or identifier fields (id, uid, cn, username, email)",
+                    "Schema must have either 'dn' field or identifier fields (id, uid, cn, username, email)"
                 )
-
             return FlextResult[bool].ok(value=True)
 
     class ConfigValidation:
@@ -667,42 +556,34 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             FlextResult[dict[str, t.ContainerValue]]: Validated config or error
 
             """
-            # Validate object classes if provided
             if "object_classes" in config:
                 object_classes = config["object_classes"]
                 if not u.Guards.is_list(object_classes) or not object_classes:
                     return FlextResult[t.ConfigurationMapping].fail(
-                        "Object classes must be a non-empty list",
+                        "Object classes must be a non-empty list"
                     )
-
                 for oc in object_classes:
                     match oc:
                         case str() as object_class if object_class.strip():
                             pass
                         case _:
                             return FlextResult[t.ConfigurationMapping].fail(
-                                "All object classes must be non-empty strings",
+                                "All object classes must be non-empty strings"
                             )
-
-            # Validate attribute mapping if provided
             if "attribute_mapping" in config:
                 attribute_mapping = config["attribute_mapping"]
                 if not isinstance(attribute_mapping, Mapping):
                     return FlextResult[t.ConfigurationMapping].fail(
-                        "Attribute mapping must be a dictionary",
+                        "Attribute mapping must be a dictionary"
                     )
-
                 attribute_mapping_map = attribute_mapping
-
                 for key, value in attribute_mapping_map.items():
                     if not u.Guards.is_type(key, str) or not u.Guards.is_type(
-                        value,
-                        str,
+                        value, str
                     ):
                         return FlextResult[t.ConfigurationMapping].fail(
-                            "Attribute mapping keys and values must be strings",
+                            "Attribute mapping keys and values must be strings"
                         )
-
             return FlextResult[t.ConfigurationMapping].ok(config)
 
         @staticmethod
@@ -720,38 +601,31 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             required_fields = ["output_file"]
             missing_fields = [field for field in required_fields if field not in config]
-
             if missing_fields:
                 return FlextResult[t.ConfigurationMapping].fail(
-                    f"Missing required LDIF target fields: {', '.join(missing_fields)}",
+                    f"Missing required LDIF target fields: {', '.join(missing_fields)}"
                 )
-
-            # Validate output file path
             output_file_raw = config["output_file"]
             if not isinstance(output_file_raw, str):
                 return FlextResult[t.ConfigurationMapping].fail(
-                    "Invalid output file: output_file must be a string",
+                    "Invalid output file: output_file must be a string"
                 )
             output_file = output_file_raw
             file_validation = (
                 FlextTargetLdifUtilities.FileUtilities.validate_ldif_file_path(
-                    output_file,
+                    output_file
                 )
             )
             if file_validation.is_failure:
                 return FlextResult[t.ConfigurationMapping].fail(
-                    f"Invalid output file: {file_validation.error}",
+                    f"Invalid output file: {file_validation.error}"
                 )
-
-            # Validate operation mode
             operation_mode = config.get("operation_mode", "append")
             valid_modes = ["append", "overwrite", "create"]
             if operation_mode not in valid_modes:
                 return FlextResult[t.ConfigurationMapping].fail(
-                    f"Invalid operation mode: {operation_mode}. Valid modes: {', '.join(valid_modes)}",
+                    f"Invalid operation mode: {operation_mode}. Valid modes: {', '.join(valid_modes)}"
                 )
-
-            # Validate DN template if provided
             if "dn_template" in config:
                 dn_template = config["dn_template"]
                 match dn_template:
@@ -759,23 +633,19 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         pass
                     case _:
                         return FlextResult[t.ConfigurationMapping].fail(
-                            "DN template must be a non-empty string",
+                            "DN template must be a non-empty string"
                         )
-
-            # Validate batch size
             batch_size_raw = config.get(
-                "batch_size",
-                FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE,
+                "batch_size", FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE
             )
             if not isinstance(batch_size_raw, int):
                 return FlextResult[t.ConfigurationMapping].fail(
-                    "Batch size must be a positive integer",
+                    "Batch size must be a positive integer"
                 )
             if batch_size_raw <= 0:
                 return FlextResult[t.ConfigurationMapping].fail(
-                    "Batch size must be a positive integer",
+                    "Batch size must be a positive integer"
                 )
-
             return FlextResult[t.ConfigurationMapping].ok(config)
 
     class StateManagement:
@@ -810,9 +680,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 "last_updated": datetime.now(UTC).isoformat(),
                 "target_type": "ldif",
             }
-
             if last_processed_record:
-                # Store minimal checkpoint information
                 checkpoint_data: dict[str, t.ContainerValue] = {
                     "id": last_processed_record.get("id"),
                     "dn": last_processed_record.get("dn"),
@@ -821,13 +689,11 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 state["checkpoint"] = {
                     k: v for k, v in checkpoint_data.items() if v is not None
                 }
-
             return state
 
         @staticmethod
         def get_target_state(
-            state: Mapping[str, t.ContainerValue],
-            stream_name: str,
+            state: Mapping[str, t.ContainerValue], stream_name: str
         ) -> Mapping[str, t.ContainerValue]:
             """Get state for a specific target stream.
 
@@ -895,19 +761,15 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             stream_state = FlextTargetLdifUtilities.StateManagement.get_target_state(
-                state,
-                stream_name,
+                state, stream_name
             )
-
             current_count_raw = stream_state.get("records_processed", 0)
             current_count = (
                 current_count_raw if isinstance(current_count_raw, int) else 0
             )
             new_count = current_count + records_count
-
             batch_count_raw = stream_state.get("batch_count", 0)
             batch_count = batch_count_raw if isinstance(batch_count_raw, int) else 0
-
             updated_stream_state: dict[str, t.ContainerValue] = {
                 **stream_state,
                 "records_processed": new_count,
@@ -915,16 +777,10 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 "last_updated": datetime.now(UTC).isoformat(),
                 "batch_count": batch_count + 1,
             }
-
             return FlextTargetLdifUtilities.StateManagement.set_target_state(
-                state,
-                stream_name,
-                updated_stream_state,
+                state, stream_name, updated_stream_state
             )
 
 
 u = FlextTargetLdifUtilities
-__all__ = [
-    "FlextTargetLdifUtilities",
-    "u",
-]
+__all__ = ["FlextTargetLdifUtilities", "u"]

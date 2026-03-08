@@ -11,9 +11,5 @@ from __future__ import annotations
 
 from .models import TestsFlextTargetLdifModels
 
-# Runtime alias for test models
 m = TestsFlextTargetLdifModels
-
-__all__ = [
-    "m",
-]
+__all__ = ["m"]

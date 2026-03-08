@@ -32,12 +32,10 @@ class FlextTargetLdifVersion:
             "License": "",
             "Home-Page": "",
         }
-
     version = _metadata["Version"]
     version_info = tuple(
         int(part) if part.isdigit() else part for part in version.split(".")
     )
-
     __title__ = _metadata["Name"]
     __description__ = _metadata.get("Summary", "")
     __author__ = _metadata.get("Author", "")
@@ -54,7 +52,6 @@ __author__ = FlextTargetLdifVersion.__author__
 __author_email__ = FlextTargetLdifVersion.__author_email__
 __license__ = FlextTargetLdifVersion.__license__
 __url__ = FlextTargetLdifVersion.__url__
-
 __all__ = [
     "FlextTargetLdifVersion",
     "__author__",

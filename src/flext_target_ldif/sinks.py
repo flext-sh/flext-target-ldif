@@ -33,7 +33,6 @@ class LDIFSink:
         self.stream_name = stream_name
         self.schema = schema
         self.key_properties = key_properties or []
-
         self._ldif_writer: LdifWriter | None = None
         self._output_file: Path | None = None
         self._logger_instance: FlextLogger | None = None
@@ -63,7 +62,6 @@ class LDIFSink:
 
     def process_batch(self, _context: Mapping[str, t.ContainerValue]) -> None:
         """Process a batch of records."""
-        # BatchSink handles the batching, we just need to ensure writer is ready
         self._get_ldif_writer()
 
     def process_record(
@@ -92,18 +90,15 @@ class LDIFSink:
         """
         if self._ldif_writer is None:
             output_file = self._get_output_file()
-
             raw_ldif_options = self.config.get("ldif_options", {})
             ldif_options: dict[str, t.ContainerValue] = {}
             if isinstance(raw_ldif_options, Mapping):
                 ldif_options = {
                     str(key): value for key, value in raw_ldif_options.items()
                 }
-
             dn_template = self.config.get("dn_template")
-            if dn_template is not None and not isinstance(dn_template, str):
+            if dn_template is not None and (not isinstance(dn_template, str)):
                 dn_template = None
-
             raw_attribute_mapping = self.config.get("attribute_mapping", {})
             attribute_mapping: dict[str, str] = {}
             if isinstance(raw_attribute_mapping, Mapping):
@@ -112,7 +107,6 @@ class LDIFSink:
                     for key, value in raw_attribute_mapping.items()
                     if isinstance(value, str)
                 }
-
             self._ldif_writer = LdifWriter(
                 output_file=output_file,
                 ldif_options=ldif_options,
@@ -120,7 +114,6 @@ class LDIFSink:
                 attribute_mapping=attribute_mapping,
                 schema=self.schema,
             )
-
         return self._ldif_writer
 
     def _get_output_file(self) -> Path:
@@ -131,15 +124,11 @@ class LDIFSink:
                 output_path_raw if isinstance(output_path_raw, str) else "./output"
             )
             output_path = Path(output_path_str)
-
-            # Create safe filename from stream name
             safe_name = "".join(
                 c for c in self.stream_name if c.isalnum() or c in "-_"
             ).strip()
             if not safe_name:
                 safe_name = "stream"
-
             filename = f"{safe_name}.ldif"
             self._output_file = output_path / filename
-
         return self._output_file

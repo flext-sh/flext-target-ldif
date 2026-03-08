@@ -41,7 +41,6 @@ class LdifWriter:
         self.dn_template = dn_template or "uid={uid},ou=users,dc=example,dc=com"
         self.attribute_mapping = attribute_mapping or {}
         self.schema = schema or {}
-        # Extract LDIF options with defaults
         line_length_val = self.ldif_options.get("line_length", 78)
         if isinstance(line_length_val, int):
             self.line_length: int = line_length_val
@@ -55,7 +54,6 @@ class LdifWriter:
         self.include_timestamps: bool = (
             bool(timestamps_val) if timestamps_val is not None else True
         )
-        # Use flext-ldif API for writing
         self._ldif_api = FlextLdif()
         self._records: list[dict[str, t.ContainerValue]] = []
         self._record_count = 0
@@ -85,13 +83,11 @@ class LdifWriter:
         """Close the output file and write all collected records."""
         try:
             if self._records:
-                # Convert records to FlextLdifEntry objects for flext-ldif API
                 self._ldif_entries = []
                 for record in self._records:
                     entry = self._convert_record_to_entry(record)
                     if entry is not None:
                         self._ldif_entries.append(entry)
-                # Write LDIF entries to file
                 self._write_entries_to_file()
             if self._file_handle is not None:
                 self._file_handle.close()
@@ -103,20 +99,15 @@ class LdifWriter:
     def open(self) -> FlextResult[bool]:
         """Open the output file for writing."""
         try:
-            # Create output directory if needed
             self.output_file.parent.mkdir(parents=True, exist_ok=True)
             self._file_handle = self.output_file.open("w", encoding="utf-8")
             return FlextResult[bool].ok(value=True)
         except (RuntimeError, ValueError, TypeError, OSError) as e:
             return FlextResult[bool].fail(f"Failed to open LDIF file: {e}")
 
-    def write_record(
-        self,
-        record: Mapping[str, t.ContainerValue],
-    ) -> FlextResult[bool]:
+    def write_record(self, record: Mapping[str, t.ContainerValue]) -> FlextResult[bool]:
         """Write a record to the LDIF file buffer."""
         try:
-            # Buffer the record for batch writing
             self._records.append(dict(record))
             self._record_count += 1
             return FlextResult[bool].ok(value=True)
@@ -124,20 +115,16 @@ class LdifWriter:
             return FlextResult[bool].fail(f"Failed to buffer record: {e}")
 
     def _convert_record_to_entry(
-        self,
-        record: Mapping[str, t.ContainerValue],
+        self, record: Mapping[str, t.ContainerValue]
     ) -> Mapping[str, t.ContainerValue] | None:
         """Convert a single record to LDIF entry format."""
         try:
             self._generate_dn(record)
             attributes = {}
-            # Apply attribute mapping and add to entry
             for key, value in record.items():
-                if key != "dn":  # Skip DN as it's already set
+                if key != "dn":
                     mapped_key = self.attribute_mapping.get(key, key)
                     attributes[mapped_key] = value
-            # Create FlextLdifEntry using the real API
-            # Convert dict[str, t.ContainerValue] to list format expected by FlextLdifAttributes
             attr_dict: dict[str, list[str]] = {}
             for key, value in attributes.items():
                 attr_dict[key] = (
@@ -145,13 +132,9 @@ class LdifWriter:
                     if not u.Guards.is_list(value)
                     else [str(v) for v in value]
                 )
-            # Create simple entry dict[str, t.ContainerValue] for LDIF writing
-            return {
-                "dn": "dn",
-                "attributes": attr_dict,
-            }
+            return {"dn": "dn", "attributes": attr_dict}
         except (RuntimeError, ValueError, TypeError) as e:
-            logger.warning("Skipping invalid record: %s", str(e))  # noqa: RUF065
+            logger.warning("Skipping invalid record: %s", str(e))
             return None
 
     def _generate_dn(self, record: Mapping[str, t.ContainerValue]) -> str:
@@ -164,15 +147,12 @@ class LdifWriter:
 
     def _needs_base64_encoding(self, value: str) -> bool:
         """Check if a value needs base64 encoding."""
-        # Check for leading space or colon
         if value and value[0] in {" ", ":"}:
             return True
-        # Check for non-ASCII characters
         try:
             value.encode("ascii")
         except UnicodeEncodeError:
             return True
-        # Check for newlines or carriage returns
         return "\n" in value or "\r" in value
 
     def _write_attribute(self, attr_name: str, value: str) -> None:
@@ -203,9 +183,7 @@ class LdifWriter:
                 f.write("\n")
 
     def _write_entry_attributes(
-        self,
-        f: TextIO,
-        attributes_obj: Mapping[str, t.ContainerValue],
+        self, f: TextIO, attributes_obj: Mapping[str, t.ContainerValue]
     ) -> None:
         """Write entry attributes to file."""
         if u.is_dict_like(attributes_obj):
@@ -223,7 +201,6 @@ class LdifWriter:
         if len(line) <= self.line_length:
             self._file_handle.write(line + "\n")
         else:
-            # Wrap long lines according to LDIF spec
             self._file_handle.write(line[: self.line_length] + "\n")
             remaining = line[self.line_length :]
             while remaining:
@@ -232,6 +209,4 @@ class LdifWriter:
                 remaining = remaining[self.line_length - 1 :]
 
 
-__all__: list[str] = [
-    "LdifWriter",
-]
+__all__: list[str] = ["LdifWriter"]

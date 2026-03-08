@@ -11,9 +11,5 @@ from __future__ import annotations
 
 from .typings import TestsFlextTargetLdifTypes
 
-# Runtime alias for test types
 t = TestsFlextTargetLdifTypes
-
-__all__ = [
-    "t",
-]
+__all__ = ["t"]

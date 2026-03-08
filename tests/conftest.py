@@ -27,7 +27,6 @@ def temp_file() -> Generator[Path]:
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         temp_path = Path(temp_file.name)
         yield temp_path
-        # Cleanup
         if temp_path.exists():
             temp_path.unlink()
 
@@ -44,11 +43,7 @@ def sample_config(temp_dir: Path) -> dict[str, t.ContainerValue]:
             "base64_encode": False,
             "include_timestamps": True,
         },
-        "attribute_mapping": {
-            "user_id": "uid",
-            "full_name": "cn",
-            "email": "mail",
-        },
+        "attribute_mapping": {"user_id": "uid", "full_name": "cn", "email": "mail"},
     }
 
 
@@ -117,11 +112,7 @@ def multiple_records() -> list[dict[str, str]]:
 @pytest.fixture
 def ldif_options() -> dict[str, t.ContainerValue]:
     """Provide sample LDIF options for testing."""
-    return {
-        "line_length": 78,
-        "base64_encode": False,
-        "include_timestamps": True,
-    }
+    return {"line_length": 78, "base64_encode": False, "include_timestamps": True}
 
 
 @pytest.fixture
@@ -140,7 +131,6 @@ def attribute_mapping() -> dict[str, str]:
     }
 
 
-# Pytest markers for test categorization
 def pytest_configure(config: pytest.Config) -> None:
     """Configure pytest markers."""
     config.addinivalue_line("markers", "unit: mark test as a unit test")
@@ -152,6 +142,5 @@ def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line("markers", "target: mark test as target-specific")
     config.addinivalue_line("markers", "sink: mark test as sink-specific")
     config.addinivalue_line(
-        "markers",
-        "requires_filesystem: mark test as requiring file system access",
+        "markers", "requires_filesystem: mark test as requiring file system access"
     )

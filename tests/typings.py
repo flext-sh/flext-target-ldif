@@ -28,5 +28,4 @@ class TestsFlextTargetLdifTypes(FlextTestsTypes, FlextTargetLdifTypes):
 
 t = TestsFlextTargetLdifTypes
 tt = TestsFlextTargetLdifTypes
-
 __all__ = ["TestsFlextTargetLdifTypes", "t", "tt"]

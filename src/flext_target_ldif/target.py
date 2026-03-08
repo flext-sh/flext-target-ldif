@@ -32,12 +32,8 @@ class TargetLDIF:
         self.config: Mapping[str, t.ContainerValue] = config or {}
         self.sinks: dict[str, LDIFSink] = {}
         self._test_config: dict[str, t.ContainerValue] | None = None
-
-        # Validate config if requested
         if validate_config:
             self.validate_config()
-
-        # Ensure output directory exists
         output_path_raw = self.config.get("output_path", "./output")
         output_path_str = (
             output_path_raw if isinstance(output_path_raw, str) else "./output"
@@ -61,16 +57,12 @@ class TargetLDIF:
         return LDIFSink
 
     def get_sink(
-        self,
-        stream_name: str,
-        schema: Mapping[str, t.ContainerValue],
+        self, stream_name: str, schema: Mapping[str, t.ContainerValue]
     ) -> LDIFSink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = LDIFSink(
-                target_config=self.config,
-                stream_name=stream_name,
-                schema=schema,
+                target_config=self.config, stream_name=stream_name, schema=schema
             )
         return self.sinks[stream_name]
 
@@ -79,7 +71,6 @@ class TargetLDIF:
         config_dict = (
             dict(self._test_config) if self._test_config else dict(self.config)
         )
-        # Filter to only include FlextTargetLdifSettings fields
         allowed_fields: set[str] = {
             "output_file",
             "output_path",
@@ -103,5 +94,4 @@ class TargetLDIF:
 
 
 if __name__ == "__main__":
-    # Use flext-target-ldif CLI entry point instead
     pass

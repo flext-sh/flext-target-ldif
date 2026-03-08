@@ -9,13 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from tests.utilities import (
-    TestsFlextTargetLdifUtilities,
-)
+from tests.utilities import TestsFlextTargetLdifUtilities
 
-# Runtime alias for test utilities
 u = TestsFlextTargetLdifUtilities
-
-__all__ = [
-    "u",
-]
+__all__ = ["u"]

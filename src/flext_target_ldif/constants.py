@@ -21,19 +21,13 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     Composes with FlextLdifConstants to avoid duplication and ensure consistency.
     """
 
-    # LDIF File Configuration using composition
     DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.DEFAULT_ENCODING
     DEFAULT_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
     MAX_LINE_LENGTH: Final[int] = 1024
     MIN_LINE_LENGTH: Final[int] = 40
     STANDARD_LINE_LENGTH: Final[int] = 78
     MAX_DN_LENGTH: Final[int] = 1000
-
-    # Singer Target Configuration - using FlextConstants composition
-    # Note: DEFAULT_BATCH_SIZE inherited from FlextConstants (Final, cannot override)
     MAX_BATCH_SIZE: Final[int] = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
-
-    # LDIF Format Options using composition
     SUPPORTED_ENCODINGS: Final[frozenset[str]] = frozenset([
         "utf-8",
         "utf-16",
@@ -42,17 +36,11 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         "latin-1",
         "cp1252",
     ])
-
-    # File naming patterns for different environments
     DEV_FILE_PATTERN: Final[str] = "dev_{stream_name}_{timestamp}.ldif"
     PROD_FILE_PATTERN: Final[str] = "prod_{stream_name}_{timestamp}.ldif"
     TEST_FILE_PATTERN: Final[str] = "test_{stream_name}.ldif"
     DEFAULT_FILE_PATTERN: Final[str] = "{stream_name}_{timestamp}.ldif"
-
-    # Development environment offset for line length
     DEV_LINE_LENGTH_OFFSET: Final[int] = 42
-
-    # ASCII character constants for LDIF encoding
     ASCII_SPACE: Final[int] = 32
     ASCII_TILDE: Final[int] = 126
     LDIF_LINE_WRAP_LENGTH: Final[int] = 76
@@ -118,5 +106,4 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
 
 c = FlextTargetLdifConstants
-
 __all__ = ["FlextTargetLdifConstants", "c"]
