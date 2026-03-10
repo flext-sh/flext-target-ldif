@@ -134,7 +134,7 @@ class LdifWriter:
                 )
             return {"dn": "dn", "attributes": attr_dict}
         except (RuntimeError, ValueError, TypeError) as e:
-            logger.warning("Skipping invalid record: %s", str(e))
+            logger.warning("Skipping invalid record: %s", e)
             return None
 
     def _generate_dn(self, record: Mapping[str, t.ContainerValue]) -> str:

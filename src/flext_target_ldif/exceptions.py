@@ -9,7 +9,7 @@ from __future__ import annotations
 from typing import override
 
 from flext_core import e
-from flext_core._models.containers import FlextModelsContainers
+from flext_core._models.containers import FlextModelsContainers  # noqa: PLC2701
 
 
 class FlextTargetLdifWriterError(e.OperationError):

@@ -7,4 +7,4 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-__all__: list[str] = ["FlextTargetLdifSettings"]
+__all__: list[str] = ["FlextTargetLdifSettings"]  # noqa: F822
