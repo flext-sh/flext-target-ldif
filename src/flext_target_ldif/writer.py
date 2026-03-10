@@ -120,7 +120,7 @@ class LdifWriter:
         """Convert a single record to LDIF entry format."""
         try:
             self._generate_dn(record)
-            attributes = {}
+            attributes: dict[str, t.ContainerValue] = {}
             for key, value in record.items():
                 if key != "dn":
                     mapped_key = self.attribute_mapping.get(key, key)
@@ -134,7 +134,7 @@ class LdifWriter:
                 )
             return {"dn": "dn", "attributes": attr_dict}
         except (RuntimeError, ValueError, TypeError) as e:
-            logger.warning("Skipping invalid record: %s", e)
+            logger.warning(f"Skipping invalid record: {e}")
             return None
 
     def _generate_dn(self, record: Mapping[str, t.ContainerValue]) -> str:

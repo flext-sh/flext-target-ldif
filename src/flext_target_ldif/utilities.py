@@ -143,6 +143,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             state: State data to write
 
             """
+            _ = state
 
     class LdifDataProcessing:
         """LDIF-specific data processing utilities."""
@@ -217,7 +218,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             if not record or not dn:
                 return FlextResult[str].fail("Record and DN are required")
             try:
-                ldif_lines = []
+                ldif_lines: list[str] = []
                 mapping = attribute_mapping or {}
                 ldif_lines.append(f"dn: {dn}")
                 if object_classes:
@@ -330,7 +331,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if len(value) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
                 return value
-            lines = []
+            lines: list[str] = []
             remaining = value
             while remaining:
                 if len(remaining) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:

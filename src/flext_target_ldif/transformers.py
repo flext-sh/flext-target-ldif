@@ -100,7 +100,8 @@ class RecordTransformer:
     def __init__(
         self,
         attribute_mapping: Mapping[str, str] | None = None,
-        custom_transformers: Mapping[str, Callable[[object], str]] | None = None,
+        custom_transformers: Mapping[str, Callable[[t.ContainerValue], str]]
+        | None = None,
     ) -> None:
         """Initialize the record transformer."""
         self.attribute_mapping = attribute_mapping or {}
@@ -133,7 +134,7 @@ class RecordTransformer:
         self, record: Mapping[str, t.ContainerValue]
     ) -> Mapping[str, str]:
         """Transform a Singer record to LDAP-compatible format."""
-        transformed = {}
+        transformed: dict[str, str] = {}
         for field, value in record.items():
             if value is None:
                 continue

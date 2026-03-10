@@ -161,7 +161,7 @@ class LdifFile(FlextMeltanoModels.Entity):
     file_path: str = Field(..., description="Path to the LDIF file")
     stream_name: str = Field(..., description="Singer stream name")
     entries: list[LdifEntry] = Field(
-        default_factory=list,
+        default_factory=list[LdifEntry],
         description="LDIF entries in the file",
     )
     format_options: LdifFormatOptions = Field(
@@ -278,7 +278,7 @@ class LdifBatchProcessing(FlextMeltanoModels.Entity):
         description="Records per batch",
     )
     current_batch: list[LdifEntry] = Field(
-        default_factory=list,
+        default_factory=list[LdifEntry],
         description="Current batch of entries",
     )
     total_processed: int = Field(default=0, ge=0, description="Total entries processed")
@@ -475,22 +475,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
     class TargetLdif:
         """TargetLdif domain namespace."""
 
-        # Configuration models
-        LdifFormatOptions = LdifFormatOptions
-        LdifExportConfig = LdifExportConfig
-        SingerStreamConfig = SingerStreamConfig
-
-        # Entity models
-        LdifEntry = LdifEntry
-        LdifFile = LdifFile
-
-        # Processing models
-        LdifTransformationResult = LdifTransformationResult
-        LdifBatchProcessing = LdifBatchProcessing
-
-        # Result models
-        LdifTargetResult = LdifTargetResult
-        LdifErrorContext = LdifErrorContext
+        pass
 
 
 # Short aliases
