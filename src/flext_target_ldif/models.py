@@ -8,8 +8,8 @@ from __future__ import annotations
 from datetime import UTC, datetime
 
 from flext_core import (
-    FlextResult,
     FlextSettings,
+    r,
     t,
 )
 from flext_ldif import FlextLdifModels
@@ -121,7 +121,7 @@ class LdifEntry(FlextMeltanoModels.Entity):
         description="LDAP controls for the entry",
     )
 
-    def validate_business_rules(self) -> FlextResult[bool]:
+    def validate_business_rules(self) -> r[bool]:
         """Validate LDIF entry business rules."""
         try:
             errors: list[str] = []
@@ -141,8 +141,8 @@ class LdifEntry(FlextMeltanoModels.Entity):
                 errors.append("Entry must have at least one attribute")
 
             if errors:
-                return FlextResult[bool].fail("; ".join(errors))
-            return FlextResult[bool].ok(value=True)
+                return r[bool].fail("; ".join(errors))
+            return r[bool].ok(value=True)
         except (
             ValueError,
             TypeError,
@@ -152,7 +152,7 @@ class LdifEntry(FlextMeltanoModels.Entity):
             RuntimeError,
             ImportError,
         ) as e:
-            return FlextResult[bool].fail(f"LDIF entry validation failed: {e}")
+            return r[bool].fail(f"LDIF entry validation failed: {e}")
 
 
 class LdifFile(FlextMeltanoModels.Entity):
@@ -178,20 +178,20 @@ class LdifFile(FlextMeltanoModels.Entity):
     entry_count: int = Field(default=0, ge=0, description="Number of entries in file")
     is_compressed: bool = Field(default=False, description="Whether file is compressed")
 
-    def validate_business_rules(self) -> FlextResult[bool]:
+    def validate_business_rules(self) -> r[bool]:
         """Validate LDIF file business rules."""
         try:
             # Validate file path
             if not self.file_path.strip():
-                return FlextResult[bool].fail("File path cannot be empty")
+                return r[bool].fail("File path cannot be empty")
 
             # Validate entry count matches actual entries
             if len(self.entries) != self.entry_count:
-                return FlextResult[bool].fail(
+                return r[bool].fail(
                     f"Entry count mismatch: {len(self.entries)} vs {self.entry_count}",
                 )
 
-            return FlextResult[bool].ok(value=True)
+            return r[bool].ok(value=True)
         except (
             ValueError,
             TypeError,
@@ -201,7 +201,7 @@ class LdifFile(FlextMeltanoModels.Entity):
             RuntimeError,
             ImportError,
         ) as e:
-            return FlextResult[bool].fail(f"LDIF file validation failed: {e}")
+            return r[bool].fail(f"LDIF file validation failed: {e}")
 
 
 class LdifTransformationResult(FlextMeltanoModels.Entity):
@@ -239,20 +239,20 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
         """Calculate transformation success rate."""
         return 0.0 if self.has_errors else 100.0
 
-    def validate_business_rules(self) -> FlextResult[bool]:
+    def validate_business_rules(self) -> r[bool]:
         """Validate transformation result business rules."""
         try:
             if not self.original_record:
-                return FlextResult[bool].fail("Original record cannot be empty")
+                return r[bool].fail("Original record cannot be empty")
 
             # Validate transformed entry
             entry_validation = self.transformed_entry.validate_business_rules()
             if entry_validation.is_failure:
-                return FlextResult[bool].fail(
+                return r[bool].fail(
                     f"Transformed entry is invalid: {entry_validation.error}",
                 )
 
-            return FlextResult[bool].ok(value=True)
+            return r[bool].ok(value=True)
         except (
             ValueError,
             TypeError,
@@ -262,7 +262,7 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
             RuntimeError,
             ImportError,
         ) as e:
-            return FlextResult[bool].fail(
+            return r[bool].fail(
                 f"Transformation result validation failed: {e}",
             )
 
@@ -302,18 +302,18 @@ class LdifBatchProcessing(FlextMeltanoModels.Entity):
             return 0.0
         return (self.successful_exports / total) * 100.0
 
-    def validate_business_rules(self) -> FlextResult[bool]:
+    def validate_business_rules(self) -> r[bool]:
         """Validate batch processing business rules."""
         try:
             if len(self.current_batch) > self.batch_size:
-                return FlextResult[bool].fail(
+                return r[bool].fail(
                     f"Current batch size exceeds maximum: {len(self.current_batch)} > {self.batch_size}",
                 )
 
             if self.successful_exports + self.failed_exports > self.total_processed:
-                return FlextResult[bool].fail("Export counts exceed total processed")
+                return r[bool].fail("Export counts exceed total processed")
 
-            return FlextResult[bool].ok(value=True)
+            return r[bool].ok(value=True)
         except (
             ValueError,
             TypeError,
@@ -323,7 +323,7 @@ class LdifBatchProcessing(FlextMeltanoModels.Entity):
             RuntimeError,
             ImportError,
         ) as e:
-            return FlextResult[bool].fail(f"Batch processing validation failed: {e}")
+            return r[bool].fail(f"Batch processing validation failed: {e}")
 
 
 class SingerStreamConfig(FlextSettings):
@@ -411,23 +411,23 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
             return 0.0
         return (self.entries_exported / self.records_processed) * 100.0
 
-    def validate_business_rules(self) -> FlextResult[bool]:
+    def validate_business_rules(self) -> r[bool]:
         """Validate LDIF target result business rules."""
         try:
             # Validate entry counts
             total_entries = self.entries_exported + self.entries_failed
             if total_entries > self.records_processed:
-                return FlextResult[bool].fail(
+                return r[bool].fail(
                     "Total entries cannot exceed records processed",
                 )
 
             # Validate file count
             if len(self.output_files) == 0 and self.entries_exported > 0:
-                return FlextResult[bool].fail(
+                return r[bool].fail(
                     "No output files but entries were exported",
                 )
 
-            return FlextResult[bool].ok(value=True)
+            return r[bool].ok(value=True)
         except (
             ValueError,
             TypeError,
@@ -437,7 +437,7 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
             RuntimeError,
             ImportError,
         ) as e:
-            return FlextResult[bool].fail(f"Target result validation failed: {e}")
+            return r[bool].fail(f"Target result validation failed: {e}")
 
 
 class LdifErrorContext(FlextMeltanoModels.ArbitraryTypesModel):

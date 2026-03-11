@@ -11,7 +11,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextResult, t
+from flext_core import r, t
 from flext_core.loggings import FlextLogger
 
 from flext_target_ldif.writer import LdifWriter
@@ -52,7 +52,7 @@ class LDIFSink:
     def clean_up(self) -> None:
         """Clean up resources when sink is finished."""
         if self._ldif_writer:
-            result: FlextResult[bool] = self._ldif_writer.close()
+            result: r[bool] = self._ldif_writer.close()
             if not result.is_success:
                 self.logger.error("Failed to close LDIF writer", error=result.error)
             else:
@@ -76,7 +76,7 @@ class LDIFSink:
 
         """
         ldif_writer = self._get_ldif_writer()
-        result: FlextResult[bool] = ldif_writer.write_record(record)
+        result: r[bool] = ldif_writer.write_record(record)
         if not result.is_success:
             msg: str = f"Failed to write LDIF record: {result.error}"
             raise RuntimeError(msg)

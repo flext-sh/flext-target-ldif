@@ -15,7 +15,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Self, TextIO, override
 
-from flext_core import FlextLogger, FlextResult, t, u
+from flext_core import FlextLogger, r, t, u
 from flext_ldif import FlextLdif
 
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError
@@ -79,7 +79,7 @@ class LdifWriter:
         """Get the number of records written."""
         return self._record_count
 
-    def close(self) -> FlextResult[bool]:
+    def close(self) -> r[bool]:
         """Close the output file and write all collected records."""
         try:
             if self._records:
@@ -92,27 +92,27 @@ class LdifWriter:
             if self._file_handle is not None:
                 self._file_handle.close()
                 self._file_handle = None
-            return FlextResult[bool].ok(value=True)
+            return r[bool].ok(value=True)
         except (RuntimeError, ValueError, TypeError, OSError) as e:
-            return FlextResult[bool].fail(f"Failed to close LDIF file: {e}")
+            return r[bool].fail(f"Failed to close LDIF file: {e}")
 
-    def open(self) -> FlextResult[bool]:
+    def open(self) -> r[bool]:
         """Open the output file for writing."""
         try:
             self.output_file.parent.mkdir(parents=True, exist_ok=True)
             self._file_handle = self.output_file.open("w", encoding="utf-8")
-            return FlextResult[bool].ok(value=True)
+            return r[bool].ok(value=True)
         except (RuntimeError, ValueError, TypeError, OSError) as e:
-            return FlextResult[bool].fail(f"Failed to open LDIF file: {e}")
+            return r[bool].fail(f"Failed to open LDIF file: {e}")
 
-    def write_record(self, record: Mapping[str, t.ContainerValue]) -> FlextResult[bool]:
+    def write_record(self, record: Mapping[str, t.ContainerValue]) -> r[bool]:
         """Write a record to the LDIF file buffer."""
         try:
             self._records.append(dict(record))
             self._record_count += 1
-            return FlextResult[bool].ok(value=True)
+            return r[bool].ok(value=True)
         except (RuntimeError, ValueError, TypeError) as e:
-            return FlextResult[bool].fail(f"Failed to buffer record: {e}")
+            return r[bool].fail(f"Failed to buffer record: {e}")
 
     def _convert_record_to_entry(
         self, record: Mapping[str, t.ContainerValue]

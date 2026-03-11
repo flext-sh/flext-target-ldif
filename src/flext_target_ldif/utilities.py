@@ -15,7 +15,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
 
-from flext_core import FlextResult, t
+from flext_core import r, t
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
 
@@ -48,92 +48,88 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def parse_singer_message(
             line: str,
-        ) -> FlextResult[Mapping[str, t.ContainerValue]]:
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Parse Singer message from input line.
 
             Args:
             line: JSON line from Singer tap
 
             Returns:
-            FlextResult[dict[str, t.ContainerValue]]: Parsed message or error
+            r[dict[str, t.ContainerValue]]: Parsed message or error
 
             """
             if not line or not line.strip():
-                return FlextResult[t.ConfigurationMapping].fail("Empty input line")
+                return r[t.ConfigurationMapping].fail("Empty input line")
             try:
                 message = json.loads(line.strip())
                 if not u.is_dict_like(message):
-                    return FlextResult[t.ConfigurationMapping].fail(
+                    return r[t.ConfigurationMapping].fail(
                         "Message must be a JSON object"
                     )
                 if "type" not in message:
-                    return FlextResult[t.ConfigurationMapping].fail(
+                    return r[t.ConfigurationMapping].fail(
                         "Message missing required 'type' field"
                     )
                 parsed_message = {str(key): value for key, value in message.items()}
-                return FlextResult[t.ConfigurationMapping].ok(parsed_message)
+                return r[t.ConfigurationMapping].ok(parsed_message)
             except json.JSONDecodeError as e:
-                return FlextResult[t.ConfigurationMapping].fail(f"Invalid JSON: {e}")
+                return r[t.ConfigurationMapping].fail(f"Invalid JSON: {e}")
 
         @staticmethod
         def validate_record_message(
             message: Mapping[str, t.ContainerValue],
-        ) -> FlextResult[Mapping[str, t.ContainerValue]]:
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Validate Singer RECORD message structure.
 
             Args:
             message: Singer message to validate
 
             Returns:
-            FlextResult[dict[str, t.ContainerValue]]: Validated record or error
+            r[dict[str, t.ContainerValue]]: Validated record or error
 
             """
             if message.get("type") != "RECORD":
-                return FlextResult[t.ConfigurationMapping].fail(
-                    "Message type must be RECORD"
-                )
+                return r[t.ConfigurationMapping].fail("Message type must be RECORD")
             required_fields = ["stream", "record"]
             for field in required_fields:
                 if field not in message:
-                    return FlextResult[t.ConfigurationMapping].fail(
+                    return r[t.ConfigurationMapping].fail(
                         f"RECORD message missing '{field}' field"
                     )
             record = message["record"]
             if not u.is_dict_like(record):
-                return FlextResult[t.ConfigurationMapping].fail(
+                return r[t.ConfigurationMapping].fail(
                     "Record data must be a dictionary"
                 )
-            return FlextResult[t.ConfigurationMapping].ok(message)
+            return r[t.ConfigurationMapping].ok(message)
 
         @staticmethod
         def validate_schema_message(
             message: Mapping[str, t.ContainerValue],
-        ) -> FlextResult[Mapping[str, t.ContainerValue]]:
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Validate Singer SCHEMA message structure.
 
             Args:
             message: Singer message to validate
 
             Returns:
-            FlextResult[dict[str, t.ContainerValue]]: Validated schema or error
+            r[dict[str, t.ContainerValue]]: Validated schema or error
 
             """
             if message.get("type") != "SCHEMA":
-                return FlextResult[t.ConfigurationMapping].fail(
-                    "Message type must be SCHEMA"
-                )
+                return r[t.ConfigurationMapping].fail("Message type must be SCHEMA")
             required_fields = ["stream", "schema"]
             for field in required_fields:
                 if field not in message:
-                    return FlextResult[t.ConfigurationMapping].fail(
+                    return r[t.ConfigurationMapping].fail(
                         f"SCHEMA message missing '{field}' field"
                     )
             schema = message["schema"]
             if not u.is_dict_like(schema):
-                return FlextResult[t.ConfigurationMapping].fail(
+                return r[t.ConfigurationMapping].fail(
                     "Schema data must be a dictionary"
                 )
-            return FlextResult[t.ConfigurationMapping].ok(message)
+            return r[t.ConfigurationMapping].ok(message)
 
         @staticmethod
         def write_state_message(state: Mapping[str, t.ContainerValue]) -> None:
@@ -153,7 +149,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             record: Mapping[str, t.ContainerValue],
             dn_template: str,
             base_dn: str | None = None,
-        ) -> FlextResult[str]:
+        ) -> r[str]:
             """Build LDIF Distinguished Name from record data.
 
             Args:
@@ -162,29 +158,25 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             base_dn: Optional base DN to append
 
             Returns:
-            FlextResult[str]: Built DN or error
+            r[str]: Built DN or error
 
             """
             if not record or not dn_template:
-                return FlextResult[str].fail("Record and DN template are required")
+                return r[str].fail("Record and DN template are required")
             try:
                 dn_rdn = dn_template
                 for key, value in record.items():
                     placeholder = f"{{{key}}}"
                     if placeholder in dn_rdn:
                         if value is None:
-                            return FlextResult[str].fail(
-                                f"Cannot build DN: {key} is null"
-                            )
+                            return r[str].fail(f"Cannot build DN: {key} is null")
                         dn_rdn = dn_rdn.replace(placeholder, str(value))
                 if "{" in dn_rdn and "}" in dn_rdn:
-                    return FlextResult[str].fail(
-                        f"Unresolved placeholders in DN: {dn_rdn}"
-                    )
+                    return r[str].fail(f"Unresolved placeholders in DN: {dn_rdn}")
                 full_dn = f"{dn_rdn},{base_dn}" if base_dn else dn_rdn
                 if not FlextTargetLdifUtilities.LdifDataProcessing.split(full_dn):
-                    return FlextResult[str].fail(f"Invalid DN format: {full_dn}")
-                return FlextResult[str].ok(full_dn)
+                    return r[str].fail(f"Invalid DN format: {full_dn}")
+                return r[str].ok(full_dn)
             except (
                 ValueError,
                 TypeError,
@@ -194,7 +186,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return FlextResult[str].fail(f"Error building DN: {e}")
+                return r[str].fail(f"Error building DN: {e}")
 
         @staticmethod
         def convert_record_to_ldif_entry(
@@ -202,7 +194,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             dn: str,
             object_classes: list[str] | None = None,
             attribute_mapping: Mapping[str, str] | None = None,
-        ) -> FlextResult[str]:
+        ) -> r[str]:
             """Convert Singer record to LDIF entry format.
 
             Args:
@@ -212,11 +204,11 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             attribute_mapping: Optional mapping from record keys to LDIF attributes
 
             Returns:
-            FlextResult[str]: LDIF entry or error
+            r[str]: LDIF entry or error
 
             """
             if not record or not dn:
-                return FlextResult[str].fail("Record and DN are required")
+                return r[str].fail("Record and DN are required")
             try:
                 ldif_lines: list[str] = []
                 mapping = attribute_mapping or {}
@@ -240,7 +232,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         )
                         ldif_lines.append(f"{ldif_attr}: {ldif_value}")
                 ldif_lines.append("")
-                return FlextResult[str].ok("\n".join(ldif_lines))
+                return r[str].ok("\n".join(ldif_lines))
             except (
                 ValueError,
                 TypeError,
@@ -250,7 +242,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return FlextResult[str].fail(f"Error converting to LDIF entry: {e}")
+                return r[str].fail(f"Error converting to LDIF entry: {e}")
 
         @staticmethod
         def format_ldif_value(value: str) -> str:
@@ -293,30 +285,30 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             return bool(re.match(dn_pattern, dn.strip()))
 
         @staticmethod
-        def validate_ldif_entry(entry: str) -> FlextResult[bool]:
+        def validate_ldif_entry(entry: str) -> r[bool]:
             """Validate LDIF entry format.
 
             Args:
             entry: LDIF entry to validate
 
             Returns:
-            FlextResult[bool]: Validation result
+            r[bool]: Validation result
 
             """
             if not entry or not entry.strip():
-                return FlextResult[bool].fail("LDIF entry cannot be empty")
+                return r[bool].fail("LDIF entry cannot be empty")
             lines = entry.strip().split("\n")
             if not lines:
-                return FlextResult[bool].fail("LDIF entry must have at least one line")
+                return r[bool].fail("LDIF entry must have at least one line")
             first_line = lines[0].strip()
             if not first_line.startswith("dn:"):
-                return FlextResult[bool].fail("LDIF entry must start with DN")
+                return r[bool].fail("LDIF entry must start with DN")
             dn_value = first_line[3:].strip()
             if not dn_value:
-                return FlextResult[bool].fail("DN cannot be empty")
+                return r[bool].fail("DN cannot be empty")
             if not FlextTargetLdifUtilities.LdifDataProcessing.split(dn_value):
-                return FlextResult[bool].fail(f"Invalid DN format: {dn_value}")
-            return FlextResult[bool].ok(value=True)
+                return r[bool].fail(f"Invalid DN format: {dn_value}")
+            return r[bool].ok(value=True)
 
         @staticmethod
         def wrap_ldif_line(value: str) -> str:
@@ -348,7 +340,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         """File handling utilities for LDIF operations."""
 
         @staticmethod
-        def append_to_ldif_file(file_path: str, entries: list[str]) -> FlextResult[str]:
+        def append_to_ldif_file(file_path: str, entries: list[str]) -> r[str]:
             """Append entries to existing LDIF file.
 
             Args:
@@ -356,11 +348,11 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             entries: List of LDIF entries to append
 
             Returns:
-            FlextResult[str]: Success message or error
+            r[str]: Success message or error
 
             """
             if not file_path or not entries:
-                return FlextResult[str].fail("File path and entries are required")
+                return r[str].fail("File path and entries are required")
             try:
                 path = Path(file_path)
                 if not path.exists():
@@ -370,9 +362,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         f.write(entry)
                         if not entry.endswith("\n"):
                             f.write("\n")
-                return FlextResult[str].ok(
-                    f"Entries appended to LDIF file: {file_path}"
-                )
+                return r[str].ok(f"Entries appended to LDIF file: {file_path}")
             except (
                 ValueError,
                 TypeError,
@@ -382,12 +372,12 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return FlextResult[str].fail(f"Error appending to LDIF file: {e}")
+                return r[str].fail(f"Error appending to LDIF file: {e}")
 
         @staticmethod
         def create_ldif_file(
             file_path: str, entries: list[str], *, overwrite: bool = False
-        ) -> FlextResult[str]:
+        ) -> r[str]:
             """Create LDIF file with entries.
 
             Args:
@@ -396,22 +386,22 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             overwrite: Whether to overwrite existing file
 
             Returns:
-            FlextResult[str]: Success message or error
+            r[str]: Success message or error
 
             """
             if not file_path or not entries:
-                return FlextResult[str].fail("File path and entries are required")
+                return r[str].fail("File path and entries are required")
             try:
                 path = Path(file_path)
                 if path.exists() and (not overwrite):
-                    return FlextResult[str].fail(f"File already exists: {file_path}")
+                    return r[str].fail(f"File already exists: {file_path}")
                 path.parent.mkdir(parents=True, exist_ok=True)
                 with Path(path).open("w", encoding="utf-8") as f:
                     for entry in entries:
                         f.write(entry)
                         if not entry.endswith("\n"):
                             f.write("\n")
-                return FlextResult[str].ok(f"LDIF file created: {file_path}")
+                return r[str].ok(f"LDIF file created: {file_path}")
             except (
                 ValueError,
                 TypeError,
@@ -421,30 +411,30 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return FlextResult[str].fail(f"Error creating LDIF file: {e}")
+                return r[str].fail(f"Error creating LDIF file: {e}")
 
         @staticmethod
-        def validate_ldif_file_path(file_path: str) -> FlextResult[str]:
+        def validate_ldif_file_path(file_path: str) -> r[str]:
             """Validate LDIF file path.
 
             Args:
             file_path: Path to validate
 
             Returns:
-            FlextResult[str]: Validated path or error
+            r[str]: Validated path or error
 
             """
             if not file_path or not file_path.strip():
-                return FlextResult[str].fail("File path cannot be empty")
+                return r[str].fail("File path cannot be empty")
             try:
                 path = Path(file_path)
                 if not path.name:
-                    return FlextResult[str].fail("Invalid file path")
+                    return r[str].fail("Invalid file path")
                 if path.suffix.lower() != ".ldif":
-                    return FlextResult[str].fail("File must have .ldif extension")
+                    return r[str].fail("File must have .ldif extension")
                 if path.parent.exists() and (not path.parent.is_dir()):
-                    return FlextResult[str].fail("Parent path is not a directory")
-                return FlextResult[str].ok(str(path.resolve()))
+                    return r[str].fail("Parent path is not a directory")
+                return r[str].ok(str(path.resolve()))
             except (
                 ValueError,
                 TypeError,
@@ -454,7 +444,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return FlextResult[str].fail(f"Invalid file path: {e}")
+                return r[str].fail(f"Invalid file path: {e}")
 
     class StreamUtilities:
         """Stream processing utilities for Singer targets."""
@@ -511,7 +501,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def validate_stream_compatibility(
             stream_name: str, schema: Mapping[str, t.ContainerValue]
-        ) -> FlextResult[bool]:
+        ) -> r[bool]:
             """Validate stream compatibility with LDIF operations.
 
             Args:
@@ -519,14 +509,14 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             schema: Stream schema
 
             Returns:
-            FlextResult[bool]: Validation result
+            r[bool]: Validation result
 
             """
             if not stream_name or not schema:
-                return FlextResult[bool].fail("Stream name and schema are required")
+                return r[bool].fail("Stream name and schema are required")
             properties_raw = schema.get("properties", {})
             if not isinstance(properties_raw, Mapping) or not properties_raw:
-                return FlextResult[bool].fail("Schema must have properties")
+                return r[bool].fail("Schema must have properties")
             properties_map = properties_raw
             properties: dict[str, t.ContainerValue] = {
                 str(key): value for key, value in properties_map.items()
@@ -536,10 +526,10 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 key in properties for key in ["id", "uid", "cn", "username", "email"]
             )
             if not has_dn_field and (not has_id_fields):
-                return FlextResult[bool].fail(
+                return r[bool].fail(
                     "Schema must have either 'dn' field or identifier fields (id, uid, cn, username, email)"
                 )
-            return FlextResult[bool].ok(value=True)
+            return r[bool].ok(value=True)
 
     class ConfigValidation:
         """Configuration validation utilities."""
@@ -547,20 +537,20 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def validate_ldif_entry_config(
             config: Mapping[str, t.ContainerValue],
-        ) -> FlextResult[Mapping[str, t.ContainerValue]]:
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Validate LDIF entry configuration.
 
             Args:
             config: Entry configuration
 
             Returns:
-            FlextResult[dict[str, t.ContainerValue]]: Validated config or error
+            r[dict[str, t.ContainerValue]]: Validated config or error
 
             """
             if "object_classes" in config:
                 object_classes = config["object_classes"]
                 if not u.Guards.is_list(object_classes) or not object_classes:
-                    return FlextResult[t.ConfigurationMapping].fail(
+                    return r[t.ConfigurationMapping].fail(
                         "Object classes must be a non-empty list"
                     )
                 for oc in object_classes:
@@ -568,13 +558,13 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         case str() as object_class if object_class.strip():
                             pass
                         case _:
-                            return FlextResult[t.ConfigurationMapping].fail(
+                            return r[t.ConfigurationMapping].fail(
                                 "All object classes must be non-empty strings"
                             )
             if "attribute_mapping" in config:
                 attribute_mapping = config["attribute_mapping"]
                 if not isinstance(attribute_mapping, Mapping):
-                    return FlextResult[t.ConfigurationMapping].fail(
+                    return r[t.ConfigurationMapping].fail(
                         "Attribute mapping must be a dictionary"
                     )
                 attribute_mapping_map = attribute_mapping
@@ -582,33 +572,33 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     if not u.Guards.is_type(key, str) or not u.Guards.is_type(
                         value, str
                     ):
-                        return FlextResult[t.ConfigurationMapping].fail(
+                        return r[t.ConfigurationMapping].fail(
                             "Attribute mapping keys and values must be strings"
                         )
-            return FlextResult[t.ConfigurationMapping].ok(config)
+            return r[t.ConfigurationMapping].ok(config)
 
         @staticmethod
         def validate_ldif_target_config(
             config: Mapping[str, t.ContainerValue],
-        ) -> FlextResult[Mapping[str, t.ContainerValue]]:
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Validate LDIF target configuration.
 
             Args:
             config: Configuration dictionary
 
             Returns:
-            FlextResult[dict[str, t.ContainerValue]]: Validated config or error
+            r[dict[str, t.ContainerValue]]: Validated config or error
 
             """
             required_fields = ["output_file"]
             missing_fields = [field for field in required_fields if field not in config]
             if missing_fields:
-                return FlextResult[t.ConfigurationMapping].fail(
+                return r[t.ConfigurationMapping].fail(
                     f"Missing required LDIF target fields: {', '.join(missing_fields)}"
                 )
             output_file_raw = config["output_file"]
             if not isinstance(output_file_raw, str):
-                return FlextResult[t.ConfigurationMapping].fail(
+                return r[t.ConfigurationMapping].fail(
                     "Invalid output file: output_file must be a string"
                 )
             output_file = output_file_raw
@@ -618,13 +608,13 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 )
             )
             if file_validation.is_failure:
-                return FlextResult[t.ConfigurationMapping].fail(
+                return r[t.ConfigurationMapping].fail(
                     f"Invalid output file: {file_validation.error}"
                 )
             operation_mode = config.get("operation_mode", "append")
             valid_modes = ["append", "overwrite", "create"]
             if operation_mode not in valid_modes:
-                return FlextResult[t.ConfigurationMapping].fail(
+                return r[t.ConfigurationMapping].fail(
                     f"Invalid operation mode: {operation_mode}. Valid modes: {', '.join(valid_modes)}"
                 )
             if "dn_template" in config:
@@ -633,21 +623,21 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     case str() as template if template.strip():
                         pass
                     case _:
-                        return FlextResult[t.ConfigurationMapping].fail(
+                        return r[t.ConfigurationMapping].fail(
                             "DN template must be a non-empty string"
                         )
             batch_size_raw = config.get(
                 "batch_size", FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE
             )
             if not isinstance(batch_size_raw, int):
-                return FlextResult[t.ConfigurationMapping].fail(
+                return r[t.ConfigurationMapping].fail(
                     "Batch size must be a positive integer"
                 )
             if batch_size_raw <= 0:
-                return FlextResult[t.ConfigurationMapping].fail(
+                return r[t.ConfigurationMapping].fail(
                     "Batch size must be a positive integer"
                 )
-            return FlextResult[t.ConfigurationMapping].ok(config)
+            return r[t.ConfigurationMapping].ok(config)
 
     class StateManagement:
         """State management utilities for target operations."""

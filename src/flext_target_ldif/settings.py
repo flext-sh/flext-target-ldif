@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextResult, FlextSettings, t
+from flext_core import FlextSettings, r, t
 from pydantic import Field
 
 
@@ -42,13 +42,13 @@ class FlextTargetLdifSettings(FlextSettings):
         description="Include timestamp metadata in generated entries",
     )
 
-    def validate_domain_rules(self) -> FlextResult[bool]:
+    def validate_domain_rules(self) -> r[bool]:
         """Validate required target configuration constraints."""
         if not self.output_path.strip():
-            return FlextResult[bool].fail("output_path cannot be empty")
+            return r[bool].fail("output_path cannot be empty")
         if not self.dn_template.strip():
-            return FlextResult[bool].fail("dn_template cannot be empty")
-        return FlextResult[bool].ok(value=True)
+            return r[bool].fail("dn_template cannot be empty")
+        return r[bool].ok(value=True)
 
 
 __all__: list[str] = ["FlextTargetLdifSettings"]
