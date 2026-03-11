@@ -8,23 +8,18 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import e
-from flext_core._models.containers import FlextModelsContainers  # noqa: PLC2701
+from flext_core import e, m
 
 
 class FlextTargetLdifWriterError(e.OperationError):
     """Error raised when LDIF writer operations fail."""
 
-    details: FlextModelsContainers.ConfigMap
+    details: m.ConfigMap
 
-    def __init__(
-        self, message: str, details: FlextModelsContainers.ConfigMap | None = None
-    ) -> None:
+    def __init__(self, message: str, details: m.ConfigMap | None = None) -> None:
         """Initialize writer error with message and optional details."""
         super().__init__(message, reason=str(details) if details else None)
-        self.details = (
-            details if details is not None else FlextModelsContainers.ConfigMap(root={})
-        )
+        self.details = details if details is not None else m.ConfigMap(root={})
 
     @override
     def __str__(self) -> str:
