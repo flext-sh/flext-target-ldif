@@ -15,7 +15,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
 
-from flext_core import r, t
+from flext_core import r
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
 
@@ -63,13 +63,9 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             try:
                 message = json.loads(line.strip())
                 if not u.is_dict_like(message):
-                    return r[object].fail(
-                        "Message must be a JSON object"
-                    )
+                    return r[object].fail("Message must be a JSON object")
                 if "type" not in message:
-                    return r[object].fail(
-                        "Message missing required 'type' field"
-                    )
+                    return r[object].fail("Message missing required 'type' field")
                 parsed_message = {str(key): value for key, value in message.items()}
                 return r[object].ok(parsed_message)
             except json.JSONDecodeError as e:
@@ -93,14 +89,10 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             required_fields = ["stream", "record"]
             for field in required_fields:
                 if field not in message:
-                    return r[object].fail(
-                        f"RECORD message missing '{field}' field"
-                    )
+                    return r[object].fail(f"RECORD message missing '{field}' field")
             record = message["record"]
             if not u.is_dict_like(record):
-                return r[object].fail(
-                    "Record data must be a dictionary"
-                )
+                return r[object].fail("Record data must be a dictionary")
             return r[object].ok(message)
 
         @staticmethod
@@ -121,14 +113,10 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             required_fields = ["stream", "schema"]
             for field in required_fields:
                 if field not in message:
-                    return r[object].fail(
-                        f"SCHEMA message missing '{field}' field"
-                    )
+                    return r[object].fail(f"SCHEMA message missing '{field}' field")
             schema = message["schema"]
             if not u.is_dict_like(schema):
-                return r[object].fail(
-                    "Schema data must be a dictionary"
-                )
+                return r[object].fail("Schema data must be a dictionary")
             return r[object].ok(message)
 
         @staticmethod
@@ -550,9 +538,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             if "object_classes" in config:
                 object_classes = config["object_classes"]
                 if not u.Guards.is_list(object_classes) or not object_classes:
-                    return r[object].fail(
-                        "Object classes must be a non-empty list"
-                    )
+                    return r[object].fail("Object classes must be a non-empty list")
                 for oc in object_classes:
                     match oc:
                         case str() as object_class if object_class.strip():
@@ -564,9 +550,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             if "attribute_mapping" in config:
                 attribute_mapping = config["attribute_mapping"]
                 if not isinstance(attribute_mapping, Mapping):
-                    return r[object].fail(
-                        "Attribute mapping must be a dictionary"
-                    )
+                    return r[object].fail("Attribute mapping must be a dictionary")
                 attribute_mapping_map = attribute_mapping
                 for key, value in attribute_mapping_map.items():
                     if not u.Guards.is_type(key, str) or not u.Guards.is_type(
@@ -608,9 +592,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 )
             )
             if file_validation.is_failure:
-                return r[object].fail(
-                    f"Invalid output file: {file_validation.error}"
-                )
+                return r[object].fail(f"Invalid output file: {file_validation.error}")
             operation_mode = config.get("operation_mode", "append")
             valid_modes = ["append", "overwrite", "create"]
             if operation_mode not in valid_modes:
@@ -623,20 +605,14 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     case str() as template if template.strip():
                         pass
                     case _:
-                        return r[object].fail(
-                            "DN template must be a non-empty string"
-                        )
+                        return r[object].fail("DN template must be a non-empty string")
             batch_size_raw = config.get(
                 "batch_size", FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE
             )
             if not isinstance(batch_size_raw, int):
-                return r[object].fail(
-                    "Batch size must be a positive integer"
-                )
+                return r[object].fail("Batch size must be a positive integer")
             if batch_size_raw <= 0:
-                return r[object].fail(
-                    "Batch size must be a positive integer"
-                )
+                return r[object].fail("Batch size must be a positive integer")
             return r[object].ok(config)
 
     class StateManagement:
