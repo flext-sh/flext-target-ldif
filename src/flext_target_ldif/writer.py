@@ -128,9 +128,7 @@ class LdifWriter:
             attr_dict: dict[str, list[str]] = {}
             for key, value in attributes.items():
                 attr_dict[key] = (
-                    [str(value)]
-                    if not u.Guards.is_list(value)
-                    else [str(v) for v in value]
+                    [str(value)] if not u.is_list(value) else [str(v) for v in value]
                 )
             return {"dn": "dn", "attributes": attr_dict}
         except (RuntimeError, ValueError, TypeError) as e:
@@ -188,7 +186,7 @@ class LdifWriter:
         """Write entry attributes to file."""
         if u.is_dict_like(attributes_obj):
             for attr, values in attributes_obj.items():
-                if u.Guards.is_list(values):
+                if u.is_list(values):
                     f.writelines(f"{attr}: {value}\n" for value in values)
                 else:
                     f.write(f"{attr}: {values}\n")

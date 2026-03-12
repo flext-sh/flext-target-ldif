@@ -207,7 +207,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     if value is None:
                         continue
                     ldif_attr = mapping.get(key, key)
-                    if u.Guards.is_list(value):
+                    if u.is_list(value):
                         for item in value:
                             if item is not None:
                                 ldif_value = FlextTargetLdifUtilities.LdifDataProcessing.format_ldif_value(
@@ -537,7 +537,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if "object_classes" in config:
                 object_classes = config["object_classes"]
-                if not u.Guards.is_list(object_classes) or not object_classes:
+                if not u.is_list(object_classes) or not object_classes:
                     return r[object].fail("Object classes must be a non-empty list")
                 for oc in object_classes:
                     match oc:
@@ -553,9 +553,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     return r[object].fail("Attribute mapping must be a dictionary")
                 attribute_mapping_map = attribute_mapping
                 for key, value in attribute_mapping_map.items():
-                    if not u.Guards.is_type(key, str) or not u.Guards.is_type(
-                        value, str
-                    ):
+                    if not u.is_type(key, str) or not u.is_type(value, str):
                         return r[object].fail(
                             "Attribute mapping keys and values must be strings"
                         )
