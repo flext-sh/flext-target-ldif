@@ -14,7 +14,6 @@ from typing import override
 from flext_target_ldif.cli import main as cli_main
 from flext_target_ldif.settings import FlextTargetLdifSettings
 from flext_target_ldif.sinks import LDIFSink
-from flext_target_ldif.typings import t
 
 
 class TargetLDIF:
@@ -25,13 +24,13 @@ class TargetLDIF:
     @override
     def __init__(
         self,
-        config: Mapping[str, t.ContainerValue] | None = None,
+        config: Mapping[str, object] | None = None,
         validate_config: bool = False,
     ) -> None:
         """Initialize the LDIF target."""
-        self.config: Mapping[str, t.ContainerValue] = config or {}
+        self.config: Mapping[str, object] = config or {}
         self.sinks: dict[str, LDIFSink] = {}
-        self._test_config: dict[str, t.ContainerValue] | None = None
+        self._test_config: dict[str, object] | None = None
         if validate_config:
             self.validate_config()
         output_path_raw = self.config.get("output_path", "./output")
@@ -47,7 +46,7 @@ class TargetLDIF:
         return cli_main
 
     @property
-    def config_jsonschema(self) -> dict[str, t.ContainerValue]:
+    def config_jsonschema(self) -> dict[str, object]:
         """Return JSON schema for configuration."""
         return FlextTargetLdifSettings.model_json_schema()
 
@@ -56,9 +55,7 @@ class TargetLDIF:
         """Return the default sink class for this target."""
         return LDIFSink
 
-    def get_sink(
-        self, stream_name: str, schema: Mapping[str, t.ContainerValue]
-    ) -> LDIFSink:
+    def get_sink(self, stream_name: str, schema: Mapping[str, object]) -> LDIFSink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = LDIFSink(
@@ -83,7 +80,7 @@ class TargetLDIF:
             "base64_encode",
             "include_timestamps",
         }
-        filtered_config: dict[str, t.ContainerValue] = {
+        filtered_config: dict[str, object] = {
             k: v for k, v in config_dict.items() if k in allowed_fields
         }
         settings = FlextTargetLdifSettings.model_validate(filtered_config)

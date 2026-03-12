@@ -11,8 +11,6 @@ from pathlib import Path
 
 import pytest
 
-from flext_target_ldif import t
-
 
 @pytest.fixture
 def temp_dir() -> Generator[Path]:
@@ -32,7 +30,7 @@ def temp_file() -> Generator[Path]:
 
 
 @pytest.fixture
-def sample_config(temp_dir: Path) -> dict[str, t.ContainerValue]:
+def sample_config(temp_dir: Path) -> dict[str, object]:
     """Provide a sample configuration for testing."""
     return {
         "output_path": str(temp_dir),
@@ -63,7 +61,7 @@ def sample_record() -> dict[str, str]:
 
 
 @pytest.fixture
-def sample_schema() -> dict[str, t.ContainerValue]:
+def sample_schema() -> dict[str, object]:
     """Provide a sample Singer schema for testing."""
     return {
         "type": "object",
@@ -110,7 +108,7 @@ def multiple_records() -> list[dict[str, str]]:
 
 
 @pytest.fixture
-def ldif_options() -> dict[str, t.ContainerValue]:
+def ldif_options() -> dict[str, object]:
     """Provide sample LDIF options for testing."""
     return {"line_length": 78, "base64_encode": False, "include_timestamps": True}
 

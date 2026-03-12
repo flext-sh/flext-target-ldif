@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextSettings, r, t
+from flext_core import FlextSettings, r
 from pydantic import Field
 
 
@@ -24,7 +24,7 @@ class FlextTargetLdifSettings(FlextSettings):
         default_factory=dict,
         description="Source-to-LDIF attribute mapping",
     )
-    ldif_options: dict[str, t.ContainerValue] = Field(
+    ldif_options: dict[str, object] = Field(
         default_factory=dict,
         description="Raw LDIF formatter options",
     )

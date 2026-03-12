@@ -10,7 +10,6 @@ from datetime import UTC, datetime
 from flext_core import (
     FlextSettings,
     r,
-    t,
 )
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
@@ -207,7 +206,7 @@ class LdifFile(FlextMeltanoModels.Entity):
 class LdifTransformationResult(FlextMeltanoModels.Entity):
     """Result of Singer to LDIF transformation."""
 
-    original_record: dict[str, t.ContainerValue] = Field(
+    original_record: dict[str, object] = Field(
         ...,
         description="Original Singer record",
     )

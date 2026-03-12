@@ -11,7 +11,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import r, t
+from flext_core import r
 from flext_core.loggings import FlextLogger
 
 from flext_target_ldif.writer import LdifWriter
@@ -23,13 +23,13 @@ class LDIFSink:
     @override
     def __init__(
         self,
-        target_config: Mapping[str, t.ContainerValue],
+        target_config: Mapping[str, object],
         stream_name: str,
-        schema: Mapping[str, t.ContainerValue],
+        schema: Mapping[str, object],
         key_properties: list[str] | None = None,
     ) -> None:
         """Initialize the LDIF sink."""
-        self.config: Mapping[str, t.ContainerValue] = target_config
+        self.config: Mapping[str, object] = target_config
         self.stream_name = stream_name
         self.schema = schema
         self.key_properties = key_properties or []
@@ -60,14 +60,14 @@ class LDIFSink:
                     "LDIF file written", output_file=str(self._output_file)
                 )
 
-    def process_batch(self, _context: Mapping[str, t.ContainerValue]) -> None:
+    def process_batch(self, _context: Mapping[str, object]) -> None:
         """Process a batch of records."""
         self._get_ldif_writer()
 
     def process_record(
         self,
-        record: Mapping[str, t.ContainerValue],
-        _context: Mapping[str, t.ContainerValue],
+        record: Mapping[str, object],
+        _context: Mapping[str, object],
     ) -> None:
         """Process a single record and write to LDIF.
 
@@ -91,7 +91,7 @@ class LDIFSink:
         if self._ldif_writer is None:
             output_file = self._get_output_file()
             raw_ldif_options = self.config.get("ldif_options", {})
-            ldif_options: dict[str, t.ContainerValue] = {}
+            ldif_options: dict[str, object] = {}
             if isinstance(raw_ldif_options, Mapping):
                 ldif_options = {
                     str(key): value for key, value in raw_ldif_options.items()
