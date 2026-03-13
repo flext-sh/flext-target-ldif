@@ -83,7 +83,7 @@ class TargetLDIF:
         filtered_config: dict[str, object] = {
             k: v for k, v in config_dict.items() if k in allowed_fields
         }
-        settings = FlextTargetLdifSettings(filtered_config)
+        settings = FlextTargetLdifSettings.model_validate(filtered_config)
         result = settings.validate_domain_rules()
         if not result.is_success:
             msg = f"Configuration validation failed: {result.error}"
