@@ -59,17 +59,19 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             if not line or not line.strip():
-                return r[object].fail("Empty input line")
+                return r[Mapping[str, object]].fail("Empty input line")
             message_adapter: TypeAdapter[Mapping[str, object]] = TypeAdapter(
                 Mapping[str, object]
             )
             try:
                 validated = message_adapter.validate_json(line.strip())
                 if "type" not in validated:
-                    return r[object].fail("Message missing required 'type' field")
-                return r[object].ok(validated)
+                    return r[Mapping[str, object]].fail(
+                        "Message missing required 'type' field"
+                    )
+                return r[Mapping[str, object]].ok(validated)
             except ValidationError as e:
-                return r[object].fail(f"Invalid JSON: {e}")
+                return r[Mapping[str, object]].fail(f"Invalid JSON: {e}")
 
         @staticmethod
         def validate_record_message(
@@ -85,15 +87,17 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             if message.get("type") != "RECORD":
-                return r[object].fail("Message type must be RECORD")
+                return r[Mapping[str, object]].fail("Message type must be RECORD")
             required_fields = ["stream", "record"]
             for field in required_fields:
                 if field not in message:
-                    return r[object].fail(f"RECORD message missing '{field}' field")
+                    return r[Mapping[str, object]].fail(
+                        f"RECORD message missing '{field}' field"
+                    )
             record = message["record"]
             if not u.is_dict_like(record):
-                return r[object].fail("Record data must be a dictionary")
-            return r[object].ok(message)
+                return r[Mapping[str, object]].fail("Record data must be a dictionary")
+            return r[Mapping[str, object]].ok(message)
 
         @staticmethod
         def validate_schema_message(
@@ -109,15 +113,17 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             if message.get("type") != "SCHEMA":
-                return r[object].fail("Message type must be SCHEMA")
+                return r[Mapping[str, object]].fail("Message type must be SCHEMA")
             required_fields = ["stream", "schema"]
             for field in required_fields:
                 if field not in message:
-                    return r[object].fail(f"SCHEMA message missing '{field}' field")
+                    return r[Mapping[str, object]].fail(
+                        f"SCHEMA message missing '{field}' field"
+                    )
             schema = message["schema"]
             if not u.is_dict_like(schema):
-                return r[object].fail("Schema data must be a dictionary")
-            return r[object].ok(message)
+                return r[Mapping[str, object]].fail("Schema data must be a dictionary")
+            return r[Mapping[str, object]].ok(message)
 
         @staticmethod
         def write_state_message(state: Mapping[str, object]) -> None:
@@ -538,26 +544,30 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             if "object_classes" in config:
                 object_classes = config["object_classes"]
                 if not u.is_list(object_classes) or not object_classes:
-                    return r[object].fail("Object classes must be a non-empty list")
+                    return r[Mapping[str, object]].fail(
+                        "Object classes must be a non-empty list"
+                    )
                 for oc in object_classes:
                     match oc:
                         case str() as object_class if object_class.strip():
                             pass
                         case _:
-                            return r[object].fail(
+                            return r[Mapping[str, object]].fail(
                                 "All object classes must be non-empty strings"
                             )
             if "attribute_mapping" in config:
                 attribute_mapping = config["attribute_mapping"]
                 if not isinstance(attribute_mapping, Mapping):
-                    return r[object].fail("Attribute mapping must be a dictionary")
+                    return r[Mapping[str, object]].fail(
+                        "Attribute mapping must be a dictionary"
+                    )
                 attribute_mapping_map = attribute_mapping
                 for key, value in attribute_mapping_map.items():
                     if not u.is_type(key, str) or not u.is_type(value, str):
-                        return r[object].fail(
+                        return r[Mapping[str, object]].fail(
                             "Attribute mapping keys and values must be strings"
                         )
-            return r[object].ok(config)
+            return r[Mapping[str, object]].ok(config)
 
         @staticmethod
         def validate_ldif_target_config(
@@ -575,12 +585,12 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             required_fields = ["output_file"]
             missing_fields = [field for field in required_fields if field not in config]
             if missing_fields:
-                return r[object].fail(
+                return r[Mapping[str, object]].fail(
                     f"Missing required LDIF target fields: {', '.join(missing_fields)}"
                 )
             output_file_raw = config["output_file"]
             if not isinstance(output_file_raw, str):
-                return r[object].fail(
+                return r[Mapping[str, object]].fail(
                     "Invalid output file: output_file must be a string"
                 )
             output_file = output_file_raw
@@ -590,11 +600,13 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 )
             )
             if file_validation.is_failure:
-                return r[object].fail(f"Invalid output file: {file_validation.error}")
+                return r[Mapping[str, object]].fail(
+                    f"Invalid output file: {file_validation.error}"
+                )
             operation_mode = config.get("operation_mode", "append")
             valid_modes = ["append", "overwrite", "create"]
             if operation_mode not in valid_modes:
-                return r[object].fail(
+                return r[Mapping[str, object]].fail(
                     f"Invalid operation mode: {operation_mode}. Valid modes: {', '.join(valid_modes)}"
                 )
             if "dn_template" in config:
@@ -603,15 +615,21 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     case str() as template if template.strip():
                         pass
                     case _:
-                        return r[object].fail("DN template must be a non-empty string")
+                        return r[Mapping[str, object]].fail(
+                            "DN template must be a non-empty string"
+                        )
             batch_size_raw = config.get(
                 "batch_size", FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE
             )
             if not isinstance(batch_size_raw, int):
-                return r[object].fail("Batch size must be a positive integer")
+                return r[Mapping[str, object]].fail(
+                    "Batch size must be a positive integer"
+                )
             if batch_size_raw <= 0:
-                return r[object].fail("Batch size must be a positive integer")
-            return r[object].ok(config)
+                return r[Mapping[str, object]].fail(
+                    "Batch size must be a positive integer"
+                )
+            return r[Mapping[str, object]].ok(config)
 
     class StateManagement:
         """State management utilities for target operations."""

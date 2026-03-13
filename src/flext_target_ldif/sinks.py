@@ -54,7 +54,9 @@ class LDIFSink:
         if self._ldif_writer:
             result: r[bool] = self._ldif_writer.close()
             if not result.is_success:
-                self.logger.error("Failed to close LDIF writer", error=result.error)
+                self.logger.error(
+                    "Failed to close LDIF writer", error=result.error or ""
+                )
             else:
                 self.logger.info(
                     "LDIF file written", output_file=str(self._output_file)
