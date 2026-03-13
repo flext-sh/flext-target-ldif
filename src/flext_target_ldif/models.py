@@ -6,6 +6,7 @@ This module provides data models for LDIF target operations.
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from typing import Annotated
 
 from flext_core import (
     FlextSettings,
@@ -27,98 +28,156 @@ compliance, format validation, and target operations following standardized patt
 class LdifFormatOptions(FlextSettings):
     """LDIF format configuration with specification compliance."""
 
-    line_length: int = Field(
-        default=c.STANDARD_LINE_LENGTH,
-        ge=c.MIN_LINE_LENGTH,
-        le=c.MAX_LINE_LENGTH,
-        description="Maximum LDIF line length",
-    )
-    fold_lines: bool = Field(
-        default=True,
-        description="Enable line folding for long lines",
-    )
-    base64_encode: bool = Field(
-        default=False,
-        description="Force base64 encoding for all attributes",
-    )
-    include_version: bool = Field(
-        default=True,
-        description="Include LDIF version header",
-    )
-    encoding: str = Field(
-        default="utf-8",
-        description="Character encoding for LDIF files",
-    )
-    line_separator: str = Field(default="\n", description="Line separator character")
+    line_length: Annotated[
+        int,
+        Field(
+            default=c.STANDARD_LINE_LENGTH,
+            ge=c.MIN_LINE_LENGTH,
+            le=c.MAX_LINE_LENGTH,
+            description="Maximum LDIF line length",
+        ),
+    ]
+    fold_lines: Annotated[
+        bool,
+        Field(
+            default=True,
+            description="Enable line folding for long lines",
+        ),
+    ]
+    base64_encode: Annotated[
+        bool,
+        Field(
+            default=False,
+            description="Force base64 encoding for all attributes",
+        ),
+    ]
+    include_version: Annotated[
+        bool,
+        Field(
+            default=True,
+            description="Include LDIF version header",
+        ),
+    ]
+    encoding: Annotated[
+        str,
+        Field(
+            default="utf-8",
+            description="Character encoding for LDIF files",
+        ),
+    ]
+    line_separator: Annotated[
+        str, Field(default="\n", description="Line separator character")
+    ]
 
 
 class LdifExportConfig(FlextSettings):
     """LDIF export configuration with file management."""
 
-    output_path: str = Field(..., description="Output directory for LDIF files")
-    file_naming_pattern: str = Field(
-        default="{stream_name}.ldif",
-        description="File naming pattern template",
-    )
-    dn_template: str = Field(
-        ...,
-        description="DN template for generating LDIF entry DNs",
-    )
-    attribute_mappings: dict[str, str] = Field(
-        default_factory=dict,
-        description="Singer field to LDIF attribute mappings",
-    )
-    object_classes: list[str] = Field(
-        default_factory=list,
-        description="Default LDAP object classes for entries",
-    )
+    output_path: Annotated[
+        str, Field(..., description="Output directory for LDIF files")
+    ]
+    file_naming_pattern: Annotated[
+        str,
+        Field(
+            default="{stream_name}.ldif",
+            description="File naming pattern template",
+        ),
+    ]
+    dn_template: Annotated[
+        str,
+        Field(
+            ...,
+            description="DN template for generating LDIF entry DNs",
+        ),
+    ]
+    attribute_mappings: Annotated[
+        dict[str, str],
+        Field(
+            default_factory=dict,
+            description="Singer field to LDIF attribute mappings",
+        ),
+    ]
+    object_classes: Annotated[
+        list[str],
+        Field(
+            default_factory=list,
+            description="Default LDAP object classes for entries",
+        ),
+    ]
 
     # File management options
-    overwrite_existing: bool = Field(
-        default=False,
-        description="Overwrite existing LDIF files",
-    )
-    create_directories: bool = Field(
-        default=True,
-        description="Create output directories if they don't exist",
-    )
-    compress_output: bool = Field(
-        default=False,
-        description="Compress LDIF files with gzip",
-    )
+    overwrite_existing: Annotated[
+        bool,
+        Field(
+            default=False,
+            description="Overwrite existing LDIF files",
+        ),
+    ]
+    create_directories: Annotated[
+        bool,
+        Field(
+            default=True,
+            description="Create output directories if they don't exist",
+        ),
+    ]
+    compress_output: Annotated[
+        bool,
+        Field(
+            default=False,
+            description="Compress LDIF files with gzip",
+        ),
+    ]
 
     # Format configuration
-    format_options: LdifFormatOptions = Field(
-        default_factory=LdifFormatOptions,
-        description="LDIF format options",
-    )
+    format_options: Annotated[
+        LdifFormatOptions,
+        Field(
+            default_factory=LdifFormatOptions,
+            description="LDIF format options",
+        ),
+    ]
 
 
 class LdifEntry(FlextMeltanoModels.Entity):
     """LDIF entry representation with format validation."""
 
-    distinguished_name: str = Field(
-        ...,
-        description="LDIF Distinguished Name (DN)",
-        min_length=1,
-        max_length=c.MAX_DN_LENGTH,
-    )
-    attributes: dict[str, list[str]] = Field(
-        default_factory=dict,
-        description="LDIF attributes with values",
-    )
-    object_classes: list[str] = Field(
-        default_factory=list,
-        description="LDAP object classes",
-    )
-    change_type: str | None = Field(
-        None,
-        description="LDIF change type (add, modify, delete, modrdn)",
-    )
-    controls: list[str] = Field(
-        default_factory=list,
-        description="LDAP controls for the entry",
-    )
+    distinguished_name: Annotated[
+        str,
+        Field(
+            ...,
+            description="LDIF Distinguished Name (DN)",
+            min_length=1,
+            max_length=c.MAX_DN_LENGTH,
+        ),
+    ]
+    attributes: Annotated[
+        dict[str, list[str]],
+        Field(
+            default_factory=dict,
+            description="LDIF attributes with values",
+        ),
+    ]
+    object_classes: Annotated[
+        list[str],
+        Field(
+            default_factory=list,
+            description="LDAP object classes",
+        ),
+    ]
+    change_type: Annotated[
+        str | None,
+        Field(
+            None,
+            description="LDIF change type (add, modify, delete, modrdn)",
+        ),
+    ]
+    controls: Annotated[
+        list[str],
+        Field(
+            default_factory=list,
+            description="LDAP controls for the entry",
+        ),
+    ]
 
     def validate_business_rules(self) -> r[bool]:
         """Validate LDIF entry business rules."""
@@ -157,25 +216,40 @@ class LdifEntry(FlextMeltanoModels.Entity):
 class LdifFile(FlextMeltanoModels.Entity):
     """LDIF file representation with metadata."""
 
-    file_path: str = Field(..., description="Path to the LDIF file")
-    stream_name: str = Field(..., description="Singer stream name")
-    entries: list[LdifEntry] = Field(
-        default_factory=list[LdifEntry],
-        description="LDIF entries in the file",
-    )
-    format_options: LdifFormatOptions = Field(
-        ...,
-        description="Format options used for the file",
-    )
+    file_path: Annotated[str, Field(..., description="Path to the LDIF file")]
+    stream_name: Annotated[str, Field(..., description="Singer stream name")]
+    entries: Annotated[
+        list[LdifEntry],
+        Field(
+            default_factory=list[LdifEntry],
+            description="LDIF entries in the file",
+        ),
+    ]
+    format_options: Annotated[
+        LdifFormatOptions,
+        Field(
+            ...,
+            description="Format options used for the file",
+        ),
+    ]
 
     # File metadata
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC),
-        description="File creation timestamp",
-    )
-    file_size_bytes: int = Field(default=0, ge=0, description="File size in bytes")
-    entry_count: int = Field(default=0, ge=0, description="Number of entries in file")
-    is_compressed: bool = Field(default=False, description="Whether file is compressed")
+    created_at: Annotated[
+        datetime,
+        Field(
+            default_factory=lambda: datetime.now(UTC),
+            description="File creation timestamp",
+        ),
+    ]
+    file_size_bytes: Annotated[
+        int, Field(default=0, ge=0, description="File size in bytes")
+    ]
+    entry_count: Annotated[
+        int, Field(default=0, ge=0, description="Number of entries in file")
+    ]
+    is_compressed: Annotated[
+        bool, Field(default=False, description="Whether file is compressed")
+    ]
 
     def validate_business_rules(self) -> r[bool]:
         """Validate LDIF file business rules."""
@@ -206,27 +280,42 @@ class LdifFile(FlextMeltanoModels.Entity):
 class LdifTransformationResult(FlextMeltanoModels.Entity):
     """Result of Singer to LDIF transformation."""
 
-    original_record: dict[str, object] = Field(
-        ...,
-        description="Original Singer record",
-    )
-    transformed_entry: LdifEntry = Field(
-        ...,
-        description="Resulting LDIF entry",
-    )
-    transformation_errors: list[str] = Field(
-        default_factory=list,
-        description="Transformation errors",
-    )
-    processing_time_ms: float = Field(
-        default=0.0,
-        ge=0.0,
-        description="Processing time in milliseconds",
-    )
-    transformation_timestamp: datetime = Field(
-        default_factory=lambda: datetime.now(UTC),
-        description="Transformation timestamp",
-    )
+    original_record: Annotated[
+        dict[str, object],
+        Field(
+            ...,
+            description="Original Singer record",
+        ),
+    ]
+    transformed_entry: Annotated[
+        LdifEntry,
+        Field(
+            ...,
+            description="Resulting LDIF entry",
+        ),
+    ]
+    transformation_errors: Annotated[
+        list[str],
+        Field(
+            default_factory=list,
+            description="Transformation errors",
+        ),
+    ]
+    processing_time_ms: Annotated[
+        float,
+        Field(
+            default=0.0,
+            ge=0.0,
+            description="Processing time in milliseconds",
+        ),
+    ]
+    transformation_timestamp: Annotated[
+        datetime,
+        Field(
+            default_factory=lambda: datetime.now(UTC),
+            description="Transformation timestamp",
+        ),
+    ]
 
     @property
     def has_errors(self) -> bool:
@@ -269,24 +358,37 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
 class LdifBatchProcessing(FlextMeltanoModels.Entity):
     """LDIF batch processing configuration and state."""
 
-    stream_name: str = Field(..., description="Singer stream name")
-    batch_size: int = Field(
-        default=c.DEFAULT_BATCH_SIZE,
-        ge=1,
-        le=c.MAX_BATCH_SIZE_LIMIT,
-        description="Records per batch",
-    )
-    current_batch: list[LdifEntry] = Field(
-        default_factory=list[LdifEntry],
-        description="Current batch of entries",
-    )
-    total_processed: int = Field(default=0, ge=0, description="Total entries processed")
-    successful_exports: int = Field(default=0, ge=0, description="Successful exports")
-    failed_exports: int = Field(default=0, ge=0, description="Failed exports")
-    last_processed_at: datetime | None = Field(
-        None,
-        description="Last processing timestamp",
-    )
+    stream_name: Annotated[str, Field(..., description="Singer stream name")]
+    batch_size: Annotated[
+        int,
+        Field(
+            default=c.DEFAULT_BATCH_SIZE,
+            ge=1,
+            le=c.MAX_BATCH_SIZE_LIMIT,
+            description="Records per batch",
+        ),
+    ]
+    current_batch: Annotated[
+        list[LdifEntry],
+        Field(
+            default_factory=list[LdifEntry],
+            description="Current batch of entries",
+        ),
+    ]
+    total_processed: Annotated[
+        int, Field(default=0, ge=0, description="Total entries processed")
+    ]
+    successful_exports: Annotated[
+        int, Field(default=0, ge=0, description="Successful exports")
+    ]
+    failed_exports: Annotated[int, Field(default=0, ge=0, description="Failed exports")]
+    last_processed_at: Annotated[
+        datetime | None,
+        Field(
+            None,
+            description="Last processing timestamp",
+        ),
+    ]
 
     @property
     def is_batch_full(self) -> bool:
@@ -328,73 +430,110 @@ class LdifBatchProcessing(FlextMeltanoModels.Entity):
 class SingerStreamConfig(FlextSettings):
     """Singer stream configuration for LDIF export."""
 
-    stream_name: str = Field(..., description="Singer stream name")
-    ldif_config: LdifExportConfig = Field(
-        ...,
-        description="LDIF export configuration",
-    )
-    batch_size: int = Field(
-        default=c.DEFAULT_BATCH_SIZE,
-        ge=1,
-        le=c.MAX_BATCH_SIZE_LIMIT,
-        description="Batch size for processing",
-    )
-    enable_validation: bool = Field(
-        default=True,
-        description="Enable LDIF format validation",
-    )
+    stream_name: Annotated[str, Field(..., description="Singer stream name")]
+    ldif_config: Annotated[
+        LdifExportConfig,
+        Field(
+            ...,
+            description="LDIF export configuration",
+        ),
+    ]
+    batch_size: Annotated[
+        int,
+        Field(
+            default=c.DEFAULT_BATCH_SIZE,
+            ge=1,
+            le=c.MAX_BATCH_SIZE_LIMIT,
+            description="Batch size for processing",
+        ),
+    ]
+    enable_validation: Annotated[
+        bool,
+        Field(
+            default=True,
+            description="Enable LDIF format validation",
+        ),
+    ]
 
 
 class LdifTargetResult(FlextMeltanoModels.Entity):
     """Result of LDIF target operation processing."""
 
-    stream_name: str = Field(..., description="Singer stream name")
-    output_files: list[str] = Field(
-        default_factory=list,
-        description="Generated LDIF file paths",
-    )
-    records_processed: int = Field(
-        default=0,
-        ge=0,
-        description="Total records processed",
-    )
-    entries_exported: int = Field(default=0, ge=0, description="LDIF entries exported")
-    entries_failed: int = Field(
-        default=0,
-        ge=0,
-        description="Entries that failed export",
-    )
+    stream_name: Annotated[str, Field(..., description="Singer stream name")]
+    output_files: Annotated[
+        list[str],
+        Field(
+            default_factory=list,
+            description="Generated LDIF file paths",
+        ),
+    ]
+    records_processed: Annotated[
+        int,
+        Field(
+            default=0,
+            ge=0,
+            description="Total records processed",
+        ),
+    ]
+    entries_exported: Annotated[
+        int, Field(default=0, ge=0, description="LDIF entries exported")
+    ]
+    entries_failed: Annotated[
+        int,
+        Field(
+            default=0,
+            ge=0,
+            description="Entries that failed export",
+        ),
+    ]
 
     # File statistics
-    total_file_size_bytes: int = Field(
-        default=0,
-        ge=0,
-        description="Total size of generated files",
-    )
-    files_compressed: int = Field(
-        default=0,
-        ge=0,
-        description="Number of compressed files",
-    )
+    total_file_size_bytes: Annotated[
+        int,
+        Field(
+            default=0,
+            ge=0,
+            description="Total size of generated files",
+        ),
+    ]
+    files_compressed: Annotated[
+        int,
+        Field(
+            default=0,
+            ge=0,
+            description="Number of compressed files",
+        ),
+    ]
 
     # Performance metrics
-    total_duration_ms: float = Field(
-        default=0.0,
-        ge=0.0,
-        description="Total processing duration",
-    )
-    average_processing_time_ms: float = Field(
-        default=0.0,
-        ge=0.0,
-        description="Average processing time per record",
-    )
+    total_duration_ms: Annotated[
+        float,
+        Field(
+            default=0.0,
+            ge=0.0,
+            description="Total processing duration",
+        ),
+    ]
+    average_processing_time_ms: Annotated[
+        float,
+        Field(
+            default=0.0,
+            ge=0.0,
+            description="Average processing time per record",
+        ),
+    ]
 
     # Error tracking
-    error_messages: list[str] = Field(
-        default_factory=list,
-        description="Error messages encountered",
-    )
-    warnings: list[str] = Field(default_factory=list, description="Warning messages")
+    error_messages: Annotated[
+        list[str],
+        Field(
+            default_factory=list,
+            description="Error messages encountered",
+        ),
+    ]
+    warnings: Annotated[
+        list[str], Field(default_factory=list, description="Warning messages")
+    ]
 
     @property
     def failure_rate(self) -> float:
@@ -442,19 +581,33 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
 class LdifErrorContext(FlextMeltanoModels.ArbitraryTypesModel):
     """Error context for LDIF target error handling."""
 
-    error_type: str = Field(..., description="Error category")
+    error_type: Annotated[str, Field(..., description="Error category")]
 
     # Context information
-    file_path: str | None = Field(None, description="File path that caused error")
-    entry_dn: str | None = Field(None, description="DN of entry causing error")
-    attribute_name: str | None = Field(None, description="Attribute causing error")
-    stream_name: str | None = Field(None, description="Singer stream name")
-    line_number: int | None = Field(None, description="Line number in LDIF file")
+    file_path: Annotated[
+        str | None, Field(None, description="File path that caused error")
+    ]
+    entry_dn: Annotated[
+        str | None, Field(None, description="DN of entry causing error")
+    ]
+    attribute_name: Annotated[
+        str | None, Field(None, description="Attribute causing error")
+    ]
+    stream_name: Annotated[str | None, Field(None, description="Singer stream name")]
+    line_number: Annotated[
+        int | None, Field(None, description="Line number in LDIF file")
+    ]
 
     # Recovery information
-    is_retryable: bool = Field(default=False, description="Whether error is retryable")
-    suggested_action: str | None = Field(None, description="Suggested recovery action")
-    max_retry_attempts: int | None = Field(None, description="Maximum retry attempts")
+    is_retryable: Annotated[
+        bool, Field(default=False, description="Whether error is retryable")
+    ]
+    suggested_action: Annotated[
+        str | None, Field(None, description="Suggested recovery action")
+    ]
+    max_retry_attempts: Annotated[
+        int | None, Field(None, description="Maximum retry attempts")
+    ]
 
 
 class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
