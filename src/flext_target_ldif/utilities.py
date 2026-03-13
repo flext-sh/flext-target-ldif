@@ -8,7 +8,6 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import base64
-import json
 import re
 from collections.abc import Mapping
 from datetime import UTC, datetime
@@ -18,6 +17,7 @@ from typing import ClassVar, override
 from flext_core import r
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
+from pydantic import TypeAdapter, ValidationError
 
 from .constants import c
 
@@ -60,15 +60,15 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if not line or not line.strip():
                 return r[object].fail("Empty input line")
+            message_adapter: TypeAdapter[Mapping[str, object]] = TypeAdapter(
+                Mapping[str, object]
+            )
             try:
-                message = json.loads(line.strip())
-                if not u.is_dict_like(message):
-                    return r[object].fail("Message must be a JSON object")
-                if "type" not in message:
+                validated = message_adapter.validate_json(line.strip())
+                if "type" not in validated:
                     return r[object].fail("Message missing required 'type' field")
-                parsed_message = {str(key): value for key, value in message.items()}
-                return r[object].ok(parsed_message)
-            except json.JSONDecodeError as e:
+                return r[object].ok(validated)
+            except ValidationError as e:
                 return r[object].fail(f"Invalid JSON: {e}")
 
         @staticmethod
