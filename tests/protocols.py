@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_tests.protocols import FlextTestsProtocols
+from flext_tests import FlextTestsProtocols
 
 from flext_target_ldif.protocols import FlextTargetLdifProtocols
 
@@ -18,23 +18,11 @@ class TestsFlextTargetLdifProtocols(FlextTestsProtocols, FlextTargetLdifProtocol
     """Test protocols combining FlextTestsProtocols and FlextTargetLdifProtocols.
 
     Provides access to:
-    - tp.Tests.Docker.* (from FlextTestsProtocols)
-    - tp.Tests.Factory.* (from FlextTestsProtocols)
-    - tp.TargetLdif.* (from FlextTargetLdifProtocols)
+    - p.Tests.Docker.* (from FlextTestsProtocols)
+    - p.Tests.Factory.* (from FlextTestsProtocols)
+    - p.TargetLdif.* (from FlextTargetLdifProtocols)
     """
 
-    class Tests:
-        """Project-specific test protocols.
 
-        Extends FlextTestsProtocols.Tests with TargetLdif-specific protocols.
-        """
-
-        class TargetLdif:
-            """TargetLdif-specific test protocols."""
-
-
-# Runtime aliases
 p = TestsFlextTargetLdifProtocols
-tp = TestsFlextTargetLdifProtocols
-
-__all__ = ["TestsFlextTargetLdifProtocols", "p", "tp"]
+__all__ = ["TestsFlextTargetLdifProtocols", "p"]

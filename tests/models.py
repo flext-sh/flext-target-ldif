@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_tests.models import FlextTestsModels
+from flext_tests import FlextTestsModels
 
 from flext_target_ldif.models import FlextTargetLdifModels
 
@@ -26,12 +26,6 @@ class TestsFlextTargetLdifModels(FlextTestsModels, FlextTargetLdifModels):
     - tm.* (Target LDIF domain models)
     - m.* (production models via alternative alias)
     """
-
-    class Tests:
-        """Project-specific test fixtures namespace."""
-
-        class TargetLdif:
-            """Target LDIF-specific test fixtures."""
 
 
 # Short aliases per FLEXT convention

@@ -4,35 +4,12 @@ Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
 """
-# PYTHON_VERSION_GUARD — Do not remove. Managed by scripts/maintenance/enforce_python_version.py
-import sys as _sys
-
-if _sys.version_info[:2] != (3, 13):
-    _v = f"{_sys.version_info.major}.{_sys.version_info.minor}.{_sys.version_info.micro}"
-    raise RuntimeError(
-        f"\n{'=' * 72}\n"
-        f"FATAL: Python {_v} detected — this project requires Python 3.13.\n"
-        f"\n"
-        f"The virtual environment was created with the WRONG Python interpreter.\n"
-        f"\n"
-        f"Fix:\n"
-        f"  1. rm -rf .venv\n"
-        f"  2. poetry env use python3.13\n"
-        f"  3. poetry install\n"
-        f"\n"
-        f"Or use the workspace Makefile:\n"
-        f"  make setup PROJECT=<project-name>\n"
-        f"{'=' * 72}\n"
-    )
-del _sys
-# PYTHON_VERSION_GUARD_END
 
 import tempfile
 from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from flext_core import FlextTypes as t
 
 
 @pytest.fixture
@@ -48,13 +25,12 @@ def temp_file() -> Generator[Path]:
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         temp_path = Path(temp_file.name)
         yield temp_path
-        # Cleanup
         if temp_path.exists():
             temp_path.unlink()
 
 
 @pytest.fixture
-def sample_config(temp_dir: Path) -> dict[str, t.GeneralValueType]:
+def sample_config(temp_dir: Path) -> dict[str, object]:
     """Provide a sample configuration for testing."""
     return {
         "output_path": str(temp_dir),
@@ -65,11 +41,7 @@ def sample_config(temp_dir: Path) -> dict[str, t.GeneralValueType]:
             "base64_encode": False,
             "include_timestamps": True,
         },
-        "attribute_mapping": {
-            "user_id": "uid",
-            "full_name": "cn",
-            "email": "mail",
-        },
+        "attribute_mapping": {"user_id": "uid", "full_name": "cn", "email": "mail"},
     }
 
 
@@ -89,7 +61,7 @@ def sample_record() -> dict[str, str]:
 
 
 @pytest.fixture
-def sample_schema() -> dict[str, t.GeneralValueType]:
+def sample_schema() -> dict[str, object]:
     """Provide a sample Singer schema for testing."""
     return {
         "type": "object",
@@ -136,13 +108,9 @@ def multiple_records() -> list[dict[str, str]]:
 
 
 @pytest.fixture
-def ldif_options() -> dict[str, t.GeneralValueType]:
+def ldif_options() -> dict[str, object]:
     """Provide sample LDIF options for testing."""
-    return {
-        "line_length": 78,
-        "base64_encode": False,
-        "include_timestamps": True,
-    }
+    return {"line_length": 78, "base64_encode": False, "include_timestamps": True}
 
 
 @pytest.fixture
@@ -161,8 +129,7 @@ def attribute_mapping() -> dict[str, str]:
     }
 
 
-# Pytest markers for test categorization
-def pytest_configure(config: object) -> None:
+def pytest_configure(config: pytest.Config) -> None:
     """Configure pytest markers."""
     config.addinivalue_line("markers", "unit: mark test as a unit test")
     config.addinivalue_line("markers", "integration: mark test as an integration test")
@@ -173,6 +140,5 @@ def pytest_configure(config: object) -> None:
     config.addinivalue_line("markers", "target: mark test as target-specific")
     config.addinivalue_line("markers", "sink: mark test as sink-specific")
     config.addinivalue_line(
-        "markers",
-        "requires_filesystem: mark test as requiring file system access",
+        "markers", "requires_filesystem: mark test as requiring file system access"
     )

@@ -11,25 +11,23 @@ from enum import StrEnum
 from typing import Final
 
 from flext_core import FlextConstants
-from flext_ldif.constants import FlextLdifConstants
+from flext_ldif import FlextLdifConstants
+from flext_meltano import FlextMeltanoConstants
 
 
-class FlextTargetLdifConstants(FlextConstants):
+class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """LDIF target export-specific constants following flext-core patterns.
 
     Composes with FlextLdifConstants to avoid duplication and ensure consistency.
     """
 
-    # LDIF File Configuration using composition
     DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.DEFAULT_ENCODING
     DEFAULT_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
     MAX_LINE_LENGTH: Final[int] = 1024
-
-    # Singer Target Configuration - using FlextConstants composition
-    # Note: DEFAULT_BATCH_SIZE inherited from FlextConstants (Final, cannot override)
+    MIN_LINE_LENGTH: Final[int] = 40
+    STANDARD_LINE_LENGTH: Final[int] = 78
+    MAX_DN_LENGTH: Final[int] = 1000
     MAX_BATCH_SIZE: Final[int] = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
-
-    # LDIF Format Options using composition
     SUPPORTED_ENCODINGS: Final[frozenset[str]] = frozenset([
         "utf-8",
         "utf-16",
@@ -38,6 +36,14 @@ class FlextTargetLdifConstants(FlextConstants):
         "latin-1",
         "cp1252",
     ])
+    DEV_FILE_PATTERN: Final[str] = "dev_{stream_name}_{timestamp}.ldif"
+    PROD_FILE_PATTERN: Final[str] = "prod_{stream_name}_{timestamp}.ldif"
+    TEST_FILE_PATTERN: Final[str] = "test_{stream_name}.ldif"
+    DEFAULT_FILE_PATTERN: Final[str] = "{stream_name}_{timestamp}.ldif"
+    DEV_LINE_LENGTH_OFFSET: Final[int] = 42
+    ASCII_SPACE: Final[int] = 32
+    ASCII_TILDE: Final[int] = 126
+    LDIF_LINE_WRAP_LENGTH: Final[int] = 76
 
     class ErrorType(StrEnum):
         """LDIF target error types using StrEnum for type safety.
@@ -96,8 +102,8 @@ class FlextTargetLdifConstants(FlextConstants):
             FlextLdifConstants.Ldif.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
         )
         MAX_ATTRIBUTE_VALUE_LENGTH: Final[int] = 1000
+        MAX_DN_COMPONENTS: Final[int] = 10
 
 
 c = FlextTargetLdifConstants
-
 __all__ = ["FlextTargetLdifConstants", "c"]
