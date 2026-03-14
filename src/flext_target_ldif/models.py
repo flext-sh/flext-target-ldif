@@ -132,7 +132,7 @@ class LdifExportConfig(FlextSettings):
     format_options: Annotated[
         LdifFormatOptions,
         Field(
-            default_factory=LdifFormatOptions,
+            default_factory=lambda: LdifFormatOptions.model_validate({}),
             description="LDIF format options",
         ),
     ]
@@ -234,13 +234,6 @@ class LdifFile(FlextMeltanoModels.Entity):
     ]
 
     # File metadata
-    created_at: Annotated[
-        datetime,
-        Field(
-            default_factory=lambda: datetime.now(UTC),
-            description="File creation timestamp",
-        ),
-    ]
     file_size_bytes: Annotated[
         int, Field(default=0, ge=0, description="File size in bytes")
     ]

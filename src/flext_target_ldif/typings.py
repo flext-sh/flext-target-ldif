@@ -31,74 +31,88 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
     class TargetLdif:
         """Singer protocol complex types."""
 
-        type SingerMessage = dict[str, object | dict[str, object]]
-        type SingerSchema = dict[str, object | list[dict[str, object]]]
-        type SingerRecord = dict[str, object | dict[str, object]]
-        type SingerState = dict[str, object | dict[str, object]]
-        type StreamConfiguration = dict[str, str | bool | dict[str, object]]
-        type TargetConfiguration = dict[str, object | dict[str, object]]
-        type MessageProcessing = dict[str, int | str | dict[str, object]]
+        type SingerMessage = dict[str, object | dict[str, t.ContainerValue]]
+        type SingerSchema = dict[str, object | list[dict[str, t.ContainerValue]]]
+        type SingerRecord = dict[str, object | dict[str, t.ContainerValue]]
+        type SingerState = dict[str, object | dict[str, t.ContainerValue]]
+        type StreamConfiguration = dict[str, str | bool | dict[str, t.ContainerValue]]
+        type TargetConfiguration = dict[str, object | dict[str, t.ContainerValue]]
+        type MessageProcessing = dict[str, int | str | dict[str, t.ContainerValue]]
 
     class LdifExport:
         """LDIF export complex types."""
 
-        type LdifEntry = dict[str, str | list[str] | dict[str, object]]
-        type Attributes = dict[str, str | list[str] | bytes | dict[str, object]]
-        type LdifRecord = dict[str, object | list[str] | dict[str, object]]
-        type LdifFileConfig = dict[str, str | int | bool | dict[str, object]]
-        type LdifFormatting = dict[str, str | int | bool | dict[str, object]]
-        type LdifValidation = dict[str, bool | str | dict[str, object]]
-        type ExportResult = dict[str, int | str | list[str] | dict[str, object]]
+        type LdifEntry = dict[str, str | list[str] | dict[str, t.ContainerValue]]
+        type Attributes = dict[
+            str, str | list[str] | bytes | dict[str, t.ContainerValue]
+        ]
+        type LdifRecord = dict[str, object | list[str] | dict[str, t.ContainerValue]]
+        type LdifFileConfig = dict[str, str | int | bool | dict[str, t.ContainerValue]]
+        type LdifFormatting = dict[str, str | int | bool | dict[str, t.ContainerValue]]
+        type LdifValidation = dict[str, bool | str | dict[str, t.ContainerValue]]
+        type ExportResult = dict[
+            str, int | str | list[str] | dict[str, t.ContainerValue]
+        ]
 
     class FileProcessing:
         """File processing complex types."""
 
-        type FileConfiguration = dict[str, str | int | dict[str, object]]
-        type StreamWriter = dict[str, str | bool | int | dict[str, object]]
-        type FileOutput = dict[str, str | list[str] | dict[str, object]]
-        type CompressionConfig = dict[str, str | bool | int | dict[str, object]]
-        type FileValidation = dict[str, bool | str | dict[str, object]]
-        type IOMetrics = dict[str, int | float | dict[str, object]]
+        type FileConfiguration = dict[str, str | int | dict[str, t.ContainerValue]]
+        type StreamWriter = dict[str, str | bool | int | dict[str, t.ContainerValue]]
+        type FileOutput = dict[str, str | list[str] | dict[str, t.ContainerValue]]
+        type CompressionConfig = dict[
+            str, str | bool | int | dict[str, t.ContainerValue]
+        ]
+        type FileValidation = dict[str, bool | str | dict[str, t.ContainerValue]]
+        type IOMetrics = dict[str, int | float | dict[str, t.ContainerValue]]
 
     class DataTransformation:
         """Data transformation complex types."""
 
-        type SingerToLdifMapping = dict[str, str | dict[str, object]]
-        type AttributeMapping = dict[str, str | list[str] | dict[str, object]]
-        type SchemaTransformation = dict[str, object | dict[str, object]]
-        type RecordTransformation = dict[str, object | dict[str, object]]
-        type DataNormalization = dict[str, bool | str | dict[str, object]]
-        type TransformationRules = dict[str, str | list[str] | dict[str, object]]
+        type SingerToLdifMapping = dict[str, str | dict[str, t.ContainerValue]]
+        type AttributeMapping = dict[str, str | list[str] | dict[str, t.ContainerValue]]
+        type SchemaTransformation = dict[str, object | dict[str, t.ContainerValue]]
+        type RecordTransformation = dict[str, object | dict[str, t.ContainerValue]]
+        type DataNormalization = dict[str, bool | str | dict[str, t.ContainerValue]]
+        type TransformationRules = dict[
+            str, str | list[str] | dict[str, t.ContainerValue]
+        ]
 
     class TargetLdifValidation:
         """Validation complex types."""
 
-        type LdifFormatValidation = dict[str, bool | str | dict[str, object]]
-        type SingerCompliance = dict[str, bool | str | dict[str, object]]
-        type SchemaValidation = dict[str, bool | list[str] | dict[str, object]]
-        type RecordValidation = dict[str, bool | str | dict[str, object]]
-        type FormatCompliance = dict[str, bool | str | list[str] | dict[str, object]]
-        type ValidationRules = dict[str, bool | str | dict[str, object]]
+        type LdifFormatValidation = dict[str, bool | str | dict[str, t.ContainerValue]]
+        type SingerCompliance = dict[str, bool | str | dict[str, t.ContainerValue]]
+        type SchemaValidation = dict[
+            str, bool | list[str] | dict[str, t.ContainerValue]
+        ]
+        type RecordValidation = dict[str, bool | str | dict[str, t.ContainerValue]]
+        type FormatCompliance = dict[
+            str, bool | str | list[str] | dict[str, t.ContainerValue]
+        ]
+        type ValidationRules = dict[str, bool | str | dict[str, t.ContainerValue]]
 
     class TargetConfiguration:
         """Target configuration complex types."""
 
-        type TargetSettings = dict[str, object | dict[str, object]]
-        type LdifTargetConfig = dict[str, str | int | bool | dict[str, object]]
-        type OutputConfiguration = dict[str, str | dict[str, object]]
-        type StreamMapping = dict[str, str | dict[str, object]]
-        type BatchConfiguration = dict[str, int | bool | dict[str, object]]
-        type ErrorHandling = dict[str, str | bool | dict[str, object]]
+        type TargetSettings = dict[str, object | dict[str, t.ContainerValue]]
+        type LdifTargetConfig = dict[
+            str, str | int | bool | dict[str, t.ContainerValue]
+        ]
+        type OutputConfiguration = dict[str, str | dict[str, t.ContainerValue]]
+        type StreamMapping = dict[str, str | dict[str, t.ContainerValue]]
+        type BatchConfiguration = dict[str, int | bool | dict[str, t.ContainerValue]]
+        type ErrorHandling = dict[str, str | bool | dict[str, t.ContainerValue]]
 
     class Performance:
         """Performance complex types."""
 
-        type PerformanceMetrics = dict[str, int | float | dict[str, object]]
-        type OptimizationConfig = dict[str, int | bool | dict[str, object]]
-        type BufferConfiguration = dict[str, int | str | dict[str, object]]
-        type StreamingConfig = dict[str, int | bool | dict[str, object]]
-        type MemoryManagement = dict[str, int | bool | dict[str, object]]
-        type IOOptimization = dict[str, int | bool | str | dict[str, object]]
+        type PerformanceMetrics = dict[str, int | float | dict[str, t.ContainerValue]]
+        type OptimizationConfig = dict[str, int | bool | dict[str, t.ContainerValue]]
+        type BufferConfiguration = dict[str, int | str | dict[str, t.ContainerValue]]
+        type StreamingConfig = dict[str, int | bool | dict[str, t.ContainerValue]]
+        type MemoryManagement = dict[str, int | bool | dict[str, t.ContainerValue]]
+        type IOOptimization = dict[str, int | bool | str | dict[str, t.ContainerValue]]
 
     class Project:
         """FLEXT Target LDIF-specific project types.
@@ -143,9 +157,11 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             "ENCODING",
         ]
         type FlextTargetLdifSettings = dict[str, object]
-        type SingerTargetConfig = dict[str, str | int | bool | dict[str, object]]
+        type SingerTargetConfig = dict[
+            str, str | int | bool | dict[str, t.ContainerValue]
+        ]
         type LdifExportConfig = dict[str, object]
-        type TargetPipelineConfig = dict[str, bool | str | dict[str, object]]
+        type TargetPipelineConfig = dict[str, bool | str | dict[str, t.ContainerValue]]
 
 
 t = FlextTargetLdifTypes

@@ -29,7 +29,11 @@ class FlextTargetLdifSettings(FlextSettings):
         ),
     ]
     dn_template: Annotated[
-        str, Field(..., description="Template used to build entry DN values")
+        str,
+        Field(
+            default="uid={uid},ou=users,dc=example,dc=com",
+            description="Template used to build entry DN values",
+        ),
     ]
     attribute_mapping: Annotated[
         dict[str, str],
