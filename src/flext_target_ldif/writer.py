@@ -19,6 +19,7 @@ from flext_core import FlextLogger, r, u
 from flext_ldif import FlextLdif
 
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError
+from flext_target_ldif.typings import t
 
 logger = FlextLogger(__name__)
 
@@ -30,10 +31,10 @@ class LdifWriter:
     def __init__(
         self,
         output_file: Path | str | None = None,
-        ldif_options: Mapping[str, object] | None = None,
+        ldif_options: Mapping[str, t.ContainerValue] | None = None,
         dn_template: str | None = None,
         attribute_mapping: Mapping[str, str] | None = None,
-        schema: Mapping[str, object] | None = None,
+        schema: Mapping[str, t.ContainerValue] | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure."""
         self.output_file = Path(output_file) if output_file else Path("output.ldif")
@@ -55,9 +56,9 @@ class LdifWriter:
             bool(timestamps_val) if timestamps_val is not None else True
         )
         self._ldif_api = FlextLdif()
-        self._records: list[dict[str, object]] = []
+        self._records: list[dict[str, t.ContainerValue]] = []
         self._record_count = 0
-        self._ldif_entries: list[Mapping[str, object]] = []
+        self._ldif_entries: list[Mapping[str, t.ContainerValue]] = []
         self._file_handle: TextIO | None = None
 
     def __enter__(self) -> Self:
@@ -105,7 +106,7 @@ class LdifWriter:
         except (RuntimeError, ValueError, TypeError, OSError) as e:
             return r[bool].fail(f"Failed to open LDIF file: {e}")
 
-    def write_record(self, record: Mapping[str, object]) -> r[bool]:
+    def write_record(self, record: Mapping[str, t.ContainerValue]) -> r[bool]:
         """Write a record to the LDIF file buffer."""
         try:
             self._records.append(dict(record))
@@ -115,12 +116,12 @@ class LdifWriter:
             return r[bool].fail(f"Failed to buffer record: {e}")
 
     def _convert_record_to_entry(
-        self, record: Mapping[str, object]
-    ) -> Mapping[str, object] | None:
+        self, record: Mapping[str, t.ContainerValue]
+    ) -> Mapping[str, t.ContainerValue] | None:
         """Convert a single record to LDIF entry format."""
         try:
             self._generate_dn(record)
-            attributes: dict[str, object] = {}
+            attributes: dict[str, t.ContainerValue] = {}
             for key, value in record.items():
                 if key != "dn":
                     mapped_key = self.attribute_mapping.get(key, key)
@@ -135,7 +136,7 @@ class LdifWriter:
             logger.warning(f"Skipping invalid record: {e}")
             return None
 
-    def _generate_dn(self, record: Mapping[str, object]) -> str:
+    def _generate_dn(self, record: Mapping[str, t.ContainerValue]) -> str:
         """Generate DN from record using template."""
         try:
             return self.dn_template.format(**record)
@@ -171,7 +172,7 @@ class LdifWriter:
                 dn_obj = entry.get("dn", "")
                 dn_str = str(dn_obj) if dn_obj else ""
                 raw_attributes = entry.get("attributes", {})
-                attributes_obj: dict[str, object] = {}
+                attributes_obj: dict[str, t.ContainerValue] = {}
                 if isinstance(raw_attributes, Mapping):
                     attributes_obj = {
                         str(key): value for key, value in raw_attributes.items()
@@ -181,7 +182,7 @@ class LdifWriter:
                 f.write("\n")
 
     def _write_entry_attributes(
-        self, f: TextIO, attributes_obj: Mapping[str, object]
+        self, f: TextIO, attributes_obj: Mapping[str, t.ContainerValue]
     ) -> None:
         """Write entry attributes to file."""
         if u.is_dict_like(attributes_obj):

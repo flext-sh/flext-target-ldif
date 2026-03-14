@@ -20,6 +20,7 @@ from flext_meltano import FlextMeltanoUtilities
 from pydantic import TypeAdapter, ValidationError
 
 from .constants import c
+from .typings import t
 
 
 class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
@@ -48,85 +49,93 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def parse_singer_message(
             line: str,
-        ) -> r[Mapping[str, object]]:
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Parse Singer message from input line.
 
             Args:
             line: JSON line from Singer tap
 
             Returns:
-            r[dict[str, object]]: Parsed message or error
+            r[dict[str, t.ContainerValue]]: Parsed message or error
 
             """
             if not line or not line.strip():
-                return r[Mapping[str, object]].fail("Empty input line")
-            message_adapter: TypeAdapter[Mapping[str, object]] = TypeAdapter(
-                Mapping[str, object]
+                return r[Mapping[str, t.ContainerValue]].fail("Empty input line")
+            message_adapter: TypeAdapter[Mapping[str, t.ContainerValue]] = TypeAdapter(
+                Mapping[str, t.ContainerValue]
             )
             try:
                 validated = message_adapter.validate_json(line.strip())
                 if "type" not in validated:
-                    return r[Mapping[str, object]].fail(
+                    return r[Mapping[str, t.ContainerValue]].fail(
                         "Message missing required 'type' field"
                     )
-                return r[Mapping[str, object]].ok(validated)
+                return r[Mapping[str, t.ContainerValue]].ok(validated)
             except ValidationError as e:
-                return r[Mapping[str, object]].fail(f"Invalid JSON: {e}")
+                return r[Mapping[str, t.ContainerValue]].fail(f"Invalid JSON: {e}")
 
         @staticmethod
         def validate_record_message(
-            message: Mapping[str, object],
-        ) -> r[Mapping[str, object]]:
+            message: Mapping[str, t.ContainerValue],
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Validate Singer RECORD message structure.
 
             Args:
             message: Singer message to validate
 
             Returns:
-            r[dict[str, object]]: Validated record or error
+            r[dict[str, t.ContainerValue]]: Validated record or error
 
             """
             if message.get("type") != "RECORD":
-                return r[Mapping[str, object]].fail("Message type must be RECORD")
+                return r[Mapping[str, t.ContainerValue]].fail(
+                    "Message type must be RECORD"
+                )
             required_fields = ["stream", "record"]
             for field in required_fields:
                 if field not in message:
-                    return r[Mapping[str, object]].fail(
+                    return r[Mapping[str, t.ContainerValue]].fail(
                         f"RECORD message missing '{field}' field"
                     )
             record = message["record"]
             if not u.is_dict_like(record):
-                return r[Mapping[str, object]].fail("Record data must be a dictionary")
-            return r[Mapping[str, object]].ok(message)
+                return r[Mapping[str, t.ContainerValue]].fail(
+                    "Record data must be a dictionary"
+                )
+            return r[Mapping[str, t.ContainerValue]].ok(message)
 
         @staticmethod
         def validate_schema_message(
-            message: Mapping[str, object],
-        ) -> r[Mapping[str, object]]:
+            message: Mapping[str, t.ContainerValue],
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Validate Singer SCHEMA message structure.
 
             Args:
             message: Singer message to validate
 
             Returns:
-            r[dict[str, object]]: Validated schema or error
+            r[dict[str, t.ContainerValue]]: Validated schema or error
 
             """
             if message.get("type") != "SCHEMA":
-                return r[Mapping[str, object]].fail("Message type must be SCHEMA")
+                return r[Mapping[str, t.ContainerValue]].fail(
+                    "Message type must be SCHEMA"
+                )
             required_fields = ["stream", "schema"]
             for field in required_fields:
                 if field not in message:
-                    return r[Mapping[str, object]].fail(
+                    return r[Mapping[str, t.ContainerValue]].fail(
                         f"SCHEMA message missing '{field}' field"
                     )
             schema = message["schema"]
             if not u.is_dict_like(schema):
-                return r[Mapping[str, object]].fail("Schema data must be a dictionary")
-            return r[Mapping[str, object]].ok(message)
+                return r[Mapping[str, t.ContainerValue]].fail(
+                    "Schema data must be a dictionary"
+                )
+            return r[Mapping[str, t.ContainerValue]].ok(message)
 
         @staticmethod
-        def write_state_message(state: Mapping[str, object]) -> None:
+        def write_state_message(state: Mapping[str, t.ContainerValue]) -> None:
             """Write Singer state message to stdout.
 
             Args:
@@ -140,7 +149,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def build_ldif_dn(
-            record: Mapping[str, object],
+            record: Mapping[str, t.ContainerValue],
             dn_template: str,
             base_dn: str | None = None,
         ) -> r[str]:
@@ -184,7 +193,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def convert_record_to_ldif_entry(
-            record: Mapping[str, object],
+            record: Mapping[str, t.ContainerValue],
             dn: str,
             object_classes: list[str] | None = None,
             attribute_mapping: Mapping[str, str] | None = None,
@@ -468,7 +477,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             record_count: int,
             file_size_bytes: int,
             processing_time: float,
-        ) -> Mapping[str, object]:
+        ) -> Mapping[str, t.ContainerValue]:
             """Generate metadata for LDIF stream processing.
 
             Args:
@@ -478,7 +487,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             processing_time: Time taken for processing
 
             Returns:
-            dict[str, object]: Stream metadata
+            dict[str, t.ContainerValue]: Stream metadata
 
             """
             return {
@@ -494,7 +503,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def validate_stream_compatibility(
-            stream_name: str, schema: Mapping[str, object]
+            stream_name: str, schema: Mapping[str, t.ContainerValue]
         ) -> r[bool]:
             """Validate stream compatibility with LDIF operations.
 
@@ -512,7 +521,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             if not isinstance(properties_raw, Mapping) or not properties_raw:
                 return r[bool].fail("Schema must have properties")
             properties_map = properties_raw
-            properties: dict[str, object] = {
+            properties: dict[str, t.ContainerValue] = {
                 str(key): value for key, value in properties_map.items()
             }
             has_dn_field = "dn" in properties
@@ -530,21 +539,21 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def validate_ldif_entry_config(
-            config: Mapping[str, object],
-        ) -> r[Mapping[str, object]]:
+            config: Mapping[str, t.ContainerValue],
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Validate LDIF entry configuration.
 
             Args:
             config: Entry configuration
 
             Returns:
-            r[dict[str, object]]: Validated config or error
+            r[dict[str, t.ContainerValue]]: Validated config or error
 
             """
             if "object_classes" in config:
                 object_classes = config["object_classes"]
                 if not u.is_list(object_classes) or not object_classes:
-                    return r[Mapping[str, object]].fail(
+                    return r[Mapping[str, t.ContainerValue]].fail(
                         "Object classes must be a non-empty list"
                     )
                 for oc in object_classes:
@@ -552,45 +561,45 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         case str() as object_class if object_class.strip():
                             pass
                         case _:
-                            return r[Mapping[str, object]].fail(
+                            return r[Mapping[str, t.ContainerValue]].fail(
                                 "All object classes must be non-empty strings"
                             )
             if "attribute_mapping" in config:
                 attribute_mapping = config["attribute_mapping"]
                 if not isinstance(attribute_mapping, Mapping):
-                    return r[Mapping[str, object]].fail(
+                    return r[Mapping[str, t.ContainerValue]].fail(
                         "Attribute mapping must be a dictionary"
                     )
                 attribute_mapping_map = attribute_mapping
                 for key, value in attribute_mapping_map.items():
                     if not u.is_type(key, str) or not u.is_type(value, str):
-                        return r[Mapping[str, object]].fail(
+                        return r[Mapping[str, t.ContainerValue]].fail(
                             "Attribute mapping keys and values must be strings"
                         )
-            return r[Mapping[str, object]].ok(config)
+            return r[Mapping[str, t.ContainerValue]].ok(config)
 
         @staticmethod
         def validate_ldif_target_config(
-            config: Mapping[str, object],
-        ) -> r[Mapping[str, object]]:
+            config: Mapping[str, t.ContainerValue],
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Validate LDIF target configuration.
 
             Args:
             config: Configuration dictionary
 
             Returns:
-            r[dict[str, object]]: Validated config or error
+            r[dict[str, t.ContainerValue]]: Validated config or error
 
             """
             required_fields = ["output_file"]
             missing_fields = [field for field in required_fields if field not in config]
             if missing_fields:
-                return r[Mapping[str, object]].fail(
+                return r[Mapping[str, t.ContainerValue]].fail(
                     f"Missing required LDIF target fields: {', '.join(missing_fields)}"
                 )
             output_file_raw = config["output_file"]
             if not isinstance(output_file_raw, str):
-                return r[Mapping[str, object]].fail(
+                return r[Mapping[str, t.ContainerValue]].fail(
                     "Invalid output file: output_file must be a string"
                 )
             output_file = output_file_raw
@@ -600,13 +609,13 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 )
             )
             if file_validation.is_failure:
-                return r[Mapping[str, object]].fail(
+                return r[Mapping[str, t.ContainerValue]].fail(
                     f"Invalid output file: {file_validation.error}"
                 )
             operation_mode = config.get("operation_mode", "append")
             valid_modes = ["append", "overwrite", "create"]
             if operation_mode not in valid_modes:
-                return r[Mapping[str, object]].fail(
+                return r[Mapping[str, t.ContainerValue]].fail(
                     f"Invalid operation mode: {operation_mode}. Valid modes: {', '.join(valid_modes)}"
                 )
             if "dn_template" in config:
@@ -615,21 +624,21 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     case str() as template if template.strip():
                         pass
                     case _:
-                        return r[Mapping[str, object]].fail(
+                        return r[Mapping[str, t.ContainerValue]].fail(
                             "DN template must be a non-empty string"
                         )
             batch_size_raw = config.get(
                 "batch_size", FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE
             )
             if not isinstance(batch_size_raw, int):
-                return r[Mapping[str, object]].fail(
+                return r[Mapping[str, t.ContainerValue]].fail(
                     "Batch size must be a positive integer"
                 )
             if batch_size_raw <= 0:
-                return r[Mapping[str, object]].fail(
+                return r[Mapping[str, t.ContainerValue]].fail(
                     "Batch size must be a positive integer"
                 )
-            return r[Mapping[str, object]].ok(config)
+            return r[Mapping[str, t.ContainerValue]].ok(config)
 
     class StateManagement:
         """State management utilities for target operations."""
@@ -640,8 +649,8 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             records_processed: int,
             file_path: str,
             file_size_bytes: int,
-            last_processed_record: Mapping[str, object] | None = None,
-        ) -> Mapping[str, object]:
+            last_processed_record: Mapping[str, t.ContainerValue] | None = None,
+        ) -> Mapping[str, t.ContainerValue]:
             """Create processing state for target stream.
 
             Args:
@@ -652,10 +661,10 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             last_processed_record: Last processed record for checkpointing
 
             Returns:
-            dict[str, object]: Processing state
+            dict[str, t.ContainerValue]: Processing state
 
             """
-            state: dict[str, object] = {
+            state: dict[str, t.ContainerValue] = {
                 "stream_name": stream_name,
                 "records_processed": records_processed,
                 "output_file": file_path,
@@ -664,7 +673,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 "target_type": "ldif",
             }
             if last_processed_record:
-                checkpoint_data: dict[str, object] = {
+                checkpoint_data: dict[str, t.ContainerValue] = {
                     "id": last_processed_record.get("id"),
                     "dn": last_processed_record.get("dn"),
                     "timestamp": last_processed_record.get("_timestamp"),
@@ -676,8 +685,8 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def get_target_state(
-            state: Mapping[str, object], stream_name: str
-        ) -> Mapping[str, object]:
+            state: Mapping[str, t.ContainerValue], stream_name: str
+        ) -> Mapping[str, t.ContainerValue]:
             """Get state for a specific target stream.
 
             Args:
@@ -685,7 +694,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             stream_name: Name of the stream
 
             Returns:
-            dict[str, object]: Stream state
+            dict[str, t.ContainerValue]: Stream state
 
             """
             bookmarks = state.get("bookmarks", {})
@@ -700,10 +709,10 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def set_target_state(
-            state: Mapping[str, object],
+            state: Mapping[str, t.ContainerValue],
             stream_name: str,
-            stream_state: Mapping[str, object],
-        ) -> Mapping[str, object]:
+            stream_state: Mapping[str, t.ContainerValue],
+        ) -> Mapping[str, t.ContainerValue]:
             """Set state for a specific target stream.
 
             Args:
@@ -712,12 +721,12 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             stream_state: State data for the stream
 
             Returns:
-            dict[str, object]: Updated state
+            dict[str, t.ContainerValue]: Updated state
 
             """
             updated_state = dict(state)
             bookmarks_raw = updated_state.get("bookmarks")
-            bookmarks: dict[str, object] = {}
+            bookmarks: dict[str, t.ContainerValue] = {}
             if isinstance(bookmarks_raw, Mapping):
                 bookmarks = {str(key): value for key, value in bookmarks_raw.items()}
             bookmarks[stream_name] = dict(stream_state)
@@ -726,11 +735,11 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def update_processing_progress(
-            state: Mapping[str, object],
+            state: Mapping[str, t.ContainerValue],
             stream_name: str,
             records_count: int,
             file_size_bytes: int,
-        ) -> Mapping[str, object]:
+        ) -> Mapping[str, t.ContainerValue]:
             """Update processing progress in state.
 
             Args:
@@ -740,7 +749,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             file_size_bytes: Current file size
 
             Returns:
-            dict[str, object]: Updated state
+            dict[str, t.ContainerValue]: Updated state
 
             """
             stream_state = FlextTargetLdifUtilities.StateManagement.get_target_state(
@@ -753,7 +762,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             new_count = current_count + records_count
             batch_count_raw = stream_state.get("batch_count", 0)
             batch_count = batch_count_raw if isinstance(batch_count_raw, int) else 0
-            updated_stream_state: dict[str, object] = {
+            updated_stream_state: dict[str, t.ContainerValue] = {
                 **stream_state,
                 "records_processed": new_count,
                 "file_size_bytes": file_size_bytes,

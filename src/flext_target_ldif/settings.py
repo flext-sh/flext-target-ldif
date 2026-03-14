@@ -12,6 +12,8 @@ from typing import Annotated
 from flext_core import FlextSettings, r
 from pydantic import Field
 
+from flext_target_ldif.typings import t
+
 
 class FlextTargetLdifSettings(FlextSettings):
     """Typed runtime configuration for the LDIF target."""
@@ -43,7 +45,7 @@ class FlextTargetLdifSettings(FlextSettings):
         ),
     ]
     ldif_options: Annotated[
-        dict[str, object],
+        dict[str, t.ContainerValue],
         Field(
             default_factory=dict,
             description="Raw LDIF formatter options",

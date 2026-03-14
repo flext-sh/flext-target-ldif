@@ -17,6 +17,7 @@ from flext_meltano import FlextMeltanoModels
 from pydantic import Field
 
 from .constants import c
+from .typings import t
 
 """LDIF target models extending flext-core FlextModels.
 
@@ -274,7 +275,7 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
     """Result of Singer to LDIF transformation."""
 
     original_record: Annotated[
-        dict[str, object],
+        dict[str, t.ContainerValue],
         Field(
             ...,
             description="Original Singer record",

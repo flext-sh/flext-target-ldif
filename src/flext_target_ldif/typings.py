@@ -156,11 +156,11 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             "PERMISSION",
             "ENCODING",
         ]
-        type FlextTargetLdifSettings = dict[str, object]
+        type FlextTargetLdifSettings = dict[str, t.ContainerValue]
         type SingerTargetConfig = dict[
             str, str | int | bool | dict[str, t.ContainerValue]
         ]
-        type LdifExportConfig = dict[str, object]
+        type LdifExportConfig = dict[str, t.ContainerValue]
         type TargetPipelineConfig = dict[str, bool | str | dict[str, t.ContainerValue]]
 
 

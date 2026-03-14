@@ -12,6 +12,8 @@ from typing import Protocol, runtime_checkable
 from flext_ldif import FlextLdifProtocols
 from flext_meltano import FlextMeltanoProtocols
 
+from flext_target_ldif.typings import t
+
 
 class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
     """Singer Target LDIF protocols extending LDIF and Meltano protocols.
@@ -60,7 +62,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 """
 
                 def generate_ldif(
-                    self, records: list[Mapping[str, object]]
+                    self, records: list[Mapping[str, t.ContainerValue]]
                 ) -> FlextMeltanoProtocols.Result[str]:
                     """Generate LDIF content from records.
 
@@ -81,7 +83,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 """
 
                 def transform_to_ldif(
-                    self, record: Mapping[str, object]
+                    self, record: Mapping[str, t.ContainerValue]
                 ) -> FlextMeltanoProtocols.Result[str]:
                     """Transform Singer record to LDIF format.
 
