@@ -60,28 +60,51 @@ if TYPE_CHECKING:
     from tests.typings import TestsFlextTargetLdifTypes, t, tt
     from tests.utilities import TestsFlextTargetLdifUtilities, u
 
-# Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "EXPECTED_BULK_SIZE": ("tests.test_writer", "EXPECTED_BULK_SIZE"),
     "EXPECTED_DATA_COUNT": ("tests.test_writer", "EXPECTED_DATA_COUNT"),
     "TestFlextTargetLdif": ("tests.test_target", "TestFlextTargetLdif"),
     "TestFlextTargetLdifSettings": ("tests.test_target", "TestFlextTargetLdifSettings"),
     "TestIntegration": ("tests.test_target", "TestIntegration"),
-    "TestLdifWriterBase64Encoding": ("tests.test_writer", "TestLdifWriterBase64Encoding"),
-    "TestLdifWriterContextManager": ("tests.test_writer", "TestLdifWriterContextManager"),
+    "TestLdifWriterBase64Encoding": (
+        "tests.test_writer",
+        "TestLdifWriterBase64Encoding",
+    ),
+    "TestLdifWriterContextManager": (
+        "tests.test_writer",
+        "TestLdifWriterContextManager",
+    ),
     "TestLdifWriterDnGeneration": ("tests.test_writer", "TestLdifWriterDnGeneration"),
-    "TestLdifWriterFileOperations": ("tests.test_writer", "TestLdifWriterFileOperations"),
-    "TestLdifWriterHeaderGeneration": ("tests.test_writer", "TestLdifWriterHeaderGeneration"),
-    "TestLdifWriterInitialization": ("tests.test_writer", "TestLdifWriterInitialization"),
+    "TestLdifWriterFileOperations": (
+        "tests.test_writer",
+        "TestLdifWriterFileOperations",
+    ),
+    "TestLdifWriterHeaderGeneration": (
+        "tests.test_writer",
+        "TestLdifWriterHeaderGeneration",
+    ),
+    "TestLdifWriterInitialization": (
+        "tests.test_writer",
+        "TestLdifWriterInitialization",
+    ),
     "TestLdifWriterLineWrapping": ("tests.test_writer", "TestLdifWriterLineWrapping"),
     "TestLdifWriterProperties": ("tests.test_writer", "TestLdifWriterProperties"),
     "TestLdifWriterRecordWriting": ("tests.test_writer", "TestLdifWriterRecordWriting"),
     "TestTargetLDIF": ("tests.test_target", "TestTargetLDIF"),
-    "TestsFlextTargetLdifConstants": ("tests.constants", "TestsFlextTargetLdifConstants"),
+    "TestsFlextTargetLdifConstants": (
+        "tests.constants",
+        "TestsFlextTargetLdifConstants",
+    ),
     "TestsFlextTargetLdifModels": ("tests.models", "TestsFlextTargetLdifModels"),
-    "TestsFlextTargetLdifProtocols": ("tests.protocols", "TestsFlextTargetLdifProtocols"),
+    "TestsFlextTargetLdifProtocols": (
+        "tests.protocols",
+        "TestsFlextTargetLdifProtocols",
+    ),
     "TestsFlextTargetLdifTypes": ("tests.typings", "TestsFlextTargetLdifTypes"),
-    "TestsFlextTargetLdifUtilities": ("tests.utilities", "TestsFlextTargetLdifUtilities"),
+    "TestsFlextTargetLdifUtilities": (
+        "tests.utilities",
+        "TestsFlextTargetLdifUtilities",
+    ),
     "attribute_mapping": ("tests.conftest", "attribute_mapping"),
     "c": ("tests.constants", "TestsFlextTargetLdifConstants"),
     "ldif_options": ("tests.conftest", "ldif_options"),
