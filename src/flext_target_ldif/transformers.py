@@ -100,7 +100,7 @@ class RecordTransformer:
     def __init__(
         self,
         attribute_mapping: Mapping[str, str] | None = None,
-        custom_transformers: Mapping[str, Callable[[object], str]] | None = None,
+        custom_transformers: Mapping[str, Callable[, str]] | None = None,
     ) -> None:
         """Initialize the record transformer."""
         self.attribute_mapping = attribute_mapping or {}
