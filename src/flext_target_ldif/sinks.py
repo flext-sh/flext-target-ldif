@@ -11,7 +11,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import r
+from flext_core import p, r
 from flext_core.loggings import FlextLogger
 
 from flext_target_ldif.typings import t
@@ -36,7 +36,7 @@ class LDIFSink:
         self.key_properties = key_properties or []
         self._ldif_writer: LdifWriter | None = None
         self._output_file: Path | None = None
-        self._logger_instance: FlextLogger | None = None
+        self._logger_instance: p.Logger | None = None
 
     @property
     def ldif_writer(self) -> LdifWriter:
