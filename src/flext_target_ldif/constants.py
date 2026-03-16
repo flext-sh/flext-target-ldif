@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from enum import StrEnum
+from enum import StrEnum, unique
 from typing import Final
 
 from flext_core import FlextConstants
@@ -45,6 +45,7 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     ASCII_TILDE: Final[int] = 126
     LDIF_LINE_WRAP_LENGTH: Final[int] = 76
 
+    @unique
     class ErrorType(StrEnum):
         """LDIF target error types using StrEnum for type safety.
 
@@ -103,6 +104,42 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         )
         MAX_ATTRIBUTE_VALUE_LENGTH: Final[int] = 1000
         MAX_DN_COMPONENTS: Final[int] = 10
+
+    @unique
+    class ProjectType(StrEnum):
+        LIBRARY = "library"
+        APPLICATION = "application"
+        SERVICE = "service"
+        TARGET_LDIF = "target-ldif"
+        SINGER_TARGET = "singer-target"
+        LDIF_EXPORT = "ldif-export"
+        SINGER_LDIF_TARGET = "singer-ldif-target"
+        LDIF_FILE_TARGET = "ldif-file-target"
+        SINGER_PROTOCOL_TARGET = "singer-protocol-target"
+        DATA_EXPORT_TARGET = "data-export-target"
+        LDIF_GENERATOR = "ldif-generator"
+        SINGER_TO_LDIF = "singer-to-ldif"
+        LDIF_EXPORT_SERVICE = "ldif-export-service"
+        TARGET_LDIF_SINGER = "target-ldif-singer"
+        LDIF_FILE_EXPORT = "ldif-file-export"
+        SINGER_LDIF_EXPORT = "singer-ldif-export"
+        LDIF_DATA_TARGET = "ldif-data-target"
+        EXPORT_TARGET_LDIF = "export-target-ldif"
+        SINGER_EXPORT_TARGET = "singer-export-target"
+        LDIF_STREAMING_TARGET = "ldif-streaming-target"
+        LDIF_BATCH_EXPORT = "ldif-batch-export"
+        SINGER_FILE_TARGET = "singer-file-target"
+
+    @unique
+    class ErrorTypeLiteral(StrEnum):
+        FORMAT_VALIDATION = "FORMAT_VALIDATION"
+        FILE_IO = "FILE_IO"
+        TRANSFORMATION = "TRANSFORMATION"
+        SINGER_PROTOCOL = "SINGER_PROTOCOL"
+        CONFIGURATION = "CONFIGURATION"
+        DISK_SPACE = "DISK_SPACE"
+        PERMISSION = "PERMISSION"
+        ENCODING = "ENCODING"
 
 
 c = FlextTargetLdifConstants

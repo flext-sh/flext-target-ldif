@@ -14,10 +14,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Literal
-
 from flext_ldif import FlextLdifTypes
 from flext_meltano import FlextMeltanoTypes
+
+from flext_target_ldif import c
 
 
 class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
@@ -122,40 +122,8 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         FLEXT Target LDIF domain owns Singer LDIF target and LDIF export-specific types.
         """
 
-        type ProjectType = Literal[
-            "library",
-            "application",
-            "service",
-            "target-ldif",
-            "singer-target",
-            "ldif-export",
-            "singer-ldif-target",
-            "ldif-file-target",
-            "singer-protocol-target",
-            "data-export-target",
-            "ldif-generator",
-            "singer-to-ldif",
-            "ldif-export-service",
-            "target-ldif-singer",
-            "ldif-file-export",
-            "singer-ldif-export",
-            "ldif-data-target",
-            "export-target-ldif",
-            "singer-export-target",
-            "ldif-streaming-target",
-            "ldif-batch-export",
-            "singer-file-target",
-        ]
-        type ErrorTypeLiteral = Literal[
-            "FORMAT_VALIDATION",
-            "FILE_IO",
-            "TRANSFORMATION",
-            "SINGER_PROTOCOL",
-            "CONFIGURATION",
-            "DISK_SPACE",
-            "PERMISSION",
-            "ENCODING",
-        ]
+        type ProjectType = c.ProjectType
+        type ErrorTypeLiteral = c.ErrorTypeLiteral
         type FlextTargetLdifSettings = dict[str, t.ContainerValue]
         type SingerTargetConfig = dict[
             str, str | int | bool | dict[str, t.ContainerValue]
