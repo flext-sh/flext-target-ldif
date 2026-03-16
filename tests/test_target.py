@@ -89,9 +89,11 @@ class TestFlextTargetLdifSettings:
 
     def test_config_validation_invalid_line_length(self) -> None:
         """Test validation with invalid line length."""
-        config = FlextTargetLdifSettings(output_file="test.ldif", line_length=0)
-        with pytest.raises(ValueError, match="Line length must be positive"):
-            config.validate_domain_rules()
+        invalid_line_length = int("0")
+        with pytest.raises(ValidationError):
+            FlextTargetLdifSettings(
+                output_file="test.ldif", line_length=invalid_line_length
+            )
 
     def test_config_validation_valid_config(self) -> None:
         """Test validation with valid config."""
