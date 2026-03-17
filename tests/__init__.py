@@ -19,7 +19,7 @@ from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 if TYPE_CHECKING:
     from flext_core.typings import FlextTypes
 
-    from tests.conftest import (
+    from .conftest import (
         attribute_mapping,
         ldif_options,
         multiple_records,
@@ -30,19 +30,19 @@ if TYPE_CHECKING:
         temp_dir,
         temp_file,
     )
-    from tests.constants import (
+    from .constants import (
         TestsFlextTargetLdifConstants,
         TestsFlextTargetLdifConstants as c,
     )
-    from tests.models import TestsFlextTargetLdifModels, tm
-    from tests.protocols import TestsFlextTargetLdifProtocols
-    from tests.test_target import (
+    from .models import TestsFlextTargetLdifModels, tm
+    from .protocols import TestsFlextTargetLdifProtocols
+    from .test_target import (
         TestFlextTargetLdif,
         TestFlextTargetLdifSettings,
         TestIntegration,
         TestTargetLDIF,
     )
-    from tests.test_writer import (
+    from .test_writer import (
         EXPECTED_BULK_SIZE,
         EXPECTED_DATA_COUNT,
         TestLdifWriterBase64Encoding,
@@ -55,10 +55,10 @@ if TYPE_CHECKING:
         TestLdifWriterProperties,
         TestLdifWriterRecordWriting,
     )
-    from tests.tm import m
-    from tests.tp import p
-    from tests.typings import TestsFlextTargetLdifTypes, t, tt
-    from tests.utilities import TestsFlextTargetLdifUtilities, u
+    from .tm import m
+    from .tp import p
+    from .typings import TestsFlextTargetLdifTypes, t, tt
+    from .utilities import TestsFlextTargetLdifUtilities, u
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "EXPECTED_BULK_SIZE": ("tests.test_writer", "EXPECTED_BULK_SIZE"),
