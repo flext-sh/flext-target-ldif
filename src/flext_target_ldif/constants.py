@@ -107,6 +107,8 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
     @unique
     class ProjectType(StrEnum):
+        """Project type literals for target package metadata."""
+
         LIBRARY = "library"
         APPLICATION = "application"
         SERVICE = "service"
@@ -132,6 +134,8 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
     @unique
     class ErrorTypeLiteral(StrEnum):
+        """Error category literals for target operations."""
+
         FORMAT_VALIDATION = "FORMAT_VALIDATION"
         FILE_IO = "FILE_IO"
         TRANSFORMATION = "TRANSFORMATION"
