@@ -13,3 +13,7 @@ from flext_tests import FlextTestsConstants
 
 class TestsFlextTargetLdifConstants(FlextTestsConstants):
     """Test constants for flexttargetldif."""
+
+
+c = TestsFlextTargetLdifConstants
+__all__ = ["TestsFlextTargetLdifConstants", "c"]
