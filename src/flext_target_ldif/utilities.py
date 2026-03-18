@@ -17,7 +17,7 @@ from typing import ClassVar, override
 from flext_core import r
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
-from pydantic import TypeAdapter, ValidationError
+from flext_target_ldap.utilities import FlextTargetLdapUtilities
 
 from .constants import c
 from .typings import t
@@ -59,20 +59,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             r[dict[str, t.ContainerValue]]: Parsed message or error
 
             """
-            if not line or not line.strip():
-                return r[Mapping[str, t.ContainerValue]].fail("Empty input line")
-            message_adapter: TypeAdapter[Mapping[str, t.ContainerValue]] = TypeAdapter(
-                Mapping[str, t.ContainerValue]
-            )
-            try:
-                validated = message_adapter.validate_json(line.strip())
-                if "type" not in validated:
-                    return r[Mapping[str, t.ContainerValue]].fail(
-                        "Message missing required 'type' field"
-                    )
-                return r[Mapping[str, t.ContainerValue]].ok(validated)
-            except ValidationError as e:
-                return r[Mapping[str, t.ContainerValue]].fail(f"Invalid JSON: {e}")
+            return FlextTargetLdapUtilities.TargetLdap.parse_singer_message(line)
 
         @staticmethod
         def validate_record_message(
@@ -87,22 +74,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             r[dict[str, t.ContainerValue]]: Validated record or error
 
             """
-            if message.get("type") != "RECORD":
-                return r[Mapping[str, t.ContainerValue]].fail(
-                    "Message type must be RECORD"
-                )
-            required_fields = ["stream", "record"]
-            for field in required_fields:
-                if field not in message:
-                    return r[Mapping[str, t.ContainerValue]].fail(
-                        f"RECORD message missing '{field}' field"
-                    )
-            record = message["record"]
-            if not u.is_dict_like(record):
-                return r[Mapping[str, t.ContainerValue]].fail(
-                    "Record data must be a dictionary"
-                )
-            return r[Mapping[str, t.ContainerValue]].ok(message)
+            return FlextTargetLdapUtilities.TargetLdap.validate_record_message(message)
 
         @staticmethod
         def validate_schema_message(
@@ -117,22 +89,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             r[dict[str, t.ContainerValue]]: Validated schema or error
 
             """
-            if message.get("type") != "SCHEMA":
-                return r[Mapping[str, t.ContainerValue]].fail(
-                    "Message type must be SCHEMA"
-                )
-            required_fields = ["stream", "schema"]
-            for field in required_fields:
-                if field not in message:
-                    return r[Mapping[str, t.ContainerValue]].fail(
-                        f"SCHEMA message missing '{field}' field"
-                    )
-            schema = message["schema"]
-            if not u.is_dict_like(schema):
-                return r[Mapping[str, t.ContainerValue]].fail(
-                    "Schema data must be a dictionary"
-                )
-            return r[Mapping[str, t.ContainerValue]].ok(message)
+            return FlextTargetLdapUtilities.TargetLdap.validate_schema_message(message)
 
         @staticmethod
         def write_state_message(state: Mapping[str, t.ContainerValue]) -> None:
@@ -222,7 +179,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     if value is None:
                         continue
                     ldif_attr = mapping.get(key, key)
-                    if u.is_list(value):
+                    if isinstance(value, list):
                         for item in value:
                             if item is not None:
                                 ldif_value = FlextTargetLdifUtilities.LdifDataProcessing.format_ldif_value(
@@ -552,7 +509,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if "object_classes" in config:
                 object_classes = config["object_classes"]
-                if not u.is_list(object_classes) or not object_classes:
+                if not isinstance(object_classes, list) or not object_classes:
                     return r[Mapping[str, t.ContainerValue]].fail(
                         "Object classes must be a non-empty list"
                     )
@@ -572,7 +529,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     )
                 attribute_mapping_map = attribute_mapping
                 for key, value in attribute_mapping_map.items():
-                    if not u.is_type(key, str) or not u.is_type(value, str):
+                    if not isinstance(key, str) or not isinstance(value, str):
                         return r[Mapping[str, t.ContainerValue]].fail(
                             "Attribute mapping keys and values must be strings"
                         )
@@ -673,7 +630,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 "target_type": "ldif",
             }
             if last_processed_record:
-                checkpoint_data: dict[str, t.ContainerValue] = {
+                checkpoint_data: dict[str, t.ContainerValue | None] = {
                     "id": last_processed_record.get("id"),
                     "dn": last_processed_record.get("dn"),
                     "timestamp": last_processed_record.get("_timestamp"),
