@@ -34,10 +34,10 @@ if TYPE_CHECKING:
     from .models import TestsFlextTargetLdifModels, tm
     from .protocols import TestsFlextTargetLdifProtocols
     from .test_target import (
-        TestFlextTargetLdif,
         TestFlextTargetLdifSettings,
         TestIntegration,
         TestTargetLDIF,
+        TestTargetLDIFClass,
     )
     from .test_writer import (
         EXPECTED_BULK_SIZE,
@@ -60,7 +60,6 @@ if TYPE_CHECKING:
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "EXPECTED_BULK_SIZE": ("tests.test_writer", "EXPECTED_BULK_SIZE"),
     "EXPECTED_DATA_COUNT": ("tests.test_writer", "EXPECTED_DATA_COUNT"),
-    "TestFlextTargetLdif": ("tests.test_target", "TestFlextTargetLdif"),
     "TestFlextTargetLdifSettings": ("tests.test_target", "TestFlextTargetLdifSettings"),
     "TestIntegration": ("tests.test_target", "TestIntegration"),
     "TestLdifWriterBase64Encoding": (
@@ -88,6 +87,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "TestLdifWriterProperties": ("tests.test_writer", "TestLdifWriterProperties"),
     "TestLdifWriterRecordWriting": ("tests.test_writer", "TestLdifWriterRecordWriting"),
     "TestTargetLDIF": ("tests.test_target", "TestTargetLDIF"),
+    "TestTargetLDIFClass": ("tests.test_target", "TestTargetLDIFClass"),
     "TestsFlextTargetLdifConstants": (
         "tests.constants",
         "TestsFlextTargetLdifConstants",
@@ -123,7 +123,6 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
 __all__ = [
     "EXPECTED_BULK_SIZE",
     "EXPECTED_DATA_COUNT",
-    "TestFlextTargetLdif",
     "TestFlextTargetLdifSettings",
     "TestIntegration",
     "TestLdifWriterBase64Encoding",
@@ -136,6 +135,7 @@ __all__ = [
     "TestLdifWriterProperties",
     "TestLdifWriterRecordWriting",
     "TestTargetLDIF",
+    "TestTargetLDIFClass",
     "TestsFlextTargetLdifConstants",
     "TestsFlextTargetLdifModels",
     "TestsFlextTargetLdifProtocols",
