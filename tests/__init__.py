@@ -30,10 +30,7 @@ if TYPE_CHECKING:
         temp_dir,
         temp_file,
     )
-    from .constants import (
-        TestsFlextTargetLdifConstants,
-        TestsFlextTargetLdifConstants as c,
-    )
+    from .constants import TestsFlextTargetLdifConstants, c
     from .models import TestsFlextTargetLdifModels, tm
     from .protocols import TestsFlextTargetLdifProtocols
     from .test_target import (
@@ -106,7 +103,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
         "TestsFlextTargetLdifUtilities",
     ),
     "attribute_mapping": ("tests.conftest", "attribute_mapping"),
-    "c": ("tests.constants", "TestsFlextTargetLdifConstants"),
+    "c": ("tests.constants", "c"),
     "ldif_options": ("tests.conftest", "ldif_options"),
     "m": ("tests.tm", "m"),
     "multiple_records": ("tests.conftest", "multiple_records"),
