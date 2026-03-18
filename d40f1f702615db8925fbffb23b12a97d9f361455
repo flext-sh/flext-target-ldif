@@ -1,0 +1,23 @@
+src/flext_target_ldif/sinks.py
+  94129b03712af7a6 47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.15",
+  "base_commit_sha": "d40f1f702615db8925fbffb23b12a97d9f361455",
+  "prompts": {
+    "94129b03712af7a6": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_2fe0a7de2ffeolmRBqYY1IOvu6",
+        "model": "anthropic/claude-haiku-4-5"
+      },
+      "human_author": "FLEXT Bot <team@flext.sh>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 1,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
