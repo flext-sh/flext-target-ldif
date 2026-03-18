@@ -11,7 +11,7 @@ from __future__ import annotations
 from flext_tests import c
 
 
-class TestsFlextTargetLdifConstants(FlextTestsConstants):
+class TestsFlextTargetLdifConstants(c):
     """Test constants for flexttargetldif."""
 
 

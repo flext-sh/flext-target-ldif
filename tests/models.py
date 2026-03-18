@@ -1,6 +1,6 @@
 """Test models for flext-target-ldif tests.
 
-Provides TestsFlextTargetLdifModels, extending FlextTestsModels with
+Provides TestsFlextTargetLdifModels, extending m with
 flext-target-ldif-specific models using COMPOSITION INHERITANCE.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
@@ -14,15 +14,15 @@ from flext_tests import m
 from flext_target_ldif.models import FlextTargetLdifModels
 
 
-class TestsFlextTargetLdifModels(FlextTestsModels, FlextTargetLdifModels):
+class TestsFlextTargetLdifModels(m, FlextTargetLdifModels):
     """Models for flext-target-ldif tests using COMPOSITION INHERITANCE.
 
     MANDATORY: Inherits from BOTH:
-    1. FlextTestsModels - for test infrastructure (.Tests.*)
+    1. m - for test infrastructure (.Tests.*)
     2. FlextTargetLdifModels - for domain models
 
     Access patterns:
-    - tm.Tests.* (generic test models from FlextTestsModels)
+    - tm.Tests.* (generic test models from m)
     - tm.* (Target LDIF domain models)
     - m.* (production models via alternative alias)
     """

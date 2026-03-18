@@ -2,7 +2,7 @@
 
 This module provides test-specific types that extend the main flext-target-ldif types.
 Uses the unified namespace pattern t.TargetLdif.Tests.* for test-only objects.
-Combines FlextTestsTypes functionality with project-specific test types.
+Combines t functionality with project-specific test types.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -16,7 +16,7 @@ from flext_tests import t
 from flext_target_ldif.typings import FlextTargetLdifTypes
 
 
-class TestsFlextTargetLdifTypes(FlextTestsTypes, FlextTargetLdifTypes):
+class TestsFlextTargetLdifTypes(t, FlextTargetLdifTypes):
     """Test types for flext-target-ldif extending both test and project types."""
 
     class TargetLdif(FlextTargetLdifTypes.TargetLdif):
