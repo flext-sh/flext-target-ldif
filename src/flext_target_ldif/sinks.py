@@ -44,7 +44,7 @@ class LDIFSink:
         return self._get_ldif_writer()
 
     @property
-    def logger(self) -> FlextLogger:
+    def logger(self) -> p.Logger:
         """Lazy logger for LDIFSink."""
         if self._logger_instance is None:
             self._logger_instance = FlextLogger.create_module_logger(__name__)
