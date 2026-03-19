@@ -31,12 +31,24 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
     class TargetLdif:
         """Singer protocol complex types."""
 
-        type SingerMessage = dict[str, object | dict[str, t.ContainerValue]]
-        type SingerSchema = dict[str, object | list[dict[str, t.ContainerValue]]]
-        type SingerRecord = dict[str, object | dict[str, t.ContainerValue]]
-        type SingerState = dict[str, object | dict[str, t.ContainerValue]]
+        type SingerMessage = dict[
+            str,
+            t.ContainerValue | dict[str, t.ContainerValue],
+        ]
+        type SingerSchema = dict[
+            str,
+            t.ContainerValue | list[dict[str, t.ContainerValue]],
+        ]
+        type SingerRecord = dict[
+            str,
+            t.ContainerValue | dict[str, t.ContainerValue],
+        ]
+        type SingerState = dict[str, t.ContainerValue | dict[str, t.ContainerValue]]
         type StreamConfiguration = dict[str, str | bool | dict[str, t.ContainerValue]]
-        type TargetConfiguration = dict[str, object | dict[str, t.ContainerValue]]
+        type TargetConfiguration = dict[
+            str,
+            t.ContainerValue | dict[str, t.ContainerValue],
+        ]
         type MessageProcessing = dict[str, int | str | dict[str, t.ContainerValue]]
 
     class LdifExport:
@@ -46,7 +58,10 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type Attributes = dict[
             str, str | list[str] | bytes | dict[str, t.ContainerValue]
         ]
-        type LdifRecord = dict[str, object | list[str] | dict[str, t.ContainerValue]]
+        type LdifRecord = dict[
+            str,
+            t.ContainerValue | list[str] | dict[str, t.ContainerValue],
+        ]
         type LdifFileConfig = dict[str, str | int | bool | dict[str, t.ContainerValue]]
         type LdifFormatting = dict[str, str | int | bool | dict[str, t.ContainerValue]]
         type LdifValidation = dict[str, bool | str | dict[str, t.ContainerValue]]
@@ -71,8 +86,14 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type SingerToLdifMapping = dict[str, str | dict[str, t.ContainerValue]]
         type AttributeMapping = dict[str, str | list[str] | dict[str, t.ContainerValue]]
-        type SchemaTransformation = dict[str, object | dict[str, t.ContainerValue]]
-        type RecordTransformation = dict[str, object | dict[str, t.ContainerValue]]
+        type SchemaTransformation = dict[
+            str,
+            t.ContainerValue | dict[str, t.ContainerValue],
+        ]
+        type RecordTransformation = dict[
+            str,
+            t.ContainerValue | dict[str, t.ContainerValue],
+        ]
         type DataNormalization = dict[str, bool | str | dict[str, t.ContainerValue]]
         type TransformationRules = dict[
             str, str | list[str] | dict[str, t.ContainerValue]
@@ -95,7 +116,10 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
     class TargetConfiguration:
         """Target configuration complex types."""
 
-        type TargetSettings = dict[str, object | dict[str, t.ContainerValue]]
+        type TargetSettings = dict[
+            str,
+            t.ContainerValue | dict[str, t.ContainerValue],
+        ]
         type LdifTargetConfig = dict[
             str, str | int | bool | dict[str, t.ContainerValue]
         ]

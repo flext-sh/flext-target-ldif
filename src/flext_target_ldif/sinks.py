@@ -14,7 +14,7 @@ from typing import override
 from flext_core import p, r
 from flext_core.loggings import FlextLogger
 
-from flext_target_ldif.typings import t
+from flext_target_ldif import t
 from flext_target_ldif.writer import LdifWriter
 
 

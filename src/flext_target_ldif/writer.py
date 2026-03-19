@@ -18,8 +18,8 @@ from typing import Self, TextIO, override
 from flext_core import FlextLogger, r, u
 from flext_ldif import FlextLdif
 
+from flext_target_ldif import t
 from flext_target_ldif.exceptions import FlextTargetLdifWriterError
-from flext_target_ldif.typings import t
 
 logger = FlextLogger(__name__)
 

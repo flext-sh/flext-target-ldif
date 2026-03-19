@@ -10,7 +10,7 @@ from collections.abc import Callable, Mapping
 from datetime import datetime
 from typing import override
 
-from flext_target_ldif.typings import t
+from flext_target_ldif import t
 
 
 def transform_timestamp(value: t.ContainerValue) -> str:

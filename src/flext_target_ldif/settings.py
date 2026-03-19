@@ -12,7 +12,7 @@ from typing import Annotated
 from flext_core import FlextSettings, r
 from pydantic import Field
 
-from flext_target_ldif.typings import t
+from flext_target_ldif import t
 
 
 class FlextTargetLdifSettings(FlextSettings):
