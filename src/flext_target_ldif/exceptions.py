@@ -8,7 +8,9 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import e, m
+from flext_core import e
+
+from flext_target_ldif import m
 
 
 class FlextTargetLdifWriterError(e.OperationError):
