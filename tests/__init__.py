@@ -31,8 +31,11 @@ if TYPE_CHECKING:
         temp_file,
     )
     from .constants import TestsFlextTargetLdifConstants, c
-    from .models import TestsFlextTargetLdifModels, tm
-    from .protocols import TestsFlextTargetLdifProtocols
+    from .models import TestsFlextTargetLdifModels, TestsFlextTargetLdifModels as m, tm
+    from .protocols import (
+        TestsFlextTargetLdifProtocols,
+        TestsFlextTargetLdifProtocols as p,
+    )
     from .test_target import (
         TestFlextTargetLdifSettings,
         TestIntegration,
@@ -52,8 +55,6 @@ if TYPE_CHECKING:
         TestLdifWriterProperties,
         TestLdifWriterRecordWriting,
     )
-    from .tm import m
-    from .tp import p
     from .typings import TestsFlextTargetLdifTypes, t, tt
     from .utilities import TestsFlextTargetLdifUtilities, u
 
@@ -105,9 +106,9 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "attribute_mapping": ("tests.conftest", "attribute_mapping"),
     "c": ("tests.constants", "c"),
     "ldif_options": ("tests.conftest", "ldif_options"),
-    "m": ("tests.tm", "m"),
+    "m": ("tests.models", "TestsFlextTargetLdifModels"),
     "multiple_records": ("tests.conftest", "multiple_records"),
-    "p": ("tests.tp", "p"),
+    "p": ("tests.protocols", "TestsFlextTargetLdifProtocols"),
     "pytest_configure": ("tests.conftest", "pytest_configure"),
     "sample_config": ("tests.conftest", "sample_config"),
     "sample_record": ("tests.conftest", "sample_record"),
