@@ -30,9 +30,15 @@ if TYPE_CHECKING:
         temp_dir,
         temp_file,
     )
-    from .constants import TestsFlextTargetLdifConstants, c
-    from .models import TestsFlextTargetLdifModels, m, tm
-    from .protocols import TestsFlextTargetLdifProtocols, p
+    from .constants import (
+        TestsFlextTargetLdifConstants,
+        TestsFlextTargetLdifConstants as c,
+    )
+    from .models import TestsFlextTargetLdifModels, TestsFlextTargetLdifModels as m, tm
+    from .protocols import (
+        TestsFlextTargetLdifProtocols,
+        TestsFlextTargetLdifProtocols as p,
+    )
     from .test_target import (
         TestFlextTargetLdifSettings,
         TestIntegration,
@@ -52,10 +58,11 @@ if TYPE_CHECKING:
         TestLdifWriterProperties,
         TestLdifWriterRecordWriting,
     )
-    from .tt import t
-    from .tu import u
-    from .typings import TestsFlextTargetLdifTypes, tt
-    from .utilities import TestsFlextTargetLdifUtilities
+    from .typings import TestsFlextTargetLdifTypes, TestsFlextTargetLdifTypes as t, tt
+    from .utilities import (
+        TestsFlextTargetLdifUtilities,
+        TestsFlextTargetLdifUtilities as u,
+    )
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "EXPECTED_BULK_SIZE": ("tests.test_writer", "EXPECTED_BULK_SIZE"),
@@ -103,21 +110,21 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
         "TestsFlextTargetLdifUtilities",
     ),
     "attribute_mapping": ("tests.conftest", "attribute_mapping"),
-    "c": ("tests.constants", "c"),
+    "c": ("tests.constants", "TestsFlextTargetLdifConstants"),
     "ldif_options": ("tests.conftest", "ldif_options"),
-    "m": ("tests.models", "m"),
+    "m": ("tests.models", "TestsFlextTargetLdifModels"),
     "multiple_records": ("tests.conftest", "multiple_records"),
-    "p": ("tests.protocols", "p"),
+    "p": ("tests.protocols", "TestsFlextTargetLdifProtocols"),
     "pytest_configure": ("tests.conftest", "pytest_configure"),
     "sample_config": ("tests.conftest", "sample_config"),
     "sample_record": ("tests.conftest", "sample_record"),
     "sample_schema": ("tests.conftest", "sample_schema"),
-    "t": ("tests.tt", "t"),
+    "t": ("tests.typings", "TestsFlextTargetLdifTypes"),
     "temp_dir": ("tests.conftest", "temp_dir"),
     "temp_file": ("tests.conftest", "temp_file"),
     "tm": ("tests.models", "tm"),
     "tt": ("tests.typings", "tt"),
-    "u": ("tests.tu", "u"),
+    "u": ("tests.utilities", "TestsFlextTargetLdifUtilities"),
 }
 
 __all__ = [
