@@ -25,10 +25,19 @@ if TYPE_CHECKING:
         __version_info__,
     )
     from flext_target_ldif.cli import main
-    from flext_target_ldif.constants import FlextTargetLdifConstants, c
+    from flext_target_ldif.constants import (
+        FlextTargetLdifConstants,
+        FlextTargetLdifConstants as c,
+    )
     from flext_target_ldif.exceptions import FlextTargetLdifWriterError
-    from flext_target_ldif.models import FlextTargetLdifModels, m
-    from flext_target_ldif.protocols import FlextTargetLdifProtocols, p
+    from flext_target_ldif.models import (
+        FlextTargetLdifModels,
+        FlextTargetLdifModels as m,
+    )
+    from flext_target_ldif.protocols import (
+        FlextTargetLdifProtocols,
+        FlextTargetLdifProtocols as p,
+    )
     from flext_target_ldif.settings import FlextTargetLdifSettings
     from flext_target_ldif.sinks import LDIFSink
     from flext_target_ldif.target import TargetLDIF
@@ -41,8 +50,14 @@ if TYPE_CHECKING:
         transform_phone,
         transform_timestamp,
     )
-    from flext_target_ldif.typings import FlextTargetLdifTypes, t
-    from flext_target_ldif.utilities import FlextTargetLdifUtilities, u
+    from flext_target_ldif.typings import (
+        FlextTargetLdifTypes,
+        FlextTargetLdifTypes as t,
+    )
+    from flext_target_ldif.utilities import (
+        FlextTargetLdifUtilities,
+        FlextTargetLdifUtilities as u,
+    )
     from flext_target_ldif.writer import LdifWriter, logger
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
@@ -81,27 +96,27 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "__url__": ("flext_target_ldif.__version__", "__url__"),
     "__version__": ("flext_target_ldif.__version__", "__version__"),
     "__version_info__": ("flext_target_ldif.__version__", "__version_info__"),
-    "c": ("flext_target_ldif.constants", "c"),
+    "c": ("flext_target_ldif.constants", "FlextTargetLdifConstants"),
     "d": ("flext_core", "d"),
     "e": ("flext_core", "e"),
     "h": ("flext_core", "h"),
     "logger": ("flext_target_ldif.writer", "logger"),
-    "m": ("flext_target_ldif.models", "m"),
+    "m": ("flext_target_ldif.models", "FlextTargetLdifModels"),
     "main": ("flext_target_ldif.cli", "main"),
     "normalize_attribute_value": (
         "flext_target_ldif.transformers",
         "normalize_attribute_value",
     ),
-    "p": ("flext_target_ldif.protocols", "p"),
+    "p": ("flext_target_ldif.protocols", "FlextTargetLdifProtocols"),
     "r": ("flext_core", "r"),
     "s": ("flext_core", "s"),
-    "t": ("flext_target_ldif.typings", "t"),
+    "t": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
     "transform_boolean": ("flext_target_ldif.transformers", "transform_boolean"),
     "transform_email": ("flext_target_ldif.transformers", "transform_email"),
     "transform_name": ("flext_target_ldif.transformers", "transform_name"),
     "transform_phone": ("flext_target_ldif.transformers", "transform_phone"),
     "transform_timestamp": ("flext_target_ldif.transformers", "transform_timestamp"),
-    "u": ("flext_target_ldif.utilities", "u"),
+    "u": ("flext_target_ldif.utilities", "FlextTargetLdifUtilities"),
     "x": ("flext_core", "x"),
 }
 

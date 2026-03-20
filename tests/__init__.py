@@ -53,11 +53,9 @@ if TYPE_CHECKING:
         TestLdifWriterRecordWriting,
     )
     from .tt import t
+    from .tu import u
     from .typings import TestsFlextTargetLdifTypes, tt
-    from .utilities import (
-        TestsFlextTargetLdifUtilities,
-        TestsFlextTargetLdifUtilities as u,
-    )
+    from .utilities import TestsFlextTargetLdifUtilities
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "EXPECTED_BULK_SIZE": ("tests.test_writer", "EXPECTED_BULK_SIZE"),
@@ -119,7 +117,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "temp_file": ("tests.conftest", "temp_file"),
     "tm": ("tests.models", "tm"),
     "tt": ("tests.typings", "tt"),
-    "u": ("tests.utilities", "TestsFlextTargetLdifUtilities"),
+    "u": ("tests.tu", "u"),
 }
 
 __all__ = [
