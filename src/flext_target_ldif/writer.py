@@ -20,7 +20,7 @@ from flext_core import FlextLogger, r
 from flext_core.typings import t
 from flext_ldif import FlextLdif
 
-from flext_target_ldif.exceptions import FlextTargetLdifWriterError
+from flext_target_ldif import FlextTargetLdifWriterError
 
 logger = FlextLogger(__name__)
 
@@ -35,7 +35,7 @@ class LdifWriter:
         ldif_options: Mapping[str, t.ContainerValue] | None = None,
         dn_template: str | None = None,
         attribute_mapping: Mapping[str, str] | None = None,
-        schema: Mapping[str, t.ContainerValue] | None = None,
+        schema: Mapping[str, t.ContainerValue | list[str]] | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure."""
         self.output_file = Path(output_file) if output_file else Path("output.ldif")
@@ -192,8 +192,8 @@ class LdifWriter:
                 dn_obj = entry.get("dn", "")
                 dn_str = str(dn_obj) if dn_obj else ""
                 raw_attributes = entry.get("attributes", {})
-                attributes_obj: dict[str, t.ContainerValue] = {}
-                if isinstance(raw_attributes, Mapping):
+                attributes_obj: dict[str, str | list[str]] = {}
+                if isinstance(raw_attributes, dict):
                     attributes_obj = {
                         str(key): value for key, value in raw_attributes.items()
                     }
@@ -202,7 +202,7 @@ class LdifWriter:
                 f.write("\n")
 
     def _write_entry_attributes(
-        self, f: TextIO, attributes_obj: Mapping[str, t.ContainerValue]
+        self, f: TextIO, attributes_obj: Mapping[str, str | list[str]]
     ) -> None:
         """Write entry attributes to file."""
         for attr, values in attributes_obj.items():

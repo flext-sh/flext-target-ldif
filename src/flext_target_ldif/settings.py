@@ -12,7 +12,7 @@ from typing import Annotated, Any, override as _override
 from flext_core import FlextSettings, r
 from flext_core.typings import t
 from pydantic import Field, ValidationError
-from pydantic.fields import PydanticUndefined
+from pydantic_core import PydanticUndefined
 
 
 class FlextTargetLdifSettings(FlextSettings):
@@ -33,7 +33,8 @@ class FlextTargetLdifSettings(FlextSettings):
                 if field_info.default is not PydanticUndefined:
                     kwargs[field_name] = field_info.default
                 elif field_info.default_factory is not None:
-                    kwargs[field_name] = field_info.default_factory()
+                    factory: Any = field_info.default_factory
+                    kwargs[field_name] = factory()
         super().__init__(**kwargs)
         object.__setattr__(self, "_allow_mutation", False)
 

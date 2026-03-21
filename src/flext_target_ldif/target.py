@@ -9,13 +9,11 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping
 from pathlib import Path
-from typing import override
+from typing import cast, override
 
-from flext_core.typings import t
+from flext_core import t
 
-from flext_target_ldif.cli import main as cli_main
-from flext_target_ldif.settings import FlextTargetLdifSettings
-from flext_target_ldif.sinks import LDIFSink
+from flext_target_ldif import FlextTargetLdifSettings, LDIFSink, main as cli_main
 
 
 class TargetLDIF:
@@ -93,12 +91,15 @@ class TargetLDIF:
             "base64_encode",
             "include_timestamps",
         }
-        filtered_config: dict[str, t.NormalizedValue] = {
+        filtered_config: dict[str, t.ContainerValue] = {
             k: v for k, v in config_dict.items() if k in allowed_fields
         }
         if "output_file" not in filtered_config:
             filtered_config["output_file"] = "output.ldif"
-        settings = FlextTargetLdifSettings(**filtered_config)
+        normalized: dict[str, t.NormalizedValue] = cast(
+            "dict[str, t.NormalizedValue]", filtered_config
+        )
+        settings = FlextTargetLdifSettings(**normalized)
         settings.validate_domain_rules()
 
 

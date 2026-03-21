@@ -10,8 +10,8 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
 if TYPE_CHECKING:
-    from flext_core import d, e, h, r, s, x
     from flext_core.typings import FlextTypes
+    from flext_ldif import d, e, h, r, s, x
 
     from flext_target_ldif.__version__ import (
         __all__,
@@ -97,9 +97,9 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "__version__": ("flext_target_ldif.__version__", "__version__"),
     "__version_info__": ("flext_target_ldif.__version__", "__version_info__"),
     "c": ("flext_target_ldif.constants", "FlextTargetLdifConstants"),
-    "d": ("flext_core", "d"),
-    "e": ("flext_core", "e"),
-    "h": ("flext_core", "h"),
+    "d": ("flext_ldif", "d"),
+    "e": ("flext_ldif", "e"),
+    "h": ("flext_ldif", "h"),
     "logger": ("flext_target_ldif.writer", "logger"),
     "m": ("flext_target_ldif.models", "FlextTargetLdifModels"),
     "main": ("flext_target_ldif.cli", "main"),
@@ -108,8 +108,8 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
         "normalize_attribute_value",
     ),
     "p": ("flext_target_ldif.protocols", "FlextTargetLdifProtocols"),
-    "r": ("flext_core", "r"),
-    "s": ("flext_core", "s"),
+    "r": ("flext_ldif", "r"),
+    "s": ("flext_ldif", "s"),
     "t": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
     "transform_boolean": ("flext_target_ldif.transformers", "transform_boolean"),
     "transform_email": ("flext_target_ldif.transformers", "transform_email"),
@@ -117,7 +117,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "transform_phone": ("flext_target_ldif.transformers", "transform_phone"),
     "transform_timestamp": ("flext_target_ldif.transformers", "transform_timestamp"),
     "u": ("flext_target_ldif.utilities", "FlextTargetLdifUtilities"),
-    "x": ("flext_core", "x"),
+    "x": ("flext_ldif", "x"),
 }
 
 __all__ = [
