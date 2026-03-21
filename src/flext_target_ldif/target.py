@@ -11,7 +11,8 @@ from collections.abc import Callable, Mapping
 from pathlib import Path
 from typing import override
 
-from flext_target_ldif import t
+from flext_core.typings import t
+
 from flext_target_ldif.cli import main as cli_main
 from flext_target_ldif.settings import FlextTargetLdifSettings
 from flext_target_ldif.sinks import LDIFSink

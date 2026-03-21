@@ -10,9 +10,8 @@ from __future__ import annotations
 from typing import Annotated
 
 from flext_core import FlextSettings, r
+from flext_core.typings import t
 from pydantic import Field
-
-from flext_target_ldif import t
 
 
 class FlextTargetLdifSettings(FlextSettings):
