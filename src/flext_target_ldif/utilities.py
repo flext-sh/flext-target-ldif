@@ -49,44 +49,44 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def parse_singer_message(
             line: str,
-        ) -> r[Mapping[str, t.ContainerValue]]:
+        ) -> r[Mapping[str, t.ConfigMap]]:
             """Parse Singer message from input line.
 
             Args:
             line: JSON line from Singer tap
 
             Returns:
-            r[dict[str, t.ContainerValue]]: Parsed message or error
+            r[Mapping[str, t.ConfigMap]]: Parsed message or error
 
             """
             return FlextTargetLdapUtilities.TargetLdap.parse_singer_message(line)
 
         @staticmethod
         def validate_record_message(
-            message: Mapping[str, t.ContainerValue],
-        ) -> r[Mapping[str, t.ContainerValue]]:
+            message: Mapping[str, t.ConfigMap],
+        ) -> r[Mapping[str, t.ConfigMap]]:
             """Validate Singer RECORD message structure.
 
             Args:
             message: Singer message to validate
 
             Returns:
-            r[dict[str, t.ContainerValue]]: Validated record or error
+            r[Mapping[str, t.ConfigMap]]: Validated record or error
 
             """
             return FlextTargetLdapUtilities.TargetLdap.validate_record_message(message)
 
         @staticmethod
         def validate_schema_message(
-            message: Mapping[str, t.ContainerValue],
-        ) -> r[Mapping[str, t.ContainerValue]]:
+            message: Mapping[str, t.ConfigMap],
+        ) -> r[Mapping[str, t.ConfigMap]]:
             """Validate Singer SCHEMA message structure.
 
             Args:
             message: Singer message to validate
 
             Returns:
-            r[dict[str, t.ContainerValue]]: Validated schema or error
+            r[Mapping[str, t.ConfigMap]]: Validated schema or error
 
             """
             return FlextTargetLdapUtilities.TargetLdap.validate_schema_message(message)

@@ -10,7 +10,6 @@ from __future__ import annotations
 from enum import StrEnum, unique
 from typing import Final
 
-from flext_core import FlextConstants
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
@@ -27,7 +26,6 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     MIN_LINE_LENGTH: Final[int] = 40
     STANDARD_LINE_LENGTH: Final[int] = 78
     MAX_DN_LENGTH: Final[int] = 1000
-    MAX_BATCH_SIZE: Final[int] = FlextConstants.MAX_ITEMS
     SUPPORTED_ENCODINGS: Final[frozenset[str]] = frozenset([
         "utf-8",
         "utf-16",
@@ -46,12 +44,12 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     LDIF_LINE_WRAP_LENGTH: Final[int] = 76
 
     @unique
-    class ErrorType(StrEnum):
+    class TargetLdifErrorType(StrEnum):
         """LDIF target error types using StrEnum for type safety.
 
         DRY Pattern:
-            StrEnum is the single source of truth. Use ErrorType.FORMAT_VALIDATION.value
-            or ErrorType.FORMAT_VALIDATION directly - no base strings needed.
+            StrEnum is the single source of truth. Use TargetLdifErrorType.FORMAT_VALIDATION.value
+            or TargetLdifErrorType.FORMAT_VALIDATION directly - no base strings needed.
         """
 
         FORMAT_VALIDATION = "FORMAT_VALIDATION"

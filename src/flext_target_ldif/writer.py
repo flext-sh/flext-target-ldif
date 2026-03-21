@@ -59,7 +59,7 @@ class LdifWriter:
         self._ldif_api = FlextLdif()
         self._records: list[dict[str, t.ContainerValue]] = []
         self._record_count = 0
-        self._ldif_entries: list[Mapping[str, t.ContainerValue]] = []
+        self._ldif_entries: list[dict[str, str | dict[str, list[str]]]] = []
         self._file_handle: TextIO | None = None
 
     def __enter__(self) -> Self:
@@ -128,7 +128,7 @@ class LdifWriter:
 
     def _convert_record_to_entry(
         self, record: Mapping[str, t.ContainerValue]
-    ) -> Mapping[str, t.ContainerValue] | None:
+    ) -> dict[str, str | dict[str, list[str]]] | None:
         """Convert a single record to LDIF entry format."""
         try:
             dn = self._generate_dn(record)

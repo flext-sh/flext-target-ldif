@@ -93,10 +93,12 @@ class TargetLDIF:
             "base64_encode",
             "include_timestamps",
         }
-        filtered_config: dict[str, t.ContainerValue] = {
+        filtered_config: dict[str, t.NormalizedValue] = {
             k: v for k, v in config_dict.items() if k in allowed_fields
         }
-        settings = FlextTargetLdifSettings.model_validate(filtered_config)
+        if "output_file" not in filtered_config:
+            filtered_config["output_file"] = "output.ldif"
+        settings = FlextTargetLdifSettings(**filtered_config)
         settings.validate_domain_rules()
 
 
