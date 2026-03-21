@@ -77,10 +77,15 @@ class FlextTargetLdifSettings(FlextSettings):
 
     def validate_domain_rules(self) -> r[bool]:
         """Validate required target configuration constraints."""
+        if not self.output_file.strip():
+            msg = "Output file cannot be empty"
+            raise ValueError(msg)
         if not self.output_path.strip():
-            return r[bool].fail("output_path cannot be empty")
+            msg = "output_path cannot be empty"
+            raise ValueError(msg)
         if not self.dn_template.strip():
-            return r[bool].fail("dn_template cannot be empty")
+            msg = "DN template cannot be empty"
+            raise ValueError(msg)
         return r[bool].ok(value=True)
 
 

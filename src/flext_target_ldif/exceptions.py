@@ -9,18 +9,17 @@ from __future__ import annotations
 from typing import override
 
 from flext_core import e
-from flext_core.models import m
 
 
 class FlextTargetLdifWriterError(e.OperationError):
     """Error raised when LDIF writer operations fail."""
 
-    details: m.ConfigMap
+    details: dict[str, str]
 
-    def __init__(self, message: str, details: m.ConfigMap | None = None) -> None:
+    def __init__(self, message: str, details: dict[str, str] | None = None) -> None:
         """Initialize writer error with message and optional details."""
         super().__init__(message, reason=str(details) if details else None)
-        self.details = details if details is not None else m.ConfigMap(root={})
+        self.details = details if details is not None else {}
 
     @override
     def __str__(self) -> str:

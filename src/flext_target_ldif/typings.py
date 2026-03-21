@@ -14,9 +14,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core.constants import c
 from flext_ldif import FlextLdifTypes
 from flext_meltano import FlextMeltanoTypes
+
+from flext_target_ldif.constants import c
 
 
 class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):

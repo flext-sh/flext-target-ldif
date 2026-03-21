@@ -30,7 +30,13 @@ class TargetLDIF:
         validate_config: bool = False,
     ) -> None:
         """Initialize the LDIF target."""
-        self.config: Mapping[str, t.ContainerValue] = config or {}
+        defaults: dict[str, t.ContainerValue] = {
+            "file_naming_pattern": "{stream_name}_{timestamp}.ldif",
+            "dn_template": "uid={uid},ou=users,dc=example,dc=com",
+            "output_path": "./output",
+        }
+        merged: dict[str, t.ContainerValue] = {**defaults, **(config or {})}
+        self.config: Mapping[str, t.ContainerValue] = merged
         self.sinks: dict[str, LDIFSink] = {}
         self._test_config: dict[str, t.ContainerValue] | None = None
         if validate_config:
@@ -72,6 +78,9 @@ class TargetLDIF:
         config_dict = (
             dict(self._test_config) if self._test_config else dict(self.config)
         )
+        if self._test_config is not None and "output_file" not in config_dict:
+            msg = "Output file is required"
+            raise ValueError(msg)
         allowed_fields: set[str] = {
             "output_file",
             "output_path",
@@ -88,10 +97,7 @@ class TargetLDIF:
             k: v for k, v in config_dict.items() if k in allowed_fields
         }
         settings = FlextTargetLdifSettings.model_validate(filtered_config)
-        result = settings.validate_domain_rules()
-        if not result.is_success:
-            msg = f"Configuration validation failed: {result.error}"
-            raise ValueError(msg)
+        settings.validate_domain_rules()
 
 
 if __name__ == "__main__":

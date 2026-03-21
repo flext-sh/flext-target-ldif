@@ -69,25 +69,17 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         Note: Does not override parent Processing class to avoid inheritance conflicts.
         """
 
-        MIN_WORKERS_FOR_PARALLEL: Final[int] = (
-            FlextLdifConstants.Ldif.LdifProcessing.MIN_WORKERS_FOR_PARALLEL
-        )
-        MAX_WORKERS_LIMIT: Final[int] = (
-            FlextLdifConstants.Ldif.LdifProcessing.MAX_WORKERS_LIMIT
-        )
-        PERFORMANCE_MIN_CHUNK_SIZE: Final[int] = (
-            FlextLdifConstants.Ldif.LdifProcessing.PERFORMANCE_MIN_CHUNK_SIZE
-        )
+        MIN_WORKERS_FOR_PARALLEL: Final[int] = 2
+        MAX_WORKERS_LIMIT: Final[int] = 16
+        PERFORMANCE_MIN_CHUNK_SIZE: Final[int] = 100
 
     class Format:
         """LDIF format specifications."""
 
-        DN_ATTRIBUTE: Final[str] = FlextLdifConstants.Ldif.Format.DN_ATTRIBUTE
-        ATTRIBUTE_SEPARATOR: Final[str] = (
-            FlextLdifConstants.Ldif.Format.ATTRIBUTE_SEPARATOR
-        )
-        BASE64_PREFIX: Final[str] = FlextLdifConstants.Ldif.Format.BASE64_PREFIX
-        COMMENT_PREFIX: Final[str] = FlextLdifConstants.Ldif.Format.COMMENT_PREFIX
+        DN_ATTRIBUTE: Final[str] = "dn"
+        ATTRIBUTE_SEPARATOR: Final[str] = ": "
+        BASE64_PREFIX: Final[str] = ":: "
+        COMMENT_PREFIX: Final[str] = "#"
 
     class TargetLdifValidation:
         """LDIF validation constants.
@@ -95,13 +87,9 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         Note: Does not override parent Validation class to avoid inheritance conflicts.
         """
 
-        MIN_DN_COMPONENTS: Final[int] = (
-            FlextLdifConstants.Ldif.LdifValidation.MIN_DN_COMPONENTS
-        )
-        MAX_DN_LENGTH: Final[int] = FlextLdifConstants.Ldif.LdifValidation.MAX_DN_LENGTH
-        MAX_ATTRIBUTES_PER_ENTRY: Final[int] = (
-            FlextLdifConstants.Ldif.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
-        )
+        MIN_DN_COMPONENTS: Final[int] = 2
+        MAX_DN_LENGTH: Final[int] = 1000
+        MAX_ATTRIBUTES_PER_ENTRY: Final[int] = 500
         MAX_ATTRIBUTE_VALUE_LENGTH: Final[int] = 1000
         MAX_DN_COMPONENTS: Final[int] = 10
 
