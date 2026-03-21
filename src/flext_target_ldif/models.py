@@ -30,11 +30,9 @@ class LdifFormatOptions(FlextSettings):
     """LDIF format configuration with specification compliance."""
 
     line_length: Annotated[
-        int,
+        t.PositiveInt,
         Field(
             default=c.STANDARD_LINE_LENGTH,
-            ge=c.MIN_LINE_LENGTH,
-            le=c.MAX_LINE_LENGTH,
             description="Maximum LDIF line length",
         ),
     ]
@@ -143,12 +141,10 @@ class LdifEntry(FlextMeltanoModels.Entity):
     """LDIF entry representation with format validation."""
 
     distinguished_name: Annotated[
-        str,
+        t.NonEmptyStr,
         Field(
             ...,
             description="LDIF Distinguished Name (DN)",
-            min_length=1,
-            max_length=c.MAX_DN_LENGTH,
         ),
     ]
     attributes: Annotated[
@@ -236,10 +232,10 @@ class LdifFile(FlextMeltanoModels.Entity):
 
     # File metadata
     file_size_bytes: Annotated[
-        int, Field(default=0, ge=0, description="File size in bytes")
+        t.NonNegativeInt, Field(default=0, description="File size in bytes")
     ]
     entry_count: Annotated[
-        int, Field(default=0, ge=0, description="Number of entries in file")
+        t.NonNegativeInt, Field(default=0, description="Number of entries in file")
     ]
     is_compressed: Annotated[
         bool, Field(default=False, description="Whether file is compressed")
@@ -296,10 +292,9 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
         ),
     ]
     processing_time_ms: Annotated[
-        float,
+        t.NonNegativeFloat,
         Field(
             default=0.0,
-            ge=0.0,
             description="Processing time in milliseconds",
         ),
     ]
@@ -354,11 +349,9 @@ class LdifBatchProcessing(FlextMeltanoModels.Entity):
 
     stream_name: Annotated[str, Field(..., description="Singer stream name")]
     batch_size: Annotated[
-        int,
+        t.BatchSize,
         Field(
             default=c.DEFAULT_BATCH_SIZE,
-            ge=1,
-            le=c.MAX_BATCH_SIZE_LIMIT,
             description="Records per batch",
         ),
     ]
@@ -370,12 +363,14 @@ class LdifBatchProcessing(FlextMeltanoModels.Entity):
         ),
     ]
     total_processed: Annotated[
-        int, Field(default=0, ge=0, description="Total entries processed")
+        t.NonNegativeInt, Field(default=0, description="Total entries processed")
     ]
     successful_exports: Annotated[
-        int, Field(default=0, ge=0, description="Successful exports")
+        t.NonNegativeInt, Field(default=0, description="Successful exports")
     ]
-    failed_exports: Annotated[int, Field(default=0, ge=0, description="Failed exports")]
+    failed_exports: Annotated[
+        t.NonNegativeInt, Field(default=0, description="Failed exports")
+    ]
     last_processed_at: Annotated[
         datetime | None,
         Field(
@@ -433,11 +428,9 @@ class SingerStreamConfig(FlextSettings):
         ),
     ]
     batch_size: Annotated[
-        int,
+        t.BatchSize,
         Field(
             default=c.DEFAULT_BATCH_SIZE,
-            ge=1,
-            le=c.MAX_BATCH_SIZE_LIMIT,
             description="Batch size for processing",
         ),
     ]
@@ -462,57 +455,51 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
         ),
     ]
     records_processed: Annotated[
-        int,
+        t.NonNegativeInt,
         Field(
             default=0,
-            ge=0,
             description="Total records processed",
         ),
     ]
     entries_exported: Annotated[
-        int, Field(default=0, ge=0, description="LDIF entries exported")
+        t.NonNegativeInt, Field(default=0, description="LDIF entries exported")
     ]
     entries_failed: Annotated[
-        int,
+        t.NonNegativeInt,
         Field(
             default=0,
-            ge=0,
             description="Entries that failed export",
         ),
     ]
 
     # File statistics
     total_file_size_bytes: Annotated[
-        int,
+        t.NonNegativeInt,
         Field(
             default=0,
-            ge=0,
             description="Total size of generated files",
         ),
     ]
     files_compressed: Annotated[
-        int,
+        t.NonNegativeInt,
         Field(
             default=0,
-            ge=0,
             description="Number of compressed files",
         ),
     ]
 
     # Performance metrics
     total_duration_ms: Annotated[
-        float,
+        t.NonNegativeFloat,
         Field(
             default=0.0,
-            ge=0.0,
             description="Total processing duration",
         ),
     ]
     average_processing_time_ms: Annotated[
-        float,
+        t.NonNegativeFloat,
         Field(
             default=0.0,
-            ge=0.0,
             description="Average processing time per record",
         ),
     ]
