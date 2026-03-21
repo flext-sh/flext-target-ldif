@@ -27,7 +27,7 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     MIN_LINE_LENGTH: Final[int] = 40
     STANDARD_LINE_LENGTH: Final[int] = 78
     MAX_DN_LENGTH: Final[int] = 1000
-    MAX_BATCH_SIZE: Final[int] = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
+    MAX_BATCH_SIZE: Final[int] = FlextConstants.MAX_ITEMS
     SUPPORTED_ENCODINGS: Final[frozenset[str]] = frozenset([
         "utf-8",
         "utf-16",
