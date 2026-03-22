@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping
 from pathlib import Path
-from typing import cast, override
+from typing import override
 
 from flext_core import t
 
@@ -96,10 +96,7 @@ class TargetLDIF:
         }
         if "output_file" not in filtered_config:
             filtered_config["output_file"] = "output.ldif"
-        normalized: dict[str, t.NormalizedValue] = cast(
-            "dict[str, t.NormalizedValue]", filtered_config
-        )
-        settings = FlextTargetLdifSettings(**normalized)
+        settings = FlextTargetLdifSettings(**filtered_config)
         settings.validate_domain_rules()
 
 
