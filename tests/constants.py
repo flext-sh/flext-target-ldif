@@ -1,6 +1,6 @@
-"""Module skeleton for TestsFlextTargetLdifConstants.
+"""Module skeleton for FlextTargetLdifTestConstants.
 
-Test constants for flexttargetldif.
+Test constants for flext-target-ldif.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -8,12 +8,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_tests import c
+from flext_tests import FlextTestsConstants
 
 
-class TestsFlextTargetLdifConstants(c):
-    """Test constants for flexttargetldif."""
+class FlextTargetLdifTestConstants(FlextTestsConstants):
+    """Test constants for flext-target-ldif."""
 
 
-c = TestsFlextTargetLdifConstants
-__all__ = ["TestsFlextTargetLdifConstants", "c"]
+c = FlextTargetLdifTestConstants
+__all__ = ["FlextTargetLdifTestConstants", "c"]
