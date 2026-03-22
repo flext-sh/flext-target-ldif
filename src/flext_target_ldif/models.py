@@ -100,7 +100,7 @@ class LdifExportConfig(FlextSettings):
         list[str],
         Field(
             default_factory=list,
-            description="Default LDAP object classes for entries",
+            description="Default LDAP t.NormalizedValue classes for entries",
         ),
     ]
 
@@ -158,7 +158,7 @@ class LdifEntry(FlextMeltanoModels.Entity):
         list[str],
         Field(
             default_factory=list,
-            description="LDAP object classes",
+            description="LDAP t.NormalizedValue classes",
         ),
     ]
     change_type: Annotated[
@@ -187,9 +187,9 @@ class LdifEntry(FlextMeltanoModels.Entity):
                     "DN must contain attribute=value pairs separated by commas",
                 )
 
-            # Validate object classes
+            # Validate t.NormalizedValue classes
             if not self.object_classes:
-                errors.append("Entry must have at least one object class")
+                errors.append("Entry must have at least one t.NormalizedValue class")
 
             # Validate attributes exist
             if not self.attributes:

@@ -519,7 +519,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                             pass
                         case _:
                             return r[Mapping[str, t.ContainerValue]].fail(
-                                "All object classes must be non-empty strings"
+                                "All t.NormalizedValue classes must be non-empty strings"
                             )
             if "attribute_mapping" in config:
                 attribute_mapping = config["attribute_mapping"]

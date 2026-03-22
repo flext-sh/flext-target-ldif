@@ -76,7 +76,7 @@ class LDIFSink:
         """Process a single record and write to LDIF.
 
         Returns:
-        object: Description of return value.
+        t.NormalizedValue: Description of return value.
 
         """
         ldif_writer = self._get_ldif_writer()
