@@ -7,7 +7,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Annotated, Any, override as _override
+from collections.abc import Callable
+from typing import Annotated, override as _override
 
 from flext_core import FlextSettings, r
 from flext_core.typings import t
@@ -20,7 +21,7 @@ class FlextTargetLdifSettings(FlextSettings):
 
     _allow_mutation: bool = True
 
-    def __init__(self, **kwargs: Any) -> None:
+    def __init__(self, **kwargs: t.NormalizedValue) -> None:
         """Initialize settings and freeze after construction.
 
         Explicitly applies field defaults for missing kwargs to ensure
@@ -33,7 +34,7 @@ class FlextTargetLdifSettings(FlextSettings):
                 if field_info.default is not PydanticUndefined:
                     kwargs[field_name] = field_info.default
                 elif field_info.default_factory is not None:
-                    factory: Any = field_info.default_factory
+                    factory: Callable[[], t.NormalizedValue] = field_info.default_factory
                     kwargs[field_name] = factory()
         super().__init__(**kwargs)
         object.__setattr__(self, "_allow_mutation", False)
