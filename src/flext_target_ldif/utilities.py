@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import base64
 import re
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping, MutableSequence, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
