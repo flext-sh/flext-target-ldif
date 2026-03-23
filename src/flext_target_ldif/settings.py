@@ -35,7 +35,7 @@ class FlextTargetLdifSettings(FlextSettings):
                 elif field_info.default_factory is not None:
                     factory_fn: Callable[..., t.NormalizedValue] = (
                         field_info.default_factory
-                    )  # type: ignore[assignment]  # Pydantic FieldInfo.default_factory is typed as Callable[[], Any] | None; we narrow None above but the union type remains
+                    )
                     kwargs[field_name] = factory_fn()
         super().__init__(**kwargs)
         object.__setattr__(self, "_allow_mutation", False)
