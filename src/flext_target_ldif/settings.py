@@ -10,8 +10,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Annotated, override as _override
 
-from flext_core import FlextSettings, r
-from flext_core.typings import t
+from flext_core import FlextSettings, r, t
 from pydantic import Field, ValidationError
 from pydantic_core import PydanticUndefined
 

@@ -11,10 +11,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import r
-from flext_core.loggings import FlextLogger
-from flext_core.protocols import FlextProtocols as p
-from flext_core.typings import t
+from flext_core import FlextLogger, p, r, t
 
 from flext_target_ldif.writer import LdifWriter
 
