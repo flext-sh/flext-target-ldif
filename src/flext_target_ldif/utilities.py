@@ -170,7 +170,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             if not record or not dn:
                 return r[str].fail("Record and DN are required")
             try:
-                ldif_lines: Sequence[str] = []
+                ldif_lines: list[str] = []
                 mapping = attribute_mapping or {}
                 ldif_lines.append(f"dn: {dn}")
                 if object_classes:
@@ -283,7 +283,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if len(value) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
                 return value
-            lines: Sequence[str] = []
+            lines: list[str] = []
             remaining = value
             while remaining:
                 if len(remaining) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
@@ -621,7 +621,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             Mapping[str, t.ContainerValue]: Processing state
 
             """
-            state: Mapping[str, t.ContainerValue] = {
+            state: dict[str, t.ContainerValue] = {
                 "stream_name": stream_name,
                 "records_processed": records_processed,
                 "output_file": file_path,
@@ -683,7 +683,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             updated_state = dict(state)
             bookmarks_raw = updated_state.get("bookmarks")
-            bookmarks: Mapping[str, t.ContainerValue] = {}
+            bookmarks: dict[str, t.ContainerValue] = {}
             if isinstance(bookmarks_raw, Mapping):
                 bookmarks = {str(key): value for key, value in bookmarks_raw.items()}
             bookmarks[stream_name] = dict(stream_state)

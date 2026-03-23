@@ -56,7 +56,7 @@ class LdifWriter:
             bool(timestamps_val) if timestamps_val is not None else True
         )
         self._ldif_api = FlextLdif()
-        self._records: Sequence[Mapping[str, t.ContainerValue]] = []
+        self._records: list[Mapping[str, t.ContainerValue]] = []
         self._record_count = 0
         self._ldif_entries: Sequence[
             Mapping[str, str | Mapping[str, Sequence[str]]]
@@ -133,12 +133,12 @@ class LdifWriter:
         """Convert a single record to LDIF entry format."""
         try:
             dn = self._generate_dn(record)
-            attributes: Mapping[str, t.ContainerValue] = {}
+            attributes: dict[str, t.ContainerValue] = {}
             for key, value in record.items():
                 if key != "dn":
                     mapped_key = self.attribute_mapping.get(key, key)
                     attributes[mapped_key] = value
-            attr_dict: Mapping[str, Sequence[str]] = {}
+            attr_dict: dict[str, Sequence[str]] = {}
             for key, value in attributes.items():
                 if isinstance(value, list):
                     attr_dict[key] = [str(v) for v in value]

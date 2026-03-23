@@ -35,7 +35,7 @@ class TargetLDIF:
         }
         merged: Mapping[str, t.ContainerValue] = {**defaults, **(config or {})}
         self.config: Mapping[str, t.ContainerValue] = merged
-        self.sinks: Mapping[str, LDIFSink] = {}
+        self.sinks: dict[str, LDIFSink] = {}
         self._test_config: Mapping[str, t.ContainerValue] | None = None
         if validate_config:
             self.validate_config()
@@ -91,7 +91,7 @@ class TargetLDIF:
             "base64_encode",
             "include_timestamps",
         }
-        filtered_config: Mapping[str, t.ContainerValue] = {
+        filtered_config: dict[str, t.ContainerValue] = {
             k: v for k, v in config_dict.items() if k in allowed_fields
         }
         if "output_file" not in filtered_config:

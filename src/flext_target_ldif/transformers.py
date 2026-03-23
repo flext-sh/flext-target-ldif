@@ -111,7 +111,7 @@ class RecordTransformer:
         record: Mapping[str, str],
     ) -> Mapping[str, t.ContainerValue]:
         """Add required LDAP attributes to the record."""
-        result: Mapping[str, t.ContainerValue] = dict(record)
+        result: dict[str, t.ContainerValue] = dict(record)
         if "objectclass" not in result:
             result["objectclass"] = ["inetOrgPerson", "person"]
         if "cn" not in result:
@@ -133,7 +133,7 @@ class RecordTransformer:
         self, record: Mapping[str, t.ContainerValue]
     ) -> Mapping[str, str]:
         """Transform a Singer record to LDAP-compatible format."""
-        transformed: Mapping[str, str] = {}
+        transformed: dict[str, str] = {}
         for field, value in record.items():
             if value is None:
                 continue
