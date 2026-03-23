@@ -170,7 +170,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             if not record or not dn:
                 return r[str].fail("Record and DN are required")
             try:
-                ldif_lines: list[str] = []
+                ldif_lines: MutableSequence[str] = []
                 mapping = attribute_mapping or {}
                 ldif_lines.append(f"dn: {dn}")
                 if object_classes:
