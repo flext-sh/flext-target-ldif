@@ -21,7 +21,7 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """
 
     DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.DEFAULT_ENCODING
-    DEFAULT_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
+    DEFAULT_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.MAX_LINE_LENGTH
     MAX_LINE_LENGTH: Final[int] = 1024
     MIN_LINE_LENGTH: Final[int] = 40
     STANDARD_LINE_LENGTH: Final[int] = 78

@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from tests.utilities import TestsFlextTargetLdifUtilities
+from tests.utilities import FlextTargetLdifTestUtilities
 
-u = TestsFlextTargetLdifUtilities
+u = FlextTargetLdifTestUtilities
 __all__ = ["u"]
