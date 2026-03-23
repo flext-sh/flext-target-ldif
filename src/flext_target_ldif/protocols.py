@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Protocol, runtime_checkable
 
 from flext_core import t
@@ -61,7 +61,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 """
 
                 def generate_ldif(
-                    self, records: list[Mapping[str, t.ContainerValue]]
+                    self, records: Sequence[Mapping[str, t.ContainerValue]]
                 ) -> FlextMeltanoProtocols.Result[str]:
                     """Generate LDIF content from records.
 

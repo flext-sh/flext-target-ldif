@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from datetime import datetime
 from typing import override
 
@@ -111,7 +111,7 @@ class RecordTransformer:
         record: Mapping[str, str],
     ) -> Mapping[str, t.ContainerValue]:
         """Add required LDAP attributes to the record."""
-        result: dict[str, t.ContainerValue] = dict(record)
+        result: Mapping[str, t.ContainerValue] = dict(record)
         if "objectclass" not in result:
             result["objectclass"] = ["inetOrgPerson", "person"]
         if "cn" not in result:
@@ -125,7 +125,7 @@ class RecordTransformer:
                 result["cn"] = "Unknown User"
         if "sn" not in result and "cn" in result:
             cn_value = result["cn"]
-            words: list[str] = cn_value.split() if isinstance(cn_value, str) else []
+            words: Sequence[str] = cn_value.split() if isinstance(cn_value, str) else []
             result["sn"] = words[-1] if words else "Unknown"
         return result
 
@@ -133,7 +133,7 @@ class RecordTransformer:
         self, record: Mapping[str, t.ContainerValue]
     ) -> Mapping[str, str]:
         """Transform a Singer record to LDAP-compatible format."""
-        transformed: dict[str, str] = {}
+        transformed: Mapping[str, str] = {}
         for field, value in record.items():
             if value is None:
                 continue

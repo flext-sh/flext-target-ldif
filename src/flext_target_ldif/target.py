@@ -28,15 +28,15 @@ class TargetLDIF:
         validate_config: bool = False,
     ) -> None:
         """Initialize the LDIF target."""
-        defaults: dict[str, t.ContainerValue] = {
+        defaults: Mapping[str, t.ContainerValue] = {
             "file_naming_pattern": "{stream_name}_{timestamp}.ldif",
             "dn_template": "uid={uid},ou=users,dc=example,dc=com",
             "output_path": "./output",
         }
-        merged: dict[str, t.ContainerValue] = {**defaults, **(config or {})}
+        merged: Mapping[str, t.ContainerValue] = {**defaults, **(config or {})}
         self.config: Mapping[str, t.ContainerValue] = merged
-        self.sinks: dict[str, LDIFSink] = {}
-        self._test_config: dict[str, t.ContainerValue] | None = None
+        self.sinks: Mapping[str, LDIFSink] = {}
+        self._test_config: Mapping[str, t.ContainerValue] | None = None
         if validate_config:
             self.validate_config()
         output_path_raw = self.config.get("output_path", "./output")
@@ -52,7 +52,7 @@ class TargetLDIF:
         return cli_main
 
     @property
-    def config_jsonschema(self) -> dict[str, t.ContainerValue]:
+    def config_jsonschema(self) -> Mapping[str, t.ContainerValue]:
         """Return JSON schema for configuration."""
         return FlextTargetLdifSettings.model_json_schema()
 
@@ -91,7 +91,7 @@ class TargetLDIF:
             "base64_encode",
             "include_timestamps",
         }
-        filtered_config: dict[str, t.ContainerValue] = {
+        filtered_config: Mapping[str, t.ContainerValue] = {
             k: v for k, v in config_dict.items() if k in allowed_fields
         }
         if "output_file" not in filtered_config:

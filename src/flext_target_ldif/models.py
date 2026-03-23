@@ -5,6 +5,7 @@ This module provides data models for LDIF target operations.
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from typing import Annotated
 
@@ -90,14 +91,14 @@ class LdifExportConfig(FlextSettings):
         ),
     ]
     attribute_mappings: Annotated[
-        dict[str, str],
+        Mapping[str, str],
         Field(
             default_factory=dict,
             description="Singer field to LDIF attribute mappings",
         ),
     ]
     object_classes: Annotated[
-        list[str],
+        Sequence[str],
         Field(
             default_factory=list,
             description="Default LDAP t.NormalizedValue classes for entries",
@@ -148,14 +149,14 @@ class LdifEntry(FlextMeltanoModels.Entity):
         ),
     ]
     attributes: Annotated[
-        dict[str, list[str]],
+        Mapping[str, Sequence[str]],
         Field(
             default_factory=dict,
             description="LDIF attributes with values",
         ),
     ]
     object_classes: Annotated[
-        list[str],
+        Sequence[str],
         Field(
             default_factory=list,
             description="LDAP t.NormalizedValue classes",
@@ -169,7 +170,7 @@ class LdifEntry(FlextMeltanoModels.Entity):
         ),
     ]
     controls: Annotated[
-        list[str],
+        Sequence[str],
         Field(
             default_factory=list,
             description="LDAP controls for the entry",
@@ -179,7 +180,7 @@ class LdifEntry(FlextMeltanoModels.Entity):
     def validate_business_rules(self) -> r[bool]:
         """Validate LDIF entry business rules."""
         try:
-            errors: list[str] = []
+            errors: Sequence[str] = []
 
             # Validate DN format
             if "=" not in self.distinguished_name or "," not in self.distinguished_name:
@@ -216,9 +217,9 @@ class LdifFile(FlextMeltanoModels.Entity):
     file_path: Annotated[str, Field(..., description="Path to the LDIF file")]
     stream_name: Annotated[str, Field(..., description="Singer stream name")]
     entries: Annotated[
-        list[LdifEntry],
+        Sequence[LdifEntry],
         Field(
-            default_factory=list[LdifEntry],
+            default_factory=Sequence[LdifEntry],
             description="LDIF entries in the file",
         ),
     ]
@@ -271,7 +272,7 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
     """Result of Singer to LDIF transformation."""
 
     original_record: Annotated[
-        dict[str, t.ContainerValue],
+        Mapping[str, t.ContainerValue],
         Field(
             ...,
             description="Original Singer record",
@@ -285,7 +286,7 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
         ),
     ]
     transformation_errors: Annotated[
-        list[str],
+        Sequence[str],
         Field(
             default_factory=list,
             description="Transformation errors",
@@ -356,9 +357,9 @@ class LdifBatchProcessing(FlextMeltanoModels.Entity):
         ),
     ]
     current_batch: Annotated[
-        list[LdifEntry],
+        Sequence[LdifEntry],
         Field(
-            default_factory=list[LdifEntry],
+            default_factory=Sequence[LdifEntry],
             description="Current batch of entries",
         ),
     ]
@@ -448,7 +449,7 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
 
     stream_name: Annotated[str, Field(..., description="Singer stream name")]
     output_files: Annotated[
-        list[str],
+        Sequence[str],
         Field(
             default_factory=list,
             description="Generated LDIF file paths",
@@ -506,14 +507,14 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
 
     # Error tracking
     error_messages: Annotated[
-        list[str],
+        Sequence[str],
         Field(
             default_factory=list,
             description="Error messages encountered",
         ),
     ]
     warnings: Annotated[
-        list[str], Field(default_factory=list, description="Warning messages")
+        Sequence[str], Field(default_factory=list, description="Warning messages")
     ]
 
     @property

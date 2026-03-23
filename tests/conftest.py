@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import tempfile
-from collections.abc import Generator
+from collections.abc import Generator, Mapping, Sequence
 from pathlib import Path
 
 import pytest
@@ -34,7 +34,7 @@ def temp_file() -> Generator[Path]:
 
 
 @pytest.fixture
-def sample_config(temp_dir: Path) -> dict[str, t.NormalizedValue]:
+def sample_config(temp_dir: Path) -> Mapping[str, t.NormalizedValue]:
     """Provide a sample configuration for testing."""
     return {
         "output_path": str(temp_dir),
@@ -50,7 +50,7 @@ def sample_config(temp_dir: Path) -> dict[str, t.NormalizedValue]:
 
 
 @pytest.fixture
-def sample_record() -> dict[str, str]:
+def sample_record() -> Mapping[str, str]:
     """Provide a sample record for testing."""
     return {
         "uid": "testuser",
@@ -65,7 +65,7 @@ def sample_record() -> dict[str, str]:
 
 
 @pytest.fixture
-def sample_schema() -> dict[str, t.NormalizedValue]:
+def sample_schema() -> Mapping[str, t.NormalizedValue]:
     """Provide a sample Singer schema for testing."""
     return {
         "type": "t.NormalizedValue",
@@ -84,7 +84,7 @@ def sample_schema() -> dict[str, t.NormalizedValue]:
 
 
 @pytest.fixture
-def multiple_records() -> list[dict[str, str]]:
+def multiple_records() -> Sequence[Mapping[str, str]]:
     """Provide multiple sample records for testing."""
     return [
         {
@@ -112,13 +112,13 @@ def multiple_records() -> list[dict[str, str]]:
 
 
 @pytest.fixture
-def ldif_options() -> dict[str, t.NormalizedValue]:
+def ldif_options() -> Mapping[str, t.NormalizedValue]:
     """Provide sample LDIF options for testing."""
     return {"line_length": 78, "base64_encode": False, "include_timestamps": True}
 
 
 @pytest.fixture
-def attribute_mapping() -> dict[str, str]:
+def attribute_mapping() -> Mapping[str, str]:
     """Provide sample attribute mapping for testing."""
     return {
         "user_id": "uid",

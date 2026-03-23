@@ -14,6 +14,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
+
 from flext_ldif import FlextLdifTypes
 from flext_meltano import FlextMeltanoTypes
 
@@ -31,112 +33,152 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
     class TargetLdif:
         """Singer protocol complex types."""
 
-        type SingerMessage = dict[
+        type SingerMessage = Mapping[
             str,
-            t.ContainerValue | dict[str, t.ContainerValue],
+            t.ContainerValue | Mapping[str, t.ContainerValue],
         ]
-        type SingerSchema = dict[
+        type SingerSchema = Mapping[
             str,
-            t.ContainerValue | list[dict[str, t.ContainerValue]],
+            t.ContainerValue | Sequence[Mapping[str, t.ContainerValue]],
         ]
-        type SingerRecord = dict[
+        type SingerRecord = Mapping[
             str,
-            t.ContainerValue | dict[str, t.ContainerValue],
+            t.ContainerValue | Mapping[str, t.ContainerValue],
         ]
-        type SingerState = dict[str, t.ContainerValue | dict[str, t.ContainerValue]]
-        type StreamConfiguration = dict[str, str | bool | dict[str, t.ContainerValue]]
-        type TargetConfiguration = dict[
+        type SingerState = Mapping[
+            str, t.ContainerValue | Mapping[str, t.ContainerValue]
+        ]
+        type StreamConfiguration = Mapping[
+            str, str | bool | Mapping[str, t.ContainerValue]
+        ]
+        type TargetConfiguration = Mapping[
             str,
-            t.ContainerValue | dict[str, t.ContainerValue],
+            t.ContainerValue | Mapping[str, t.ContainerValue],
         ]
-        type MessageProcessing = dict[str, int | str | dict[str, t.ContainerValue]]
+        type MessageProcessing = Mapping[
+            str, int | str | Mapping[str, t.ContainerValue]
+        ]
 
     class LdifExport:
         """LDIF export complex types."""
 
-        type LdifEntry = dict[str, str | list[str] | dict[str, t.ContainerValue]]
-        type Attributes = dict[
-            str, str | list[str] | bytes | dict[str, t.ContainerValue]
+        type LdifEntry = Mapping[
+            str, str | Sequence[str] | Mapping[str, t.ContainerValue]
         ]
-        type LdifRecord = dict[
+        type Attributes = Mapping[
+            str, str | Sequence[str] | bytes | Mapping[str, t.ContainerValue]
+        ]
+        type LdifRecord = Mapping[
             str,
-            t.ContainerValue | list[str] | dict[str, t.ContainerValue],
+            t.ContainerValue | Sequence[str] | Mapping[str, t.ContainerValue],
         ]
-        type LdifFileConfig = dict[str, str | int | bool | dict[str, t.ContainerValue]]
-        type LdifFormatting = dict[str, str | int | bool | dict[str, t.ContainerValue]]
-        type LdifValidation = dict[str, bool | str | dict[str, t.ContainerValue]]
-        type ExportResult = dict[
-            str, int | str | list[str] | dict[str, t.ContainerValue]
+        type LdifFileConfig = Mapping[
+            str, str | int | bool | Mapping[str, t.ContainerValue]
+        ]
+        type LdifFormatting = Mapping[
+            str, str | int | bool | Mapping[str, t.ContainerValue]
+        ]
+        type LdifValidation = Mapping[str, bool | str | Mapping[str, t.ContainerValue]]
+        type ExportResult = Mapping[
+            str, int | str | Sequence[str] | Mapping[str, t.ContainerValue]
         ]
 
     class FileProcessing:
         """File processing complex types."""
 
-        type FileConfiguration = dict[str, str | int | dict[str, t.ContainerValue]]
-        type StreamWriter = dict[str, str | bool | int | dict[str, t.ContainerValue]]
-        type FileOutput = dict[str, str | list[str] | dict[str, t.ContainerValue]]
-        type CompressionConfig = dict[
-            str, str | bool | int | dict[str, t.ContainerValue]
+        type FileConfiguration = Mapping[
+            str, str | int | Mapping[str, t.ContainerValue]
         ]
-        type FileValidation = dict[str, bool | str | dict[str, t.ContainerValue]]
-        type IOMetrics = dict[str, int | float | dict[str, t.ContainerValue]]
+        type StreamWriter = Mapping[
+            str, str | bool | int | Mapping[str, t.ContainerValue]
+        ]
+        type FileOutput = Mapping[
+            str, str | Sequence[str] | Mapping[str, t.ContainerValue]
+        ]
+        type CompressionConfig = Mapping[
+            str, str | bool | int | Mapping[str, t.ContainerValue]
+        ]
+        type FileValidation = Mapping[str, bool | str | Mapping[str, t.ContainerValue]]
+        type IOMetrics = Mapping[str, int | float | Mapping[str, t.ContainerValue]]
 
     class DataTransformation:
         """Data transformation complex types."""
 
-        type SingerToLdifMapping = dict[str, str | dict[str, t.ContainerValue]]
-        type AttributeMapping = dict[str, str | list[str] | dict[str, t.ContainerValue]]
-        type SchemaTransformation = dict[
-            str,
-            t.ContainerValue | dict[str, t.ContainerValue],
+        type SingerToLdifMapping = Mapping[str, str | Mapping[str, t.ContainerValue]]
+        type AttributeMapping = Mapping[
+            str, str | Sequence[str] | Mapping[str, t.ContainerValue]
         ]
-        type RecordTransformation = dict[
+        type SchemaTransformation = Mapping[
             str,
-            t.ContainerValue | dict[str, t.ContainerValue],
+            t.ContainerValue | Mapping[str, t.ContainerValue],
         ]
-        type DataNormalization = dict[str, bool | str | dict[str, t.ContainerValue]]
-        type TransformationRules = dict[
-            str, str | list[str] | dict[str, t.ContainerValue]
+        type RecordTransformation = Mapping[
+            str,
+            t.ContainerValue | Mapping[str, t.ContainerValue],
+        ]
+        type DataNormalization = Mapping[
+            str, bool | str | Mapping[str, t.ContainerValue]
+        ]
+        type TransformationRules = Mapping[
+            str, str | Sequence[str] | Mapping[str, t.ContainerValue]
         ]
 
     class TargetLdifValidation:
         """Validation complex types."""
 
-        type LdifFormatValidation = dict[str, bool | str | dict[str, t.ContainerValue]]
-        type SingerCompliance = dict[str, bool | str | dict[str, t.ContainerValue]]
-        type SchemaValidation = dict[
-            str, bool | list[str] | dict[str, t.ContainerValue]
+        type LdifFormatValidation = Mapping[
+            str, bool | str | Mapping[str, t.ContainerValue]
         ]
-        type RecordValidation = dict[str, bool | str | dict[str, t.ContainerValue]]
-        type FormatCompliance = dict[
-            str, bool | str | list[str] | dict[str, t.ContainerValue]
+        type SingerCompliance = Mapping[
+            str, bool | str | Mapping[str, t.ContainerValue]
         ]
-        type ValidationRules = dict[str, bool | str | dict[str, t.ContainerValue]]
+        type SchemaValidation = Mapping[
+            str, bool | Sequence[str] | Mapping[str, t.ContainerValue]
+        ]
+        type RecordValidation = Mapping[
+            str, bool | str | Mapping[str, t.ContainerValue]
+        ]
+        type FormatCompliance = Mapping[
+            str, bool | str | Sequence[str] | Mapping[str, t.ContainerValue]
+        ]
+        type ValidationRules = Mapping[str, bool | str | Mapping[str, t.ContainerValue]]
 
     class TargetConfiguration:
         """Target configuration complex types."""
 
-        type TargetSettings = dict[
+        type TargetSettings = Mapping[
             str,
-            t.ContainerValue | dict[str, t.ContainerValue],
+            t.ContainerValue | Mapping[str, t.ContainerValue],
         ]
-        type LdifTargetConfig = dict[
-            str, str | int | bool | dict[str, t.ContainerValue]
+        type LdifTargetConfig = Mapping[
+            str, str | int | bool | Mapping[str, t.ContainerValue]
         ]
-        type OutputConfiguration = dict[str, str | dict[str, t.ContainerValue]]
-        type StreamMapping = dict[str, str | dict[str, t.ContainerValue]]
-        type BatchConfiguration = dict[str, int | bool | dict[str, t.ContainerValue]]
-        type ErrorHandling = dict[str, str | bool | dict[str, t.ContainerValue]]
+        type OutputConfiguration = Mapping[str, str | Mapping[str, t.ContainerValue]]
+        type StreamMapping = Mapping[str, str | Mapping[str, t.ContainerValue]]
+        type BatchConfiguration = Mapping[
+            str, int | bool | Mapping[str, t.ContainerValue]
+        ]
+        type ErrorHandling = Mapping[str, str | bool | Mapping[str, t.ContainerValue]]
 
     class Performance:
         """Performance complex types."""
 
-        type PerformanceMetrics = dict[str, int | float | dict[str, t.ContainerValue]]
-        type OptimizationConfig = dict[str, int | bool | dict[str, t.ContainerValue]]
-        type BufferConfiguration = dict[str, int | str | dict[str, t.ContainerValue]]
-        type StreamingConfig = dict[str, int | bool | dict[str, t.ContainerValue]]
-        type MemoryManagement = dict[str, int | bool | dict[str, t.ContainerValue]]
-        type IOOptimization = dict[str, int | bool | str | dict[str, t.ContainerValue]]
+        type PerformanceMetrics = Mapping[
+            str, int | float | Mapping[str, t.ContainerValue]
+        ]
+        type OptimizationConfig = Mapping[
+            str, int | bool | Mapping[str, t.ContainerValue]
+        ]
+        type BufferConfiguration = Mapping[
+            str, int | str | Mapping[str, t.ContainerValue]
+        ]
+        type StreamingConfig = Mapping[str, int | bool | Mapping[str, t.ContainerValue]]
+        type MemoryManagement = Mapping[
+            str, int | bool | Mapping[str, t.ContainerValue]
+        ]
+        type IOOptimization = Mapping[
+            str, int | bool | str | Mapping[str, t.ContainerValue]
+        ]
 
     class Project:
         """FLEXT Target LDIF-specific project types.
@@ -148,12 +190,14 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type ProjectType = c.ProjectType
         type ErrorTypeLiteral = c.ErrorTypeLiteral
-        type FlextTargetLdifSettings = dict[str, t.ContainerValue]
-        type SingerTargetConfig = dict[
-            str, str | int | bool | dict[str, t.ContainerValue]
+        type FlextTargetLdifSettings = Mapping[str, t.ContainerValue]
+        type SingerTargetConfig = Mapping[
+            str, str | int | bool | Mapping[str, t.ContainerValue]
         ]
-        type LdifExportConfig = dict[str, t.ContainerValue]
-        type TargetPipelineConfig = dict[str, bool | str | dict[str, t.ContainerValue]]
+        type LdifExportConfig = Mapping[str, t.ContainerValue]
+        type TargetPipelineConfig = Mapping[
+            str, bool | str | Mapping[str, t.ContainerValue]
+        ]
 
 
 t = FlextTargetLdifTypes

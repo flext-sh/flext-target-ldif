@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import base64
 import types
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Self, TextIO, override
@@ -34,7 +34,7 @@ class LdifWriter:
         ldif_options: Mapping[str, t.ContainerValue] | None = None,
         dn_template: str | None = None,
         attribute_mapping: Mapping[str, str] | None = None,
-        schema: Mapping[str, t.ContainerValue | list[str]] | None = None,
+        schema: Mapping[str, t.ContainerValue | Sequence[str]] | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure."""
         self.output_file = Path(output_file) if output_file else Path("output.ldif")
@@ -56,9 +56,11 @@ class LdifWriter:
             bool(timestamps_val) if timestamps_val is not None else True
         )
         self._ldif_api = FlextLdif()
-        self._records: list[dict[str, t.ContainerValue]] = []
+        self._records: Sequence[Mapping[str, t.ContainerValue]] = []
         self._record_count = 0
-        self._ldif_entries: list[dict[str, str | dict[str, list[str]]]] = []
+        self._ldif_entries: Sequence[
+            Mapping[str, str | Mapping[str, Sequence[str]]]
+        ] = []
         self._file_handle: TextIO | None = None
 
     def __enter__(self) -> Self:
@@ -127,22 +129,22 @@ class LdifWriter:
 
     def _convert_record_to_entry(
         self, record: Mapping[str, t.ContainerValue]
-    ) -> dict[str, str | dict[str, list[str]]] | None:
+    ) -> Mapping[str, str | Mapping[str, Sequence[str]]] | None:
         """Convert a single record to LDIF entry format."""
         try:
             dn = self._generate_dn(record)
-            attributes: dict[str, t.ContainerValue] = {}
+            attributes: Mapping[str, t.ContainerValue] = {}
             for key, value in record.items():
                 if key != "dn":
                     mapped_key = self.attribute_mapping.get(key, key)
                     attributes[mapped_key] = value
-            attr_dict: dict[str, list[str]] = {}
+            attr_dict: Mapping[str, Sequence[str]] = {}
             for key, value in attributes.items():
                 if isinstance(value, list):
                     attr_dict[key] = [str(v) for v in value]
                 else:
                     attr_dict[key] = [str(value)]
-            result: dict[str, str | dict[str, list[str]]] = {
+            result: Mapping[str, str | Mapping[str, Sequence[str]]] = {
                 "dn": dn,
                 "attributes": attr_dict,
             }
@@ -191,7 +193,7 @@ class LdifWriter:
                 dn_obj = entry.get("dn", "")
                 dn_str = str(dn_obj) if dn_obj else ""
                 raw_attributes = entry.get("attributes", {})
-                attributes_obj: dict[str, str | list[str]] = {}
+                attributes_obj: Mapping[str, str | Sequence[str]] = {}
                 if isinstance(raw_attributes, dict):
                     attributes_obj = {
                         str(key): value for key, value in raw_attributes.items()
@@ -201,7 +203,7 @@ class LdifWriter:
                 f.write("\n")
 
     def _write_entry_attributes(
-        self, f: TextIO, attributes_obj: Mapping[str, str | list[str]]
+        self, f: TextIO, attributes_obj: Mapping[str, str | Sequence[str]]
     ) -> None:
         """Write entry attributes to file."""
         for attr, values in attributes_obj.items():
@@ -236,4 +238,4 @@ class LdifWriter:
                 remaining = remaining[self.line_length - 1 :]
 
 
-__all__: list[str] = ["LdifWriter"]
+__all__: Sequence[str] = ["LdifWriter"]
