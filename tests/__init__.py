@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_tests import d, e, h, r, s, x
 
-    from .conftest import (
+    from tests.conftest import (
         attribute_mapping,
         ldif_options,
         multiple_records,
@@ -31,22 +31,26 @@ if TYPE_CHECKING:
         temp_dir,
         temp_file,
     )
-    from .constants import (
+    from tests.constants import (
         FlextTargetLdifTestConstants,
         FlextTargetLdifTestConstants as c,
     )
-    from .models import FlextTargetLdifTestModels, FlextTargetLdifTestModels as m, tm
-    from .protocols import (
+    from tests.models import (
+        FlextTargetLdifTestModels,
+        FlextTargetLdifTestModels as m,
+        tm,
+    )
+    from tests.protocols import (
         FlextTargetLdifTestProtocols,
         FlextTargetLdifTestProtocols as p,
     )
-    from .test_target import (
+    from tests.test_target import (
         TestFlextTargetLdifSettings,
         TestIntegration,
         TestTargetLDIF,
         TestTargetLDIFClass,
     )
-    from .test_writer import (
+    from tests.test_writer import (
         EXPECTED_BULK_SIZE,
         EXPECTED_DATA_COUNT,
         TestLdifWriterBase64Encoding,
@@ -59,8 +63,12 @@ if TYPE_CHECKING:
         TestLdifWriterProperties,
         TestLdifWriterRecordWriting,
     )
-    from .typings import FlextTargetLdifTestTypes, FlextTargetLdifTestTypes as t, tt
-    from .utilities import (
+    from tests.typings import (
+        FlextTargetLdifTestTypes,
+        FlextTargetLdifTestTypes as t,
+        tt,
+    )
+    from tests.utilities import (
         FlextTargetLdifTestUtilities,
         FlextTargetLdifTestUtilities as u,
     )
