@@ -73,10 +73,10 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             t.ContainerValue | Sequence[str] | Mapping[str, t.ContainerValue],
         ]
         type LdifFileConfig = Mapping[
-            str, str | int | bool | Mapping[str, t.ContainerValue]
+            str, t.Scalar | Mapping[str, t.ContainerValue]
         ]
         type LdifFormatting = Mapping[
-            str, str | int | bool | Mapping[str, t.ContainerValue]
+            str, t.Scalar | Mapping[str, t.ContainerValue]
         ]
         type LdifValidation = Mapping[str, bool | str | Mapping[str, t.ContainerValue]]
         type ExportResult = Mapping[
@@ -151,7 +151,7 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             t.ContainerValue | Mapping[str, t.ContainerValue],
         ]
         type LdifTargetConfig = Mapping[
-            str, str | int | bool | Mapping[str, t.ContainerValue]
+            str, t.Scalar | Mapping[str, t.ContainerValue]
         ]
         type OutputConfiguration = Mapping[str, str | Mapping[str, t.ContainerValue]]
         type StreamMapping = Mapping[str, str | Mapping[str, t.ContainerValue]]
@@ -192,7 +192,7 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type ErrorTypeLiteral = c.ErrorTypeLiteral
         type FlextTargetLdifSettings = Mapping[str, t.ContainerValue]
         type SingerTargetConfig = Mapping[
-            str, str | int | bool | Mapping[str, t.ContainerValue]
+            str, t.Scalar | Mapping[str, t.ContainerValue]
         ]
         type LdifExportConfig = Mapping[str, t.ContainerValue]
         type TargetPipelineConfig = Mapping[
