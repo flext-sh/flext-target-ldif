@@ -40,17 +40,9 @@ if TYPE_CHECKING:
         FlextTargetLdifProtocols as p,
     )
     from flext_target_ldif.settings import FlextTargetLdifSettings
-    from flext_target_ldif.sinks import LDIFSink
-    from flext_target_ldif.target import TargetLDIF
-    from flext_target_ldif.transformers import (
-        RecordTransformer,
-        normalize_attribute_value,
-        transform_boolean,
-        transform_email,
-        transform_name,
-        transform_phone,
-        transform_timestamp,
-    )
+    from flext_target_ldif.sinks import FlextTargetLdifSink
+    from flext_target_ldif.target import FlextTargetLdif
+    from flext_target_ldif.transformers import FlextTargetLdifRecordTransformer
     from flext_target_ldif.typings import (
         FlextTargetLdifTypes,
         FlextTargetLdifTypes as t,
@@ -59,35 +51,20 @@ if TYPE_CHECKING:
         FlextTargetLdifUtilities,
         FlextTargetLdifUtilities as u,
     )
-    from flext_target_ldif.writer import LdifWriter, logger
+    from flext_target_ldif.writer import FlextTargetLdifWriter, logger
 
 _LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
-    "FlextTargetLdifConstants": (
-        "flext_target_ldif.constants",
-        "FlextTargetLdifConstants",
-    ),
+    "FlextTargetLdif": ("flext_target_ldif.target", "FlextTargetLdif"),
+    "FlextTargetLdifConstants": ("flext_target_ldif.constants", "FlextTargetLdifConstants"),
     "FlextTargetLdifModels": ("flext_target_ldif.models", "FlextTargetLdifModels"),
-    "FlextTargetLdifProtocols": (
-        "flext_target_ldif.protocols",
-        "FlextTargetLdifProtocols",
-    ),
-    "FlextTargetLdifSettings": (
-        "flext_target_ldif.settings",
-        "FlextTargetLdifSettings",
-    ),
+    "FlextTargetLdifProtocols": ("flext_target_ldif.protocols", "FlextTargetLdifProtocols"),
+    "FlextTargetLdifRecordTransformer": ("flext_target_ldif.transformers", "FlextTargetLdifRecordTransformer"),
+    "FlextTargetLdifSettings": ("flext_target_ldif.settings", "FlextTargetLdifSettings"),
+    "FlextTargetLdifSink": ("flext_target_ldif.sinks", "FlextTargetLdifSink"),
     "FlextTargetLdifTypes": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
-    "FlextTargetLdifUtilities": (
-        "flext_target_ldif.utilities",
-        "FlextTargetLdifUtilities",
-    ),
-    "FlextTargetLdifWriterError": (
-        "flext_target_ldif.exceptions",
-        "FlextTargetLdifWriterError",
-    ),
-    "LDIFSink": ("flext_target_ldif.sinks", "LDIFSink"),
-    "LdifWriter": ("flext_target_ldif.writer", "LdifWriter"),
-    "RecordTransformer": ("flext_target_ldif.transformers", "RecordTransformer"),
-    "TargetLDIF": ("flext_target_ldif.target", "TargetLDIF"),
+    "FlextTargetLdifUtilities": ("flext_target_ldif.utilities", "FlextTargetLdifUtilities"),
+    "FlextTargetLdifWriter": ("flext_target_ldif.writer", "FlextTargetLdifWriter"),
+    "FlextTargetLdifWriterError": ("flext_target_ldif.exceptions", "FlextTargetLdifWriterError"),
     "__all__": ("flext_target_ldif.__version__", "__all__"),
     "__author__": ("flext_target_ldif.__version__", "__author__"),
     "__author_email__": ("flext_target_ldif.__version__", "__author_email__"),
@@ -104,35 +81,26 @@ _LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
     "logger": ("flext_target_ldif.writer", "logger"),
     "m": ("flext_target_ldif.models", "FlextTargetLdifModels"),
     "main": ("flext_target_ldif.cli", "main"),
-    "normalize_attribute_value": (
-        "flext_target_ldif.transformers",
-        "normalize_attribute_value",
-    ),
     "p": ("flext_target_ldif.protocols", "FlextTargetLdifProtocols"),
     "r": ("flext_ldif", "r"),
     "s": ("flext_ldif", "s"),
     "t": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
-    "transform_boolean": ("flext_target_ldif.transformers", "transform_boolean"),
-    "transform_email": ("flext_target_ldif.transformers", "transform_email"),
-    "transform_name": ("flext_target_ldif.transformers", "transform_name"),
-    "transform_phone": ("flext_target_ldif.transformers", "transform_phone"),
-    "transform_timestamp": ("flext_target_ldif.transformers", "transform_timestamp"),
     "u": ("flext_target_ldif.utilities", "FlextTargetLdifUtilities"),
     "x": ("flext_ldif", "x"),
 }
 
 __all__ = [
+    "FlextTargetLdif",
     "FlextTargetLdifConstants",
     "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
+    "FlextTargetLdifRecordTransformer",
     "FlextTargetLdifSettings",
+    "FlextTargetLdifSink",
     "FlextTargetLdifTypes",
     "FlextTargetLdifUtilities",
+    "FlextTargetLdifWriter",
     "FlextTargetLdifWriterError",
-    "LDIFSink",
-    "LdifWriter",
-    "RecordTransformer",
-    "TargetLDIF",
     "__all__",
     "__author__",
     "__author_email__",
@@ -149,16 +117,10 @@ __all__ = [
     "logger",
     "m",
     "main",
-    "normalize_attribute_value",
     "p",
     "r",
     "s",
     "t",
-    "transform_boolean",
-    "transform_email",
-    "transform_name",
-    "transform_phone",
-    "transform_timestamp",
     "u",
     "x",
 ]

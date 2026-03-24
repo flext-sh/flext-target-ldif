@@ -13,7 +13,7 @@ from typing import override
 
 from flext_core import FlextLogger, p, r, t
 
-from flext_target_ldif.writer import LdifWriter
+from flext_target_ldif.writer import FlextTargetLdifWriter
 
 
 class FlextTargetLdifSink:
@@ -32,18 +32,18 @@ class FlextTargetLdifSink:
         self.stream_name = stream_name
         self.schema = schema
         self.key_properties = key_properties or []
-        self._ldif_writer: LdifWriter | None = None
+        self._ldif_writer: FlextTargetLdifWriter | None = None
         self._output_file: Path | None = None
         self._logger_instance: p.Logger | None = None
 
     @property
-    def ldif_writer(self) -> LdifWriter:
+    def ldif_writer(self) -> FlextTargetLdifWriter:
         """Get the LDIF writer (for testing)."""
         return self._get_ldif_writer()
 
     @property
     def logger(self) -> p.Logger:
-        """Lazy logger for LDIFSink."""
+        """Lazy logger for FlextTargetLdifSink."""
         if self._logger_instance is None:
             self._logger_instance = FlextLogger.create_module_logger(__name__)
         return self._logger_instance
@@ -82,11 +82,11 @@ class FlextTargetLdifSink:
             msg: str = f"Failed to write LDIF record: {result.error}"
             raise RuntimeError(msg)
 
-    def _get_ldif_writer(self) -> LdifWriter:
+    def _get_ldif_writer(self) -> FlextTargetLdifWriter:
         """Get or create the LDIF writer for this sink.
 
         Returns:
-        LdifWriter: The LDIF writer.
+        FlextTargetLdifWriter: The LDIF writer.
 
         """
         if self._ldif_writer is None:
@@ -108,7 +108,7 @@ class FlextTargetLdifSink:
                     for key, value in raw_attribute_mapping.items()
                     if isinstance(value, str)
                 }
-            self._ldif_writer = LdifWriter(
+            self._ldif_writer = FlextTargetLdifWriter(
                 output_file=output_file,
                 ldif_options=ldif_options,
                 dn_template=dn_template,

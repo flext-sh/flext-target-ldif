@@ -13,7 +13,9 @@ from typing import override
 
 from flext_core import t
 
-from flext_target_ldif import FlextTargetLdifSettings, LDIFSink, main as cli_main
+from flext_target_ldif.settings import FlextTargetLdifSettings
+from flext_target_ldif.sinks import FlextTargetLdifSink
+from flext_target_ldif.cli import main as cli_main
 
 
 class FlextTargetLdif:
@@ -35,7 +37,7 @@ class FlextTargetLdif:
         }
         merged: Mapping[str, t.ContainerValue] = {**defaults, **(config or {})}
         self.config: Mapping[str, t.ContainerValue] = merged
-        self.sinks: dict[str, LDIFSink] = {}
+        self.sinks: dict[str, FlextTargetLdifSink] = {}
         self._test_config: Mapping[str, t.ContainerValue] | None = None
         if validate_config:
             self.validate_config()
@@ -57,16 +59,16 @@ class FlextTargetLdif:
         return FlextTargetLdifSettings.model_json_schema()
 
     @property
-    def default_sink_class(self) -> type[LDIFSink]:
+    def default_sink_class(self) -> type[FlextTargetLdifSink]:
         """Return the default sink class for this target."""
-        return LDIFSink
+        return FlextTargetLdifSink
 
     def get_sink(
         self, stream_name: str, schema: Mapping[str, t.ContainerValue]
-    ) -> LDIFSink:
+    ) -> FlextTargetLdifSink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
-            self.sinks[stream_name] = LDIFSink(
+            self.sinks[stream_name] = FlextTargetLdifSink(
                 target_config=self.config, stream_name=stream_name, schema=schema
             )
         return self.sinks[stream_name]

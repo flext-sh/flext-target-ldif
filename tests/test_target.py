@@ -14,11 +14,9 @@ from unittest.mock import Mock, patch
 import pytest
 from pydantic import ValidationError
 
-from flext_target_ldif import (
-    FlextTargetLdifSettings,
-    LDIFSink,
-    TargetLDIF,
-)
+from flext_target_ldif.settings import FlextTargetLdifSettings
+from flext_target_ldif.sinks import FlextTargetLdifSink
+from flext_target_ldif.target import FlextTargetLdif
 
 
 class TestFlextTargetLdifSettings:
@@ -104,29 +102,29 @@ class TestFlextTargetLdifSettings:
         config.validate_domain_rules()
 
 
-class TestTargetLDIFClass:
-    """Test TargetLDIF main class."""
+class TestFlextTargetLdifClass:
+    """Test FlextTargetLdif main class."""
 
     def test_target_inheritance(self) -> None:
-        """Test that TargetLDIF is properly instantiated."""
-        target = TargetLDIF()
-        assert isinstance(target, TargetLDIF)
+        """Test that FlextTargetLdif is properly instantiated."""
+        target = FlextTargetLdif()
+        assert isinstance(target, FlextTargetLdif)
 
     def test_target_creation_with_defaults(self) -> None:
         """Test creating target with default configuration."""
-        target = TargetLDIF()
+        target = FlextTargetLdif()
         assert hasattr(target, "config")
 
-    @patch("flext_target_ldif.target.TargetLDIF.__init__")
+    @patch("flext_target_ldif.target.FlextTargetLdif.__init__")
     def test_self(self, mock_init: Mock) -> None:
         """Test target initialization calls parent."""
         mock_init.return_value = None
-        TargetLDIF()
+        FlextTargetLdif()
         mock_init.assert_called_once()
 
     def test_target_validate_config_success(self) -> None:
         """Test successful config validation."""
-        target = TargetLDIF()
+        target = FlextTargetLdif()
         target._test_config = {
             "output_file": "test.ldif",
             "schema_validation": True,
@@ -138,7 +136,7 @@ class TestTargetLDIFClass:
 
     def test_target_validate_config_missing_output_file(self) -> None:
         """Test config validation with missing output file."""
-        target = TargetLDIF()
+        target = FlextTargetLdif()
         target._test_config = {"schema_validation": True}
         with pytest.raises(ValueError) as exc_info:
             target.validate_config()
@@ -149,7 +147,7 @@ class TestTargetLDIFClass:
 
     def test_target_validate_config_invalid_output_file(self) -> None:
         """Test config validation with invalid output file."""
-        target = TargetLDIF()
+        target = FlextTargetLdif()
         target._test_config = {"output_file": "", "schema_validation": True}
         with pytest.raises(ValueError) as exc_info:
             target.validate_config()
@@ -160,7 +158,7 @@ class TestTargetLDIFClass:
 
     def test_target_validate_config_invalid_dn_template(self) -> None:
         """Test config validation with invalid DN template."""
-        target = TargetLDIF()
+        target = FlextTargetLdif()
         target._test_config = {
             "output_file": "test.ldif",
             "dn_template": "",
@@ -174,27 +172,27 @@ class TestTargetLDIFClass:
             )
 
 
-class TestTargetLDIF:
-    """Test the base TargetLDIF class."""
+class TestFlextTargetLdif:
+    """Test the base FlextTargetLdif class."""
 
     def test_target_ldif_creation(self) -> None:
-        """Test creating TargetLDIF instance."""
+        """Test creating FlextTargetLdif instance."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             config = {"output_path": tmp_dir}
-            target = TargetLDIF(config=config)
-            assert isinstance(target, TargetLDIF)
+            target = FlextTargetLdif(config=config)
+            assert isinstance(target, FlextTargetLdif)
 
     def test_target_ldif_name_property(self) -> None:
         """Test target name property."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             config = {"output_path": tmp_dir}
-            target = TargetLDIF(config=config)
+            target = FlextTargetLdif(config=config)
             if target.name != "target-ldif":
                 raise AssertionError(f"Expected {'target-ldif'}, got {target.name}")
 
     def test_target_ldif_config_schema(self) -> None:
         """Test target config schema is properly defined."""
-        target = TargetLDIF()
+        target = FlextTargetLdif()
         assert hasattr(target, "config_jsonschema")
         assert isinstance(target.config_jsonschema, dict)
         properties = target.config_jsonschema.get("properties", {})
@@ -207,10 +205,10 @@ class TestTargetLDIF:
 
     def test_target_ldif_default_sink_class(self) -> None:
         """Test target has proper default sink class."""
-        target = TargetLDIF()
-        if target.default_sink_class != LDIFSink:
+        target = FlextTargetLdif()
+        if target.default_sink_class != FlextTargetLdifSink:
             raise AssertionError(
-                f"Expected {LDIFSink}, got {target.default_sink_class}"
+                f"Expected {FlextTargetLdifSink}, got {target.default_sink_class}"
             )
 
     def test_target_ldif_output_directory_creation(self) -> None:
@@ -219,13 +217,13 @@ class TestTargetLDIF:
             output_path = Path(tmp_dir) / "new_directory"
             config = {"output_path": str(output_path)}
             assert not output_path.exists()
-            TargetLDIF(config=config)
+            FlextTargetLdif(config=config)
             assert output_path.exists()
             assert output_path.is_dir()
 
     def test_target_ldif_cli_method(self) -> None:
         """Test CLI method exists."""
-        target = TargetLDIF()
+        target = FlextTargetLdif()
         assert hasattr(target, "cli")
         assert callable(target.cli)
 
@@ -236,7 +234,7 @@ class TestTargetLDIF:
                 "output_path": tmp_dir,
                 "dn_template": "cn={name},ou=people,dc=test,dc=com",
             }
-            target = TargetLDIF(config=config)
+            target = FlextTargetLdif(config=config)
             if target.config["output_path"] != tmp_dir:
                 raise AssertionError(
                     f"Expected {tmp_dir}, got {target.config['output_path']}"
@@ -247,7 +245,7 @@ class TestTargetLDIF:
         """Test default configuration values."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             config = {"output_path": tmp_dir}
-            target = TargetLDIF(config=config)
+            target = FlextTargetLdif(config=config)
             assert (
                 target.config["file_naming_pattern"] == "{stream_name}_{timestamp}.ldif"
             )
@@ -271,7 +269,7 @@ class TestIntegration:
             dn_template="uid={uid},ou=users,dc=example,dc=com",
         )
         config.validate_domain_rules()
-        target = TargetLDIF()
+        target = FlextTargetLdif()
         target._test_config = {
             "output_file": str(tmp_path),
             "schema_validation": True,
@@ -283,13 +281,13 @@ class TestIntegration:
         tmp_path.unlink()
 
     def test_target_ldif_alias_compatibility(self) -> None:
-        """Test that TargetLDIF maintains compatibility."""
+        """Test that FlextTargetLdif maintains compatibility."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             config = {"output_path": tmp_dir}
-            original_target = TargetLDIF(config=config)
-            target = TargetLDIF()
-            assert isinstance(original_target, TargetLDIF)
-            assert isinstance(target, TargetLDIF)
+            original_target = FlextTargetLdif(config=config)
+            target = FlextTargetLdif()
+            assert isinstance(original_target, FlextTargetLdif)
+            assert isinstance(target, FlextTargetLdif)
             assert hasattr(target, "cli")
             assert hasattr(target, "validate_config")
 
@@ -329,7 +327,7 @@ class TestIntegration:
         invalid_config = FlextTargetLdifSettings(output_file="")
         with pytest.raises(ValueError, match="Output file cannot be empty"):
             invalid_config.validate_domain_rules()
-        target = TargetLDIF()
+        target = FlextTargetLdif()
         target._test_config = {"output_file": ""}
         with pytest.raises(ValueError):
             target.validate_config()
@@ -342,7 +340,7 @@ class TestIntegration:
                 "dn_template": "uid={uid},ou=users,dc=example,dc=com",
                 "file_naming_pattern": "{stream_name}.ldif",
             }
-            target = TargetLDIF(config=config, validate_config=True)
+            target = FlextTargetLdif(config=config, validate_config=True)
             assert hasattr(target, "name")
             assert hasattr(target, "config_jsonschema")
             assert hasattr(target, "default_sink_class")
