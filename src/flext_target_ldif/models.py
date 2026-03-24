@@ -542,7 +542,7 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
                 )
 
             # Validate file count
-            if len(self.output_files) == 0 and self.entries_exported > 0:
+            if not self.output_files and self.entries_exported > 0:
                 return r[bool].fail(
                     "No output files but entries were exported",
                 )
