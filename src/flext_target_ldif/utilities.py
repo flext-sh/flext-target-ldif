@@ -282,7 +282,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             if len(value) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
                 return value
-            lines: list[str] = []
+            lines: MutableSequence[str] = []
             remaining = value
             while remaining:
                 if len(remaining) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:

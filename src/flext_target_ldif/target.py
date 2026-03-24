@@ -97,7 +97,7 @@ class FlextTargetLdif:
             "base64_encode",
             "include_timestamps",
         }
-        filtered_config: dict[str, t.ContainerValue] = {
+        filtered_config: MutableMapping[str, t.ContainerValue] = {
             k: v for k, v in config_dict.items() if k in allowed_fields
         }
         if "output_file" not in filtered_config:

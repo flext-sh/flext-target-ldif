@@ -5,7 +5,7 @@ This module provides data models for LDIF target operations.
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping, MutableSequence, Sequence
 from datetime import UTC, datetime
 from typing import Annotated
 
@@ -200,7 +200,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             def validate_business_rules(self) -> r[bool]:
                 """Validate LDIF entry business rules."""
                 try:
-                    errors: list[str] = []
+                    errors: MutableSequence[str] = []
 
                     # Validate DN format
                     if (
