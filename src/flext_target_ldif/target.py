@@ -16,7 +16,7 @@ from flext_core import t
 from flext_target_ldif import FlextTargetLdifSettings, LDIFSink, main as cli_main
 
 
-class TargetLDIF:
+class FlextTargetLdif:
     """Singer target for writing data to LDIF format."""
 
     name: str = "target-ldif"

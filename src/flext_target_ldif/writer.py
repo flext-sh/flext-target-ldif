@@ -24,7 +24,7 @@ from flext_target_ldif import FlextTargetLdifWriterError
 logger = FlextLogger(__name__)
 
 
-class LdifWriter:
+class FlextTargetLdifWriter:
     """Writer for converting data records to LDIF format."""
 
     @override

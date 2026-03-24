@@ -93,7 +93,7 @@ def normalize_attribute_value(
     return str(value).strip()
 
 
-class RecordTransformer:
+class FlextTargetLdifRecordTransformer:
     """Transform Singer records for LDIF output."""
 
     @override

@@ -16,7 +16,7 @@ from flext_core import FlextLogger, p, r, t
 from flext_target_ldif.writer import LdifWriter
 
 
-class LDIFSink:
+class FlextTargetLdifSink:
     """Singer sink for writing records to LDIF format."""
 
     @override
