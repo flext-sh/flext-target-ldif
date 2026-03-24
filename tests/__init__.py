@@ -85,42 +85,15 @@ _LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
     "TestFlextTargetLdif": ("tests.test_target", "TestFlextTargetLdif"),
     "TestFlextTargetLdifClass": ("tests.test_target", "TestFlextTargetLdifClass"),
     "TestFlextTargetLdifSettings": ("tests.test_target", "TestFlextTargetLdifSettings"),
-    "TestFlextTargetLdifWriterBase64Encoding": (
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterBase64Encoding",
-    ),
-    "TestFlextTargetLdifWriterContextManager": (
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterContextManager",
-    ),
-    "TestFlextTargetLdifWriterDnGeneration": (
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterDnGeneration",
-    ),
-    "TestFlextTargetLdifWriterFileOperations": (
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterFileOperations",
-    ),
-    "TestFlextTargetLdifWriterHeaderGeneration": (
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterHeaderGeneration",
-    ),
-    "TestFlextTargetLdifWriterInitialization": (
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterInitialization",
-    ),
-    "TestFlextTargetLdifWriterLineWrapping": (
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterLineWrapping",
-    ),
-    "TestFlextTargetLdifWriterProperties": (
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterProperties",
-    ),
-    "TestFlextTargetLdifWriterRecordWriting": (
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterRecordWriting",
-    ),
+    "TestFlextTargetLdifWriterBase64Encoding": ("tests.test_writer", "TestFlextTargetLdifWriterBase64Encoding"),
+    "TestFlextTargetLdifWriterContextManager": ("tests.test_writer", "TestFlextTargetLdifWriterContextManager"),
+    "TestFlextTargetLdifWriterDnGeneration": ("tests.test_writer", "TestFlextTargetLdifWriterDnGeneration"),
+    "TestFlextTargetLdifWriterFileOperations": ("tests.test_writer", "TestFlextTargetLdifWriterFileOperations"),
+    "TestFlextTargetLdifWriterHeaderGeneration": ("tests.test_writer", "TestFlextTargetLdifWriterHeaderGeneration"),
+    "TestFlextTargetLdifWriterInitialization": ("tests.test_writer", "TestFlextTargetLdifWriterInitialization"),
+    "TestFlextTargetLdifWriterLineWrapping": ("tests.test_writer", "TestFlextTargetLdifWriterLineWrapping"),
+    "TestFlextTargetLdifWriterProperties": ("tests.test_writer", "TestFlextTargetLdifWriterProperties"),
+    "TestFlextTargetLdifWriterRecordWriting": ("tests.test_writer", "TestFlextTargetLdifWriterRecordWriting"),
     "TestIntegration": ("tests.test_target", "TestIntegration"),
     "attribute_mapping": ("tests.conftest", "attribute_mapping"),
     "c": ("tests.constants", "FlextTargetLdifTestConstants"),
