@@ -34,7 +34,7 @@ def temp_file() -> Generator[Path]:
 
 
 @pytest.fixture
-def sample_config(temp_dir: Path) -> Mapping[str, t.NormalizedValue]:
+def sample_config(temp_dir: Path) -> t.ContainerMapping:
     """Provide a sample configuration for testing."""
     return {
         "output_path": str(temp_dir),
@@ -65,7 +65,7 @@ def sample_record() -> Mapping[str, str]:
 
 
 @pytest.fixture
-def sample_schema() -> Mapping[str, t.NormalizedValue]:
+def sample_schema() -> t.ContainerMapping:
     """Provide a sample Singer schema for testing."""
     return {
         "type": "t.NormalizedValue",
@@ -112,7 +112,7 @@ def multiple_records() -> Sequence[Mapping[str, str]]:
 
 
 @pytest.fixture
-def ldif_options() -> Mapping[str, t.NormalizedValue]:
+def ldif_options() -> t.ContainerMapping:
     """Provide sample LDIF options for testing."""
     return {"line_length": 78, "base64_encode": False, "include_timestamps": True}
 
