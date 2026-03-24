@@ -84,27 +84,12 @@ _LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
     "FlextTargetLdifTestUtilities": ("tests.utilities", "FlextTargetLdifTestUtilities"),
     "TestFlextTargetLdifSettings": ("tests.test_target", "TestFlextTargetLdifSettings"),
     "TestIntegration": ("tests.test_target", "TestIntegration"),
-    "TestLdifWriterBase64Encoding": (
-        "tests.test_writer",
-        "TestLdifWriterBase64Encoding",
-    ),
-    "TestLdifWriterContextManager": (
-        "tests.test_writer",
-        "TestLdifWriterContextManager",
-    ),
+    "TestLdifWriterBase64Encoding": ("tests.test_writer", "TestLdifWriterBase64Encoding"),
+    "TestLdifWriterContextManager": ("tests.test_writer", "TestLdifWriterContextManager"),
     "TestLdifWriterDnGeneration": ("tests.test_writer", "TestLdifWriterDnGeneration"),
-    "TestLdifWriterFileOperations": (
-        "tests.test_writer",
-        "TestLdifWriterFileOperations",
-    ),
-    "TestLdifWriterHeaderGeneration": (
-        "tests.test_writer",
-        "TestLdifWriterHeaderGeneration",
-    ),
-    "TestLdifWriterInitialization": (
-        "tests.test_writer",
-        "TestLdifWriterInitialization",
-    ),
+    "TestLdifWriterFileOperations": ("tests.test_writer", "TestLdifWriterFileOperations"),
+    "TestLdifWriterHeaderGeneration": ("tests.test_writer", "TestLdifWriterHeaderGeneration"),
+    "TestLdifWriterInitialization": ("tests.test_writer", "TestLdifWriterInitialization"),
     "TestLdifWriterLineWrapping": ("tests.test_writer", "TestLdifWriterLineWrapping"),
     "TestLdifWriterProperties": ("tests.test_writer", "TestLdifWriterProperties"),
     "TestLdifWriterRecordWriting": ("tests.test_writer", "TestLdifWriterRecordWriting"),
