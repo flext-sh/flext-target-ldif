@@ -20,7 +20,7 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     Composes with FlextLdifConstants to avoid duplication and ensure consistency.
     """
 
-    DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.DEFAULT_ENCODING
+    DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.Encoding.UTF8
     DEFAULT_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.MAX_LINE_LENGTH
     MAX_LINE_LENGTH: Final[int] = 1024
     MIN_LINE_LENGTH: Final[int] = 40
