@@ -91,14 +91,14 @@ class LdifExportConfig(FlextSettings):
         ),
     ]
     attribute_mappings: Annotated[
-        Mapping[str, str],
+        t.StrMapping,
         Field(
             default_factory=dict,
             description="Singer field to LDIF attribute mappings",
         ),
     ]
     object_classes: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="Default LDAP t.NormalizedValue classes for entries",
@@ -149,14 +149,14 @@ class LdifEntry(FlextMeltanoModels.Entity):
         ),
     ]
     attributes: Annotated[
-        Mapping[str, Sequence[str]],
+        Mapping[str, t.StrSequence],
         Field(
             default_factory=dict,
             description="LDIF attributes with values",
         ),
     ]
     object_classes: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="LDAP t.NormalizedValue classes",
@@ -170,7 +170,7 @@ class LdifEntry(FlextMeltanoModels.Entity):
         ),
     ]
     controls: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="LDAP controls for the entry",
@@ -214,8 +214,8 @@ class LdifEntry(FlextMeltanoModels.Entity):
 class LdifFile(FlextMeltanoModels.Entity):
     """LDIF file representation with metadata."""
 
-    file_path: Annotated[str, Field(..., description="Path to the LDIF file")]
-    stream_name: Annotated[str, Field(..., description="Singer stream name")]
+    file_path: Annotated[t.NonEmptyStr, Field(..., description="Path to the LDIF file")]
+    stream_name: Annotated[t.NonEmptyStr, Field(..., description="Singer stream name")]
     entries: Annotated[
         Sequence[LdifEntry],
         Field(
@@ -286,7 +286,7 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
         ),
     ]
     transformation_errors: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="Transformation errors",
@@ -348,7 +348,7 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
 class LdifBatchProcessing(FlextMeltanoModels.Entity):
     """LDIF batch processing configuration and state."""
 
-    stream_name: Annotated[str, Field(..., description="Singer stream name")]
+    stream_name: Annotated[t.NonEmptyStr, Field(..., description="Singer stream name")]
     batch_size: Annotated[
         t.BatchSize,
         Field(
@@ -420,7 +420,7 @@ class LdifBatchProcessing(FlextMeltanoModels.Entity):
 class SingerStreamConfig(FlextSettings):
     """Singer stream configuration for LDIF export."""
 
-    stream_name: Annotated[str, Field(..., description="Singer stream name")]
+    stream_name: Annotated[t.NonEmptyStr, Field(..., description="Singer stream name")]
     ldif_config: Annotated[
         LdifExportConfig,
         Field(
@@ -447,9 +447,9 @@ class SingerStreamConfig(FlextSettings):
 class LdifTargetResult(FlextMeltanoModels.Entity):
     """Result of LDIF target operation processing."""
 
-    stream_name: Annotated[str, Field(..., description="Singer stream name")]
+    stream_name: Annotated[t.NonEmptyStr, Field(..., description="Singer stream name")]
     output_files: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="Generated LDIF file paths",
@@ -507,14 +507,14 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
 
     # Error tracking
     error_messages: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="Error messages encountered",
         ),
     ]
     warnings: Annotated[
-        Sequence[str], Field(default_factory=list, description="Warning messages")
+        t.StrSequence, Field(default_factory=list, description="Warning messages")
     ]
 
     @property
@@ -563,7 +563,7 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
 class LdifErrorContext(FlextMeltanoModels.ArbitraryTypesModel):
     """Error context for LDIF target error handling."""
 
-    error_type: Annotated[str, Field(..., description="Error category")]
+    error_type: Annotated[t.NonEmptyStr, Field(..., description="Error category")]
 
     # Context information
     file_path: Annotated[

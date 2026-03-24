@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Mapping
 from typing import Annotated, override as _override
 
 from flext_core import FlextSettings, r, t
@@ -74,7 +74,7 @@ class FlextTargetLdifSettings(FlextSettings):
         ),
     ]
     attribute_mapping: Annotated[
-        Mapping[str, str],
+        t.StrMapping,
         Field(
             default_factory=dict,
             description="Source-to-LDIF attribute mapping",
@@ -126,4 +126,4 @@ class FlextTargetLdifSettings(FlextSettings):
         return r[bool].ok(value=True)
 
 
-__all__: Sequence[str] = ["FlextTargetLdifSettings"]
+__all__: t.StrSequence = ["FlextTargetLdifSettings"]

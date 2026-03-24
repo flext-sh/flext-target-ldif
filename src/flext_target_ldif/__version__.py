@@ -9,7 +9,6 @@ SPDX-License-Identifier: Proprietary
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from importlib.metadata import PackageMetadata, PackageNotFoundError, metadata
 
 
@@ -20,7 +19,7 @@ class FlextTargetLdifVersion:
     metadata extraction with graceful fallback handling.
     """
 
-    _metadata: PackageMetadata | Mapping[str, str]
+    _metadata: PackageMetadata | t.StrMapping
     try:
         _metadata = metadata("flext-target-ldif")
     except PackageNotFoundError:

@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import tempfile
-from collections.abc import Generator, Mapping, Sequence
+from collections.abc import Generator, Sequence
 from pathlib import Path
 
 import pytest
@@ -50,7 +50,7 @@ def sample_config(temp_dir: Path) -> t.ContainerMapping:
 
 
 @pytest.fixture
-def sample_record() -> Mapping[str, str]:
+def sample_record() -> t.StrMapping:
     """Provide a sample record for testing."""
     return {
         "uid": "testuser",
@@ -84,7 +84,7 @@ def sample_schema() -> t.ContainerMapping:
 
 
 @pytest.fixture
-def multiple_records() -> Sequence[Mapping[str, str]]:
+def multiple_records() -> Sequence[t.StrMapping]:
     """Provide multiple sample records for testing."""
     return [
         {
@@ -118,7 +118,7 @@ def ldif_options() -> t.ContainerMapping:
 
 
 @pytest.fixture
-def attribute_mapping() -> Mapping[str, str]:
+def attribute_mapping() -> t.StrMapping:
     """Provide sample attribute mapping for testing."""
     return {
         "user_id": "uid",
