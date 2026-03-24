@@ -56,19 +56,19 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
     class LdifExport:
         """LDIF export complex types."""
 
-        type LdifEntry = Mapping[str, str | Sequence[str] | t.ContainerValueMapping]
+        type LdifEntry = Mapping[str, str | t.StrSequence | t.ContainerValueMapping]
         type Attributes = Mapping[
-            str, str | Sequence[str] | bytes | t.ContainerValueMapping
+            str, str | t.StrSequence | bytes | t.ContainerValueMapping
         ]
         type LdifRecord = Mapping[
             str,
-            t.ContainerValue | Sequence[str] | t.ContainerValueMapping,
+            t.ContainerValue | t.StrSequence | t.ContainerValueMapping,
         ]
         type LdifFileConfig = Mapping[str, t.Scalar | t.ContainerValueMapping]
         type LdifFormatting = Mapping[str, t.Scalar | t.ContainerValueMapping]
         type LdifValidation = Mapping[str, bool | str | t.ContainerValueMapping]
         type ExportResult = Mapping[
-            str, int | str | Sequence[str] | t.ContainerValueMapping
+            str, int | str | t.StrSequence | t.ContainerValueMapping
         ]
 
     class FileProcessing:
@@ -76,7 +76,7 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type FileConfiguration = Mapping[str, str | int | t.ContainerValueMapping]
         type StreamWriter = Mapping[str, str | bool | int | t.ContainerValueMapping]
-        type FileOutput = Mapping[str, str | Sequence[str] | t.ContainerValueMapping]
+        type FileOutput = Mapping[str, str | t.StrSequence | t.ContainerValueMapping]
         type CompressionConfig = Mapping[
             str, str | bool | int | t.ContainerValueMapping
         ]
@@ -88,7 +88,7 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type SingerToLdifMapping = Mapping[str, str | t.ContainerValueMapping]
         type AttributeMapping = Mapping[
-            str, str | Sequence[str] | t.ContainerValueMapping
+            str, str | t.StrSequence | t.ContainerValueMapping
         ]
         type SchemaTransformation = Mapping[
             str,
@@ -100,7 +100,7 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         ]
         type DataNormalization = Mapping[str, bool | str | t.ContainerValueMapping]
         type TransformationRules = Mapping[
-            str, str | Sequence[str] | t.ContainerValueMapping
+            str, str | t.StrSequence | t.ContainerValueMapping
         ]
 
     class TargetLdifValidation:
@@ -109,11 +109,11 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type LdifFormatValidation = Mapping[str, bool | str | t.ContainerValueMapping]
         type SingerCompliance = Mapping[str, bool | str | t.ContainerValueMapping]
         type SchemaValidation = Mapping[
-            str, bool | Sequence[str] | t.ContainerValueMapping
+            str, bool | t.StrSequence | t.ContainerValueMapping
         ]
         type RecordValidation = Mapping[str, bool | str | t.ContainerValueMapping]
         type FormatCompliance = Mapping[
-            str, bool | str | Sequence[str] | t.ContainerValueMapping
+            str, bool | str | t.StrSequence | t.ContainerValueMapping
         ]
         type ValidationRules = Mapping[str, bool | str | t.ContainerValueMapping]
 

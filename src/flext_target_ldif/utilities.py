@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import base64
 import re
-from collections.abc import Mapping, MutableSequence, Sequence
+from collections.abc import Mapping, MutableSequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
@@ -152,8 +152,8 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         def convert_record_to_ldif_entry(
             record: Mapping[str, t.ContainerValue],
             dn: str,
-            object_classes: Sequence[str] | None = None,
-            attribute_mapping: Mapping[str, str] | None = None,
+            object_classes: t.StrSequence | None = None,
+            attribute_mapping: t.StrMapping | None = None,
         ) -> r[str]:
             """Convert Singer record to LDIF entry format.
 
@@ -300,7 +300,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         """File handling utilities for LDIF operations."""
 
         @staticmethod
-        def append_to_ldif_file(file_path: str, entries: Sequence[str]) -> r[str]:
+        def append_to_ldif_file(file_path: str, entries: t.StrSequence) -> r[str]:
             """Append entries to existing LDIF file.
 
             Args:
@@ -336,7 +336,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def create_ldif_file(
-            file_path: str, entries: Sequence[str], *, overwrite: bool = False
+            file_path: str, entries: t.StrSequence, *, overwrite: bool = False
         ) -> r[str]:
             """Create LDIF file with entries.
 

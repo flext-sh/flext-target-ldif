@@ -91,14 +91,14 @@ class LdifExportConfig(FlextSettings):
         ),
     ]
     attribute_mappings: Annotated[
-        Mapping[str, str],
+        t.StrMapping,
         Field(
             default_factory=dict,
             description="Singer field to LDIF attribute mappings",
         ),
     ]
     object_classes: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="Default LDAP t.NormalizedValue classes for entries",
@@ -149,14 +149,14 @@ class LdifEntry(FlextMeltanoModels.Entity):
         ),
     ]
     attributes: Annotated[
-        Mapping[str, Sequence[str]],
+        Mapping[str, t.StrSequence],
         Field(
             default_factory=dict,
             description="LDIF attributes with values",
         ),
     ]
     object_classes: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="LDAP t.NormalizedValue classes",
@@ -170,7 +170,7 @@ class LdifEntry(FlextMeltanoModels.Entity):
         ),
     ]
     controls: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="LDAP controls for the entry",
@@ -286,7 +286,7 @@ class LdifTransformationResult(FlextMeltanoModels.Entity):
         ),
     ]
     transformation_errors: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="Transformation errors",
@@ -449,7 +449,7 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
 
     stream_name: Annotated[t.NonEmptyStr, Field(..., description="Singer stream name")]
     output_files: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="Generated LDIF file paths",
@@ -507,14 +507,14 @@ class LdifTargetResult(FlextMeltanoModels.Entity):
 
     # Error tracking
     error_messages: Annotated[
-        Sequence[str],
+        t.StrSequence,
         Field(
             default_factory=list,
             description="Error messages encountered",
         ),
     ]
     warnings: Annotated[
-        Sequence[str], Field(default_factory=list, description="Warning messages")
+        t.StrSequence, Field(default_factory=list, description="Warning messages")
     ]
 
     @property

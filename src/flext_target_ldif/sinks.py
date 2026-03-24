@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 from pathlib import Path
 from typing import override
 
@@ -25,7 +25,7 @@ class LDIFSink:
         target_config: Mapping[str, t.ContainerValue],
         stream_name: str,
         schema: Mapping[str, t.ContainerValue],
-        key_properties: Sequence[str] | None = None,
+        key_properties: t.StrSequence | None = None,
     ) -> None:
         """Initialize the LDIF sink."""
         self.config: Mapping[str, t.ContainerValue] = target_config
@@ -101,7 +101,7 @@ class LDIFSink:
             if dn_template is not None and (not isinstance(dn_template, str)):
                 dn_template = None
             raw_attribute_mapping = self.config.get("attribute_mapping", {})
-            attribute_mapping: Mapping[str, str] = {}
+            attribute_mapping: t.StrMapping = {}
             if isinstance(raw_attribute_mapping, Mapping):
                 attribute_mapping = {
                     str(key): value

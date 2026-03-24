@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Mapping
 from datetime import datetime
 from typing import override
 
@@ -99,7 +99,7 @@ class RecordTransformer:
     @override
     def __init__(
         self,
-        attribute_mapping: Mapping[str, str] | None = None,
+        attribute_mapping: t.StrMapping | None = None,
         custom_transformers: Mapping[str, Callable[..., str]] | None = None,
     ) -> None:
         """Initialize the record transformer."""
@@ -108,7 +108,7 @@ class RecordTransformer:
 
     @staticmethod
     def add_required_attributes(
-        record: Mapping[str, str],
+        record: t.StrMapping,
     ) -> Mapping[str, t.ContainerValue]:
         """Add required LDAP attributes to the record."""
         result: dict[str, t.ContainerValue] = dict(record)
@@ -125,13 +125,11 @@ class RecordTransformer:
                 result["cn"] = "Unknown User"
         if "sn" not in result and "cn" in result:
             cn_value = result["cn"]
-            words: Sequence[str] = cn_value.split() if isinstance(cn_value, str) else []
+            words: t.StrSequence = cn_value.split() if isinstance(cn_value, str) else []
             result["sn"] = words[-1] if words else "Unknown"
         return result
 
-    def transform_record(
-        self, record: Mapping[str, t.ContainerValue]
-    ) -> Mapping[str, str]:
+    def transform_record(self, record: Mapping[str, t.ContainerValue]) -> t.StrMapping:
         """Transform a Singer record to LDAP-compatible format."""
         transformed: dict[str, str] = {}
         for field, value in record.items():
