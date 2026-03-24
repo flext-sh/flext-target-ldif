@@ -85,7 +85,9 @@ class FlextTargetLdifWriter:
     def close(self) -> r[bool]:
         """Close the output file and write all collected records."""
         try:
-            self._ldif_entries = []
+            self._ldif_entries: list[
+                Mapping[str, str | Mapping[str, t.StrSequence]]
+            ] = []
             for record in self._records:
                 entry = self._convert_record_to_entry(record)
                 if entry is not None:

@@ -74,76 +74,76 @@ if TYPE_CHECKING:
         FlextTargetLdifTestUtilities as u,
     )
 
-_LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
-    "EXPECTED_BULK_SIZE": ("tests.test_writer", "EXPECTED_BULK_SIZE"),
-    "EXPECTED_DATA_COUNT": ("tests.test_writer", "EXPECTED_DATA_COUNT"),
-    "FlextTargetLdifTestConstants": ("tests.constants", "FlextTargetLdifTestConstants"),
-    "FlextTargetLdifTestModels": ("tests.models", "FlextTargetLdifTestModels"),
-    "FlextTargetLdifTestProtocols": ("tests.protocols", "FlextTargetLdifTestProtocols"),
-    "FlextTargetLdifTestTypes": ("tests.typings", "FlextTargetLdifTestTypes"),
-    "FlextTargetLdifTestUtilities": ("tests.utilities", "FlextTargetLdifTestUtilities"),
-    "TestFlextTargetLdif": ("tests.test_target", "TestFlextTargetLdif"),
-    "TestFlextTargetLdifClass": ("tests.test_target", "TestFlextTargetLdifClass"),
-    "TestFlextTargetLdifSettings": ("tests.test_target", "TestFlextTargetLdifSettings"),
-    "TestFlextTargetLdifWriterBase64Encoding": (
+_LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
+    "EXPECTED_BULK_SIZE": ["tests.test_writer", "EXPECTED_BULK_SIZE"],
+    "EXPECTED_DATA_COUNT": ["tests.test_writer", "EXPECTED_DATA_COUNT"],
+    "FlextTargetLdifTestConstants": ["tests.constants", "FlextTargetLdifTestConstants"],
+    "FlextTargetLdifTestModels": ["tests.models", "FlextTargetLdifTestModels"],
+    "FlextTargetLdifTestProtocols": ["tests.protocols", "FlextTargetLdifTestProtocols"],
+    "FlextTargetLdifTestTypes": ["tests.typings", "FlextTargetLdifTestTypes"],
+    "FlextTargetLdifTestUtilities": ["tests.utilities", "FlextTargetLdifTestUtilities"],
+    "TestFlextTargetLdif": ["tests.test_target", "TestFlextTargetLdif"],
+    "TestFlextTargetLdifClass": ["tests.test_target", "TestFlextTargetLdifClass"],
+    "TestFlextTargetLdifSettings": ["tests.test_target", "TestFlextTargetLdifSettings"],
+    "TestFlextTargetLdifWriterBase64Encoding": [
         "tests.test_writer",
         "TestFlextTargetLdifWriterBase64Encoding",
-    ),
-    "TestFlextTargetLdifWriterContextManager": (
+    ],
+    "TestFlextTargetLdifWriterContextManager": [
         "tests.test_writer",
         "TestFlextTargetLdifWriterContextManager",
-    ),
-    "TestFlextTargetLdifWriterDnGeneration": (
+    ],
+    "TestFlextTargetLdifWriterDnGeneration": [
         "tests.test_writer",
         "TestFlextTargetLdifWriterDnGeneration",
-    ),
-    "TestFlextTargetLdifWriterFileOperations": (
+    ],
+    "TestFlextTargetLdifWriterFileOperations": [
         "tests.test_writer",
         "TestFlextTargetLdifWriterFileOperations",
-    ),
-    "TestFlextTargetLdifWriterHeaderGeneration": (
+    ],
+    "TestFlextTargetLdifWriterHeaderGeneration": [
         "tests.test_writer",
         "TestFlextTargetLdifWriterHeaderGeneration",
-    ),
-    "TestFlextTargetLdifWriterInitialization": (
+    ],
+    "TestFlextTargetLdifWriterInitialization": [
         "tests.test_writer",
         "TestFlextTargetLdifWriterInitialization",
-    ),
-    "TestFlextTargetLdifWriterLineWrapping": (
+    ],
+    "TestFlextTargetLdifWriterLineWrapping": [
         "tests.test_writer",
         "TestFlextTargetLdifWriterLineWrapping",
-    ),
-    "TestFlextTargetLdifWriterProperties": (
+    ],
+    "TestFlextTargetLdifWriterProperties": [
         "tests.test_writer",
         "TestFlextTargetLdifWriterProperties",
-    ),
-    "TestFlextTargetLdifWriterRecordWriting": (
+    ],
+    "TestFlextTargetLdifWriterRecordWriting": [
         "tests.test_writer",
         "TestFlextTargetLdifWriterRecordWriting",
-    ),
-    "TestIntegration": ("tests.test_target", "TestIntegration"),
-    "attribute_mapping": ("tests.conftest", "attribute_mapping"),
-    "c": ("tests.constants", "FlextTargetLdifTestConstants"),
-    "d": ("flext_tests", "d"),
-    "e": ("flext_tests", "e"),
-    "h": ("flext_tests", "h"),
-    "ldif_options": ("tests.conftest", "ldif_options"),
-    "m": ("tests.models", "FlextTargetLdifTestModels"),
-    "multiple_records": ("tests.conftest", "multiple_records"),
-    "p": ("tests.protocols", "FlextTargetLdifTestProtocols"),
-    "pytest_configure": ("tests.conftest", "pytest_configure"),
-    "r": ("flext_tests", "r"),
-    "s": ("flext_tests", "s"),
-    "sample_config": ("tests.conftest", "sample_config"),
-    "sample_record": ("tests.conftest", "sample_record"),
-    "sample_schema": ("tests.conftest", "sample_schema"),
-    "t": ("tests.typings", "FlextTargetLdifTestTypes"),
-    "temp_dir": ("tests.conftest", "temp_dir"),
-    "temp_file": ("tests.conftest", "temp_file"),
-    "tm": ("tests.models", "tm"),
-    "tt": ("tests.typings", "tt"),
-    "u": ("tests.utilities", "FlextTargetLdifTestUtilities"),
-    "x": ("flext_tests", "x"),
+    ],
+    "TestIntegration": ["tests.test_target", "TestIntegration"],
+    "attribute_mapping": ["tests.conftest", "attribute_mapping"],
+    "c": ["tests.constants", "FlextTargetLdifTestConstants"],
+    "d": ["flext_tests", "d"],
+    "e": ["flext_tests", "e"],
+    "h": ["flext_tests", "h"],
+    "ldif_options": ["tests.conftest", "ldif_options"],
+    "m": ["tests.models", "FlextTargetLdifTestModels"],
+    "multiple_records": ["tests.conftest", "multiple_records"],
+    "p": ["tests.protocols", "FlextTargetLdifTestProtocols"],
+    "pytest_configure": ["tests.conftest", "pytest_configure"],
+    "r": ["flext_tests", "r"],
+    "s": ["flext_tests", "s"],
+    "sample_config": ["tests.conftest", "sample_config"],
+    "sample_record": ["tests.conftest", "sample_record"],
+    "sample_schema": ["tests.conftest", "sample_schema"],
+    "t": ["tests.typings", "FlextTargetLdifTestTypes"],
+    "temp_dir": ["tests.conftest", "temp_dir"],
+    "temp_file": ["tests.conftest", "temp_file"],
+    "tm": ["tests.models", "tm"],
+    "tt": ["tests.typings", "tt"],
+    "u": ["tests.utilities", "FlextTargetLdifTestUtilities"],
+    "x": ["flext_tests", "x"],
 }
 
 __all__ = [

@@ -53,58 +53,58 @@ if TYPE_CHECKING:
     )
     from flext_target_ldif.writer import FlextTargetLdifWriter, logger
 
-_LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
-    "FlextTargetLdif": ("flext_target_ldif.target", "FlextTargetLdif"),
-    "FlextTargetLdifConstants": (
+_LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
+    "FlextTargetLdif": ["flext_target_ldif.target", "FlextTargetLdif"],
+    "FlextTargetLdifConstants": [
         "flext_target_ldif.constants",
         "FlextTargetLdifConstants",
-    ),
-    "FlextTargetLdifModels": ("flext_target_ldif.models", "FlextTargetLdifModels"),
-    "FlextTargetLdifProtocols": (
+    ],
+    "FlextTargetLdifModels": ["flext_target_ldif.models", "FlextTargetLdifModels"],
+    "FlextTargetLdifProtocols": [
         "flext_target_ldif.protocols",
         "FlextTargetLdifProtocols",
-    ),
-    "FlextTargetLdifRecordTransformer": (
+    ],
+    "FlextTargetLdifRecordTransformer": [
         "flext_target_ldif.transformers",
         "FlextTargetLdifRecordTransformer",
-    ),
-    "FlextTargetLdifSettings": (
+    ],
+    "FlextTargetLdifSettings": [
         "flext_target_ldif.settings",
         "FlextTargetLdifSettings",
-    ),
-    "FlextTargetLdifSink": ("flext_target_ldif.sinks", "FlextTargetLdifSink"),
-    "FlextTargetLdifTypes": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
-    "FlextTargetLdifUtilities": (
+    ],
+    "FlextTargetLdifSink": ["flext_target_ldif.sinks", "FlextTargetLdifSink"],
+    "FlextTargetLdifTypes": ["flext_target_ldif.typings", "FlextTargetLdifTypes"],
+    "FlextTargetLdifUtilities": [
         "flext_target_ldif.utilities",
         "FlextTargetLdifUtilities",
-    ),
-    "FlextTargetLdifWriter": ("flext_target_ldif.writer", "FlextTargetLdifWriter"),
-    "FlextTargetLdifWriterError": (
+    ],
+    "FlextTargetLdifWriter": ["flext_target_ldif.writer", "FlextTargetLdifWriter"],
+    "FlextTargetLdifWriterError": [
         "flext_target_ldif.exceptions",
         "FlextTargetLdifWriterError",
-    ),
-    "__all__": ("flext_target_ldif.__version__", "__all__"),
-    "__author__": ("flext_target_ldif.__version__", "__author__"),
-    "__author_email__": ("flext_target_ldif.__version__", "__author_email__"),
-    "__description__": ("flext_target_ldif.__version__", "__description__"),
-    "__license__": ("flext_target_ldif.__version__", "__license__"),
-    "__title__": ("flext_target_ldif.__version__", "__title__"),
-    "__url__": ("flext_target_ldif.__version__", "__url__"),
-    "__version__": ("flext_target_ldif.__version__", "__version__"),
-    "__version_info__": ("flext_target_ldif.__version__", "__version_info__"),
-    "c": ("flext_target_ldif.constants", "FlextTargetLdifConstants"),
-    "d": ("flext_ldif", "d"),
-    "e": ("flext_ldif", "e"),
-    "h": ("flext_ldif", "h"),
-    "logger": ("flext_target_ldif.writer", "logger"),
-    "m": ("flext_target_ldif.models", "FlextTargetLdifModels"),
-    "main": ("flext_target_ldif.cli", "main"),
-    "p": ("flext_target_ldif.protocols", "FlextTargetLdifProtocols"),
-    "r": ("flext_ldif", "r"),
-    "s": ("flext_ldif", "s"),
-    "t": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
-    "u": ("flext_target_ldif.utilities", "FlextTargetLdifUtilities"),
-    "x": ("flext_ldif", "x"),
+    ],
+    "__all__": ["flext_target_ldif.__version__", "__all__"],
+    "__author__": ["flext_target_ldif.__version__", "__author__"],
+    "__author_email__": ["flext_target_ldif.__version__", "__author_email__"],
+    "__description__": ["flext_target_ldif.__version__", "__description__"],
+    "__license__": ["flext_target_ldif.__version__", "__license__"],
+    "__title__": ["flext_target_ldif.__version__", "__title__"],
+    "__url__": ["flext_target_ldif.__version__", "__url__"],
+    "__version__": ["flext_target_ldif.__version__", "__version__"],
+    "__version_info__": ["flext_target_ldif.__version__", "__version_info__"],
+    "c": ["flext_target_ldif.constants", "FlextTargetLdifConstants"],
+    "d": ["flext_ldif", "d"],
+    "e": ["flext_ldif", "e"],
+    "h": ["flext_ldif", "h"],
+    "logger": ["flext_target_ldif.writer", "logger"],
+    "m": ["flext_target_ldif.models", "FlextTargetLdifModels"],
+    "main": ["flext_target_ldif.cli", "main"],
+    "p": ["flext_target_ldif.protocols", "FlextTargetLdifProtocols"],
+    "r": ["flext_ldif", "r"],
+    "s": ["flext_ldif", "s"],
+    "t": ["flext_target_ldif.typings", "FlextTargetLdifTypes"],
+    "u": ["flext_target_ldif.utilities", "FlextTargetLdifUtilities"],
+    "x": ["flext_ldif", "x"],
 }
 
 __all__ = [
