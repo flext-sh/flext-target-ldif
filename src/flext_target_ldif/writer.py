@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import base64
 import types
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping, MutableMapping, MutableSequence, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Self, TextIO, override
@@ -56,7 +56,7 @@ class FlextTargetLdifWriter:
             bool(timestamps_val) if timestamps_val is not None else True
         )
         self._ldif_api = FlextLdif()
-        self._records: list[Mapping[str, t.ContainerValue]] = []
+        self._records: MutableSequence[Mapping[str, t.ContainerValue]] = []
         self._record_count = 0
         self._ldif_entries: Sequence[
             Mapping[str, str | Mapping[str, t.StrSequence]]
@@ -85,7 +85,7 @@ class FlextTargetLdifWriter:
     def close(self) -> r[bool]:
         """Close the output file and write all collected records."""
         try:
-            self._ldif_entries: list[
+            self._ldif_entries: MutableSequence[
                 Mapping[str, str | Mapping[str, t.StrSequence]]
             ] = []
             for record in self._records:
@@ -136,7 +136,7 @@ class FlextTargetLdifWriter:
         """Convert a single record to LDIF entry format."""
         try:
             dn = self._generate_dn(record)
-            attributes: dict[str, t.ContainerValue] = {}
+            attributes: MutableMapping[str, t.ContainerValue] = {}
             for key, value in record.items():
                 if key != "dn":
                     mapped_key = self.attribute_mapping.get(key, key)
