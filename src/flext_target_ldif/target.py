@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, MutableMapping
 from pathlib import Path
 from typing import override
 
@@ -37,7 +37,7 @@ class FlextTargetLdif:
         }
         merged: Mapping[str, t.ContainerValue] = {**defaults, **(config or {})}
         self.config: Mapping[str, t.ContainerValue] = merged
-        self.sinks: dict[str, FlextTargetLdifSink] = {}
+        self.sinks: MutableMapping[str, FlextTargetLdifSink] = {}
         self._test_config: Mapping[str, t.ContainerValue] | None = None
         if validate_config:
             self.validate_config()

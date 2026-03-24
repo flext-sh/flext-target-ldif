@@ -141,7 +141,7 @@ class FlextTargetLdifWriter:
                 if key != "dn":
                     mapped_key = self.attribute_mapping.get(key, key)
                     attributes[mapped_key] = value
-            attr_dict: dict[str, t.StrSequence] = {}
+            attr_dict: MutableMapping[str, t.StrSequence] = {}
             for key, value in attributes.items():
                 if isinstance(value, list):
                     attr_dict[key] = [str(v) for v in value]

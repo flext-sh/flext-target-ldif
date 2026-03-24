@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import base64
 import re
-from collections.abc import Mapping, MutableSequence
+from collections.abc import Mapping, MutableMapping, MutableSequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
@@ -626,7 +626,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             Mapping[str, t.ContainerValue]: Processing state
 
             """
-            state: dict[str, t.ContainerValue] = {
+            state: MutableMapping[str, t.ContainerValue] = {
                 "stream_name": stream_name,
                 "records_processed": records_processed,
                 "output_file": file_path,
@@ -689,7 +689,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             updated_state = dict(state)
             bookmarks_raw = updated_state.get("bookmarks")
-            bookmarks: dict[str, t.ContainerValue] = {}
+            bookmarks: MutableMapping[str, t.ContainerValue] = {}
             if isinstance(bookmarks_raw, Mapping):
                 bookmarks = {str(key): value for key, value in bookmarks_raw.items()}
             bookmarks[stream_name] = dict(stream_state)

@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, MutableMapping
 from datetime import datetime
 from typing import override
 
@@ -113,7 +113,7 @@ class FlextTargetLdifRecordTransformer:
         record: t.StrMapping,
     ) -> Mapping[str, t.ContainerValue]:
         """Add required LDAP attributes to the record."""
-        result: dict[str, t.ContainerValue] = dict(record)
+        result: MutableMapping[str, t.ContainerValue] = dict(record)
         if "objectclass" not in result:
             result["objectclass"] = ["inetOrgPerson", "person"]
         if "cn" not in result:
@@ -133,7 +133,7 @@ class FlextTargetLdifRecordTransformer:
 
     def transform_record(self, record: Mapping[str, t.ContainerValue]) -> t.StrMapping:
         """Transform a Singer record to LDAP-compatible format."""
-        transformed: dict[str, str] = {}
+        transformed: MutableMapping[str, str] = {}
         for field, value in record.items():
             if value is None:
                 continue
