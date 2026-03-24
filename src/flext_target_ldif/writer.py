@@ -151,7 +151,7 @@ class FlextTargetLdifWriter:
             }
             return result
         except (RuntimeError, ValueError, TypeError, FlextTargetLdifWriterError) as e:
-            logger.warning("Skipping invalid record: %s", e)
+            logger.warning("Skipping invalid record: %s", str(e))
             return None
 
     def _generate_dn(self, record: Mapping[str, t.ContainerValue]) -> str:
