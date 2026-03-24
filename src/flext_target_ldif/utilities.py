@@ -19,8 +19,7 @@ from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
 from flext_target_ldap.utilities import FlextTargetLdapUtilities
 
-from .constants import c
-from .typings import t
+from flext_target_ldif import c, t
 
 
 class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
