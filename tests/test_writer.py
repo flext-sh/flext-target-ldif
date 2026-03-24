@@ -17,7 +17,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from flext_target_ldif import FlextTargetFlextTargetLdifWriterError
+from flext_target_ldif import FlextTargetLdifWriterError
 from flext_target_ldif.writer import FlextTargetLdifWriter
 
 EXPECTED_BULK_SIZE = 2
@@ -443,7 +443,7 @@ class TestFlextTargetLdifWriterDnGeneration:
             dn_template="uid={uid},ou={department},dc=example,dc=com",
         )
         record = {"uid": "jdoe"}
-        with pytest.raises(FlextTargetFlextTargetLdifWriterError) as exc_info:
+        with pytest.raises(FlextTargetLdifWriterError) as exc_info:
             writer._generate_dn(record)
         if "Missing required field for DN generation" not in str(exc_info.value):
             raise AssertionError(
