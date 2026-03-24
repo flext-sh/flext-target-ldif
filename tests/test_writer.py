@@ -18,7 +18,6 @@ from unittest.mock import Mock, patch
 import pytest
 
 from flext_target_ldif import FlextTargetFlextTargetLdifWriterError
-from flext_target_ldif.writer import FlextTargetFlextTargetLdifWriter
 
 EXPECTED_BULK_SIZE = 2
 EXPECTED_DATA_COUNT = 3
@@ -192,7 +191,9 @@ class TestFlextTargetLdifWriterRecordWriting:
         ) as tmp:
             tmp_path = Path(tmp.name)
         attribute_mapping = {"email": "mail", "name": "cn"}
-        writer = FlextTargetLdifWriter(output_file=tmp_path, attribute_mapping=attribute_mapping)
+        writer = FlextTargetLdifWriter(
+            output_file=tmp_path, attribute_mapping=attribute_mapping
+        )
         record = {"uid": "jdoe", "name": "John Doe", "email": "john@example.com"}
         writer.write_record(record)
         writer.close()
@@ -219,7 +220,9 @@ class TestFlextTargetLdifWriterRecordWriting:
 
     def test_write_record_missing_dn_field(self) -> None:
         """Test writing record with missing DN field."""
-        writer = FlextTargetLdifWriter(dn_template="uid={uid},ou=users,dc=example,dc=com")
+        writer = FlextTargetLdifWriter(
+            dn_template="uid={uid},ou=users,dc=example,dc=com"
+        )
         record = {"cn": "John Doe", "mail": "john@example.com"}
         result = writer.write_record(record)
         assert not result.is_success
@@ -326,7 +329,9 @@ class TestFlextTargetLdifWriterBase64Encoding:
             encoding="utf-8", mode="w+", delete=False
         ) as tmp:
             tmp_path = Path(tmp.name)
-        writer = FlextTargetLdifWriter(output_file=tmp_path, ldif_options={"base64_encode": True})
+        writer = FlextTargetLdifWriter(
+            output_file=tmp_path, ldif_options={"base64_encode": True}
+        )
         record = {"uid": "jdoe", "cn": "John Doe"}
         writer.write_record(record)
         writer.close()
@@ -362,7 +367,9 @@ class TestFlextTargetLdifWriterLineWrapping:
             encoding="utf-8", mode="w+", delete=False
         ) as tmp:
             tmp_path = Path(tmp.name)
-        writer = FlextTargetLdifWriter(output_file=tmp_path, ldif_options={"line_length": 20})
+        writer = FlextTargetLdifWriter(
+            output_file=tmp_path, ldif_options={"line_length": 20}
+        )
         writer.open()
         long_line = "this is a very long line that should be wrapped and exceed the 20 character limit"
         writer._write_line(long_line)
@@ -395,7 +402,9 @@ class TestFlextTargetLdifWriterDnGeneration:
 
     def test_generate_dn_success(self) -> None:
         """Test successful DN generation."""
-        writer = FlextTargetLdifWriter(dn_template="uid={uid},ou={department},dc=example,dc=com")
+        writer = FlextTargetLdifWriter(
+            dn_template="uid={uid},ou={department},dc=example,dc=com"
+        )
         record = {"uid": "jdoe", "department": "engineering"}
         dn = writer._generate_dn(record)
         if dn != "uid=jdoe,ou=engineering,dc=example,dc=com":
@@ -406,7 +415,9 @@ class TestFlextTargetLdifWriterDnGeneration:
 
     def test_generate_dn_missing_field(self) -> None:
         """Test DN generation with missing field."""
-        writer = FlextTargetLdifWriter(dn_template="uid={uid},ou={department},dc=example,dc=com")
+        writer = FlextTargetLdifWriter(
+            dn_template="uid={uid},ou={department},dc=example,dc=com"
+        )
         record = {"uid": "jdoe"}
         with pytest.raises(FlextTargetFlextTargetLdifWriterError) as exc_info:
             writer._generate_dn(record)

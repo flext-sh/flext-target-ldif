@@ -141,8 +141,10 @@ class FlextTargetLdifRecordTransformer:
                 attr_name = self.attribute_mapping[field]
             else:
                 attr_name = field.lower().replace("_", "")
-            transformed_value = FlextTargetLdifRecordTransformer.normalize_attribute_value(
-                attr_name, value, self.custom_transformers
+            transformed_value = (
+                FlextTargetLdifRecordTransformer.normalize_attribute_value(
+                    attr_name, value, self.custom_transformers
+                )
             )
             if transformed_value:
                 transformed[attr_name] = transformed_value
