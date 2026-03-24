@@ -61,7 +61,8 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 """
 
                 def generate_ldif(
-                    self, records: Sequence[Mapping[str, t.ContainerValue]]
+                    self,
+                    records: Sequence[Mapping[str, t.ContainerValue]],
                 ) -> FlextMeltanoProtocols.Result[str]:
                     """Generate LDIF content from records.
 
@@ -82,7 +83,8 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 """
 
                 def transform_to_ldif(
-                    self, record: Mapping[str, t.ContainerValue]
+                    self,
+                    record: Mapping[str, t.ContainerValue],
                 ) -> FlextMeltanoProtocols.Result[str]:
                     """Transform Singer record to LDIF format.
 
@@ -103,7 +105,9 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 """
 
                 def write_ldif_file(
-                    self, file_path: str, content: str
+                    self,
+                    file_path: str,
+                    content: str,
                 ) -> FlextMeltanoProtocols.Result[bool]:
                     """Write LDIF content to file.
 
@@ -125,7 +129,8 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 """
 
                 def validate_ldif(
-                    self, ldif_content: str
+                    self,
+                    ldif_content: str,
                 ) -> FlextMeltanoProtocols.Result[bool]:
                     """Validate LDIF content.
 
@@ -146,7 +151,8 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 """
 
                 def optimize_batch(
-                    self, batch_size: int
+                    self,
+                    batch_size: int,
                 ) -> FlextMeltanoProtocols.Result[int]:
                     """Optimize batch size for performance.
 
@@ -167,7 +173,8 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 """
 
                 def track_progress(
-                    self, records: int
+                    self,
+                    records: int,
                 ) -> FlextMeltanoProtocols.Result[bool]:
                     """Track progress of LDIF generation.
 

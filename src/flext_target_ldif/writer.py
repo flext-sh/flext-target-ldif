@@ -128,7 +128,8 @@ class FlextTargetLdifWriter:
             return r[bool].fail(f"Failed to write record: {e}")
 
     def _convert_record_to_entry(
-        self, record: Mapping[str, t.ContainerValue]
+        self,
+        record: Mapping[str, t.ContainerValue],
     ) -> Mapping[str, str | Mapping[str, t.StrSequence]] | None:
         """Convert a single record to LDIF entry format."""
         try:
@@ -150,7 +151,7 @@ class FlextTargetLdifWriter:
             }
             return result
         except (RuntimeError, ValueError, TypeError, FlextTargetLdifWriterError) as e:
-            logger.warning(f"Skipping invalid record: {e}")
+            logger.warning("Skipping invalid record: %s", e)
             return None
 
     def _generate_dn(self, record: Mapping[str, t.ContainerValue]) -> str:
@@ -203,7 +204,9 @@ class FlextTargetLdifWriter:
                 f.write("\n")
 
     def _write_entry_attributes(
-        self, f: TextIO, attributes_obj: Mapping[str, str | t.StrSequence]
+        self,
+        f: TextIO,
+        attributes_obj: Mapping[str, str | t.StrSequence],
     ) -> None:
         """Write entry attributes to file."""
         for attr, values in attributes_obj.items():
@@ -211,7 +214,7 @@ class FlextTargetLdifWriter:
                 for value in values:
                     if self.base64_encode:
                         encoded = base64.b64encode(str(value).encode("utf-8")).decode(
-                            "ascii"
+                            "ascii",
                         )
                         f.write(f"{attr}:: {encoded}\n")
                     else:

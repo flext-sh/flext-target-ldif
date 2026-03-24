@@ -102,7 +102,7 @@ class FlextTargetLdifRecordTransformer:
         if transformers and attr_name in transformers:
             return transformers[attr_name](value)
         builtin_transformer = FlextTargetLdifRecordTransformer._get_builtin_transformer(
-            attr_name
+            attr_name,
         )
         if builtin_transformer:
             return builtin_transformer(value)
@@ -143,7 +143,9 @@ class FlextTargetLdifRecordTransformer:
                 attr_name = field.lower().replace("_", "")
             transformed_value = (
                 FlextTargetLdifRecordTransformer.normalize_attribute_value(
-                    attr_name, value, self.custom_transformers
+                    attr_name,
+                    value,
+                    self.custom_transformers,
                 )
             )
             if transformed_value:

@@ -144,5 +144,6 @@ def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line("markers", "target: mark test as target-specific")
     config.addinivalue_line("markers", "sink: mark test as sink-specific")
     config.addinivalue_line(
-        "markers", "requires_filesystem: mark test as requiring file system access"
+        "markers",
+        "requires_filesystem: mark test as requiring file system access",
     )

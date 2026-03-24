@@ -182,12 +182,12 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         for item in value:
                             if item is not None:
                                 ldif_value = FlextTargetLdifUtilities.LdifDataProcessing.format_ldif_value(
-                                    str(item)
+                                    str(item),
                                 )
                                 ldif_lines.append(f"{ldif_attr}: {ldif_value}")
                     else:
                         ldif_value = FlextTargetLdifUtilities.LdifDataProcessing.format_ldif_value(
-                            str(value)
+                            str(value),
                         )
                         ldif_lines.append(f"{ldif_attr}: {ldif_value}")
                 ldif_lines.append("")
@@ -335,7 +335,10 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def create_ldif_file(
-            file_path: str, entries: t.StrSequence, *, overwrite: bool = False
+            file_path: str,
+            entries: t.StrSequence,
+            *,
+            overwrite: bool = False,
         ) -> r[str]:
             """Create LDIF file with entries.
 
@@ -410,7 +413,8 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def calculate_ldif_batch_size(
-            record_count: int, target_batches: int = 10
+            record_count: int,
+            target_batches: int = 10,
         ) -> int:
             """Calculate optimal batch size for LDIF operations.
 
@@ -459,7 +463,8 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def validate_stream_compatibility(
-            stream_name: str, schema: Mapping[str, t.ContainerValue]
+            stream_name: str,
+            schema: Mapping[str, t.ContainerValue],
         ) -> r[bool]:
             """Validate stream compatibility with LDIF operations.
 
@@ -486,7 +491,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             )
             if not has_dn_field and (not has_id_fields):
                 return r[bool].fail(
-                    "Schema must have either 'dn' field or identifier fields (id, uid, cn, username, email)"
+                    "Schema must have either 'dn' field or identifier fields (id, uid, cn, username, email)",
                 )
             return r[bool].ok(value=True)
 
@@ -510,7 +515,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 object_classes = config["object_classes"]
                 if not isinstance(object_classes, list) or not object_classes:
                     return r[t.ContainerValueMapping].fail(
-                        "Object classes must be a non-empty list"
+                        "Object classes must be a non-empty list",
                     )
                 for oc in object_classes:
                     match oc:
@@ -518,19 +523,19 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                             pass
                         case _:
                             return r[t.ContainerValueMapping].fail(
-                                "All t.NormalizedValue classes must be non-empty strings"
+                                "All t.NormalizedValue classes must be non-empty strings",
                             )
             if "attribute_mapping" in config:
                 attribute_mapping = config["attribute_mapping"]
                 if not isinstance(attribute_mapping, Mapping):
                     return r[t.ContainerValueMapping].fail(
-                        "Attribute mapping must be a dictionary"
+                        "Attribute mapping must be a dictionary",
                     )
                 attribute_mapping_map = attribute_mapping
                 for key, value in attribute_mapping_map.items():
                     if not isinstance(key, str) or not isinstance(value, str):
                         return r[t.ContainerValueMapping].fail(
-                            "Attribute mapping keys and values must be strings"
+                            "Attribute mapping keys and values must be strings",
                         )
             return r[t.ContainerValueMapping].ok(config)
 
@@ -551,28 +556,28 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             missing_fields = [field for field in required_fields if field not in config]
             if missing_fields:
                 return r[t.ContainerValueMapping].fail(
-                    f"Missing required LDIF target fields: {', '.join(missing_fields)}"
+                    f"Missing required LDIF target fields: {', '.join(missing_fields)}",
                 )
             output_file_raw = config["output_file"]
             if not isinstance(output_file_raw, str):
                 return r[t.ContainerValueMapping].fail(
-                    "Invalid output file: output_file must be a string"
+                    "Invalid output file: output_file must be a string",
                 )
             output_file = output_file_raw
             file_validation = (
                 FlextTargetLdifUtilities.FileUtilities.validate_ldif_file_path(
-                    output_file
+                    output_file,
                 )
             )
             if file_validation.is_failure:
                 return r[t.ContainerValueMapping].fail(
-                    f"Invalid output file: {file_validation.error}"
+                    f"Invalid output file: {file_validation.error}",
                 )
             operation_mode = config.get("operation_mode", "append")
             valid_modes = ["append", "overwrite", "create"]
             if operation_mode not in valid_modes:
                 return r[t.ContainerValueMapping].fail(
-                    f"Invalid operation mode: {operation_mode}. Valid modes: {', '.join(valid_modes)}"
+                    f"Invalid operation mode: {operation_mode}. Valid modes: {', '.join(valid_modes)}",
                 )
             if "dn_template" in config:
                 dn_template = config["dn_template"]
@@ -581,18 +586,19 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         pass
                     case _:
                         return r[t.ContainerValueMapping].fail(
-                            "DN template must be a non-empty string"
+                            "DN template must be a non-empty string",
                         )
             batch_size_raw = config.get(
-                "batch_size", FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE
+                "batch_size",
+                FlextTargetLdifUtilities.DEFAULT_BATCH_SIZE,
             )
             if not isinstance(batch_size_raw, int):
                 return r[t.ContainerValueMapping].fail(
-                    "Batch size must be a positive integer"
+                    "Batch size must be a positive integer",
                 )
             if batch_size_raw <= 0:
                 return r[t.ContainerValueMapping].fail(
-                    "Batch size must be a positive integer"
+                    "Batch size must be a positive integer",
                 )
             return r[t.ContainerValueMapping].ok(config)
 
@@ -641,7 +647,8 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def get_target_state(
-            state: Mapping[str, t.ContainerValue], stream_name: str
+            state: Mapping[str, t.ContainerValue],
+            stream_name: str,
         ) -> Mapping[str, t.ContainerValue]:
             """Get state for a specific target stream.
 
@@ -709,7 +716,8 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             stream_state = FlextTargetLdifUtilities.StateManagement.get_target_state(
-                state, stream_name
+                state,
+                stream_name,
             )
             current_count_raw = stream_state.get("records_processed", 0)
             current_count = (
@@ -726,7 +734,9 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 "batch_count": batch_count + 1,
             }
             return FlextTargetLdifUtilities.StateManagement.set_target_state(
-                state, stream_name, updated_stream_state
+                state,
+                stream_name,
+                updated_stream_state,
             )
 
 

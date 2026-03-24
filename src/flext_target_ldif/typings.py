@@ -51,14 +51,16 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             FlextMeltanoTypes.ContainerValue | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type StreamConfiguration = Mapping[
-            str, str | bool | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | bool | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type TargetConfiguration = Mapping[
             str,
             FlextMeltanoTypes.ContainerValue | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type MessageProcessing = Mapping[
-            str, int | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
 
     class LdifExport:
@@ -84,13 +86,16 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type LdifFileConfig = Mapping[
-            str, FlextMeltanoTypes.Scalar | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            FlextMeltanoTypes.Scalar | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type LdifFormatting = Mapping[
-            str, FlextMeltanoTypes.Scalar | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            FlextMeltanoTypes.Scalar | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type LdifValidation = Mapping[
-            str, bool | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            bool | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type ExportResult = Mapping[
             str,
@@ -104,10 +109,12 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         """File processing complex types."""
 
         type FileConfiguration = Mapping[
-            str, str | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type StreamWriter = Mapping[
-            str, str | bool | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | bool | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type FileOutput = Mapping[
             str,
@@ -116,20 +123,24 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type CompressionConfig = Mapping[
-            str, str | bool | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | bool | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type FileValidation = Mapping[
-            str, bool | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            bool | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type IOMetrics = Mapping[
-            str, int | float | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | float | FlextMeltanoTypes.ContainerValueMapping,
         ]
 
     class DataTransformation:
         """Data transformation complex types."""
 
         type SingerToLdifMapping = Mapping[
-            str, str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type AttributeMapping = Mapping[
             str,
@@ -146,7 +157,8 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             FlextMeltanoTypes.ContainerValue | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type DataNormalization = Mapping[
-            str, bool | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            bool | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type TransformationRules = Mapping[
             str,
@@ -159,10 +171,12 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         """Validation complex types."""
 
         type LdifFormatValidation = Mapping[
-            str, bool | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            bool | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type SingerCompliance = Mapping[
-            str, bool | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            bool | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type SchemaValidation = Mapping[
             str,
@@ -171,7 +185,8 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type RecordValidation = Mapping[
-            str, bool | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            bool | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type FormatCompliance = Mapping[
             str,
@@ -181,7 +196,8 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type ValidationRules = Mapping[
-            str, bool | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            bool | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
 
     class TargetConfiguration:
@@ -192,39 +208,49 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             FlextMeltanoTypes.ContainerValue | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type LdifTargetConfig = Mapping[
-            str, FlextMeltanoTypes.Scalar | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            FlextMeltanoTypes.Scalar | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type OutputConfiguration = Mapping[
-            str, str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type StreamMapping = Mapping[str, str | FlextMeltanoTypes.ContainerValueMapping]
         type BatchConfiguration = Mapping[
-            str, int | bool | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | bool | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type ErrorHandling = Mapping[
-            str, str | bool | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | bool | FlextMeltanoTypes.ContainerValueMapping,
         ]
 
     class Performance:
         """Performance complex types."""
 
         type PerformanceMetrics = Mapping[
-            str, int | float | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | float | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type OptimizationConfig = Mapping[
-            str, int | bool | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | bool | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type BufferConfiguration = Mapping[
-            str, int | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type StreamingConfig = Mapping[
-            str, int | bool | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | bool | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type MemoryManagement = Mapping[
-            str, int | bool | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | bool | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type IOOptimization = Mapping[
-            str, int | bool | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | bool | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
 
     class Project:
@@ -239,11 +265,13 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type ErrorTypeLiteral = c.ErrorTypeLiteral
         type FlextTargetLdifSettings = Mapping[str, FlextMeltanoTypes.ContainerValue]
         type SingerTargetConfig = Mapping[
-            str, FlextMeltanoTypes.Scalar | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            FlextMeltanoTypes.Scalar | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type LdifExportConfig = Mapping[str, FlextMeltanoTypes.ContainerValue]
         type TargetPipelineConfig = Mapping[
-            str, bool | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            bool | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
 
 

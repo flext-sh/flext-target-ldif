@@ -54,11 +54,13 @@ class FlextTargetLdifSink:
             result: r[bool] = self._ldif_writer.close()
             if not result.is_success:
                 self.logger.error(
-                    "Failed to close LDIF writer", error=result.error or ""
+                    "Failed to close LDIF writer",
+                    error=result.error or "",
                 )
             else:
                 self.logger.info(
-                    "LDIF file written", output_file=str(self._output_file)
+                    "LDIF file written",
+                    output_file=str(self._output_file),
                 )
 
     def process_batch(self, _context: Mapping[str, t.ContainerValue]) -> None:

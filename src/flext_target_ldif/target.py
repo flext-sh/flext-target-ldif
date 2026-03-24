@@ -64,12 +64,16 @@ class FlextTargetLdif:
         return FlextTargetLdifSink
 
     def get_sink(
-        self, stream_name: str, schema: Mapping[str, t.ContainerValue]
+        self,
+        stream_name: str,
+        schema: Mapping[str, t.ContainerValue],
     ) -> FlextTargetLdifSink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = FlextTargetLdifSink(
-                target_config=self.config, stream_name=stream_name, schema=schema
+                target_config=self.config,
+                stream_name=stream_name,
+                schema=schema,
             )
         return self.sinks[stream_name]
 

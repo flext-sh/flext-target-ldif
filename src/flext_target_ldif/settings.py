@@ -55,15 +55,18 @@ class FlextTargetLdifSettings(FlextSettings):
         super().__setattr__(name, value)
 
     output_file: Annotated[
-        str, Field(default="output.ldif", description="Output LDIF filename")
+        str,
+        Field(default="output.ldif", description="Output LDIF filename"),
     ]
     output_path: Annotated[
-        str, Field(default="./output", description="Output directory path")
+        str,
+        Field(default="./output", description="Output directory path"),
     ]
     file_naming_pattern: Annotated[
         str,
         Field(
-            default="{stream_name}.ldif", description="Pattern for generated filenames"
+            default="{stream_name}.ldif",
+            description="Pattern for generated filenames",
         ),
     ]
     dn_template: Annotated[
@@ -95,7 +98,8 @@ class FlextTargetLdifSettings(FlextSettings):
         ),
     ]
     line_length: Annotated[
-        int, Field(default=78, ge=1, description="LDIF line wrap length")
+        int,
+        Field(default=78, ge=1, description="LDIF line wrap length"),
     ]
     base64_encode: Annotated[
         bool,

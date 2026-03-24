@@ -82,14 +82,16 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 ),
             ]
             line_separator: Annotated[
-                str, Field(default="\n", description="Line separator character")
+                str,
+                Field(default="\n", description="Line separator character"),
             ]
 
         class LdifExportConfig(FlextSettings):
             """LDIF export configuration with file management."""
 
             output_path: Annotated[
-                str, Field(..., description="Output directory for LDIF files")
+                str,
+                Field(..., description="Output directory for LDIF files"),
             ]
             file_naming_pattern: Annotated[
                 str,
@@ -212,7 +214,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                     # Validate t.NormalizedValue classes
                     if not self.object_classes:
                         errors.append(
-                            "Entry must have at least one t.NormalizedValue class"
+                            "Entry must have at least one t.NormalizedValue class",
                         )
 
                     # Validate attributes exist
@@ -237,10 +239,12 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             """LDIF file representation with metadata."""
 
             file_path: Annotated[
-                t.NonEmptyStr, Field(..., description="Path to the LDIF file")
+                t.NonEmptyStr,
+                Field(..., description="Path to the LDIF file"),
             ]
             stream_name: Annotated[
-                t.NonEmptyStr, Field(..., description="Singer stream name")
+                t.NonEmptyStr,
+                Field(..., description="Singer stream name"),
             ]
             entries: Annotated[
                 Sequence[FlextTargetLdifModels.Ldif.LdifEntry],
@@ -259,14 +263,16 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             # File metadata
             file_size_bytes: Annotated[
-                t.NonNegativeInt, Field(default=0, description="File size in bytes")
+                t.NonNegativeInt,
+                Field(default=0, description="File size in bytes"),
             ]
             entry_count: Annotated[
                 t.NonNegativeInt,
                 Field(default=0, description="Number of entries in file"),
             ]
             is_compressed: Annotated[
-                bool, Field(default=False, description="Whether file is compressed")
+                bool,
+                Field(default=False, description="Whether file is compressed"),
             ]
 
             def validate_business_rules(self) -> r[bool]:
@@ -374,7 +380,8 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             """LDIF batch processing configuration and state."""
 
             stream_name: Annotated[
-                t.NonEmptyStr, Field(..., description="Singer stream name")
+                t.NonEmptyStr,
+                Field(..., description="Singer stream name"),
             ]
             batch_size: Annotated[
                 t.BatchSize,
@@ -395,10 +402,12 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 Field(default=0, description="Total entries processed"),
             ]
             successful_exports: Annotated[
-                t.NonNegativeInt, Field(default=0, description="Successful exports")
+                t.NonNegativeInt,
+                Field(default=0, description="Successful exports"),
             ]
             failed_exports: Annotated[
-                t.NonNegativeInt, Field(default=0, description="Failed exports")
+                t.NonNegativeInt,
+                Field(default=0, description="Failed exports"),
             ]
             last_processed_at: Annotated[
                 datetime | None,
@@ -451,7 +460,8 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             """Singer stream configuration for LDIF export."""
 
             stream_name: Annotated[
-                t.NonEmptyStr, Field(..., description="Singer stream name")
+                t.NonEmptyStr,
+                Field(..., description="Singer stream name"),
             ]
             ldif_config: Annotated[
                 FlextTargetLdifModels.Ldif.LdifExportConfig,
@@ -479,7 +489,8 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             """Result of LDIF target operation processing."""
 
             stream_name: Annotated[
-                t.NonEmptyStr, Field(..., description="Singer stream name")
+                t.NonEmptyStr,
+                Field(..., description="Singer stream name"),
             ]
             output_files: Annotated[
                 t.StrSequence,
@@ -598,35 +609,44 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             """Error context for LDIF target error handling."""
 
             error_type: Annotated[
-                t.NonEmptyStr, Field(..., description="Error category")
+                t.NonEmptyStr,
+                Field(..., description="Error category"),
             ]
 
             # Context information
             file_path: Annotated[
-                str | None, Field(None, description="File path that caused error")
+                str | None,
+                Field(None, description="File path that caused error"),
             ]
             entry_dn: Annotated[
-                str | None, Field(None, description="DN of entry causing error")
+                str | None,
+                Field(None, description="DN of entry causing error"),
             ]
             attribute_name: Annotated[
-                str | None, Field(None, description="Attribute causing error")
+                str | None,
+                Field(None, description="Attribute causing error"),
             ]
             stream_name: Annotated[
-                str | None, Field(None, description="Singer stream name")
+                str | None,
+                Field(None, description="Singer stream name"),
             ]
             line_number: Annotated[
-                int | None, Field(None, description="Line number in LDIF file")
+                int | None,
+                Field(None, description="Line number in LDIF file"),
             ]
 
             # Recovery information
             is_retryable: Annotated[
-                bool, Field(default=False, description="Whether error is retryable")
+                bool,
+                Field(default=False, description="Whether error is retryable"),
             ]
             suggested_action: Annotated[
-                str | None, Field(None, description="Suggested recovery action")
+                str | None,
+                Field(None, description="Suggested recovery action"),
             ]
             max_retry_attempts: Annotated[
-                int | None, Field(None, description="Maximum retry attempts")
+                int | None,
+                Field(None, description="Maximum retry attempts"),
             ]
 
 
