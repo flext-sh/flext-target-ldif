@@ -247,7 +247,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 Field(
                     description="LDIF entries in the file",
                 ),
-            ] = Field(default_factory=list)
+            ] = Field(default_factory=lambda: list[FlextTargetLdifModels.TargetLdif.LdifEntry]())
             format_options: Annotated[
                 FlextTargetLdifModels.TargetLdif.LdifFormatOptions,
                 Field(
@@ -388,7 +388,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 Field(
                     description="Current batch of entries",
                 ),
-            ] = Field(default_factory=list)
+            ] = Field(default_factory=lambda: list[FlextTargetLdifModels.TargetLdif.LdifEntry]())
             total_processed: Annotated[
                 t.NonNegativeInt,
                 Field(default=0, description="Total entries processed"),

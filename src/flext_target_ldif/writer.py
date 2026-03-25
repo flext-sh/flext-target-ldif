@@ -50,11 +50,9 @@ class FlextTargetLdifWriter:
         else:
             self.line_length = 78
         base64_val = self.ldif_options.get("base64_encode", False)
-        self.base64_encode: bool = bool(base64_val) if base64_val is not None else False
+        self.base64_encode: bool = bool(base64_val)
         timestamps_val = self.ldif_options.get("include_timestamps", True)
-        self.include_timestamps: bool = (
-            bool(timestamps_val) if timestamps_val is not None else True
-        )
+        self.include_timestamps: bool = bool(timestamps_val)
         self._ldif_api = FlextLdif()
         self._records: MutableSequence[Mapping[str, t.ContainerValue]] = []
         self._record_count = 0

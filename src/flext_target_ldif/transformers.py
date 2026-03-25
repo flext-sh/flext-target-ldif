@@ -29,8 +29,6 @@ class FlextTargetLdifRecordTransformer:
     @staticmethod
     def transform_timestamp(value: t.ContainerValue) -> str:
         """Transform timestamp values to LDAP timestamp format using flext-ldap."""
-        if value is None:
-            return ""
         if isinstance(value, datetime):
             return value.isoformat()
         if isinstance(value, str):
@@ -135,8 +133,6 @@ class FlextTargetLdifRecordTransformer:
         """Transform a Singer record to LDAP-compatible format."""
         transformed: MutableMapping[str, str] = {}
         for field, value in record.items():
-            if value is None:
-                continue
             if field in self.attribute_mapping:
                 attr_name = self.attribute_mapping[field]
             else:

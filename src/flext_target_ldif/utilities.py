@@ -127,8 +127,6 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     for key, value in record.items():
                         placeholder = f"{{{key}}}"
                         if placeholder in dn_rdn:
-                            if value is None:
-                                return r[str].fail(f"Cannot build DN: {key} is null")
                             dn_rdn = dn_rdn.replace(placeholder, str(value))
                     if "{" in dn_rdn and "}" in dn_rdn:
                         return r[str].fail(f"Unresolved placeholders in DN: {dn_rdn}")
@@ -177,16 +175,13 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     if object_classes:
                         ldif_lines.extend(f"objectClass: {oc}" for oc in object_classes)
                     for key, value in record.items():
-                        if value is None:
-                            continue
                         ldif_attr = mapping.get(key, key)
                         if isinstance(value, list):
                             for item in value:
-                                if item is not None:
-                                    ldif_value = FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.format_ldif_value(
-                                        str(item),
-                                    )
-                                    ldif_lines.append(f"{ldif_attr}: {ldif_value}")
+                                ldif_value = FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.format_ldif_value(
+                                    str(item),
+                                )
+                                ldif_lines.append(f"{ldif_attr}: {ldif_value}")
                         else:
                             ldif_value = FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.format_ldif_value(
                                 str(value),
@@ -539,8 +534,8 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                             "Attribute mapping must be a dictionary",
                         )
                     attribute_mapping_map = attribute_mapping
-                    for key, value in attribute_mapping_map.items():
-                        if not isinstance(key, str) or not isinstance(value, str):
+                    for value in attribute_mapping_map.values():
+                        if not isinstance(value, str):
                             return r[t.ContainerValueMapping].fail(
                                 "Attribute mapping keys and values must be strings",
                             )
