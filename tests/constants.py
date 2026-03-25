@@ -10,8 +10,10 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsConstants
 
+from flext_target_ldif import FlextTargetLdifConstants
 
-class FlextTargetLdifTestConstants(FlextTestsConstants):
+
+class FlextTargetLdifTestConstants(FlextTestsConstants, FlextTargetLdifConstants):
     """Test constants for flext-target-ldif."""
 
 

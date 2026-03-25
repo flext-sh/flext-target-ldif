@@ -43,24 +43,6 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     ASCII_TILDE: Final[int] = 126
     LDIF_LINE_WRAP_LENGTH: Final[int] = 76
 
-    @unique
-    class TargetLdifErrorType(StrEnum):
-        """LDIF target error types using StrEnum for type safety.
-
-        DRY Pattern:
-            StrEnum is the single source of truth. Use TargetLdifErrorType.FORMAT_VALIDATION.value
-            or TargetLdifErrorType.FORMAT_VALIDATION directly - no base strings needed.
-        """
-
-        FORMAT_VALIDATION = "FORMAT_VALIDATION"
-        FILE_IO = "FILE_IO"
-        TRANSFORMATION = "TRANSFORMATION"
-        SINGER_PROTOCOL = "SINGER_PROTOCOL"
-        CONFIGURATION = "CONFIGURATION"
-        DISK_SPACE = "DISK_SPACE"
-        PERMISSION = "PERMISSION"
-        ENCODING = "ENCODING"
-
     class TargetLdif:
         """LDIF target processing configuration.
 
@@ -71,65 +53,83 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         MAX_WORKERS_LIMIT: Final[int] = 16
         PERFORMANCE_MIN_CHUNK_SIZE: Final[int] = 100
 
-    class Format:
-        """LDIF format specifications."""
+        @unique
+        class TargetLdifErrorType(StrEnum):
+            """LDIF target error types using StrEnum for type safety.
 
-        DN_ATTRIBUTE: Final[str] = "dn"
-        ATTRIBUTE_SEPARATOR: Final[str] = ": "
-        BASE64_PREFIX: Final[str] = ":: "
-        COMMENT_PREFIX: Final[str] = "#"
+            DRY Pattern:
+                StrEnum is the single source of truth. Use TargetLdifErrorType.FORMAT_VALIDATION.value
+                or TargetLdifErrorType.FORMAT_VALIDATION directly - no base strings needed.
+            """
 
-    class TargetLdifValidation:
-        """LDIF validation constants.
+            FORMAT_VALIDATION = "FORMAT_VALIDATION"
+            FILE_IO = "FILE_IO"
+            TRANSFORMATION = "TRANSFORMATION"
+            SINGER_PROTOCOL = "SINGER_PROTOCOL"
+            CONFIGURATION = "CONFIGURATION"
+            DISK_SPACE = "DISK_SPACE"
+            PERMISSION = "PERMISSION"
+            ENCODING = "ENCODING"
 
-        Note: Does not override parent Validation class to avoid inheritance conflicts.
-        """
+        class Format:
+            """LDIF format specifications."""
 
-        MIN_DN_COMPONENTS: Final[int] = 2
-        MAX_DN_LENGTH: Final[int] = 1000
-        MAX_ATTRIBUTES_PER_ENTRY: Final[int] = 500
-        MAX_ATTRIBUTE_VALUE_LENGTH: Final[int] = 1000
-        MAX_DN_COMPONENTS: Final[int] = 10
+            DN_ATTRIBUTE: Final[str] = "dn"
+            ATTRIBUTE_SEPARATOR: Final[str] = ": "
+            BASE64_PREFIX: Final[str] = ":: "
+            COMMENT_PREFIX: Final[str] = "#"
 
-    @unique
-    class ProjectType(StrEnum):
-        """Project type literals for target package metadata."""
+        class TargetLdifValidation:
+            """LDIF validation constants.
 
-        LIBRARY = "library"
-        APPLICATION = "application"
-        SERVICE = "service"
-        TARGET_LDIF = "target-ldif"
-        SINGER_TARGET = "singer-target"
-        LDIF_EXPORT = "ldif-export"
-        SINGER_LDIF_TARGET = "singer-ldif-target"
-        LDIF_FILE_TARGET = "ldif-file-target"
-        SINGER_PROTOCOL_TARGET = "singer-protocol-target"
-        DATA_EXPORT_TARGET = "data-export-target"
-        LDIF_GENERATOR = "ldif-generator"
-        SINGER_TO_LDIF = "singer-to-ldif"
-        LDIF_EXPORT_SERVICE = "ldif-export-service"
-        TARGET_LDIF_SINGER = "target-ldif-singer"
-        LDIF_FILE_EXPORT = "ldif-file-export"
-        SINGER_LDIF_EXPORT = "singer-ldif-export"
-        LDIF_DATA_TARGET = "ldif-data-target"
-        EXPORT_TARGET_LDIF = "export-target-ldif"
-        SINGER_EXPORT_TARGET = "singer-export-target"
-        LDIF_STREAMING_TARGET = "ldif-streaming-target"
-        LDIF_BATCH_EXPORT = "ldif-batch-export"
-        SINGER_FILE_TARGET = "singer-file-target"
+            Note: Does not override parent Validation class to avoid inheritance conflicts.
+            """
 
-    @unique
-    class ErrorTypeLiteral(StrEnum):
-        """Error category literals for target operations."""
+            MIN_DN_COMPONENTS: Final[int] = 2
+            MAX_DN_LENGTH: Final[int] = 1000
+            MAX_ATTRIBUTES_PER_ENTRY: Final[int] = 500
+            MAX_ATTRIBUTE_VALUE_LENGTH: Final[int] = 1000
+            MAX_DN_COMPONENTS: Final[int] = 10
 
-        FORMAT_VALIDATION = "FORMAT_VALIDATION"
-        FILE_IO = "FILE_IO"
-        TRANSFORMATION = "TRANSFORMATION"
-        SINGER_PROTOCOL = "SINGER_PROTOCOL"
-        CONFIGURATION = "CONFIGURATION"
-        DISK_SPACE = "DISK_SPACE"
-        PERMISSION = "PERMISSION"
-        ENCODING = "ENCODING"
+        @unique
+        class ProjectType(StrEnum):
+            """Project type literals for target package metadata."""
+
+            LIBRARY = "library"
+            APPLICATION = "application"
+            SERVICE = "service"
+            TARGET_LDIF = "target-ldif"
+            SINGER_TARGET = "singer-target"
+            LDIF_EXPORT = "ldif-export"
+            SINGER_LDIF_TARGET = "singer-ldif-target"
+            LDIF_FILE_TARGET = "ldif-file-target"
+            SINGER_PROTOCOL_TARGET = "singer-protocol-target"
+            DATA_EXPORT_TARGET = "data-export-target"
+            LDIF_GENERATOR = "ldif-generator"
+            SINGER_TO_LDIF = "singer-to-ldif"
+            LDIF_EXPORT_SERVICE = "ldif-export-service"
+            TARGET_LDIF_SINGER = "target-ldif-singer"
+            LDIF_FILE_EXPORT = "ldif-file-export"
+            SINGER_LDIF_EXPORT = "singer-ldif-export"
+            LDIF_DATA_TARGET = "ldif-data-target"
+            EXPORT_TARGET_LDIF = "export-target-ldif"
+            SINGER_EXPORT_TARGET = "singer-export-target"
+            LDIF_STREAMING_TARGET = "ldif-streaming-target"
+            LDIF_BATCH_EXPORT = "ldif-batch-export"
+            SINGER_FILE_TARGET = "singer-file-target"
+
+        @unique
+        class ErrorTypeLiteral(StrEnum):
+            """Error category literals for target operations."""
+
+            FORMAT_VALIDATION = "FORMAT_VALIDATION"
+            FILE_IO = "FILE_IO"
+            TRANSFORMATION = "TRANSFORMATION"
+            SINGER_PROTOCOL = "SINGER_PROTOCOL"
+            CONFIGURATION = "CONFIGURATION"
+            DISK_SPACE = "DISK_SPACE"
+            PERMISSION = "PERMISSION"
+            ENCODING = "ENCODING"
 
 
 c = FlextTargetLdifConstants

@@ -40,8 +40,8 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
     - Results: Operation results and error context models
     """
 
-    class Ldif(FlextLdifModels.Ldif):
-        """LDIF domain model namespace."""
+    class TargetLdif(FlextLdifModels.Ldif):
+        """TargetLdif domain model namespace."""
 
         class LdifFormatOptions(FlextSettings):
             """LDIF format configuration with specification compliance."""
@@ -145,13 +145,13 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             # Format configuration
             format_options: Annotated[
-                FlextTargetLdifModels.Ldif.LdifFormatOptions,
+                FlextTargetLdifModels.TargetLdif.LdifFormatOptions,
                 Field(
                     description="LDIF format options",
                 ),
             ] = Field(
                 default_factory=lambda: (
-                    FlextTargetLdifModels.Ldif.LdifFormatOptions.model_validate(
+                    FlextTargetLdifModels.TargetLdif.LdifFormatOptions.model_validate(
                         {},
                     )
                 )
@@ -243,13 +243,13 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 Field(..., description="Singer stream name"),
             ]
             entries: Annotated[
-                Sequence[FlextTargetLdifModels.Ldif.LdifEntry],
+                Sequence[FlextTargetLdifModels.TargetLdif.LdifEntry],
                 Field(
                     description="LDIF entries in the file",
                 ),
             ] = Field(default_factory=list)
             format_options: Annotated[
-                FlextTargetLdifModels.Ldif.LdifFormatOptions,
+                FlextTargetLdifModels.TargetLdif.LdifFormatOptions,
                 Field(
                     ...,
                     description="Format options used for the file",
@@ -306,7 +306,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 ),
             ]
             transformed_entry: Annotated[
-                FlextTargetLdifModels.Ldif.LdifEntry,
+                FlextTargetLdifModels.TargetLdif.LdifEntry,
                 Field(
                     ...,
                     description="Resulting LDIF entry",
@@ -384,7 +384,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 ),
             ]
             current_batch: Annotated[
-                Sequence[FlextTargetLdifModels.Ldif.LdifEntry],
+                Sequence[FlextTargetLdifModels.TargetLdif.LdifEntry],
                 Field(
                     description="Current batch of entries",
                 ),
@@ -456,7 +456,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 Field(..., description="Singer stream name"),
             ]
             ldif_config: Annotated[
-                FlextTargetLdifModels.Ldif.LdifExportConfig,
+                FlextTargetLdifModels.TargetLdif.LdifExportConfig,
                 Field(
                     ...,
                     description="LDIF export configuration",
