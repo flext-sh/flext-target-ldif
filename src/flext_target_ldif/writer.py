@@ -97,7 +97,7 @@ class FlextTargetLdifWriter:
                 self._file_handle.close()
                 self._file_handle = None
             return r[bool].ok(value=True)
-        except (RuntimeError, ValueError, TypeError, OSError, Exception) as e:
+        except (RuntimeError, ValueError, TypeError, OSError) as e:
             self._file_handle = None
             return r[bool].fail(f"Failed to close LDIF file: {e}")
 
