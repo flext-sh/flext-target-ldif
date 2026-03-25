@@ -110,17 +110,15 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             attribute_mappings: Annotated[
                 t.StrMapping,
                 Field(
-                    default_factory=dict,
                     description="Singer field to LDIF attribute mappings",
                 ),
-            ]
+            ] = Field(default_factory=dict)
             object_classes: Annotated[
                 t.StrSequence,
                 Field(
-                    default_factory=list,
                     description="Default LDAP t.NormalizedValue classes for entries",
                 ),
-            ]
+            ] = Field(default_factory=list)
 
             # File management options
             overwrite_existing: Annotated[
@@ -149,14 +147,15 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             format_options: Annotated[
                 FlextTargetLdifModels.Ldif.LdifFormatOptions,
                 Field(
-                    default_factory=lambda: (
-                        FlextTargetLdifModels.Ldif.LdifFormatOptions.model_validate(
-                            {},
-                        )
-                    ),
                     description="LDIF format options",
                 ),
-            ]
+            ] = Field(
+                default_factory=lambda: (
+                    FlextTargetLdifModels.Ldif.LdifFormatOptions.model_validate(
+                        {},
+                    )
+                )
+            )
 
         class LdifEntry(FlextMeltanoModels.Entity):
             """LDIF entry representation with format validation."""
@@ -171,17 +170,15 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             attributes: Annotated[
                 Mapping[str, t.StrSequence],
                 Field(
-                    default_factory=dict,
                     description="LDIF attributes with values",
                 ),
-            ]
+            ] = Field(default_factory=dict)
             object_classes: Annotated[
                 t.StrSequence,
                 Field(
-                    default_factory=list,
                     description="LDAP t.NormalizedValue classes",
                 ),
-            ]
+            ] = Field(default_factory=list)
             change_type: Annotated[
                 str | None,
                 Field(
@@ -192,10 +189,9 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             controls: Annotated[
                 t.StrSequence,
                 Field(
-                    default_factory=list,
                     description="LDAP controls for the entry",
                 ),
-            ]
+            ] = Field(default_factory=list)
 
             def validate_business_rules(self) -> r[bool]:
                 """Validate LDIF entry business rules."""
@@ -249,10 +245,9 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             entries: Annotated[
                 Sequence[FlextTargetLdifModels.Ldif.LdifEntry],
                 Field(
-                    default_factory=list,
                     description="LDIF entries in the file",
                 ),
-            ]
+            ] = Field(default_factory=list)
             format_options: Annotated[
                 FlextTargetLdifModels.Ldif.LdifFormatOptions,
                 Field(
@@ -320,10 +315,9 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             transformation_errors: Annotated[
                 t.StrSequence,
                 Field(
-                    default_factory=list,
                     description="Transformation errors",
                 ),
-            ]
+            ] = Field(default_factory=list)
             processing_time_ms: Annotated[
                 t.NonNegativeFloat,
                 Field(
@@ -334,10 +328,9 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             transformation_timestamp: Annotated[
                 datetime,
                 Field(
-                    default_factory=lambda: datetime.now(UTC),
                     description="Transformation timestamp",
                 ),
-            ]
+            ] = Field(default_factory=lambda: datetime.now(UTC))
 
             @property
             def has_errors(self) -> bool:
@@ -393,10 +386,9 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             current_batch: Annotated[
                 Sequence[FlextTargetLdifModels.Ldif.LdifEntry],
                 Field(
-                    default_factory=list,
                     description="Current batch of entries",
                 ),
-            ]
+            ] = Field(default_factory=list)
             total_processed: Annotated[
                 t.NonNegativeInt,
                 Field(default=0, description="Total entries processed"),
@@ -495,10 +487,9 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             output_files: Annotated[
                 t.StrSequence,
                 Field(
-                    default_factory=list,
                     description="Generated LDIF file paths",
                 ),
-            ]
+            ] = Field(default_factory=list)
             records_processed: Annotated[
                 t.NonNegativeInt,
                 Field(
@@ -554,14 +545,13 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             error_messages: Annotated[
                 t.StrSequence,
                 Field(
-                    default_factory=list,
                     description="Error messages encountered",
                 ),
-            ]
+            ] = Field(default_factory=list)
             warnings: Annotated[
                 t.StrSequence,
-                Field(default_factory=list, description="Warning messages"),
-            ]
+                Field(description="Warning messages"),
+            ] = Field(default_factory=list)
 
             @property
             def failure_rate(self) -> float:

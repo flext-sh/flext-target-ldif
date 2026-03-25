@@ -79,17 +79,15 @@ class FlextTargetLdifSettings(FlextSettings):
     attribute_mapping: Annotated[
         t.StrMapping,
         Field(
-            default_factory=dict,
             description="Source-to-LDIF attribute mapping",
         ),
-    ]
+    ] = Field(default_factory=dict)
     ldif_options: Annotated[
         Mapping[str, t.ContainerValue],
         Field(
-            default_factory=dict,
             description="Raw LDIF formatter options",
         ),
-    ]
+    ] = Field(default_factory=dict)
     schema_validation: Annotated[
         bool,
         Field(
