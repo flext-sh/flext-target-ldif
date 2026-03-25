@@ -10,7 +10,7 @@ from collections.abc import Callable, Mapping, MutableMapping
 from datetime import datetime
 from typing import override
 
-from flext_core import t
+from flext_target_ldif import t
 
 
 class FlextTargetLdifRecordTransformer:
