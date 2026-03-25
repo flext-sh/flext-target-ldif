@@ -85,9 +85,7 @@ class FlextTargetLdifWriter:
     def close(self) -> r[bool]:
         """Close the output file and write all collected records."""
         try:
-            self._ldif_entries: MutableSequence[
-                Mapping[str, str | Mapping[str, t.StrSequence]]
-            ] = []
+            self._ldif_entries = []
             for record in self._records:
                 entry = self._convert_record_to_entry(record)
                 if entry is not None:
@@ -153,7 +151,8 @@ class FlextTargetLdifWriter:
             }
             return result
         except (RuntimeError, ValueError, TypeError, FlextTargetLdifWriterError) as e:
-            logger.warning("Skipping invalid record: %s", e)
+            msg: str = str(e)
+            logger.warning("Skipping invalid record: %s", msg)
             return None
 
     def _generate_dn(self, record: Mapping[str, t.ContainerValue]) -> str:
