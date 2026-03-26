@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Self, TextIO, override
 
 from flext_core import FlextLogger, r
-from flext_ldif import FlextLdif
+from flext_ldif import ldif
 
 from flext_target_ldif import FlextTargetLdifWriterError, t
 
@@ -53,7 +53,7 @@ class FlextTargetLdifWriter:
         self.base64_encode: bool = bool(base64_val)
         timestamps_val = self.ldif_options.get("include_timestamps", True)
         self.include_timestamps: bool = bool(timestamps_val)
-        self._ldif_api = FlextLdif()
+        self._ldif_api = ldif()
         self._records: MutableSequence[Mapping[str, t.ContainerValue]] = []
         self._record_count = 0
         self._ldif_entries: Sequence[
