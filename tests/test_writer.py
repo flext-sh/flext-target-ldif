@@ -567,14 +567,13 @@ class TestFlextTargetLdifWriterProperties:
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
-        if writer.record_count != 0:
-            raise AssertionError(f"Expected {0}, got {writer.record_count}")
+        assert writer.record_count == 0, f"Expected 0, got {writer.record_count}"
         writer.write_record({"uid": "user1", "cn": "User One"})
-        if writer.record_count != 1:
-            raise AssertionError(f"Expected {1}, got {writer.record_count}")
+        assert writer.record_count == 1, f"Expected 1, got {writer.record_count}"
         writer.write_record({"uid": "user2", "cn": "User Two"})
-        if writer.record_count != EXPECTED_BULK_SIZE:
-            raise AssertionError(f"Expected {2}, got {writer.record_count}")
+        assert writer.record_count == EXPECTED_BULK_SIZE, (
+            f"Expected 2, got {writer.record_count}"
+        )
         writer.close()
         tmp_path.unlink()
 
