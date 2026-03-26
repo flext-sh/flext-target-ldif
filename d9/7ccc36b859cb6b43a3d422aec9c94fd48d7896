@@ -1,0 +1,25 @@
+tests/test_writer.py
+  9a55587b306916d6 570,572,575
+src/flext_target_ldif/constants.py
+  9a55587b306916d6 24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.19",
+  "base_commit_sha": "d97ccc36b859cb6b43a3d422aec9c94fd48d7896",
+  "prompts": {
+    "9a55587b306916d6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9c05a9ec-c2fa-4a16-a033-a11e3509bfbb",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "FLEXT Bot <team@flext.sh>",
+      "messages": [],
+      "total_additions": 4,
+      "total_deletions": 7,
+      "accepted_lines": 4,
+      "overriden_lines": 1
+    }
+  }
+}
