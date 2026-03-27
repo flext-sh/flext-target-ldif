@@ -22,7 +22,7 @@ class FlextTargetLdifSettings(FlextSettings):
 
     _allow_mutation: bool = True
 
-    def __init__(self, **kwargs: t.NormalizedValue) -> None:
+    def __init__(self, **kwargs: t.SettingsValue) -> None:
         """Initialize settings and freeze after construction.
 
         Explicitly applies field defaults for missing kwargs to ensure
