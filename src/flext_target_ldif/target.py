@@ -103,7 +103,3 @@ class FlextTargetLdif:
             filtered_config["output_file"] = "output.ldif"
         settings = FlextTargetLdifSettings(**filtered_config)
         settings.validate_domain_rules()
-
-
-if __name__ == "__main__":
-    pass
