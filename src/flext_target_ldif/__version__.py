@@ -9,30 +9,17 @@ SPDX-License-Identifier: Proprietary
 
 from __future__ import annotations
 
-from collections.abc import Mapping
-from importlib.metadata import PackageMetadata, PackageNotFoundError, metadata
+from importlib.metadata import PackageMetadata, metadata
 
 
 class FlextTargetLdifVersion:
     """Package version and metadata information.
 
     Provides version information and package metadata using standard library
-    metadata extraction with graceful fallback handling.
+    metadata extraction.
     """
 
-    _metadata: PackageMetadata | Mapping[str, str]
-    try:
-        _metadata = metadata("flext-target-ldif")
-    except PackageNotFoundError:
-        _metadata = {
-            "Version": "0.12.0-dev",
-            "Name": "flext-target-ldif",
-            "Summary": "FLEXT Target LDIF (metadata fallback)",
-            "Author": "",
-            "Author-Email": "",
-            "License": "",
-            "Home-Page": "",
-        }
+    _metadata: PackageMetadata = metadata("flext-target-ldif")
     version = _metadata["Version"]
     version_info = tuple(
         int(part) if part.isdigit() else part for part in version.split(".")
