@@ -15,10 +15,10 @@ import pytest
 from pydantic import ValidationError
 
 from flext_target_ldif.models import FlextTargetLdifModels
-
-FlextTargetLdifSink = FlextTargetLdifModels.TargetLdif.Sink
 from flext_target_ldif.settings import FlextTargetLdifSettings
 from flext_target_ldif.target import FlextTargetLdif
+
+FlextTargetLdifSink = FlextTargetLdifModels.TargetLdif.Sink
 
 
 class TestFlextTargetLdifSettings:
