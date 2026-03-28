@@ -34,13 +34,13 @@ if TYPE_CHECKING:
     from flext_target_ldif.models import (
         FlextTargetLdifModels,
         FlextTargetLdifModels as m,
-        FlextTargetLdifSink,
     )
     from flext_target_ldif.protocols import (
         FlextTargetLdifProtocols,
         FlextTargetLdifProtocols as p,
     )
     from flext_target_ldif.settings import FlextTargetLdifSettings
+    from flext_target_ldif.sinks import FlextTargetLdifSink
     from flext_target_ldif.target import FlextTargetLdif
     from flext_target_ldif.transformers import FlextTargetLdifRecordTransformer
     from flext_target_ldif.typings import (
@@ -72,7 +72,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
         "flext_target_ldif.settings",
         "FlextTargetLdifSettings",
     ],
-    "FlextTargetLdifSink": ["flext_target_ldif.models", "FlextTargetLdifSink"],
+    "FlextTargetLdifSink": ["flext_target_ldif.sinks", "FlextTargetLdifSink"],
     "FlextTargetLdifTypes": ["flext_target_ldif.typings", "FlextTargetLdifTypes"],
     "FlextTargetLdifUtilities": [
         "flext_target_ldif.utilities",

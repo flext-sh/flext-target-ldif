@@ -887,7 +887,4 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
 u = FlextTargetLdifUtilities
 
-# Backward-compatible alias
-FlextTargetLdifRecordTransformer = FlextTargetLdifUtilities.TargetLdif.RecordTransformer
-
-__all__ = ["FlextTargetLdifRecordTransformer", "FlextTargetLdifUtilities", "u"]
+__all__ = ["FlextTargetLdifUtilities", "u"]

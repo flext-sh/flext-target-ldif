@@ -770,10 +770,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 return self._output_file
 
 
-# Short aliases
+# Short alias
 m = FlextTargetLdifModels
 
-# Backward-compatible alias
-FlextTargetLdifSink = FlextTargetLdifModels.TargetLdif.Sink
-
-__all__ = ["FlextTargetLdifModels", "FlextTargetLdifSink", "m"]
+__all__ = ["FlextTargetLdifModels", "m"]

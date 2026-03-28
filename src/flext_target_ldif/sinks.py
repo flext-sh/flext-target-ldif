@@ -1,4 +1,4 @@
-"""Backward-compatible re-export for FlextTargetLdifSink.
+"""Backward-compatible re-export for Sink.
 
 The Sink class has been absorbed into m.TargetLdif.Sink (models.py).
 This module re-exports the class for import compatibility.
@@ -9,6 +9,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_target_ldif.models import FlextTargetLdifSink
+from flext_target_ldif.models import FlextTargetLdifModels
+
+FlextTargetLdifSink = FlextTargetLdifModels.TargetLdif.Sink
 
 __all__ = ["FlextTargetLdifSink"]

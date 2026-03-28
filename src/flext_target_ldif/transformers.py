@@ -9,6 +9,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_target_ldif.utilities import FlextTargetLdifRecordTransformer
+from flext_target_ldif import FlextTargetLdifRecordTransformer
 
 __all__ = ["FlextTargetLdifRecordTransformer"]
