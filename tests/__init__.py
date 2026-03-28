@@ -46,6 +46,7 @@ if TYPE_CHECKING:
         FlextTargetLdifTestProtocols as p,
     )
     from tests.test_target import (
+        FlextTargetLdifSink,
         TestFlextTargetLdif,
         TestFlextTargetLdifClass,
         TestFlextTargetLdifSettings,
@@ -77,6 +78,7 @@ if TYPE_CHECKING:
 _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "EXPECTED_BULK_SIZE": ["tests.test_writer", "EXPECTED_BULK_SIZE"],
     "EXPECTED_DATA_COUNT": ["tests.test_writer", "EXPECTED_DATA_COUNT"],
+    "FlextTargetLdifSink": ["tests.test_target", "FlextTargetLdifSink"],
     "FlextTargetLdifTestConstants": ["tests.constants", "FlextTargetLdifTestConstants"],
     "FlextTargetLdifTestModels": ["tests.models", "FlextTargetLdifTestModels"],
     "FlextTargetLdifTestProtocols": ["tests.protocols", "FlextTargetLdifTestProtocols"],
@@ -149,6 +151,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
 __all__ = [
     "EXPECTED_BULK_SIZE",
     "EXPECTED_DATA_COUNT",
+    "FlextTargetLdifSink",
     "FlextTargetLdifTestConstants",
     "FlextTargetLdifTestModels",
     "FlextTargetLdifTestProtocols",
