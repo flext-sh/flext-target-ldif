@@ -14,8 +14,8 @@ from unittest.mock import Mock, patch
 import pytest
 from pydantic import ValidationError
 
+from flext_target_ldif.models import FlextTargetLdifSink
 from flext_target_ldif.settings import FlextTargetLdifSettings
-from flext_target_ldif.sinks import FlextTargetLdifSink
 from flext_target_ldif.target import FlextTargetLdif
 
 
