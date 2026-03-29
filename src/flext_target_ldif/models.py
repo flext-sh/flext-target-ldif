@@ -159,7 +159,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                     FlextTargetLdifModels.TargetLdif.LdifFormatOptions.model_validate(
                         {},
                     )
-                )
+                ),
             )
 
         class LdifEntry(FlextMeltanoModels.Entity):
@@ -225,15 +225,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                     if errors:
                         return r[bool].fail("; ".join(errors))
                     return r[bool].ok(value=True)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"LDIF entry validation failed: {e}")
 
         class LdifFile(FlextMeltanoModels.Entity):
@@ -255,7 +247,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             ] = Field(
                 default_factory=lambda: list[
                     FlextTargetLdifModels.TargetLdif.LdifEntry
-                ]()
+                ](),
             )
             format_options: Annotated[
                 FlextTargetLdifModels.TargetLdif.LdifFormatOptions,
@@ -293,15 +285,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                         )
 
                     return r[bool].ok(value=True)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"LDIF file validation failed: {e}")
 
         class LdifTransformationResult(FlextMeltanoModels.Entity):
@@ -365,15 +349,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                         )
 
                     return r[bool].ok(value=True)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[bool].fail(
                         f"Transformation result validation failed: {e}",
                     )
@@ -388,7 +364,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             batch_size: Annotated[
                 t.BatchSize,
                 Field(
-                    default=c.DEFAULT_BATCH_SIZE,
+                    default=c.DEFAULT_SIZE,
                     description="Records per batch",
                 ),
             ]
@@ -400,7 +376,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             ] = Field(
                 default_factory=lambda: list[
                     FlextTargetLdifModels.TargetLdif.LdifEntry
-                ]()
+                ](),
             )
             total_processed: Annotated[
                 t.NonNegativeInt,
@@ -450,15 +426,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                         return r[bool].fail("Export counts exceed total processed")
 
                     return r[bool].ok(value=True)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"Batch processing validation failed: {e}")
 
         class SingerStreamConfig(FlextSettings):
@@ -478,7 +446,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             batch_size: Annotated[
                 t.BatchSize,
                 Field(
-                    default=c.DEFAULT_BATCH_SIZE,
+                    default=c.DEFAULT_SIZE,
                     description="Batch size for processing",
                 ),
             ]
@@ -597,15 +565,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                         )
 
                     return r[bool].ok(value=True)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"Target result validation failed: {e}")
 
         class LdifErrorContext(FlextMeltanoModels.ArbitraryTypesModel):

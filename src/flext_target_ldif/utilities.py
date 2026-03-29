@@ -14,10 +14,10 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
 
+import orjson
 from flext_core import r
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
-from flext_target_ldap.utilities import FlextTargetLdapUtilities
 
 from flext_target_ldif import c, t
 
@@ -30,9 +30,9 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     Extends urget-specific operations.
     """
 
-    DEFAULT_BATCH_SIZE: ClassVar[int] = c.DEFAULT_BATCH_SIZE
+    DEFAULT_BATCH_SIZE: ClassVar[int] = c.DEFAULT_SIZE
     DEFAULT_TIMEOUT: ClassVar[int] = c.DEFAULT_TIMEOUT_SECONDS
-    MAX_RETRIES: ClassVar[int] = c.MAX_RETRIES
+    MAX_RETRIES: ClassVar[int] = c.BACKUP_COUNT
     LDIF_LINE_WRAP_LENGTH: ClassVar[int] = c.LDIF_LINE_WRAP_LENGTH
     ASCII_SPACE: ClassVar[int] = c.ASCII_SPACE
     ASCII_TILDE: ClassVar[int] = c.ASCII_TILDE
@@ -48,47 +48,91 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def parse_singer_message(
             line: str,
-        ) -> r[Mapping[str, t.ConfigMap]]:
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Parse Singer message from input line.
 
             Args:
             line: JSON line from Singer tap
 
             Returns:
-            r[Mapping[str, t.ConfigMap]]: Parsed message or error
+            r[Mapping[str, t.ContainerValue]]: Parsed message or error
 
             """
-            return FlextTargetLdapUtilities.TargetLdap.parse_singer_message(line)
+            if not line or not line.strip():
+                return r[t.ContainerValueMapping].fail("Empty input line")
+            try:
+                parsed = orjson.loads(line.strip())
+                if not isinstance(parsed, dict):
+                    return r[t.ContainerValueMapping].fail(
+                        "Singer message must be a JSON object",
+                    )
+                if "type" not in parsed:
+                    return r[t.ContainerValueMapping].fail(
+                        "Message missing required 'type' field",
+                    )
+                return r[t.ContainerValueMapping].ok(parsed)
+            except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                return r[t.ContainerValueMapping].fail(f"Invalid JSON: {e}")
 
         @staticmethod
         def validate_record_message(
-            message: Mapping[str, t.ConfigMap],
-        ) -> r[Mapping[str, t.ConfigMap]]:
+            message: Mapping[str, t.ContainerValue],
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Validate Singer RECORD message structure.
 
             Args:
             message: Singer message to validate
 
             Returns:
-            r[Mapping[str, t.ConfigMap]]: Validated record or error
+            r[Mapping[str, t.ContainerValue]]: Validated record or error
 
             """
-            return FlextTargetLdapUtilities.TargetLdap.validate_record_message(message)
+            if str(message.get("type", "")) != c.Meltano.Singer.MESSAGE_TYPE_RECORD:
+                return r[t.ContainerValueMapping].fail(
+                    "Message type must be RECORD",
+                )
+            required_fields = ["stream", "record"]
+            for field in required_fields:
+                if field not in message:
+                    return r[t.ContainerValueMapping].fail(
+                        f"RECORD message missing '{field}' field",
+                    )
+            record = message["record"]
+            if not isinstance(record, Mapping):
+                return r[t.ContainerValueMapping].fail(
+                    "Record data must be a dictionary",
+                )
+            return r[t.ContainerValueMapping].ok(message)
 
         @staticmethod
         def validate_schema_message(
-            message: Mapping[str, t.ConfigMap],
-        ) -> r[Mapping[str, t.ConfigMap]]:
+            message: Mapping[str, t.ContainerValue],
+        ) -> r[Mapping[str, t.ContainerValue]]:
             """Validate Singer SCHEMA message structure.
 
             Args:
             message: Singer message to validate
 
             Returns:
-            r[Mapping[str, t.ConfigMap]]: Validated schema or error
+            r[Mapping[str, t.ContainerValue]]: Validated schema or error
 
             """
-            return FlextTargetLdapUtilities.TargetLdap.validate_schema_message(message)
+            if str(message.get("type", "")) != c.Meltano.Singer.MESSAGE_TYPE_SCHEMA:
+                return r[t.ContainerValueMapping].fail(
+                    "Message type must be SCHEMA",
+                )
+            required_fields = ["stream", "schema"]
+            for field in required_fields:
+                if field not in message:
+                    return r[t.ContainerValueMapping].fail(
+                        f"SCHEMA message missing '{field}' field",
+                    )
+            schema = message["schema"]
+            if not isinstance(schema, Mapping):
+                return r[t.ContainerValueMapping].fail(
+                    "Schema data must be a dictionary",
+                )
+            return r[t.ContainerValueMapping].ok(message)
 
         @staticmethod
         def write_state_message(state: Mapping[str, t.ContainerValue]) -> None:
@@ -132,19 +176,11 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         return r[str].fail(f"Unresolved placeholders in DN: {dn_rdn}")
                     full_dn = f"{dn_rdn},{base_dn}" if base_dn else dn_rdn
                     if not FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.split(
-                        full_dn
+                        full_dn,
                     ):
                         return r[str].fail(f"Invalid DN format: {full_dn}")
                     return r[str].ok(full_dn)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Error building DN: {e}")
 
             @staticmethod
@@ -189,15 +225,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                             ldif_lines.append(f"{ldif_attr}: {ldif_value}")
                     ldif_lines.append("")
                     return r[str].ok("\n".join(ldif_lines))
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Error converting to LDIF entry: {e}")
 
             @staticmethod
@@ -214,15 +242,15 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 if not value:
                     return ""
                 if value.startswith((" ", ":", "<")) or any(
-                    ord(c) < FlextTargetLdifUtilities.ASCII_SPACE
-                    or ord(c) > FlextTargetLdifUtilities.ASCII_TILDE
-                    for c in value
+                    ord(ch) < FlextTargetLdifUtilities.ASCII_SPACE
+                    or ord(ch) > FlextTargetLdifUtilities.ASCII_TILDE
+                    for ch in value
                 ):
                     encoded = base64.b64encode(value.encode("utf-8")).decode("ascii")
                     return f":: {encoded}"
                 if len(value) > FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
                     return FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.wrap_ldif_line(
-                        value
+                        value,
                     )
                 return value
 
@@ -265,7 +293,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 if not dn_value:
                     return r[bool].fail("DN cannot be empty")
                 if not FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.split(
-                    dn_value
+                    dn_value,
                 ):
                     return r[bool].fail(f"Invalid DN format: {dn_value}")
                 return r[bool].ok(value=True)
@@ -323,15 +351,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                             if not entry.endswith("\n"):
                                 f.write("\n")
                     return r[str].ok(f"Entries appended to LDIF file: {file_path}")
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Error appending to LDIF file: {e}")
 
             @staticmethod
@@ -365,15 +385,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                             if not entry.endswith("\n"):
                                 f.write("\n")
                     return r[str].ok(f"LDIF file created: {file_path}")
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Error creating LDIF file: {e}")
 
             @staticmethod
@@ -398,15 +410,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     if path.parent.exists() and (not path.parent.is_dir()):
                         return r[str].fail("Parent path is not a directory")
                     return r[str].ok(str(path.resolve()))
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Invalid file path: {e}")
 
         class StreamUtilities:
@@ -787,7 +791,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             def transform_phone(value: t.ContainerValue) -> str:
                 """Transform phone numbers to standard format."""
                 phone_str = str(value)
-                return "".join(c for c in phone_str if c.isdigit() or c in "+- ()")
+                return "".join(ch for ch in phone_str if ch.isdigit() or ch in "+- ()")
 
             @staticmethod
             def transform_name(value: t.ContainerValue) -> str:
@@ -865,7 +869,8 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 self.custom_transformers = custom_transformers or {}
 
             def transform_record(
-                self, record: Mapping[str, t.ContainerValue]
+                self,
+                record: Mapping[str, t.ContainerValue],
             ) -> t.StrMapping:
                 """Transform a Singer record to LDAP-compatible format."""
                 rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer

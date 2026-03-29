@@ -219,7 +219,8 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
                 str | FlextMeltanoTypes.ContainerValueMapping,
             ]
             type StreamMapping = Mapping[
-                str, str | FlextMeltanoTypes.ContainerValueMapping
+                str,
+                str | FlextMeltanoTypes.ContainerValueMapping,
             ]
             type BatchConfiguration = Mapping[
                 str,
@@ -269,7 +270,8 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             type ProjectType = c.TargetLdif.ProjectType
             type ErrorTypeLiteral = c.TargetLdif.ErrorTypeLiteral
             type FlextTargetLdifSettings = Mapping[
-                str, FlextMeltanoTypes.ContainerValue
+                str,
+                FlextMeltanoTypes.ContainerValue,
             ]
             type SingerTargetConfig = Mapping[
                 str,
