@@ -21,6 +21,19 @@ if TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_tests import d, e, h, r, s, x
 
+    from tests import (
+        conftest,
+        constants,
+        models,
+        protocols,
+        test_target,
+        test_writer,
+        tp,
+        tt,
+        tu,
+        typings,
+        utilities,
+    )
     from tests.conftest import (
         attribute_mapping,
         ldif_options,
@@ -65,11 +78,7 @@ if TYPE_CHECKING:
         TestFlextTargetLdifWriterProperties,
         TestFlextTargetLdifWriterRecordWriting,
     )
-    from tests.typings import (
-        FlextTargetLdifTestTypes,
-        FlextTargetLdifTestTypes as t,
-        tt,
-    )
+    from tests.typings import FlextTargetLdifTestTypes, FlextTargetLdifTestTypes as t
     from tests.utilities import (
         FlextTargetLdifTestUtilities,
         FlextTargetLdifTestUtilities as u,
@@ -126,13 +135,17 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "TestIntegration": ["tests.test_target", "TestIntegration"],
     "attribute_mapping": ["tests.conftest", "attribute_mapping"],
     "c": ["tests.constants", "FlextTargetLdifTestConstants"],
+    "conftest": ["tests.conftest", ""],
+    "constants": ["tests.constants", ""],
     "d": ["flext_tests", "d"],
     "e": ["flext_tests", "e"],
     "h": ["flext_tests", "h"],
     "ldif_options": ["tests.conftest", "ldif_options"],
     "m": ["tests.models", "FlextTargetLdifTestModels"],
+    "models": ["tests.models", ""],
     "multiple_records": ["tests.conftest", "multiple_records"],
     "p": ["tests.protocols", "FlextTargetLdifTestProtocols"],
+    "protocols": ["tests.protocols", ""],
     "pytest_configure": ["tests.conftest", "pytest_configure"],
     "r": ["flext_tests", "r"],
     "s": ["flext_tests", "s"],
@@ -142,9 +155,15 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "t": ["tests.typings", "FlextTargetLdifTestTypes"],
     "temp_dir": ["tests.conftest", "temp_dir"],
     "temp_file": ["tests.conftest", "temp_file"],
+    "test_target": ["tests.test_target", ""],
+    "test_writer": ["tests.test_writer", ""],
     "tm": ["tests.models", "tm"],
-    "tt": ["tests.typings", "tt"],
+    "tp": ["tests.tp", ""],
+    "tt": ["tests.tt", ""],
+    "tu": ["tests.tu", ""],
+    "typings": ["tests.typings", ""],
     "u": ["tests.utilities", "FlextTargetLdifTestUtilities"],
+    "utilities": ["tests.utilities", ""],
     "x": ["flext_tests", "x"],
 }
 
@@ -172,13 +191,17 @@ __all__ = [
     "TestIntegration",
     "attribute_mapping",
     "c",
+    "conftest",
+    "constants",
     "d",
     "e",
     "h",
     "ldif_options",
     "m",
+    "models",
     "multiple_records",
     "p",
+    "protocols",
     "pytest_configure",
     "r",
     "s",
@@ -188,9 +211,15 @@ __all__ = [
     "t",
     "temp_dir",
     "temp_file",
+    "test_target",
+    "test_writer",
     "tm",
+    "tp",
     "tt",
+    "tu",
+    "typings",
     "u",
+    "utilities",
     "x",
 ]
 
