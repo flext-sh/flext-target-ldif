@@ -42,7 +42,6 @@ if TYPE_CHECKING:
     from flext_target_ldif.settings import FlextTargetLdifSettings
     from flext_target_ldif.sinks import FlextTargetLdifSink
     from flext_target_ldif.target import FlextTargetLdif
-    from flext_target_ldif.transformers import FlextTargetLdifRecordTransformer
     from flext_target_ldif.typings import (
         FlextTargetLdifTypes,
         FlextTargetLdifTypes as t,
@@ -63,10 +62,6 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "FlextTargetLdifProtocols": [
         "flext_target_ldif.protocols",
         "FlextTargetLdifProtocols",
-    ],
-    "FlextTargetLdifRecordTransformer": [
-        "flext_target_ldif.transformers",
-        "FlextTargetLdifRecordTransformer",
     ],
     "FlextTargetLdifSettings": [
         "flext_target_ldif.settings",
@@ -112,7 +107,6 @@ __all__ = [
     "FlextTargetLdifConstants",
     "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
-    "FlextTargetLdifRecordTransformer",
     "FlextTargetLdifSettings",
     "FlextTargetLdifSink",
     "FlextTargetLdifTypes",
