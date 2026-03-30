@@ -10,21 +10,22 @@ from typing import TYPE_CHECKING
 
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
+from flext_target_ldif.__version__ import (
+    FlextTargetLdifVersion,
+    __author__,
+    __author_email__,
+    __description__,
+    __license__,
+    __title__,
+    __url__,
+    __version__,
+    __version_info__,
+)
+
 if TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_ldif import d, e, h, r, s, x
 
-    from flext_target_ldif.__version__ import (
-        FlextTargetLdifVersion,
-        __author__,
-        __author_email__,
-        __description__,
-        __license__,
-        __title__,
-        __url__,
-        __version__,
-        __version_info__,
-    )
     from flext_target_ldif.cli import main
     from flext_target_ldif.constants import (
         FlextTargetLdifConstants,
@@ -73,23 +74,11 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
         "flext_target_ldif.utilities",
         "FlextTargetLdifUtilities",
     ],
-    "FlextTargetLdifVersion": [
-        "flext_target_ldif.__version__",
-        "FlextTargetLdifVersion",
-    ],
     "FlextTargetLdifWriter": ["flext_target_ldif.writer", "FlextTargetLdifWriter"],
     "FlextTargetLdifWriterError": [
         "flext_target_ldif.errors",
         "FlextTargetLdifWriterError",
     ],
-    "__author__": ["flext_target_ldif.__version__", "__author__"],
-    "__author_email__": ["flext_target_ldif.__version__", "__author_email__"],
-    "__description__": ["flext_target_ldif.__version__", "__description__"],
-    "__license__": ["flext_target_ldif.__version__", "__license__"],
-    "__title__": ["flext_target_ldif.__version__", "__title__"],
-    "__url__": ["flext_target_ldif.__version__", "__url__"],
-    "__version__": ["flext_target_ldif.__version__", "__version__"],
-    "__version_info__": ["flext_target_ldif.__version__", "__version_info__"],
     "c": ["flext_target_ldif.constants", "FlextTargetLdifConstants"],
     "d": ["flext_ldif", "d"],
     "e": ["flext_ldif", "e"],
