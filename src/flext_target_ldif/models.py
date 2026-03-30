@@ -22,7 +22,7 @@ from pydantic import Field
 from flext_target_ldif import c, p, t
 
 if TYPE_CHECKING:
-    from flext_target_ldif.writer import FlextTargetLdifWriter
+    from flext_target_ldif import FlextTargetLdifWriter
 
 """LDIF target models extending flext-core FlextModels.
 
@@ -680,7 +680,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             def _get_ldif_writer(self) -> FlextTargetLdifWriter:
                 """Get or create the LDIF writer for this sink."""
-                from flext_target_ldif.writer import FlextTargetLdifWriter
+                from flext_target_ldif import FlextTargetLdifWriter
 
                 if self._ldif_writer is None:
                     output_file = self._get_output_file()

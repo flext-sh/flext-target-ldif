@@ -17,8 +17,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from flext_target_ldif import FlextTargetLdifWriterError
-from flext_target_ldif.writer import FlextTargetLdifWriter
+from flext_target_ldif import FlextTargetLdifWriter, FlextTargetLdifWriterError
 
 EXPECTED_BULK_SIZE = 2
 EXPECTED_DATA_COUNT = 3

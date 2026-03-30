@@ -11,10 +11,12 @@ from collections.abc import Callable, Mapping, MutableMapping
 from pathlib import Path
 from typing import override
 
-from flext_target_ldif import t
-from flext_target_ldif.cli import main as cli_main
-from flext_target_ldif.models import FlextTargetLdifModels
-from flext_target_ldif.settings import FlextTargetLdifSettings
+from flext_target_ldif import (
+    FlextTargetLdifModels,
+    FlextTargetLdifSettings,
+    main as cli_main,
+    t,
+)
 
 
 class FlextTargetLdif:

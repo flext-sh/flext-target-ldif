@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsUtilities
 
-from flext_target_ldif.utilities import FlextTargetLdifUtilities
+from flext_target_ldif import FlextTargetLdifUtilities
 
 
 class FlextTargetLdifTestUtilities(FlextTestsUtilities, FlextTargetLdifUtilities):

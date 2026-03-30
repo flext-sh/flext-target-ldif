@@ -14,9 +14,11 @@ from unittest.mock import Mock, patch
 import pytest
 from pydantic import ValidationError
 
-from flext_target_ldif.models import FlextTargetLdifModels
-from flext_target_ldif.settings import FlextTargetLdifSettings
-from flext_target_ldif.target import FlextTargetLdif
+from flext_target_ldif import (
+    FlextTargetLdif,
+    FlextTargetLdifModels,
+    FlextTargetLdifSettings,
+)
 
 FlextTargetLdifSink = FlextTargetLdifModels.TargetLdif.Sink
 

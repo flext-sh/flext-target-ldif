@@ -28,7 +28,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
     - PROVIDES: Root-level alias `p` for convenient access
 
     Usage:
-        from flext_target_ldif.protocols import p
+        from flext_target_ldif import p
 
         # Foundation protocols (inherited)
         result: p.Result[str]
