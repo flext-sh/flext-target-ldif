@@ -10,35 +10,8 @@ from typing import TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports
 
-from flext_target_ldif.__version__ import (
-    FlextTargetLdifVersion,
-    __author__,
-    __author_email__,
-    __description__,
-    __license__,
-    __title__,
-    __url__,
-    __version__,
-    __version_info__,
-)
-
 if TYPE_CHECKING:
-    from flext_ldif import *
-
-    from flext_target_ldif import (
-        cli,
-        constants,
-        errors,
-        exceptions,
-        models,
-        protocols,
-        settings,
-        sinks,
-        target,
-        typings,
-        utilities,
-        writer,
-    )
+    from flext_target_ldif.__version__ import *
     from flext_target_ldif.cli import *
     from flext_target_ldif.constants import *
     from flext_target_ldif.errors import *
@@ -60,8 +33,17 @@ _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
     "FlextTargetLdifSink": "flext_target_ldif.sinks",
     "FlextTargetLdifTypes": "flext_target_ldif.typings",
     "FlextTargetLdifUtilities": "flext_target_ldif.utilities",
+    "FlextTargetLdifVersion": "flext_target_ldif.__version__",
     "FlextTargetLdifWriter": "flext_target_ldif.writer",
     "FlextTargetLdifWriterError": "flext_target_ldif.errors",
+    "__author__": "flext_target_ldif.__version__",
+    "__author_email__": "flext_target_ldif.__version__",
+    "__description__": "flext_target_ldif.__version__",
+    "__license__": "flext_target_ldif.__version__",
+    "__title__": "flext_target_ldif.__version__",
+    "__url__": "flext_target_ldif.__version__",
+    "__version__": "flext_target_ldif.__version__",
+    "__version_info__": "flext_target_ldif.__version__",
     "c": ["flext_target_ldif.constants", "FlextTargetLdifConstants"],
     "cli": "flext_target_ldif.cli",
     "constants": "flext_target_ldif.constants",
@@ -90,4 +72,4 @@ _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
 }
 
 
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, sorted(_LAZY_IMPORTS))
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
