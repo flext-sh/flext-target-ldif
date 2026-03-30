@@ -12,75 +12,77 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping, MutableMapping, Sequence
+from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
+from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_core import FlextTypes
     from flext_tests import d, e, h, r, s, x
 
     from tests import (
-        conftest,
-        constants,
-        models,
-        protocols,
-        test_target,
-        test_writer,
-        tp,
-        tt,
-        tu,
-        typings,
-        utilities,
+        conftest as conftest,
+        constants as constants,
+        models as models,
+        protocols as protocols,
+        test_target as test_target,
+        test_writer as test_writer,
+        tp as tp,
+        tt as tt,
+        tu as tu,
+        typings as typings,
+        utilities as utilities,
     )
     from tests.conftest import (
-        attribute_mapping,
-        ldif_options,
-        multiple_records,
-        pytest_configure,
-        sample_config,
-        sample_record,
-        sample_schema,
-        temp_dir,
-        temp_file,
+        attribute_mapping as attribute_mapping,
+        ldif_options as ldif_options,
+        multiple_records as multiple_records,
+        pytest_configure as pytest_configure,
+        sample_config as sample_config,
+        sample_record as sample_record,
+        sample_schema as sample_schema,
+        temp_dir as temp_dir,
+        temp_file as temp_file,
     )
     from tests.constants import (
-        FlextTargetLdifTestConstants,
+        FlextTargetLdifTestConstants as FlextTargetLdifTestConstants,
         FlextTargetLdifTestConstants as c,
     )
     from tests.models import (
-        FlextTargetLdifTestModels,
+        FlextTargetLdifTestModels as FlextTargetLdifTestModels,
         FlextTargetLdifTestModels as m,
-        tm,
+        tm as tm,
     )
     from tests.protocols import (
-        FlextTargetLdifTestProtocols,
+        FlextTargetLdifTestProtocols as FlextTargetLdifTestProtocols,
         FlextTargetLdifTestProtocols as p,
     )
     from tests.test_target import (
-        FlextTargetLdifSink,
-        TestFlextTargetLdif,
-        TestFlextTargetLdifClass,
-        TestFlextTargetLdifSettings,
-        TestIntegration,
+        FlextTargetLdifSink as FlextTargetLdifSink,
+        TestFlextTargetLdif as TestFlextTargetLdif,
+        TestFlextTargetLdifClass as TestFlextTargetLdifClass,
+        TestFlextTargetLdifSettings as TestFlextTargetLdifSettings,
+        TestIntegration as TestIntegration,
     )
     from tests.test_writer import (
-        EXPECTED_BULK_SIZE,
-        EXPECTED_DATA_COUNT,
-        TestFlextTargetLdifWriterBase64Encoding,
-        TestFlextTargetLdifWriterContextManager,
-        TestFlextTargetLdifWriterDnGeneration,
-        TestFlextTargetLdifWriterFileOperations,
-        TestFlextTargetLdifWriterHeaderGeneration,
-        TestFlextTargetLdifWriterInitialization,
-        TestFlextTargetLdifWriterLineWrapping,
-        TestFlextTargetLdifWriterProperties,
-        TestFlextTargetLdifWriterRecordWriting,
+        EXPECTED_BULK_SIZE as EXPECTED_BULK_SIZE,
+        EXPECTED_DATA_COUNT as EXPECTED_DATA_COUNT,
+        TestFlextTargetLdifWriterBase64Encoding as TestFlextTargetLdifWriterBase64Encoding,
+        TestFlextTargetLdifWriterContextManager as TestFlextTargetLdifWriterContextManager,
+        TestFlextTargetLdifWriterDnGeneration as TestFlextTargetLdifWriterDnGeneration,
+        TestFlextTargetLdifWriterFileOperations as TestFlextTargetLdifWriterFileOperations,
+        TestFlextTargetLdifWriterHeaderGeneration as TestFlextTargetLdifWriterHeaderGeneration,
+        TestFlextTargetLdifWriterInitialization as TestFlextTargetLdifWriterInitialization,
+        TestFlextTargetLdifWriterLineWrapping as TestFlextTargetLdifWriterLineWrapping,
+        TestFlextTargetLdifWriterProperties as TestFlextTargetLdifWriterProperties,
+        TestFlextTargetLdifWriterRecordWriting as TestFlextTargetLdifWriterRecordWriting,
     )
-    from tests.typings import FlextTargetLdifTestTypes, FlextTargetLdifTestTypes as t
+    from tests.typings import (
+        FlextTargetLdifTestTypes as FlextTargetLdifTestTypes,
+        FlextTargetLdifTestTypes as t,
+    )
     from tests.utilities import (
-        FlextTargetLdifTestUtilities,
+        FlextTargetLdifTestUtilities as FlextTargetLdifTestUtilities,
         FlextTargetLdifTestUtilities as u,
     )
 
@@ -96,42 +98,15 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "TestFlextTargetLdif": ["tests.test_target", "TestFlextTargetLdif"],
     "TestFlextTargetLdifClass": ["tests.test_target", "TestFlextTargetLdifClass"],
     "TestFlextTargetLdifSettings": ["tests.test_target", "TestFlextTargetLdifSettings"],
-    "TestFlextTargetLdifWriterBase64Encoding": [
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterBase64Encoding",
-    ],
-    "TestFlextTargetLdifWriterContextManager": [
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterContextManager",
-    ],
-    "TestFlextTargetLdifWriterDnGeneration": [
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterDnGeneration",
-    ],
-    "TestFlextTargetLdifWriterFileOperations": [
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterFileOperations",
-    ],
-    "TestFlextTargetLdifWriterHeaderGeneration": [
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterHeaderGeneration",
-    ],
-    "TestFlextTargetLdifWriterInitialization": [
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterInitialization",
-    ],
-    "TestFlextTargetLdifWriterLineWrapping": [
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterLineWrapping",
-    ],
-    "TestFlextTargetLdifWriterProperties": [
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterProperties",
-    ],
-    "TestFlextTargetLdifWriterRecordWriting": [
-        "tests.test_writer",
-        "TestFlextTargetLdifWriterRecordWriting",
-    ],
+    "TestFlextTargetLdifWriterBase64Encoding": ["tests.test_writer", "TestFlextTargetLdifWriterBase64Encoding"],
+    "TestFlextTargetLdifWriterContextManager": ["tests.test_writer", "TestFlextTargetLdifWriterContextManager"],
+    "TestFlextTargetLdifWriterDnGeneration": ["tests.test_writer", "TestFlextTargetLdifWriterDnGeneration"],
+    "TestFlextTargetLdifWriterFileOperations": ["tests.test_writer", "TestFlextTargetLdifWriterFileOperations"],
+    "TestFlextTargetLdifWriterHeaderGeneration": ["tests.test_writer", "TestFlextTargetLdifWriterHeaderGeneration"],
+    "TestFlextTargetLdifWriterInitialization": ["tests.test_writer", "TestFlextTargetLdifWriterInitialization"],
+    "TestFlextTargetLdifWriterLineWrapping": ["tests.test_writer", "TestFlextTargetLdifWriterLineWrapping"],
+    "TestFlextTargetLdifWriterProperties": ["tests.test_writer", "TestFlextTargetLdifWriterProperties"],
+    "TestFlextTargetLdifWriterRecordWriting": ["tests.test_writer", "TestFlextTargetLdifWriterRecordWriting"],
     "TestIntegration": ["tests.test_target", "TestIntegration"],
     "attribute_mapping": ["tests.conftest", "attribute_mapping"],
     "c": ["tests.constants", "FlextTargetLdifTestConstants"],
@@ -167,7 +142,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "x": ["flext_tests", "x"],
 }
 
-__all__ = [
+_EXPORTS: Sequence[str] = [
     "EXPECTED_BULK_SIZE",
     "EXPECTED_DATA_COUNT",
     "FlextTargetLdifSink",
@@ -224,41 +199,4 @@ __all__ = [
 ]
 
 
-_LAZY_CACHE: MutableMapping[str, FlextTypes.ModuleExport] = {}
-
-
-def __getattr__(name: str) -> FlextTypes.ModuleExport:
-    """Lazy-load module attributes on first access (PEP 562).
-
-    A local cache ``_LAZY_CACHE`` persists resolved objects across repeated
-    accesses during process lifetime.
-
-    Args:
-        name: Attribute name requested by dir()/import.
-
-    Returns:
-        Lazy-loaded module export type.
-
-    Raises:
-        AttributeError: If attribute not registered.
-
-    """
-    if name in _LAZY_CACHE:
-        return _LAZY_CACHE[name]
-
-    value = lazy_getattr(name, _LAZY_IMPORTS, globals(), __name__)
-    _LAZY_CACHE[name] = value
-    return value
-
-
-def __dir__() -> Sequence[str]:
-    """Return list of available attributes for dir() and autocomplete.
-
-    Returns:
-        List of public names from module exports.
-
-    """
-    return sorted(__all__)
-
-
-cleanup_submodule_namespace(__name__, _LAZY_IMPORTS)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, _EXPORTS)
