@@ -61,7 +61,9 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             if not line or not line.strip():
                 return r[t.ContainerValueMapping].fail("Empty input line")
             try:
-                parsed = orjson.loads(line.strip())
+                parsed: Mapping[str, t.ContainerValue] | t.ContainerValue = (
+                    orjson.loads(line.strip())
+                )
                 if not isinstance(parsed, dict):
                     return r[t.ContainerValueMapping].fail(
                         "Singer message must be a JSON object",
