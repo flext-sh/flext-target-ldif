@@ -21,10 +21,43 @@ if _TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_tests import d, e, h, r, s, x
 
-    from tests.conftest import *
-    from tests.constants import *
-    from tests.models import *
-    from tests.protocols import *
+    from tests import (
+        conftest,
+        constants,
+        models,
+        protocols,
+        test_target,
+        test_writer,
+        tp,
+        tt,
+        tu,
+        typings,
+        utilities,
+    )
+    from tests.conftest import (
+        attribute_mapping,
+        ldif_options,
+        multiple_records,
+        pytest_configure,
+        sample_config,
+        sample_record,
+        sample_schema,
+        temp_dir,
+        temp_file,
+    )
+    from tests.constants import (
+        FlextTargetLdifTestConstants,
+        FlextTargetLdifTestConstants as c,
+    )
+    from tests.models import (
+        FlextTargetLdifTestModels,
+        FlextTargetLdifTestModels as m,
+        tm,
+    )
+    from tests.protocols import (
+        FlextTargetLdifTestProtocols,
+        FlextTargetLdifTestProtocols as p,
+    )
     from tests.test_target import (
         FlextTargetLdifSink,
         TestFlextTargetLdif,
@@ -45,8 +78,11 @@ if _TYPE_CHECKING:
         TestFlextTargetLdifWriterProperties,
         TestFlextTargetLdifWriterRecordWriting,
     )
-    from tests.typings import *
-    from tests.utilities import *
+    from tests.typings import FlextTargetLdifTestTypes, FlextTargetLdifTestTypes as t
+    from tests.utilities import (
+        FlextTargetLdifTestUtilities,
+        FlextTargetLdifTestUtilities as u,
+    )
 
 _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
     "EXPECTED_BULK_SIZE": "tests.test_writer",
