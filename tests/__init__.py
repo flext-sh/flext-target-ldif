@@ -25,8 +25,26 @@ if _TYPE_CHECKING:
     from tests.constants import *
     from tests.models import *
     from tests.protocols import *
-    from tests.test_target import *
-    from tests.test_writer import *
+    from tests.test_target import (
+        FlextTargetLdifSink,
+        TestFlextTargetLdif,
+        TestFlextTargetLdifClass,
+        TestFlextTargetLdifSettings,
+        TestIntegration,
+    )
+    from tests.test_writer import (
+        EXPECTED_BULK_SIZE,
+        EXPECTED_DATA_COUNT,
+        TestFlextTargetLdifWriterBase64Encoding,
+        TestFlextTargetLdifWriterContextManager,
+        TestFlextTargetLdifWriterDnGeneration,
+        TestFlextTargetLdifWriterFileOperations,
+        TestFlextTargetLdifWriterHeaderGeneration,
+        TestFlextTargetLdifWriterInitialization,
+        TestFlextTargetLdifWriterLineWrapping,
+        TestFlextTargetLdifWriterProperties,
+        TestFlextTargetLdifWriterRecordWriting,
+    )
     from tests.typings import *
     from tests.utilities import *
 
