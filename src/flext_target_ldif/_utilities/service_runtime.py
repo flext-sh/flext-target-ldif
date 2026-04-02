@@ -7,11 +7,7 @@ from pathlib import Path
 from typing import override
 
 from flext_meltano import FlextMeltanoSingerSinkBase, FlextMeltanoSingerTargetBase
-
-from flext_target_ldif import u
-from flext_target_ldif.models import FlextTargetLdifModels
-from flext_target_ldif.target import FlextTargetLdif
-from flext_target_ldif.typings import t
+from flext_target_ldif import FlextTargetLdif, FlextTargetLdifModels, t, u
 
 
 class FlextTargetLdifServiceRuntime:

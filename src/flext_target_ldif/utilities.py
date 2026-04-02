@@ -17,7 +17,6 @@ from typing import ClassVar, override
 from flext_core import r
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
-
 from flext_target_ldif import c, t
 
 

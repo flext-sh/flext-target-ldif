@@ -10,6 +10,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, override
 
+from pydantic import Field
+
 from flext_core import (
     FlextLogger,
     FlextSettings,
@@ -17,8 +19,6 @@ from flext_core import (
 )
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
-from pydantic import Field
-
 from flext_target_ldif import c, p, t
 
 if TYPE_CHECKING:

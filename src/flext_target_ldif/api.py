@@ -12,9 +12,7 @@ from __future__ import annotations
 from typing import override
 
 from flext_meltano import FlextMeltanoSingerSinkBase, FlextMeltanoTargetServiceBase
-
-from flext_target_ldif import t
-from flext_target_ldif._utilities.service_runtime import FlextTargetLdifServiceRuntime
+from flext_target_ldif import FlextTargetLdifServiceRuntime, t
 
 
 class FlextTargetLdifService(FlextMeltanoTargetServiceBase):

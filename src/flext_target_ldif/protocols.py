@@ -11,7 +11,6 @@ from typing import Protocol, runtime_checkable
 
 from flext_ldif import FlextLdifProtocols
 from flext_meltano import FlextMeltanoProtocols
-
 from flext_target_ldif import t
 
 

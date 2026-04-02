@@ -18,7 +18,6 @@ from typing import Self, TextIO, override
 
 from flext_core import FlextLogger, r
 from flext_ldif import ldif
-
 from flext_target_ldif import FlextTargetLdifWriterError, c, t
 
 logger = FlextLogger(__name__)
@@ -193,7 +192,7 @@ class FlextTargetLdifWriter:
                 dn_obj = entry.get("dn", "")
                 dn_str = str(dn_obj) if dn_obj else ""
                 raw_attributes = entry.get("attributes", {})
-                attributes_obj: Mapping[str, str | t.StrSequence] = {}
+                attributes_obj: t.AttributeMapping = {}
                 if isinstance(raw_attributes, dict):
                     attributes_obj = {
                         str(key): value for key, value in raw_attributes.items()
@@ -205,7 +204,7 @@ class FlextTargetLdifWriter:
     def _write_entry_attributes(
         self,
         f: TextIO,
-        attributes_obj: Mapping[str, str | t.StrSequence],
+        attributes_obj: t.AttributeMapping,
     ) -> None:
         """Write entry attributes to file."""
         for attr, values in attributes_obj.items():
