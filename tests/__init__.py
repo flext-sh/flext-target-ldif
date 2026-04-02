@@ -18,9 +18,13 @@ from typing import TYPE_CHECKING as _TYPE_CHECKING
 from flext_core.lazy import install_lazy_exports
 
 if _TYPE_CHECKING:
-    from flext_tests import d, e, h, r, s, x
-
     from flext_core import FlextTypes
+    from flext_core.decorators import FlextDecorators as d
+    from flext_core.exceptions import FlextExceptions as e
+    from flext_core.handlers import FlextHandlers as h
+    from flext_core.mixins import FlextMixins as x
+    from flext_core.result import FlextResult as r
+    from flext_core.service import FlextService as s
     from tests import (
         conftest,
         constants,
@@ -110,9 +114,9 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
     "c": ("tests.constants", "FlextTargetLdifTestConstants"),
     "conftest": "tests.conftest",
     "constants": "tests.constants",
-    "d": "flext_tests",
-    "e": "flext_tests",
-    "h": "flext_tests",
+    "d": ("flext_core.decorators", "FlextDecorators"),
+    "e": ("flext_core.exceptions", "FlextExceptions"),
+    "h": ("flext_core.handlers", "FlextHandlers"),
     "ldif_options": "tests.conftest",
     "m": ("tests.models", "FlextTargetLdifTestModels"),
     "models": "tests.models",
@@ -120,8 +124,8 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
     "p": ("tests.protocols", "FlextTargetLdifTestProtocols"),
     "protocols": "tests.protocols",
     "pytest_configure": "tests.conftest",
-    "r": "flext_tests",
-    "s": "flext_tests",
+    "r": ("flext_core.result", "FlextResult"),
+    "s": ("flext_core.service", "FlextService"),
     "sample_config": "tests.conftest",
     "sample_record": "tests.conftest",
     "sample_schema": "tests.conftest",
@@ -137,7 +141,7 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
     "typings": "tests.typings",
     "u": ("tests.utilities", "FlextTargetLdifTestUtilities"),
     "utilities": "tests.utilities",
-    "x": "flext_tests",
+    "x": ("flext_core.mixins", "FlextMixins"),
 }
 
 

@@ -195,7 +195,10 @@ class FlextTargetLdifWriter:
                 attributes_obj: t.AttributeMapping = {}
                 if isinstance(raw_attributes, dict):
                     attributes_obj = {
-                        str(key): value for key, value in raw_attributes.items()
+                        str(key): list(value)
+                        if isinstance(value, Sequence) and not isinstance(value, str)
+                        else str(value)
+                        for key, value in raw_attributes.items()
                     }
                 f.write(f"dn: {dn_str}\n")
                 self._write_entry_attributes(f, attributes_obj)
