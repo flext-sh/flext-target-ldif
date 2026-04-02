@@ -13,7 +13,8 @@ from typing import override
 
 from flext_meltano import FlextMeltanoSingerSinkBase, FlextMeltanoTargetServiceBase
 
-from flext_target_ldif import FlextTargetLdifModels, t
+from flext_target_ldif import t
+from flext_target_ldif._utilities.service_runtime import FlextTargetLdifServiceRuntime
 
 
 class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
@@ -28,11 +29,13 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
         schema: t.FlatContainerMapping,
     ) -> FlextMeltanoSingerSinkBase:
         """Create an LDIF sink for a stream."""
-        target_config = self.settings.model_dump() if self.settings else {}
-        return FlextTargetLdifModels.TargetLdif.Sink(
-            target_config=target_config,
+        target_config: t.ContainerMapping = (
+            self.config_overrides if self.config_overrides is not None else {}
+        )
+        return FlextTargetLdifServiceRuntime.create_sink(
             stream_name=stream_name,
             schema=schema,
+            target_config=target_config,
         )
 
 
