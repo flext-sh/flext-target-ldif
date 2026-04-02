@@ -27,6 +27,7 @@ if _TYPE_CHECKING:
     from flext_ldif import d, e, h, r, s, x
 
     from flext_target_ldif import (
+        api,
         cli,
         constants,
         errors,
@@ -40,6 +41,7 @@ if _TYPE_CHECKING:
         utilities,
         writer,
     )
+    from flext_target_ldif.api import FlextTargetLdifService
     from flext_target_ldif.cli import main
     from flext_target_ldif.constants import (
         FlextTargetLdifConstants,
@@ -72,12 +74,14 @@ _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
     "FlextTargetLdifConstants": "flext_target_ldif.constants",
     "FlextTargetLdifModels": "flext_target_ldif.models",
     "FlextTargetLdifProtocols": "flext_target_ldif.protocols",
+    "FlextTargetLdifService": "flext_target_ldif.api",
     "FlextTargetLdifSettings": "flext_target_ldif.settings",
     "FlextTargetLdifSink": "flext_target_ldif.sinks",
     "FlextTargetLdifTypes": "flext_target_ldif.typings",
     "FlextTargetLdifUtilities": "flext_target_ldif.utilities",
     "FlextTargetLdifWriter": "flext_target_ldif.writer",
     "FlextTargetLdifWriterError": "flext_target_ldif.errors",
+    "api": "flext_target_ldif.api",
     "c": ("flext_target_ldif.constants", "FlextTargetLdifConstants"),
     "cli": "flext_target_ldif.cli",
     "constants": "flext_target_ldif.constants",

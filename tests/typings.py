@@ -19,7 +19,7 @@ from flext_target_ldif import FlextTargetLdifTypes
 class FlextTargetLdifTestTypes(FlextTestsTypes, FlextTargetLdifTypes):
     """Test types for flext-target-ldif extending both test and project types."""
 
-    class TargetLdif(FlextTargetLdifTypes.TargetLdif):
+    class TargetLdif:
         """TargetLdif test namespace."""
 
         class Tests:
