@@ -292,7 +292,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             """Result of Singer to LDIF transformation."""
 
             original_record: Annotated[
-                Mapping[str, t.ContainerValue],
+                t.ContainerValueMapping,
                 Field(
                     ...,
                     description="Original Singer record",
@@ -621,13 +621,13 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             @override
             def __init__(
                 self,
-                target_config: Mapping[str, t.ContainerValue],
+                target_config: t.ContainerValueMapping,
                 stream_name: str,
-                schema: Mapping[str, t.ContainerValue],
+                schema: t.ContainerValueMapping,
                 key_properties: t.StrSequence | None = None,
             ) -> None:
                 """Initialize the LDIF sink."""
-                self.config: Mapping[str, t.ContainerValue] = target_config
+                self.config: t.ContainerValueMapping = target_config
                 self.stream_name = stream_name
                 self.schema = schema
                 self.key_properties = key_properties or []
@@ -662,14 +662,14 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                             output_file=str(self._output_file),
                         )
 
-            def process_batch(self, _context: Mapping[str, t.ContainerValue]) -> None:
+            def process_batch(self, _context: t.ContainerValueMapping) -> None:
                 """Process a batch of records."""
                 self._get_ldif_writer()
 
             def process_record(
                 self,
-                record: Mapping[str, t.ContainerValue],
-                _context: Mapping[str, t.ContainerValue],
+                record: t.ContainerValueMapping,
+                _context: t.ContainerValueMapping,
             ) -> None:
                 """Process a single record and write to LDIF."""
                 ldif_writer = self._get_ldif_writer()
@@ -685,7 +685,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 if self._ldif_writer is None:
                     output_file = self._get_output_file()
                     raw_ldif_options = self.config.get("ldif_options", {})
-                    ldif_options: Mapping[str, t.ContainerValue] = {}
+                    ldif_options: t.ContainerValueMapping = {}
                     if isinstance(raw_ldif_options, Mapping):
                         ldif_options = {
                             str(key): value for key, value in raw_ldif_options.items()

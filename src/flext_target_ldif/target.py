@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping, MutableMapping
+from collections.abc import Callable, MutableMapping
 from pathlib import Path
 from typing import override
 
@@ -27,19 +27,19 @@ class FlextTargetLdif:
     @override
     def __init__(
         self,
-        config: Mapping[str, t.ContainerValue] | None = None,
+        config: t.ContainerValueMapping | None = None,
         validate_config: bool = False,
     ) -> None:
         """Initialize the LDIF target."""
-        defaults: Mapping[str, t.ContainerValue] = {
+        defaults: t.ContainerValueMapping = {
             "file_naming_pattern": "{stream_name}_{timestamp}.ldif",
             "dn_template": "uid={uid},ou=users,dc=example,dc=com",
             "output_path": "./output",
         }
-        merged: Mapping[str, t.ContainerValue] = {**defaults, **(config or {})}
-        self.config: Mapping[str, t.ContainerValue] = merged
+        merged: t.ContainerValueMapping = {**defaults, **(config or {})}
+        self.config: t.ContainerValueMapping = merged
         self.sinks: MutableMapping[str, FlextTargetLdifModels.TargetLdif.Sink] = {}
-        self._test_config: Mapping[str, t.ContainerValue] | None = None
+        self._test_config: t.ContainerValueMapping | None = None
         if validate_config:
             self.validate_config()
         output_path_raw = self.config.get("output_path", "./output")
@@ -55,7 +55,7 @@ class FlextTargetLdif:
         return cli_main
 
     @property
-    def config_jsonschema(self) -> Mapping[str, t.ContainerValue]:
+    def config_jsonschema(self) -> t.ContainerValueMapping:
         """Return JSON schema for configuration."""
         return FlextTargetLdifSettings.model_json_schema()
 
@@ -67,7 +67,7 @@ class FlextTargetLdif:
     def get_sink(
         self,
         stream_name: str,
-        schema: Mapping[str, t.ContainerValue],
+        schema: t.ContainerValueMapping,
     ) -> FlextTargetLdifModels.TargetLdif.Sink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
@@ -98,7 +98,7 @@ class FlextTargetLdif:
             "base64_encode",
             "include_timestamps",
         }
-        filtered_config: MutableMapping[str, t.ContainerValue] = {
+        filtered_config: t.MutableContainerValueMapping = {
             k: v for k, v in config_dict.items() if k in allowed_fields
         }
         if "output_file" not in filtered_config:

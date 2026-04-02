@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from typing import Protocol, runtime_checkable
 
 from flext_ldif import FlextLdifProtocols
@@ -62,7 +62,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
                 def generate_ldif(
                     self,
-                    records: Sequence[Mapping[str, t.ContainerValue]],
+                    records: Sequence[t.ContainerValueMapping],
                 ) -> FlextMeltanoProtocols.Result[str]:
                     """Generate LDIF content from records.
 
@@ -84,7 +84,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
                 def transform_to_ldif(
                     self,
-                    record: Mapping[str, t.ContainerValue],
+                    record: t.ContainerValueMapping,
                 ) -> FlextMeltanoProtocols.Result[str]:
                     """Transform Singer record to LDIF format.
 

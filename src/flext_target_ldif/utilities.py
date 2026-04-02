@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import base64
 import re
-from collections.abc import Callable, Mapping, MutableMapping, MutableSequence
+from collections.abc import Callable, Mapping, MutableSequence
 from datetime import datetime
 from pathlib import Path
 from typing import ClassVar, override
@@ -43,7 +43,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             @staticmethod
             def build_ldif_dn(
-                record: Mapping[str, t.ContainerValue],
+                record: t.ContainerValueMapping,
                 dn_template: str,
                 base_dn: str | None = None,
             ) -> r[str]:
@@ -79,7 +79,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             @staticmethod
             def convert_record_to_ldif_entry(
-                record: Mapping[str, t.ContainerValue],
+                record: t.ContainerValueMapping,
                 dn: str,
                 object_classes: t.StrSequence | None = None,
                 attribute_mapping: t.StrMapping | None = None,
@@ -397,9 +397,9 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             @staticmethod
             def add_required_attributes(
                 record: t.StrMapping,
-            ) -> Mapping[str, t.ContainerValue]:
+            ) -> t.ContainerValueMapping:
                 """Add required LDAP attributes to the record."""
-                result: MutableMapping[str, t.ContainerValue] = dict(record)
+                result: t.MutableContainerValueMapping = dict(record)
                 if "objectclass" not in result:
                     result["objectclass"] = ["inetOrgPerson", "person"]
                 if "cn" not in result:
@@ -430,11 +430,11 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             def transform_record(
                 self,
-                record: Mapping[str, t.ContainerValue],
+                record: t.ContainerValueMapping,
             ) -> t.StrMapping:
                 """Transform a Singer record to LDAP-compatible format."""
                 rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer
-                transformed: MutableMapping[str, str] = {}
+                transformed: t.MutableStrMapping = {}
                 for field, value in record.items():
                     if field in self.attribute_mapping:
                         attr_name = self.attribute_mapping[field]

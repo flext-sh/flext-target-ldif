@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
+from collections.abc import Callable
 from typing import Annotated, override as _override
 
 from pydantic import Field, ValidationError
@@ -85,7 +85,7 @@ class FlextTargetLdifSettings(FlextSettings):
         ),
     ] = Field(default_factory=dict)
     ldif_options: Annotated[
-        Mapping[str, t.ContainerValue],
+        t.ContainerValueMapping,
         Field(
             description="Raw LDIF formatter options",
         ),

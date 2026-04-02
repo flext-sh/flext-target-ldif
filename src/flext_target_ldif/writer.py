@@ -35,7 +35,7 @@ class FlextTargetLdifWriter:
     def __init__(
         self,
         output_file: Path | str | None = None,
-        ldif_options: Mapping[str, t.ContainerValue] | None = None,
+        ldif_options: t.ContainerValueMapping | None = None,
         dn_template: str | None = None,
         attribute_mapping: t.StrMapping | None = None,
         schema: Mapping[str, t.ContainerValue | t.StrSequence] | None = None,
@@ -58,7 +58,7 @@ class FlextTargetLdifWriter:
         timestamps_val = self.ldif_options.get("include_timestamps", True)
         self.include_timestamps: bool = bool(timestamps_val)
         self._ldif_api = ldif()
-        self._records: MutableSequence[Mapping[str, t.ContainerValue]] = []
+        self._records: MutableSequence[t.ContainerValueMapping] = []
         self._record_count = 0
         self._ldif_entries: Sequence[
             Mapping[str, str | Mapping[str, t.StrSequence]]
@@ -110,7 +110,7 @@ class FlextTargetLdifWriter:
         except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
             return r[bool].fail(f"Failed to open LDIF file: {e}")
 
-    def write_record(self, record: Mapping[str, t.ContainerValue]) -> r[bool]:
+    def write_record(self, record: t.ContainerValueMapping) -> r[bool]:
         """Write a record to the LDIF file buffer."""
         try:
             if self._file_handle is None:
@@ -126,12 +126,12 @@ class FlextTargetLdifWriter:
 
     def _convert_record_to_entry(
         self,
-        record: Mapping[str, t.ContainerValue],
+        record: t.ContainerValueMapping,
     ) -> Mapping[str, str | Mapping[str, t.StrSequence]] | None:
         """Convert a single record to LDIF entry format."""
         try:
             dn = self._generate_dn(record)
-            attributes: MutableMapping[str, t.ContainerValue] = {}
+            attributes: t.MutableContainerValueMapping = {}
             for key, value in record.items():
                 if key != "dn":
                     mapped_key = self.attribute_mapping.get(key, key)
@@ -152,7 +152,7 @@ class FlextTargetLdifWriter:
             logger.warning("Skipping invalid record: %s", msg)
             return None
 
-    def _generate_dn(self, record: Mapping[str, t.ContainerValue]) -> str:
+    def _generate_dn(self, record: t.ContainerValueMapping) -> str:
         """Generate DN from record using template."""
         try:
             return self.dn_template.format(**record)
