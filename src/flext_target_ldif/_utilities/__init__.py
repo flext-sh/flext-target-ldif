@@ -5,22 +5,28 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
-from typing import TYPE_CHECKING as _TYPE_CHECKING
+import typing as _t
 
 from flext_core.lazy import install_lazy_exports
 
-if _TYPE_CHECKING:
-    from flext_core import FlextTypes
-    from flext_target_ldif._utilities import service_runtime
-    from flext_target_ldif._utilities.service_runtime import (
-        FlextTargetLdifServiceRuntime,
-    )
+if _t.TYPE_CHECKING:
+    import flext_target_ldif._utilities.service_runtime as _flext_target_ldif__utilities_service_runtime
 
-_LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
+    service_runtime = _flext_target_ldif__utilities_service_runtime
+
+    _ = (
+        FlextTargetLdifServiceRuntime,
+        service_runtime,
+    )
+_LAZY_IMPORTS = {
     "FlextTargetLdifServiceRuntime": "flext_target_ldif._utilities.service_runtime",
     "service_runtime": "flext_target_ldif._utilities.service_runtime",
 }
+
+__all__ = [
+    "FlextTargetLdifServiceRuntime",
+    "service_runtime",
+]
 
 
 install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)

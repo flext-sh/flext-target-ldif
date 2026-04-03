@@ -5,38 +5,88 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
-from typing import TYPE_CHECKING as _TYPE_CHECKING
+import typing as _t
 
+from flext_core.decorators import FlextDecorators as d
+from flext_core.exceptions import FlextExceptions as e
+from flext_core.handlers import FlextHandlers as h
 from flext_core.lazy import install_lazy_exports, merge_lazy_imports
+from flext_core.mixins import FlextMixins as x
+from flext_core.result import FlextResult as r
 from flext_target_ldif.__version__ import *
+from flext_target_ldif.__version__ import (
+    FlextTargetLdifVersion,
+    __author__,
+    __author_email__,
+    __description__,
+    __license__,
+    __title__,
+    __url__,
+    __version__,
+    __version_info__,
+)
 
-if _TYPE_CHECKING:
-    from flext_core import FlextTypes
-    from flext_core.decorators import FlextDecorators as d
-    from flext_core.exceptions import FlextExceptions as e
-    from flext_core.handlers import FlextHandlers as h
-    from flext_core.mixins import FlextMixins as x
-    from flext_core.result import FlextResult as r
-    from flext_core.service import FlextService as s
-    from flext_target_ldif import (
-        _utilities,
-        api,
-        cli,
-        constants,
-        errors,
-        exceptions,
-        models,
-        protocols,
-        settings,
-        sinks,
-        target,
-        typings,
-        utilities,
-        writer,
-    )
-    from flext_target_ldif.__version__ import (
+if _t.TYPE_CHECKING:
+    import flext_target_ldif._utilities as _flext_target_ldif__utilities
+
+    _utilities = _flext_target_ldif__utilities
+    import flext_target_ldif._utilities.service_runtime as _flext_target_ldif__utilities_service_runtime
+
+    service_runtime = _flext_target_ldif__utilities_service_runtime
+    import flext_target_ldif.api as _flext_target_ldif_api
+
+    api = _flext_target_ldif_api
+    import flext_target_ldif.cli as _flext_target_ldif_cli
+
+    cli = _flext_target_ldif_cli
+    import flext_target_ldif.constants as _flext_target_ldif_constants
+
+    constants = _flext_target_ldif_constants
+    import flext_target_ldif.errors as _flext_target_ldif_errors
+
+    errors = _flext_target_ldif_errors
+    import flext_target_ldif.exceptions as _flext_target_ldif_exceptions
+
+    exceptions = _flext_target_ldif_exceptions
+    import flext_target_ldif.models as _flext_target_ldif_models
+
+    models = _flext_target_ldif_models
+    import flext_target_ldif.protocols as _flext_target_ldif_protocols
+
+    protocols = _flext_target_ldif_protocols
+    import flext_target_ldif.settings as _flext_target_ldif_settings
+
+    settings = _flext_target_ldif_settings
+    import flext_target_ldif.sinks as _flext_target_ldif_sinks
+
+    sinks = _flext_target_ldif_sinks
+    import flext_target_ldif.target as _flext_target_ldif_target
+
+    target = _flext_target_ldif_target
+    import flext_target_ldif.typings as _flext_target_ldif_typings
+
+    typings = _flext_target_ldif_typings
+    import flext_target_ldif.utilities as _flext_target_ldif_utilities
+
+    utilities = _flext_target_ldif_utilities
+    import flext_target_ldif.writer as _flext_target_ldif_writer
+
+    writer = _flext_target_ldif_writer
+
+    _ = (
+        FlextTargetLdif,
+        FlextTargetLdifConstants,
+        FlextTargetLdifModels,
+        FlextTargetLdifProtocols,
+        FlextTargetLdifService,
+        FlextTargetLdifServiceRuntime,
+        FlextTargetLdifSettings,
+        FlextTargetLdifSink,
+        FlextTargetLdifTypes,
+        FlextTargetLdifUtilities,
         FlextTargetLdifVersion,
+        FlextTargetLdifWriter,
+        FlextTargetLdifWriterError,
         __author__,
         __author_email__,
         __description__,
@@ -45,40 +95,35 @@ if _TYPE_CHECKING:
         __url__,
         __version__,
         __version_info__,
-    )
-    from flext_target_ldif._utilities import (
-        FlextTargetLdifServiceRuntime,
+        _utilities,
+        api,
+        c,
+        cli,
+        constants,
+        d,
+        e,
+        errors,
+        exceptions,
+        h,
+        m,
+        main,
+        models,
+        p,
+        protocols,
+        r,
+        s,
         service_runtime,
+        settings,
+        sinks,
+        t,
+        target,
+        typings,
+        u,
+        utilities,
+        writer,
+        x,
     )
-    from flext_target_ldif.api import FlextTargetLdifService
-    from flext_target_ldif.cli import main
-    from flext_target_ldif.constants import (
-        FlextTargetLdifConstants,
-        FlextTargetLdifConstants as c,
-    )
-    from flext_target_ldif.errors import FlextTargetLdifWriterError
-    from flext_target_ldif.models import (
-        FlextTargetLdifModels,
-        FlextTargetLdifModels as m,
-    )
-    from flext_target_ldif.protocols import (
-        FlextTargetLdifProtocols,
-        FlextTargetLdifProtocols as p,
-    )
-    from flext_target_ldif.settings import FlextTargetLdifSettings
-    from flext_target_ldif.sinks import FlextTargetLdifSink
-    from flext_target_ldif.target import FlextTargetLdif
-    from flext_target_ldif.typings import (
-        FlextTargetLdifTypes,
-        FlextTargetLdifTypes as t,
-    )
-    from flext_target_ldif.utilities import (
-        FlextTargetLdifUtilities,
-        FlextTargetLdifUtilities as u,
-    )
-    from flext_target_ldif.writer import FlextTargetLdifWriter
-
-_LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
+_LAZY_IMPORTS = merge_lazy_imports(
     ("flext_target_ldif._utilities",),
     {
         "FlextTargetLdif": "flext_target_ldif.target",
@@ -117,7 +162,7 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "p": ("flext_target_ldif.protocols", "FlextTargetLdifProtocols"),
         "protocols": "flext_target_ldif.protocols",
         "r": ("flext_core.result", "FlextResult"),
-        "s": ("flext_core.service", "FlextService"),
+        "s": ("flext_target_ldif.api", "FlextTargetLdifService"),
         "settings": "flext_target_ldif.settings",
         "sinks": "flext_target_ldif.sinks",
         "t": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
@@ -129,6 +174,57 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "x": ("flext_core.mixins", "FlextMixins"),
     },
 )
+
+__all__ = [
+    "FlextTargetLdif",
+    "FlextTargetLdifConstants",
+    "FlextTargetLdifModels",
+    "FlextTargetLdifProtocols",
+    "FlextTargetLdifService",
+    "FlextTargetLdifServiceRuntime",
+    "FlextTargetLdifSettings",
+    "FlextTargetLdifSink",
+    "FlextTargetLdifTypes",
+    "FlextTargetLdifUtilities",
+    "FlextTargetLdifVersion",
+    "FlextTargetLdifWriter",
+    "FlextTargetLdifWriterError",
+    "__author__",
+    "__author_email__",
+    "__description__",
+    "__license__",
+    "__title__",
+    "__url__",
+    "__version__",
+    "__version_info__",
+    "_utilities",
+    "api",
+    "c",
+    "cli",
+    "constants",
+    "d",
+    "e",
+    "errors",
+    "exceptions",
+    "h",
+    "m",
+    "main",
+    "models",
+    "p",
+    "protocols",
+    "r",
+    "s",
+    "service_runtime",
+    "settings",
+    "sinks",
+    "t",
+    "target",
+    "typings",
+    "u",
+    "utilities",
+    "writer",
+    "x",
+]
 
 
 install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
