@@ -1,7 +1,7 @@
 # AUTO-GENERATED FILE — DO NOT EDIT MANUALLY.
 # Regenerate with: make gen
 #
-"""Internal utilities subpackage."""
+"""Utilities package."""
 
 from __future__ import annotations
 
@@ -12,14 +12,12 @@ from flext_core.lazy import install_lazy_exports
 
 if _TYPE_CHECKING:
     from flext_core import FlextTypes
-    from flext_target_ldif._utilities import service_runtime
-    from flext_target_ldif._utilities.service_runtime import (
-        FlextTargetLdifServiceRuntime,
-    )
+    from flext_target_ldif import service_runtime
+    from flext_target_ldif.service_runtime import FlextTargetLdifServiceRuntime
 
 _LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
-    "FlextTargetLdifServiceRuntime": "flext_target_ldif._utilities.service_runtime",
-    "service_runtime": "flext_target_ldif._utilities.service_runtime",
+    "FlextTargetLdifServiceRuntime": "flext_target_ldif.service_runtime",
+    "service_runtime": "flext_target_ldif.service_runtime",
 }
 
 

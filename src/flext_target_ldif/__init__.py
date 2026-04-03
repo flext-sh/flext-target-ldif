@@ -1,7 +1,7 @@
 # AUTO-GENERATED FILE — DO NOT EDIT MANUALLY.
 # Regenerate with: make gen
 #
-"""Module docstring."""
+"""Flext target ldif package."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING as _TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports, merge_lazy_imports
 from flext_target_ldif.__version__ import (
-    FlextTargetLdifVersion,
+    __all__,
     __author__,
     __author_email__,
     __description__,
@@ -38,6 +38,7 @@ if _TYPE_CHECKING:
         exceptions,
         models,
         protocols,
+        service_runtime,
         settings,
         sinks,
         target,
@@ -45,10 +46,7 @@ if _TYPE_CHECKING:
         utilities,
         writer,
     )
-    from flext_target_ldif._utilities import (
-        FlextTargetLdifServiceRuntime,
-        service_runtime,
-    )
+    from flext_target_ldif._utilities import FlextTargetLdifServiceRuntime
     from flext_target_ldif.api import FlextTargetLdifService
     from flext_target_ldif.cli import main
     from flext_target_ldif.constants import (
@@ -108,6 +106,7 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "protocols": "flext_target_ldif.protocols",
         "r": ("flext_core.result", "FlextResult"),
         "s": ("flext_core.service", "FlextService"),
+        "service_runtime": "flext_target_ldif.service_runtime",
         "settings": "flext_target_ldif.settings",
         "sinks": "flext_target_ldif.sinks",
         "t": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
@@ -126,7 +125,7 @@ install_lazy_exports(
     globals(),
     _LAZY_IMPORTS,
     [
-        "FlextTargetLdifVersion",
+        "__all__",
         "__author__",
         "__author_email__",
         "__description__",
