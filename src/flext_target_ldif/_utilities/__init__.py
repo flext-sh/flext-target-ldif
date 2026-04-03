@@ -13,10 +13,8 @@ if _t.TYPE_CHECKING:
     import flext_target_ldif._utilities.service_runtime as _flext_target_ldif__utilities_service_runtime
 
     service_runtime = _flext_target_ldif__utilities_service_runtime
-
-    _ = (
+    from flext_target_ldif._utilities.service_runtime import (
         FlextTargetLdifServiceRuntime,
-        service_runtime,
     )
 _LAZY_IMPORTS = {
     "FlextTargetLdifServiceRuntime": "flext_target_ldif._utilities.service_runtime",
