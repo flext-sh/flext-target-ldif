@@ -12,17 +12,6 @@ from flext_target_ldif.__version__ import *
 
 if _t.TYPE_CHECKING:
     import flext_target_ldif._utilities as _flext_target_ldif__utilities
-    from flext_target_ldif.__version__ import (
-        FlextTargetLdifVersion,
-        __author__,
-        __author_email__,
-        __description__,
-        __license__,
-        __title__,
-        __url__,
-        __version__,
-        __version_info__,
-    )
 
     _utilities = _flext_target_ldif__utilities
     import flext_target_ldif.api as _flext_target_ldif_api
