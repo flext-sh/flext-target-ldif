@@ -25,12 +25,10 @@ if _t.TYPE_CHECKING:
     )
 
     _utilities = _flext_target_ldif__utilities
-    import flext_target_ldif._utilities.service_runtime as _flext_target_ldif__utilities_service_runtime
-
-    service_runtime = _flext_target_ldif__utilities_service_runtime
     import flext_target_ldif.api as _flext_target_ldif_api
-    from flext_target_ldif._utilities.service_runtime import (
+    from flext_target_ldif._utilities import (
         FlextTargetLdifServiceRuntime,
+        service_runtime,
     )
 
     api = _flext_target_ldif_api
