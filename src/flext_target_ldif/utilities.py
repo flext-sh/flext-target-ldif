@@ -74,7 +74,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     ):
                         return r[str].fail(f"Invalid DN format: {full_dn}")
                     return r[str].ok(full_dn)
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Error building DN: {e}")
 
             @staticmethod
@@ -119,7 +119,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                             ldif_lines.append(f"{ldif_attr}: {ldif_value}")
                     ldif_lines.append("")
                     return r[str].ok("\n".join(ldif_lines))
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Error converting to LDIF entry: {e}")
 
             @staticmethod
@@ -245,7 +245,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                             if not entry.endswith("\n"):
                                 f.write("\n")
                     return r[str].ok(f"Entries appended to LDIF file: {file_path}")
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Error appending to LDIF file: {e}")
 
             @staticmethod
@@ -279,7 +279,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                             if not entry.endswith("\n"):
                                 f.write("\n")
                     return r[str].ok(f"LDIF file created: {file_path}")
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Error creating LDIF file: {e}")
 
             @staticmethod
@@ -304,7 +304,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     if path.parent.exists() and (not path.parent.is_dir()):
                         return r[str].fail("Parent path is not a directory")
                     return r[str].ok(str(path.resolve()))
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Invalid file path: {e}")
 
         class RecordTransformer:

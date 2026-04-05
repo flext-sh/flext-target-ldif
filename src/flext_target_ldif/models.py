@@ -225,7 +225,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                     if errors:
                         return r[bool].fail("; ".join(errors))
                     return r[bool].ok(value=True)
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"LDIF entry validation failed: {e}")
 
         class LdifFile(FlextMeltanoModels.Entity):
@@ -285,7 +285,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                         )
 
                     return r[bool].ok(value=True)
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"LDIF file validation failed: {e}")
 
         class LdifTransformationResult(FlextMeltanoModels.Entity):
@@ -349,7 +349,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                         )
 
                     return r[bool].ok(value=True)
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[bool].fail(
                         f"Transformation result validation failed: {e}",
                     )
@@ -426,7 +426,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                         return r[bool].fail("Export counts exceed total processed")
 
                     return r[bool].ok(value=True)
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"Batch processing validation failed: {e}")
 
         class SingerStreamConfig(FlextSettings):
@@ -565,7 +565,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                         )
 
                     return r[bool].ok(value=True)
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"Target result validation failed: {e}")
 
         class LdifErrorContext(FlextMeltanoModels.ArbitraryTypesModel):

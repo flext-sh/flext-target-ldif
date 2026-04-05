@@ -23,7 +23,7 @@ from flext_target_ldif import FlextTargetLdifWriterError, c, t
 logger = FlextLogger(__name__)
 
 _WRITER_SAFE_EXCEPTIONS: tuple[type[Exception], ...] = (
-    *c.Meltano.Singer.SAFE_EXCEPTIONS,
+    *c.Meltano.SINGER_SAFE_EXCEPTIONS,
     FlextTargetLdifWriterError,
 )
 
@@ -97,7 +97,7 @@ class FlextTargetLdifWriter:
                 self._file_handle.close()
                 self._file_handle = None
             return r[bool].ok(value=True)
-        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             self._file_handle = None
             return r[bool].fail(f"Failed to close LDIF file: {e}")
 
@@ -107,7 +107,7 @@ class FlextTargetLdifWriter:
             self.output_file.parent.mkdir(parents=True, exist_ok=True)
             self._file_handle = self.output_file.open("w", encoding="utf-8")
             return r[bool].ok(value=True)
-        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[bool].fail(f"Failed to open LDIF file: {e}")
 
     def write_record(self, record: t.ContainerValueMapping) -> r[bool]:
@@ -196,7 +196,7 @@ class FlextTargetLdifWriter:
                 if isinstance(raw_attributes, dict):
                     attributes_obj = {
                         str(key): list(value)
-                        if isinstance(value, Sequence) and not isinstance(value, str)
+                        if not isinstance(value, str)
                         else str(value)
                         for key, value in raw_attributes.items()
                     }
