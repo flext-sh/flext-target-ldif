@@ -8,17 +8,24 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import Annotated, override as _override
+from typing import Annotated, ClassVar, override as _override
 
 from pydantic import Field, ValidationError
 from pydantic_core import PydanticUndefined
+from pydantic_settings import SettingsConfigDict
 
 from flext_core import FlextSettings, r
-from flext_target_ldif import t
+from flext_target_ldif import c, t
 
 
+@FlextSettings.auto_register("target-ldif")
 class FlextTargetLdifSettings(FlextSettings):
     """Typed runtime configuration for the LDIF target."""
+
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
+        env_prefix="FLEXT_TARGET_LDIF_",
+        extra="ignore",
+    )
 
     _allow_mutation: bool = True
 
@@ -58,23 +65,28 @@ class FlextTargetLdifSettings(FlextSettings):
 
     output_file: Annotated[
         str,
-        Field(default="output.ldif", description="Output LDIF filename"),
+        Field(
+            default=c.TargetLdif.DEFAULT_OUTPUT_FILE, description="Output LDIF filename"
+        ),
     ]
     output_path: Annotated[
         str,
-        Field(default="./output", description="Output directory path"),
+        Field(
+            default=c.TargetLdif.DEFAULT_OUTPUT_PATH,
+            description="Output directory path",
+        ),
     ]
     file_naming_pattern: Annotated[
         str,
         Field(
-            default="{stream_name}.ldif",
+            default=c.TargetLdif.DEFAULT_FILE_NAMING_PATTERN,
             description="Pattern for generated filenames",
         ),
     ]
     dn_template: Annotated[
         str,
         Field(
-            default="uid={uid},ou=users,dc=example,dc=com",
+            default=c.TargetLdif.DEFAULT_DN_TEMPLATE,
             description="Template used to build entry DN values",
         ),
     ]
@@ -99,7 +111,11 @@ class FlextTargetLdifSettings(FlextSettings):
     ]
     line_length: Annotated[
         int,
-        Field(default=78, ge=1, description="LDIF line wrap length"),
+        Field(
+            default=c.TargetLdif.DEFAULT_LINE_LENGTH,
+            ge=1,
+            description="LDIF line wrap length",
+        ),
     ]
     base64_encode: Annotated[
         bool,
