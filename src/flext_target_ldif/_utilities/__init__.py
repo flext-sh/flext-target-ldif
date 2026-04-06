@@ -17,7 +17,10 @@ if _t.TYPE_CHECKING:
         FlextTargetLdifServiceRuntime,
     )
 _LAZY_IMPORTS = {
-    "FlextTargetLdifServiceRuntime": "flext_target_ldif._utilities.service_runtime",
+    "FlextTargetLdifServiceRuntime": (
+        "flext_target_ldif._utilities.service_runtime",
+        "FlextTargetLdifServiceRuntime",
+    ),
     "service_runtime": "flext_target_ldif._utilities.service_runtime",
 }
 
