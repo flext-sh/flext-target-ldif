@@ -53,7 +53,6 @@ if _t.TYPE_CHECKING:
     test_target = _tests_test_target
     import tests.test_writer as _tests_test_writer
     from tests.test_target import (
-        FlextTargetLdifSink,
         TestFlextTargetLdif,
         TestFlextTargetLdifClass,
         TestFlextTargetLdifSettings,
@@ -103,7 +102,6 @@ if _t.TYPE_CHECKING:
 _LAZY_IMPORTS = {
     "EXPECTED_BULK_SIZE": ("tests.test_writer", "EXPECTED_BULK_SIZE"),
     "EXPECTED_DATA_COUNT": ("tests.test_writer", "EXPECTED_DATA_COUNT"),
-    "FlextTargetLdifSink": ("tests.test_target", "FlextTargetLdifSink"),
     "FlextTargetLdifTestConstants": ("tests.constants", "FlextTargetLdifTestConstants"),
     "FlextTargetLdifTestModels": ("tests.models", "FlextTargetLdifTestModels"),
     "FlextTargetLdifTestProtocols": ("tests.protocols", "FlextTargetLdifTestProtocols"),
@@ -188,7 +186,6 @@ _LAZY_IMPORTS = {
 __all__ = [
     "EXPECTED_BULK_SIZE",
     "EXPECTED_DATA_COUNT",
-    "FlextTargetLdifSink",
     "FlextTargetLdifTestConstants",
     "FlextTargetLdifTestModels",
     "FlextTargetLdifTestProtocols",

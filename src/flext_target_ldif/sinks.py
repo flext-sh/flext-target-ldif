@@ -9,8 +9,4 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_target_ldif import FlextTargetLdifModels
-
-FlextTargetLdifSink = FlextTargetLdifModels.TargetLdif.Sink
-
-__all__ = ["FlextTargetLdifSink"]
+__all__: list[str] = []

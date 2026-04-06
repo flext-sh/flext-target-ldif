@@ -65,7 +65,6 @@ if _t.TYPE_CHECKING:
 
     sinks = _flext_target_ldif_sinks
     import flext_target_ldif.target as _flext_target_ldif_target
-    from flext_target_ldif.sinks import FlextTargetLdifSink
 
     target = _flext_target_ldif_target
     import flext_target_ldif.typings as _flext_target_ldif_typings
@@ -110,7 +109,6 @@ _LAZY_IMPORTS = merge_lazy_imports(
             "flext_target_ldif.settings",
             "FlextTargetLdifSettings",
         ),
-        "FlextTargetLdifSink": ("flext_target_ldif.sinks", "FlextTargetLdifSink"),
         "FlextTargetLdifTypes": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
         "FlextTargetLdifUtilities": (
             "flext_target_ldif.utilities",
@@ -176,7 +174,6 @@ __all__ = [
     "FlextTargetLdifService",
     "FlextTargetLdifServiceRuntime",
     "FlextTargetLdifSettings",
-    "FlextTargetLdifSink",
     "FlextTargetLdifTypes",
     "FlextTargetLdifUtilities",
     "FlextTargetLdifVersion",

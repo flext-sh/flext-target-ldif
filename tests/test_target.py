@@ -20,8 +20,6 @@ from flext_target_ldif import (
     FlextTargetLdifSettings,
 )
 
-FlextTargetLdifSink = FlextTargetLdifModels.TargetLdif.Sink
-
 
 class TestFlextTargetLdifSettings:
     """Test FlextTargetLdifSettings value t.NormalizedValue."""
@@ -211,9 +209,9 @@ class TestFlextTargetLdif:
     def test_target_ldif_default_sink_class(self) -> None:
         """Test target has proper default sink class."""
         target = FlextTargetLdif()
-        if target.default_sink_class != FlextTargetLdifSink:
+        if target.default_sink_class != FlextTargetLdifModels.TargetLdif.Sink:
             raise AssertionError(
-                f"Expected {FlextTargetLdifSink}, got {target.default_sink_class}",
+                f"Expected {FlextTargetLdifModels.TargetLdif.Sink}, got {target.default_sink_class}",
             )
 
     def test_target_ldif_output_directory_creation(self) -> None:
