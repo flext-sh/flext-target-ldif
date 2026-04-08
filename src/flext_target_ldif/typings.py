@@ -16,4 +16,5 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
 
 t = FlextTargetLdifTypes
+
 __all__ = ["FlextTargetLdifTypes", "t"]

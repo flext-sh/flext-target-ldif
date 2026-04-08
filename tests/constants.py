@@ -1,4 +1,4 @@
-"""Module skeleton for FlextTargetLdifTestConstants.
+"""Module skeleton for TestsFlextTargetLdifConstants.
 
 Test constants for flext-target-ldif.
 
@@ -13,9 +13,10 @@ from flext_tests import FlextTestsConstants
 from flext_target_ldif import FlextTargetLdifConstants
 
 
-class FlextTargetLdifTestConstants(FlextTestsConstants, FlextTargetLdifConstants):
+class TestsFlextTargetLdifConstants(FlextTestsConstants, FlextTargetLdifConstants):
     """Test constants for flext-target-ldif."""
 
 
-c = FlextTargetLdifTestConstants
-__all__ = ["FlextTargetLdifTestConstants", "c"]
+c = TestsFlextTargetLdifConstants
+
+__all__ = ["TestsFlextTargetLdifConstants", "c"]

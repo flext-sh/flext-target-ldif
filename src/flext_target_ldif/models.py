@@ -15,11 +15,10 @@ from pydantic import Field
 from flext_core import (
     FlextLogger,
     FlextSettings,
-    r,
 )
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
-from flext_target_ldif import c, p, t
+from flext_target_ldif import c, p, r, t
 
 if TYPE_CHECKING:
     from flext_target_ldif import FlextTargetLdifWriter
