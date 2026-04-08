@@ -60,11 +60,8 @@ if _t.TYPE_CHECKING:
     )
 
     settings = _flext_target_ldif_settings
-    import flext_target_ldif.sinks as _flext_target_ldif_sinks
-    from flext_target_ldif.settings import FlextTargetLdifSettings
-
-    sinks = _flext_target_ldif_sinks
     import flext_target_ldif.target as _flext_target_ldif_target
+    from flext_target_ldif.settings import FlextTargetLdifSettings
 
     target = _flext_target_ldif_target
     import flext_target_ldif.typings as _flext_target_ldif_typings
@@ -206,7 +203,6 @@ __all__ = [
     "s",
     "service_runtime",
     "settings",
-    "sinks",
     "t",
     "target",
     "typings",

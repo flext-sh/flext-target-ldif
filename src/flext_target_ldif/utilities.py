@@ -12,7 +12,6 @@ import re
 from collections.abc import Callable, Mapping, MutableSequence
 from datetime import datetime
 from pathlib import Path
-from typing import ClassVar, override
 
 from flext_core import r
 from flext_ldif import FlextLdifUtilities
@@ -22,18 +21,6 @@ from flext_target_ldif import c, t
 
 class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     """Single unified utilities class for Singer target LDIF operations."""
-
-    DEFAULT_BATCH_SIZE: ClassVar[int] = c.DEFAULT_SIZE
-    DEFAULT_TIMEOUT: ClassVar[int] = c.DEFAULT_TIMEOUT_SECONDS
-    MAX_RETRIES: ClassVar[int] = c.BACKUP_COUNT
-    LDIF_LINE_WRAP_LENGTH: ClassVar[int] = c.LDIF_LINE_WRAP_LENGTH
-    ASCII_SPACE: ClassVar[int] = c.ASCII_SPACE
-    ASCII_TILDE: ClassVar[int] = c.ASCII_TILDE
-
-    @override
-    def __init__(self) -> None:
-        """Initialize LDIF target utilities."""
-        super().__init__()
 
     class TargetLdif:
         """Singer protocol utilities for target operations."""
@@ -136,13 +123,13 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 if not value:
                     return ""
                 if value.startswith((" ", ":", "<")) or any(
-                    ord(ch) < FlextTargetLdifUtilities.ASCII_SPACE
-                    or ord(ch) > FlextTargetLdifUtilities.ASCII_TILDE
+                    ord(ch) < c.TargetLdif.ASCII_SPACE
+                    or ord(ch) > c.TargetLdif.ASCII_TILDE
                     for ch in value
                 ):
                     encoded = base64.b64encode(value.encode("utf-8")).decode("ascii")
                     return f":: {encoded}"
-                if len(value) > FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
+                if len(value) > c.TargetLdif.LDIF_LINE_WRAP_LENGTH:
                     return FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.wrap_ldif_line(
                         value,
                     )
@@ -203,15 +190,15 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 str: Wrapped value
 
                 """
-                if len(value) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
+                if len(value) <= c.TargetLdif.LDIF_LINE_WRAP_LENGTH:
                     return value
                 lines: MutableSequence[str] = []
                 remaining = value
                 while remaining:
-                    if len(remaining) <= FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH:
+                    if len(remaining) <= c.TargetLdif.LDIF_LINE_WRAP_LENGTH:
                         lines.append(remaining)
                         break
-                    break_point = FlextTargetLdifUtilities.LDIF_LINE_WRAP_LENGTH
+                    break_point = c.TargetLdif.LDIF_LINE_WRAP_LENGTH
                     if " " in remaining[:break_point]:
                         break_point = remaining[:break_point].rfind(" ")
                     lines.append(remaining[:break_point])

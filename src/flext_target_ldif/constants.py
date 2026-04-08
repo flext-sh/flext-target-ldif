@@ -16,11 +16,6 @@ from flext_meltano import FlextMeltanoConstants
 class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """LDIF target export-specific constants following flext-core patterns."""
 
-    STANDARD_LINE_LENGTH: Final[int] = 78
-    ASCII_SPACE: Final[int] = 32
-    ASCII_TILDE: Final[int] = 126
-    LDIF_LINE_WRAP_LENGTH: Final[int] = 76
-
     class TargetLdif:
         """Target LDIF domain constants namespace."""
 
@@ -29,6 +24,11 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         DEFAULT_FILE_NAMING_PATTERN: Final[str] = "{stream_name}.ldif"
         DEFAULT_DN_TEMPLATE: Final[str] = "uid={uid},ou=users,dc=example,dc=com"
         DEFAULT_LINE_LENGTH: Final[int] = 78
+
+        STANDARD_LINE_LENGTH: Final[int] = 78
+        ASCII_SPACE: Final[int] = 32
+        ASCII_TILDE: Final[int] = 126
+        LDIF_LINE_WRAP_LENGTH: Final[int] = 76
 
 
 c = FlextTargetLdifConstants
