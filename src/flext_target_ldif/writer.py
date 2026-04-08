@@ -22,7 +22,7 @@ from flext_target_ldif import FlextTargetLdifWriterError, c, t
 
 logger = FlextLogger(__name__)
 
-_WRITER_SAFE_EXCEPTIONS: tuple[type[Exception], ...] = (
+_WRITER_SAFE_EXCEPTIONS: t.VariadicTuple[type[Exception]] = (
     *c.Meltano.SINGER_SAFE_EXCEPTIONS,
     FlextTargetLdifWriterError,
 )

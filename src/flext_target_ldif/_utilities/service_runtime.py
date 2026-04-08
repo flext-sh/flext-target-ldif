@@ -34,7 +34,7 @@ class FlextTargetLdifServiceRuntime:
             runtime_sink: FlextTargetLdifModels.TargetLdif.Sink,
             target: FlextMeltanoSingerTargetBase,
             stream_name: str,
-            schema: dict[str, t.ContainerValue],
+            schema: t.MutableMappingKV[str, t.ContainerValue],
             key_properties: t.StrSequence,
         ) -> FlextTargetLdifServiceRuntime.Sink:
             """Create an adapter sink and attach the LDIF runtime sink."""
@@ -100,9 +100,9 @@ class FlextTargetLdifServiceRuntime:
     def normalize_singer_mapping(
         cls,
         source: t.ContainerMapping,
-    ) -> dict[str, t.ContainerValue]:
+    ) -> t.MutableMappingKV[str, t.ContainerValue]:
         """Normalize a Singer payload mapping to the LDIF runtime contract."""
-        normalized: dict[str, t.ContainerValue] = {}
+        normalized: t.MutableMappingKV[str, t.ContainerValue] = {}
         for key, value in source.items():
             normalized_value = cls.normalize_singer_value(value)
             if normalized_value is not None:
@@ -123,7 +123,7 @@ class FlextTargetLdifServiceRuntime:
             return value
         if u.is_mapping(value):
             return cls.normalize_singer_mapping(value)
-        normalized_sequence: list[t.ContainerValue] = []
+        normalized_sequence: t.MutableSequenceOf[t.ContainerValue] = []
         for item in value:
             normalized_item = cls.normalize_singer_value(item)
             if normalized_item is not None:
@@ -133,7 +133,7 @@ class FlextTargetLdifServiceRuntime:
     @staticmethod
     def normalize_schema(
         source: t.FlatContainerMapping,
-    ) -> dict[str, t.ContainerValue]:
+    ) -> t.MutableMappingKV[str, t.ContainerValue]:
         """Normalize a flat Singer schema to the LDIF runtime contract."""
         return {
             key: (str(value) if isinstance(value, Path) else value)

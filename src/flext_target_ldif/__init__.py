@@ -146,7 +146,6 @@ _LAZY_IMPORTS = merge_lazy_imports(
         "r": ("flext_core.result", "FlextResult"),
         "s": ("flext_target_ldif.api", "FlextTargetLdifService"),
         "settings": "flext_target_ldif.settings",
-        "sinks": "flext_target_ldif.sinks",
         "t": ("flext_target_ldif.typings", "FlextTargetLdifTypes"),
         "target": "flext_target_ldif.target",
         "typings": "flext_target_ldif.typings",
