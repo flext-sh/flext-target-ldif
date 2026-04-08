@@ -12,7 +12,6 @@ _LAZY_IMPORTS = {
         "flext_target_ldif._utilities.service_runtime",
         "FlextTargetLdifServiceRuntime",
     ),
-    "service_runtime": "flext_target_ldif._utilities.service_runtime",
 }
 
 
