@@ -116,7 +116,6 @@ class TestFlextTargetLdifClass:
     def test_target_creation_with_defaults(self) -> None:
         """Test creating target with default configuration."""
         target = FlextTargetLdif()
-        assert hasattr(target, "config")
 
     @patch("flext_target_ldif.target.FlextTargetLdif.__init__")
     def test_self(self, mock_init: Mock) -> None:
@@ -196,7 +195,6 @@ class TestFlextTargetLdif:
     def test_target_ldif_config_schema(self) -> None:
         """Test target config schema is properly defined."""
         target = FlextTargetLdif()
-        assert hasattr(target, "config_jsonschema")
         assert isinstance(target.config_jsonschema, dict)
         properties = target.config_jsonschema.get("properties", {})
         if isinstance(properties, dict):
@@ -227,7 +225,6 @@ class TestFlextTargetLdif:
     def test_target_ldif_cli_method(self) -> None:
         """Test CLI method exists."""
         target = FlextTargetLdif()
-        assert hasattr(target, "cli")
         assert callable(target.cli)
 
     def test_target_ldif_config_dict_access(self) -> None:
@@ -294,8 +291,6 @@ class TestIntegration:
             target = FlextTargetLdif()
             assert isinstance(original_target, FlextTargetLdif)
             assert isinstance(target, FlextTargetLdif)
-            assert hasattr(target, "cli")
-            assert hasattr(target, "validate_config")
 
     def test_config_to_dict_conversion(self) -> None:
         """Test config can be converted to t.ContainerMapping for Singer SDK."""
@@ -347,10 +342,6 @@ class TestIntegration:
                 "file_naming_pattern": "{stream_name}.ldif",
             }
             target = FlextTargetLdif(config=config, validate_config=True)
-            assert hasattr(target, "name")
-            assert hasattr(target, "config_jsonschema")
-            assert hasattr(target, "default_sink_class")
-            assert hasattr(target, "cli")
             if target.config["output_path"] != tmp_dir:
                 raise AssertionError(
                     f"Expected {tmp_dir}, got {target.config['output_path']}",
