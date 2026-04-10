@@ -144,6 +144,3 @@ class FlextTargetLdifSettings(FlextSettings):
             msg = "DN template cannot be empty"
             raise ValueError(msg)
         return r[bool].ok(value=True)
-
-
-__all__: t.StrSequence = ["FlextTargetLdifSettings"]

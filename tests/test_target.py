@@ -115,7 +115,7 @@ class TestFlextTargetLdifClass:
 
     def test_target_creation_with_defaults(self) -> None:
         """Test creating target with default configuration."""
-        target = FlextTargetLdif()
+        FlextTargetLdif()
 
     @patch("flext_target_ldif.target.FlextTargetLdif.__init__")
     def test_self(self, mock_init: Mock) -> None:

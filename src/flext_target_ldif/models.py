@@ -8,7 +8,7 @@ from __future__ import annotations
 from collections.abc import Mapping, MutableSequence, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, override
+from typing import Annotated, override
 
 from pydantic import Field
 
@@ -18,10 +18,7 @@ from flext_core import (
 )
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
-from flext_target_ldif import c, p, r, t
-
-if TYPE_CHECKING:
-    from flext_target_ldif import FlextTargetLdifWriter
+from flext_target_ldif import FlextTargetLdifWriter, c, p, r, t
 
 """LDIF target models extending flext-core FlextModels.
 
@@ -44,7 +41,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
     - Results: Operation results and error context models
     """
 
-    class TargetLdif(FlextLdifModels.Ldif):
+    class TargetLdif:
         """TargetLdif domain model namespace."""
 
         class LdifFormatOptions(FlextSettings):
