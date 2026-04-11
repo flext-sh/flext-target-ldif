@@ -108,7 +108,7 @@ class TestFlextTargetLdifWriterFileOperations:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
         result = writer.open()
-        assert result.is_success
+        assert result.success
         assert writer._file_handle is not None
         writer.close()
         tmp_path.unlink()
@@ -118,7 +118,7 @@ class TestFlextTargetLdifWriterFileOperations:
         invalid_path = Path("/nonexistent/directory/test.ldif")
         writer = FlextTargetLdifWriter(output_file=invalid_path)
         result = writer.open()
-        assert not result.is_success
+        assert not result.success
         if result.error is not None and "Failed to open LDIF file" not in result.error:
             raise AssertionError(
                 f"Expected {'Failed to open LDIF file'} in {result.error}",
@@ -135,7 +135,7 @@ class TestFlextTargetLdifWriterFileOperations:
         writer = FlextTargetLdifWriter(output_file=tmp_path)
         writer.open()
         result = writer.close()
-        assert result.is_success
+        assert result.success
         assert writer._file_handle is None
         tmp_path.unlink()
 
@@ -143,7 +143,7 @@ class TestFlextTargetLdifWriterFileOperations:
         """Test closing when file is not open."""
         writer = FlextTargetLdifWriter()
         result = writer.close()
-        assert result.is_success
+        assert result.success
 
     @patch("pathlib.Path.open")
     def test_self(self, mock_open_method: Mock) -> None:
@@ -154,7 +154,7 @@ class TestFlextTargetLdifWriterFileOperations:
         writer = FlextTargetLdifWriter()
         writer.open()
         result = writer.close()
-        assert not result.is_success
+        assert not result.success
         if result.error is not None and "Failed to close LDIF file" not in result.error:
             raise AssertionError(
                 f"Expected {'Failed to close LDIF file'} in {result.error}",
@@ -175,7 +175,7 @@ class TestFlextTargetLdifWriterRecordWriting:
         writer = FlextTargetLdifWriter(output_file=tmp_path)
         record = {"uid": "jdoe", "cn": "John Doe", "mail": "john@example.com"}
         result = writer.write_record(record)
-        assert result.is_success
+        assert result.success
         if writer.record_count != 1:
             raise AssertionError(f"Expected {1}, got {writer.record_count}")
         writer.close()
@@ -224,7 +224,7 @@ class TestFlextTargetLdifWriterRecordWriting:
         record = {"uid": "jdoe", "cn": "John Doe"}
         record = {"uid": "jdoe", "cn": "John Doe"}
         result = writer.write_record(record)
-        assert result.is_success
+        assert result.success
         assert writer._file_handle is not None
         writer.close()
         tmp_path.unlink()
@@ -236,7 +236,7 @@ class TestFlextTargetLdifWriterRecordWriting:
         )
         record = {"cn": "John Doe", "mail": "john@example.com"}
         result = writer.write_record(record)
-        assert not result.is_success
+        assert not result.success
         if result.error is not None and "Failed to write record" not in result.error:
             raise AssertionError(
                 f"Expected {'Failed to write record'} in {result.error}",
@@ -258,7 +258,7 @@ class TestFlextTargetLdifWriterRecordWriting:
         ]
         for record in records:
             result = writer.write_record(record)
-            assert result.is_success
+            assert result.success
         if writer.record_count != EXPECTED_DATA_COUNT:
             raise AssertionError(f"Expected {3}, got {writer.record_count}")
         writer.close()
@@ -474,7 +474,7 @@ class TestFlextTargetLdifWriterContextManager:
         record = {"uid": "jdoe", "cn": "John Doe"}
         with FlextTargetLdifWriter(output_file=tmp_path) as writer:
             result = writer.write_record(record)
-            assert result.is_success
+            assert result.success
             assert writer._file_handle is not None
         assert writer._file_handle is None
         content = tmp_path.read_text(encoding="utf-8")

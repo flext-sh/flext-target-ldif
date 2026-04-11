@@ -339,7 +339,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
                     # Validate transformed entry
                     entry_validation = self.transformed_entry.validate_business_rules()
-                    if entry_validation.is_failure:
+                    if entry_validation.failure:
                         return r[bool].fail(
                             f"Transformed entry is invalid: {entry_validation.error}",
                         )
@@ -647,7 +647,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 """Clean up resources when sink is finished."""
                 if self._ldif_writer:
                     result: r[bool] = self._ldif_writer.close()
-                    if not result.is_success:
+                    if not result.success:
                         self.logger.error(
                             "Failed to close LDIF writer",
                             error=result.error or "",
@@ -670,7 +670,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 """Process a single record and write to LDIF."""
                 ldif_writer = self._get_ldif_writer()
                 result: r[bool] = ldif_writer.write_record(record)
-                if not result.is_success:
+                if not result.success:
                     msg: str = f"Failed to write LDIF record: {result.error}"
                     raise RuntimeError(msg)
 

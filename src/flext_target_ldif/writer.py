@@ -115,7 +115,7 @@ class FlextTargetLdifWriter:
         try:
             if self._file_handle is None:
                 open_result = self.open()
-                if not open_result.is_success:
+                if not open_result.success:
                     return r[bool].fail(f"Failed to write record: {open_result.error}")
             self._generate_dn(record)
             self._records.append(dict(record))

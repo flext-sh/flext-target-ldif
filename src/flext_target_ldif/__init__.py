@@ -13,13 +13,7 @@ from flext_core.lazy import (
 from flext_target_ldif.__version__ import *
 
 if _t.TYPE_CHECKING:
-    from flext_cli.base import s
-
-    from flext_core.decorators import d
-    from flext_core.exceptions import e
-    from flext_core.handlers import h
-    from flext_core.mixins import x
-    from flext_core.result import r
+    from flext_meltano import d, e, h, r, s, x
     from flext_target_ldif._utilities.service_runtime import (
         FlextTargetLdifServiceRuntime,
     )
@@ -39,7 +33,6 @@ _LAZY_IMPORTS = merge_lazy_imports(
     build_lazy_import_map(
         {
             ".__version__": (
-                "FlextTargetLdifVersion",
                 "__author__",
                 "__author_email__",
                 "__description__",
@@ -78,12 +71,14 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "u",
             ),
             ".writer": ("FlextTargetLdifWriter",),
-            "flext_cli.base": ("s",),
-            "flext_core.decorators": ("d",),
-            "flext_core.exceptions": ("e",),
-            "flext_core.handlers": ("h",),
-            "flext_core.mixins": ("x",),
-            "flext_core.result": ("r",),
+            "flext_meltano": (
+                "d",
+                "e",
+                "h",
+                "r",
+                "s",
+                "x",
+            ),
         },
     ),
     exclude_names=(
@@ -112,7 +107,6 @@ __all__ = [
     "FlextTargetLdifSettings",
     "FlextTargetLdifTypes",
     "FlextTargetLdifUtilities",
-    "FlextTargetLdifVersion",
     "FlextTargetLdifWriter",
     "FlextTargetLdifWriterError",
     "__author__",
