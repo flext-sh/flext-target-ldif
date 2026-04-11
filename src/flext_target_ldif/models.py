@@ -622,7 +622,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 key_properties: t.StrSequence | None = None,
             ) -> None:
                 """Initialize the LDIF sink."""
-                self.config: t.ContainerValueMapping = target_config
+                self.settings: t.ContainerValueMapping = target_config
                 self.stream_name = stream_name
                 self.schema = schema
                 self.key_properties = key_properties or []
@@ -679,16 +679,16 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
                 if self._ldif_writer is None:
                     output_file = self._get_output_file()
-                    raw_ldif_options = self.config.get("ldif_options", {})
+                    raw_ldif_options = self.settings.get("ldif_options", {})
                     ldif_options: t.ContainerValueMapping = {}
                     if isinstance(raw_ldif_options, Mapping):
                         ldif_options = {
                             str(key): value for key, value in raw_ldif_options.items()
                         }
-                    dn_template = self.config.get("dn_template")
+                    dn_template = self.settings.get("dn_template")
                     if dn_template is not None and (not isinstance(dn_template, str)):
                         dn_template = None
-                    raw_attribute_mapping = self.config.get("attribute_mapping", {})
+                    raw_attribute_mapping = self.settings.get("attribute_mapping", {})
                     attribute_mapping: t.StrMapping = {}
                     if isinstance(raw_attribute_mapping, Mapping):
                         attribute_mapping = {
@@ -708,7 +708,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             def _get_output_file(self) -> Path:
                 """Get the output file path for this stream."""
                 if self._output_file is None:
-                    output_path_raw = self.config.get("output_path", "./output")
+                    output_path_raw = self.settings.get("output_path", "./output")
                     output_path_str = (
                         output_path_raw
                         if isinstance(output_path_raw, str)

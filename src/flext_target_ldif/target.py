@@ -27,7 +27,7 @@ class FlextTargetLdif:
     @override
     def __init__(
         self,
-        config: t.ContainerValueMapping | None = None,
+        settings: t.ContainerValueMapping | None = None,
         validate_config: bool = False,
     ) -> None:
         """Initialize the LDIF target."""
@@ -36,13 +36,13 @@ class FlextTargetLdif:
             "dn_template": "uid={uid},ou=users,dc=example,dc=com",
             "output_path": "./output",
         }
-        merged: t.ContainerValueMapping = {**defaults, **(config or {})}
-        self.config: t.ContainerValueMapping = merged
+        merged: t.ContainerValueMapping = {**defaults, **(settings or {})}
+        self.settings: t.ContainerValueMapping = merged
         self.sinks: MutableMapping[str, FlextTargetLdifModels.TargetLdif.Sink] = {}
         self._test_config: t.ContainerValueMapping | None = None
         if validate_config:
             self.validate_config()
-        output_path_raw = self.config.get("output_path", "./output")
+        output_path_raw = self.settings.get("output_path", "./output")
         output_path_str = (
             output_path_raw if isinstance(output_path_raw, str) else "./output"
         )
@@ -72,7 +72,7 @@ class FlextTargetLdif:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = FlextTargetLdifModels.TargetLdif.Sink(
-                target_config=self.config,
+                target_config=self.settings,
                 stream_name=stream_name,
                 schema=schema,
             )
@@ -81,7 +81,7 @@ class FlextTargetLdif:
     def validate_config(self) -> None:
         """Validate the target configuration."""
         config_dict = (
-            dict(self._test_config) if self._test_config else dict(self.config)
+            dict(self._test_config) if self._test_config else dict(self.settings)
         )
         if self._test_config is not None and "output_file" not in config_dict:
             msg = "Output file is required"

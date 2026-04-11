@@ -80,7 +80,7 @@ class FlextTargetLdifServiceRuntime:
         """Create the LDIF runtime sink for the service facade."""
         normalized_target_config = cls.normalize_singer_mapping(target_config)
         runtime_target = FlextTargetLdif(
-            config=normalized_target_config,
+            settings=normalized_target_config,
             validate_config=False,
         )
         normalized_schema = cls.normalize_schema(schema)
@@ -90,7 +90,7 @@ class FlextTargetLdifServiceRuntime:
         )
         return cls.Sink.create(
             runtime_sink=runtime_sink,
-            target=cls.Target(config=normalized_target_config, validate_config=False),
+            target=cls.Target(settings=normalized_target_config, validate_config=False),
             stream_name=stream_name,
             schema=dict(normalized_schema),
             key_properties=[],

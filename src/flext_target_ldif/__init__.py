@@ -13,7 +13,7 @@ from flext_core.lazy import (
 from flext_target_ldif.__version__ import *
 
 if _t.TYPE_CHECKING:
-    from flext_meltano import d, e, h, r, s, x
+    from flext_ldif import d, e, h, r, s, x
     from flext_target_ldif._utilities.service_runtime import (
         FlextTargetLdifServiceRuntime,
     )
@@ -74,7 +74,7 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "u",
             ),
             ".writer": ("FlextTargetLdifWriter",),
-            "flext_meltano": (
+            "flext_ldif": (
                 "d",
                 "e",
                 "h",
