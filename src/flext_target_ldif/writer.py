@@ -16,11 +16,11 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Self, TextIO, override
 
-from flext_core import FlextLogger, r
+from flext_core import r
 from flext_ldif import ldif
 from flext_target_ldif import FlextTargetLdifWriterError, c, t
 
-logger = FlextLogger(__name__)
+logger = u.fetch_logger(__name__)
 
 _WRITER_SAFE_EXCEPTIONS: t.VariadicTuple[type[Exception]] = (
     *c.Meltano.SINGER_SAFE_EXCEPTIONS,

@@ -17,7 +17,7 @@ if _t.TYPE_CHECKING:
     from flext_target_ldif._utilities.service_runtime import (
         FlextTargetLdifServiceRuntime,
     )
-    from flext_target_ldif.api import FlextTargetLdifService
+    from flext_target_ldif.api import FlextTargetLdifService, target_ldif
     from flext_target_ldif.cli import FlextTargetLdifCli, main
     from flext_target_ldif.constants import FlextTargetLdifConstants, c
     from flext_target_ldif.errors import FlextTargetLdifWriterError
@@ -42,7 +42,10 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "__version__",
                 "__version_info__",
             ),
-            ".api": ("FlextTargetLdifService",),
+            ".api": (
+                "FlextTargetLdifService",
+                "target_ldif",
+            ),
             ".cli": (
                 "FlextTargetLdifCli",
                 "main",
@@ -127,6 +130,7 @@ __all__ = [
     "r",
     "s",
     "t",
+    "target_ldif",
     "u",
     "x",
 ]

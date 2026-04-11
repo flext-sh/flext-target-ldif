@@ -13,7 +13,6 @@ from typing import Annotated, override
 from pydantic import Field
 
 from flext_core import (
-    FlextLogger,
     FlextSettings,
 )
 from flext_ldif import FlextLdifModels
@@ -640,7 +639,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             def logger(self) -> p.Logger:
                 """Lazy logger for Sink."""
                 if self._logger_instance is None:
-                    self._logger_instance = FlextLogger.create_module_logger(__name__)
+                    self._logger_instance = u.fetch_logger(__name__)
                 return self._logger_instance
 
             def clean_up(self) -> None:
