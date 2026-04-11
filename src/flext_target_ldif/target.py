@@ -50,7 +50,7 @@ class FlextTargetLdif:
         output_path.mkdir(parents=True, exist_ok=True)
 
     @property
-    def cli(self) -> Callable[..., None]:
+    def cli(self) -> Callable[..., int]:
         """Return the CLI entry point for this target."""
         return cli_main
 

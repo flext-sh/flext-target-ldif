@@ -18,7 +18,7 @@ from typing import Self, TextIO, override
 
 from flext_core import r
 from flext_ldif import ldif
-from flext_target_ldif import FlextTargetLdifWriterError, c, t
+from flext_target_ldif import FlextTargetLdifWriterError, c, t, u
 
 logger = u.fetch_logger(__name__)
 

@@ -17,7 +17,7 @@ from flext_core import (
 )
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
-from flext_target_ldif import FlextTargetLdifWriter, c, p, r, t
+from flext_target_ldif import FlextTargetLdifWriter, c, p, r, t, u
 
 """LDIF target models extending flext-core FlextModels.
 

@@ -37,4 +37,6 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
         )
 
 
-__all__ = ["FlextTargetLdifService"]
+target_ldif = FlextTargetLdifService
+
+__all__ = ["FlextTargetLdifService", "target_ldif"]
