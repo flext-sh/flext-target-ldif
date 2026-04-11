@@ -13,6 +13,8 @@ from flext_core.lazy import (
 from flext_target_ldif.__version__ import *
 
 if _t.TYPE_CHECKING:
+    from flext_cli.base import s
+
     from flext_core.decorators import d
     from flext_core.exceptions import e
     from flext_core.handlers import h
@@ -21,34 +23,16 @@ if _t.TYPE_CHECKING:
     from flext_target_ldif._utilities.service_runtime import (
         FlextTargetLdifServiceRuntime,
     )
-    from flext_target_ldif.api import (
-        FlextTargetLdifService,
-        FlextTargetLdifService as s,
-    )
+    from flext_target_ldif.api import FlextTargetLdifService
     from flext_target_ldif.cli import FlextTargetLdifCli, main
-    from flext_target_ldif.constants import (
-        FlextTargetLdifConstants,
-        FlextTargetLdifConstants as c,
-    )
+    from flext_target_ldif.constants import FlextTargetLdifConstants, c
     from flext_target_ldif.errors import FlextTargetLdifWriterError
-    from flext_target_ldif.models import (
-        FlextTargetLdifModels,
-        FlextTargetLdifModels as m,
-    )
-    from flext_target_ldif.protocols import (
-        FlextTargetLdifProtocols,
-        FlextTargetLdifProtocols as p,
-    )
+    from flext_target_ldif.models import FlextTargetLdifModels, m
+    from flext_target_ldif.protocols import FlextTargetLdifProtocols, p
     from flext_target_ldif.settings import FlextTargetLdifSettings
     from flext_target_ldif.target import FlextTargetLdif
-    from flext_target_ldif.typings import (
-        FlextTargetLdifTypes,
-        FlextTargetLdifTypes as t,
-    )
-    from flext_target_ldif.utilities import (
-        FlextTargetLdifUtilities,
-        FlextTargetLdifUtilities as u,
-    )
+    from flext_target_ldif.typings import FlextTargetLdifTypes, t
+    from flext_target_ldif.utilities import FlextTargetLdifUtilities, u
     from flext_target_ldif.writer import FlextTargetLdifWriter
 _LAZY_IMPORTS = merge_lazy_imports(
     ("._utilities",),
@@ -70,28 +54,36 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "FlextTargetLdifCli",
                 "main",
             ),
-            ".constants": ("FlextTargetLdifConstants",),
+            ".constants": (
+                "FlextTargetLdifConstants",
+                "c",
+            ),
             ".errors": ("FlextTargetLdifWriterError",),
-            ".models": ("FlextTargetLdifModels",),
-            ".protocols": ("FlextTargetLdifProtocols",),
+            ".models": (
+                "FlextTargetLdifModels",
+                "m",
+            ),
+            ".protocols": (
+                "FlextTargetLdifProtocols",
+                "p",
+            ),
             ".settings": ("FlextTargetLdifSettings",),
             ".target": ("FlextTargetLdif",),
-            ".typings": ("FlextTargetLdifTypes",),
-            ".utilities": ("FlextTargetLdifUtilities",),
+            ".typings": (
+                "FlextTargetLdifTypes",
+                "t",
+            ),
+            ".utilities": (
+                "FlextTargetLdifUtilities",
+                "u",
+            ),
             ".writer": ("FlextTargetLdifWriter",),
+            "flext_cli.base": ("s",),
             "flext_core.decorators": ("d",),
             "flext_core.exceptions": ("e",),
             "flext_core.handlers": ("h",),
             "flext_core.mixins": ("x",),
             "flext_core.result": ("r",),
-        },
-        alias_groups={
-            ".api": (("s", "FlextTargetLdifService"),),
-            ".constants": (("c", "FlextTargetLdifConstants"),),
-            ".models": (("m", "FlextTargetLdifModels"),),
-            ".protocols": (("p", "FlextTargetLdifProtocols"),),
-            ".typings": (("t", "FlextTargetLdifTypes"),),
-            ".utilities": (("u", "FlextTargetLdifUtilities"),),
         },
     ),
     exclude_names=(
@@ -105,6 +97,9 @@ _LAZY_IMPORTS = merge_lazy_imports(
     ),
     module_name=__name__,
 )
+
+
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
 
 __all__ = [
     "FlextTargetLdif",
@@ -141,6 +136,3 @@ __all__ = [
     "u",
     "x",
 ]
-
-
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)

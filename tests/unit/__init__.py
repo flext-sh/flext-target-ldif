@@ -1,74 +1,16 @@
 # AUTO-GENERATED FILE — Regenerate with: make gen
-"""Tests package."""
+"""Unit package."""
 
 from __future__ import annotations
 
-import typing as _t
-
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
-if _t.TYPE_CHECKING:
-    from flext_core.decorators import d
-    from flext_core.exceptions import e
-    from flext_core.handlers import h
-    from flext_core.mixins import x
-    from flext_core.result import r
-    from flext_core.service import s
-    from tests.constants import (
-        TestsFlextTargetLdifConstants,
-        TestsFlextTargetLdifConstants as c,
-    )
-    from tests.models import TestsFlextTargetLdifModels, TestsFlextTargetLdifModels as m
-    from tests.protocols import (
-        TestsFlextTargetLdifProtocols,
-        TestsFlextTargetLdifProtocols as p,
-    )
-    from tests.typings import TestsFlextTargetLdifTypes, TestsFlextTargetLdifTypes as t
-    from tests.utilities import (
-        TestsFlextTargetLdifUtilities,
-        TestsFlextTargetLdifUtilities as u,
-    )
 _LAZY_IMPORTS = build_lazy_import_map(
     {
-        ".constants": ("TestsFlextTargetLdifConstants",),
-        ".models": ("TestsFlextTargetLdifModels",),
-        ".protocols": ("TestsFlextTargetLdifProtocols",),
-        ".typings": ("TestsFlextTargetLdifTypes",),
-        ".utilities": ("TestsFlextTargetLdifUtilities",),
-        "flext_core.decorators": ("d",),
-        "flext_core.exceptions": ("e",),
-        "flext_core.handlers": ("h",),
-        "flext_core.mixins": ("x",),
-        "flext_core.result": ("r",),
-        "flext_core.service": ("s",),
-    },
-    alias_groups={
-        ".constants": (("c", "TestsFlextTargetLdifConstants"),),
-        ".models": (("m", "TestsFlextTargetLdifModels"),),
-        ".protocols": (("p", "TestsFlextTargetLdifProtocols"),),
-        ".typings": (("t", "TestsFlextTargetLdifTypes"),),
-        ".utilities": (("u", "TestsFlextTargetLdifUtilities"),),
+        ".test_target": ("test_target",),
+        ".test_writer": ("test_writer",),
     },
 )
 
-__all__ = [
-    "TestsFlextTargetLdifConstants",
-    "TestsFlextTargetLdifModels",
-    "TestsFlextTargetLdifProtocols",
-    "TestsFlextTargetLdifTypes",
-    "TestsFlextTargetLdifUtilities",
-    "c",
-    "d",
-    "e",
-    "h",
-    "m",
-    "p",
-    "r",
-    "s",
-    "t",
-    "u",
-    "x",
-]
 
-
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)
