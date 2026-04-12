@@ -14,10 +14,15 @@ from pydantic import Field
 
 from flext_core import (
     FlextSettings,
+    r,
 )
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
-from flext_target_ldif import FlextTargetLdifWriter, c, p, r, t, u
+from flext_target_ldif.constants import c
+from flext_target_ldif.protocols import p
+from flext_target_ldif.typings import t
+from flext_target_ldif.utilities import u
+from flext_target_ldif.writer import FlextTargetLdifWriter
 
 """LDIF target models extending flext-core FlextModels.
 
@@ -49,7 +54,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             line_length: Annotated[
                 t.PositiveInt,
                 Field(
-                    default=c.STANDARD_LINE_LENGTH,
+                    default=c.TargetLdif.STANDARD_LINE_LENGTH,
                     description="Maximum LDIF line length",
                 ),
             ]
@@ -675,8 +680,6 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             def _get_ldif_writer(self) -> FlextTargetLdifWriter:
                 """Get or create the LDIF writer for this sink."""
-                from flext_target_ldif import FlextTargetLdifWriter
-
                 if self._ldif_writer is None:
                     output_file = self._get_output_file()
                     raw_ldif_options = self.settings.get("ldif_options", {})

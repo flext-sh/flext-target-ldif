@@ -23,8 +23,7 @@ class FlextTargetLdifSettings(FlextSettings):
     """Typed runtime configuration for the LDIF target."""
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
-        env_prefix="FLEXT_TARGET_LDIF_",
-        extra="ignore",
+        env_prefix="FLEXT_TARGET_LDIF_", extra="ignore"
     )
 
     _allow_mutation: bool = True

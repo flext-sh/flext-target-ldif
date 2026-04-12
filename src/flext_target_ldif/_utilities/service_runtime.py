@@ -5,11 +5,14 @@ from __future__ import annotations
 from pathlib import Path
 from typing import override
 
-from flext_meltano import (
+from flext_meltano.services.singer_sdk import (
     Sink as FlextMeltanoSingerSinkBase,
     Target as FlextMeltanoSingerTargetBase,
 )
-from flext_target_ldif import FlextTargetLdif, FlextTargetLdifModels, p, t, u
+from flext_target_ldif.models import FlextTargetLdifModels
+from flext_target_ldif.protocols import p
+from flext_target_ldif.typings import t
+from flext_target_ldif.utilities import u
 
 
 class FlextTargetLdifServiceRuntime:
@@ -79,18 +82,18 @@ class FlextTargetLdifServiceRuntime:
     ) -> p.Meltano.SingerDrainSink:
         """Create the LDIF runtime sink for the service facade."""
         normalized_target_config = cls.normalize_singer_mapping(target_config)
-        runtime_target = FlextTargetLdif(
-            settings=normalized_target_config,
-            validate_config=False,
-        )
         normalized_schema = cls.normalize_schema(schema)
-        runtime_sink = runtime_target.get_sink(
+        runtime_sink = FlextTargetLdifModels.TargetLdif.Sink(
+            target_config=normalized_target_config,
             stream_name=stream_name,
             schema=normalized_schema,
         )
         return cls.Sink.create(
             runtime_sink=runtime_sink,
-            target=cls.Target(settings=normalized_target_config, validate_config=False),
+            target=cls.Target(
+                config=dict(normalized_target_config),
+                validate_config=False,
+            ),
             stream_name=stream_name,
             schema=dict(normalized_schema),
             key_properties=[],

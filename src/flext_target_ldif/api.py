@@ -9,16 +9,25 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import override
+from typing import Annotated, override
+
+from pydantic import Field
 
 from flext_meltano import FlextMeltanoTargetServiceBase
-from flext_target_ldif import FlextTargetLdifServiceRuntime, p, t
+from flext_target_ldif._utilities.service_runtime import (
+    FlextTargetLdifServiceRuntime,
+)
+from flext_target_ldif.protocols import p
+from flext_target_ldif.typings import t
 
 
 class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
     """Orchestrator for target-ldif. All behavior from base via MRO."""
 
-    target_name: t.NonEmptyStr = "target-ldif"
+    target_name: Annotated[
+        t.NonEmptyStr,
+        Field(default="target-ldif", description="Singer target name"),
+    ]
 
     @override
     def create_sink(
@@ -27,9 +36,7 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
         schema: t.FlatContainerMapping,
     ) -> p.Meltano.SingerDrainSink:
         """Create an LDIF sink for a stream."""
-        target_config: t.ContainerMapping = (
-            self.config_overrides if self.config_overrides is not None else {}
-        )
+        target_config: t.ContainerMapping = self.settings_overrides or {}
         return FlextTargetLdifServiceRuntime.create_sink(
             stream_name=stream_name,
             schema=schema,

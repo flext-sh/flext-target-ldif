@@ -142,19 +142,17 @@ def attribute_mapping() -> t.StrMapping:
     }
 
 
-def pytest_configure(settings: pytest.Config) -> None:
+def pytest_configure(config: pytest.Config) -> None:
     """Configure pytest markers."""
-    settings.addinivalue_line("markers", "unit: mark test as a unit test")
-    settings.addinivalue_line(
-        "markers", "integration: mark test as an integration test"
-    )
-    settings.addinivalue_line("markers", "slow: mark test as slow running")
-    settings.addinivalue_line("markers", "smoke: mark test as a smoke test")
-    settings.addinivalue_line("markers", "ldif: mark test as LDIF-specific")
-    settings.addinivalue_line("markers", "singer: mark test as Singer-specific")
-    settings.addinivalue_line("markers", "target: mark test as target-specific")
-    settings.addinivalue_line("markers", "sink: mark test as sink-specific")
-    settings.addinivalue_line(
+    config.addinivalue_line("markers", "unit: mark test as a unit test")
+    config.addinivalue_line("markers", "integration: mark test as an integration test")
+    config.addinivalue_line("markers", "slow: mark test as slow running")
+    config.addinivalue_line("markers", "smoke: mark test as a smoke test")
+    config.addinivalue_line("markers", "ldif: mark test as LDIF-specific")
+    config.addinivalue_line("markers", "singer: mark test as Singer-specific")
+    config.addinivalue_line("markers", "target: mark test as target-specific")
+    config.addinivalue_line("markers", "sink: mark test as sink-specific")
+    config.addinivalue_line(
         "markers",
         "requires_filesystem: mark test as requiring file system access",
     )
