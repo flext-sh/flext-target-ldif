@@ -22,7 +22,7 @@ from flext_target_ldif import (
 
 
 class TestFlextTargetLdifSettings:
-    """Test FlextTargetLdifSettings value t.NormalizedValue."""
+    """Test FlextTargetLdifSettings value t.RecursiveContainer."""
 
     def test_config_creation_with_defaults(self) -> None:
         """Test creating settings with default values."""
@@ -230,7 +230,7 @@ class TestFlextTargetLdif:
         assert callable(target.cli)
 
     def test_target_ldif_config_dict_access(self) -> None:
-        """Test settings t.ContainerMapping access."""
+        """Test settings t.RecursiveContainerMapping access."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {
                 "output_path": tmp_dir,
@@ -298,7 +298,7 @@ class TestIntegration:
             assert isinstance(target, FlextTargetLdif)
 
     def test_config_to_dict_conversion(self) -> None:
-        """Test settings can be converted to t.ContainerMapping for Singer SDK."""
+        """Test settings can be converted to t.RecursiveContainerMapping for Singer SDK."""
         settings = FlextTargetLdifSettings(
             output_file="test.ldif",
             schema_validation=True,
