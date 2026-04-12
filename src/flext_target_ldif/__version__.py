@@ -40,7 +40,7 @@ __author__ = FlextTargetLdifVersion.__author__
 __author_email__ = FlextTargetLdifVersion.__author_email__
 __license__ = FlextTargetLdifVersion.__license__
 __url__ = FlextTargetLdifVersion.__url__
-__all__ = [
+__all__: list[str] = [
     "FlextTargetLdifVersion",
     "__author__",
     "__author_email__",

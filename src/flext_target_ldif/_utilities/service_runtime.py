@@ -144,4 +144,4 @@ class FlextTargetLdifServiceRuntime:
         }
 
 
-__all__ = ["FlextTargetLdifServiceRuntime"]
+__all__: list[str] = ["FlextTargetLdifServiceRuntime"]

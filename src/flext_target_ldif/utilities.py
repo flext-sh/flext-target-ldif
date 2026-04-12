@@ -440,4 +440,4 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
 u = FlextTargetLdifUtilities
 
-__all__ = ["FlextTargetLdifUtilities", "u"]
+__all__: list[str] = ["FlextTargetLdifUtilities", "u"]

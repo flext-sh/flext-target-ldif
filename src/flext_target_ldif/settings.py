@@ -10,19 +10,15 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Annotated, ClassVar, override as _override
 
-from pydantic import Field, ValidationError
-from pydantic_core import PydanticUndefined
-from pydantic_settings import SettingsConfigDict
-
 from flext_core import FlextSettings, r
-from flext_target_ldif import c, t
+from flext_target_ldif import c, t, u
 
 
 @FlextSettings.auto_register("target-ldif")
 class FlextTargetLdifSettings(FlextSettings):
     """Typed runtime configuration for the LDIF target."""
 
-    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
+    model_config: ClassVar[c.SettingsConfigDict] = c.SettingsConfigDict(
         env_prefix="FLEXT_TARGET_LDIF_", extra="ignore"
     )
 
@@ -38,7 +34,7 @@ class FlextTargetLdifSettings(FlextSettings):
         object.__setattr__(self, "_allow_mutation", True)
         for field_name, field_info in type(self).model_fields.items():
             if field_name not in kwargs:
-                if field_info.default is not PydanticUndefined:
+                if field_info.default is not c.PydanticUndefined:
                     kwargs[field_name] = field_info.default
                 elif field_info.default_factory is not None:
                     factory_fn: Callable[..., t.NormalizedValue] = (
@@ -56,7 +52,7 @@ class FlextTargetLdifSettings(FlextSettings):
         except AttributeError:
             allow = True
         if not allow and name != "_allow_mutation" and name in type(self).model_fields:
-            raise ValidationError.from_exception_data(
+            raise c.ValidationError.from_exception_data(
                 type(self).__name__,
                 [{"type": "frozen_instance", "loc": (name,), "input": value}],
             )
@@ -64,53 +60,53 @@ class FlextTargetLdifSettings(FlextSettings):
 
     output_file: Annotated[
         str,
-        Field(
+        u.Field(
             default=c.TargetLdif.DEFAULT_OUTPUT_FILE, description="Output LDIF filename"
         ),
     ]
     output_path: Annotated[
         str,
-        Field(
+        u.Field(
             default=c.TargetLdif.DEFAULT_OUTPUT_PATH,
             description="Output directory path",
         ),
     ]
     file_naming_pattern: Annotated[
         str,
-        Field(
+        u.Field(
             default=c.TargetLdif.DEFAULT_FILE_NAMING_PATTERN,
             description="Pattern for generated filenames",
         ),
     ]
     dn_template: Annotated[
         str,
-        Field(
+        u.Field(
             default=c.TargetLdif.DEFAULT_DN_TEMPLATE,
             description="Template used to build entry DN values",
         ),
     ]
     attribute_mapping: Annotated[
         t.StrMapping,
-        Field(
+        u.Field(
             description="Source-to-LDIF attribute mapping",
         ),
-    ] = Field(default_factory=dict)
+    ] = u.Field(default_factory=dict)
     ldif_options: Annotated[
         t.ContainerValueMapping,
-        Field(
+        u.Field(
             description="Raw LDIF formatter options",
         ),
-    ] = Field(default_factory=dict)
+    ] = u.Field(default_factory=dict)
     schema_validation: Annotated[
         bool,
-        Field(
+        u.Field(
             default=True,
             description="Enable schema validation for transformed records",
         ),
     ]
     line_length: Annotated[
         int,
-        Field(
+        u.Field(
             default=c.TargetLdif.DEFAULT_LINE_LENGTH,
             ge=1,
             description="LDIF line wrap length",
@@ -118,14 +114,14 @@ class FlextTargetLdifSettings(FlextSettings):
     ]
     base64_encode: Annotated[
         bool,
-        Field(
+        u.Field(
             default=False,
             description="Force base64 encoding for all values",
         ),
     ]
     include_timestamps: Annotated[
         bool,
-        Field(
+        u.Field(
             default=True,
             description="Include timestamp metadata in generated entries",
         ),

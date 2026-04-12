@@ -26,4 +26,4 @@ def main(args: t.StrSequence | None = None) -> int:
     return FlextTargetLdifCli.run(args)
 
 
-__all__ = ["FlextTargetLdifCli", "main"]
+__all__: list[str] = ["FlextTargetLdifCli", "main"]

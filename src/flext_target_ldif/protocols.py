@@ -189,4 +189,4 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
 
 p = FlextTargetLdifProtocols
-__all__ = ["FlextTargetLdifProtocols", "p"]
+__all__: list[str] = ["FlextTargetLdifProtocols", "p"]

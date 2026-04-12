@@ -29,4 +29,4 @@ class FlextTargetLdifWriterError(e.OperationError):
         return f"FlextTargetLdifWriterError: {self.message}"
 
 
-__all__ = ["FlextTargetLdifWriterError"]
+__all__: list[str] = ["FlextTargetLdifWriterError"]

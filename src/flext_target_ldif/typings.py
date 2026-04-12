@@ -17,4 +17,4 @@ class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
 t = FlextTargetLdifTypes
 
-__all__ = ["FlextTargetLdifTypes", "t"]
+__all__: list[str] = ["FlextTargetLdifTypes", "t"]

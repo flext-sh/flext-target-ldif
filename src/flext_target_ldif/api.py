@@ -11,9 +11,8 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from pydantic import Field
-
 from flext_meltano import FlextMeltanoTargetServiceBase
+from flext_target_ldif import u
 from flext_target_ldif._utilities.service_runtime import (
     FlextTargetLdifServiceRuntime,
 )
@@ -26,7 +25,7 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
 
     target_name: Annotated[
         t.NonEmptyStr,
-        Field(default="target-ldif", description="Singer target name"),
+        u.Field(default="target-ldif", description="Singer target name"),
     ]
 
     @override
@@ -46,4 +45,4 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
 
 target_ldif = FlextTargetLdifService
 
-__all__ = ["FlextTargetLdifService", "target_ldif"]
+__all__: list[str] = ["FlextTargetLdifService", "target_ldif"]

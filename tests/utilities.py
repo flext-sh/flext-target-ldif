@@ -22,4 +22,4 @@ class TestsFlextTargetLdifUtilities(FlextTestsUtilities, FlextTargetLdifUtilitie
 
 u = TestsFlextTargetLdifUtilities
 
-__all__ = ["TestsFlextTargetLdifUtilities", "u"]
+__all__: list[str] = ["TestsFlextTargetLdifUtilities", "u"]

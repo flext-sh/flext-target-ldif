@@ -19,4 +19,4 @@ class TestsFlextTargetLdifConstants(FlextTestsConstants, FlextTargetLdifConstant
 
 c = TestsFlextTargetLdifConstants
 
-__all__ = ["TestsFlextTargetLdifConstants", "c"]
+__all__: list[str] = ["TestsFlextTargetLdifConstants", "c"]

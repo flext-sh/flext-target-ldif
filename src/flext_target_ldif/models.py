@@ -10,8 +10,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Annotated, override
 
-from pydantic import Field
-
 from flext_core import (
     FlextSettings,
     r,
@@ -53,42 +51,42 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             line_length: Annotated[
                 t.PositiveInt,
-                Field(
+                u.Field(
                     default=c.TargetLdif.STANDARD_LINE_LENGTH,
                     description="Maximum LDIF line length",
                 ),
             ]
             fold_lines: Annotated[
                 bool,
-                Field(
+                u.Field(
                     default=True,
                     description="Enable line folding for long lines",
                 ),
             ]
             base64_encode: Annotated[
                 bool,
-                Field(
+                u.Field(
                     default=False,
                     description="Force base64 encoding for all attributes",
                 ),
             ]
             include_version: Annotated[
                 bool,
-                Field(
+                u.Field(
                     default=True,
                     description="Include LDIF version header",
                 ),
             ]
             encoding: Annotated[
                 str,
-                Field(
+                u.Field(
                     default="utf-8",
                     description="Character encoding for LDIF files",
                 ),
             ]
             line_separator: Annotated[
                 str,
-                Field(default="\n", description="Line separator character"),
+                u.Field(default="\n", description="Line separator character"),
             ]
 
         class LdifExportConfig(FlextSettings):
@@ -96,53 +94,53 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             output_path: Annotated[
                 str,
-                Field(..., description="Output directory for LDIF files"),
+                u.Field(..., description="Output directory for LDIF files"),
             ]
             file_naming_pattern: Annotated[
                 str,
-                Field(
+                u.Field(
                     default="{stream_name}.ldif",
                     description="File naming pattern template",
                 ),
             ]
             dn_template: Annotated[
                 str,
-                Field(
+                u.Field(
                     ...,
                     description="DN template for generating LDIF entry DNs",
                 ),
             ]
             attribute_mappings: Annotated[
                 t.StrMapping,
-                Field(
+                u.Field(
                     description="Singer field to LDIF attribute mappings",
                 ),
-            ] = Field(default_factory=dict)
+            ] = u.Field(default_factory=dict)
             object_classes: Annotated[
                 t.StrSequence,
-                Field(
+                u.Field(
                     description="Default LDAP t.NormalizedValue classes for entries",
                 ),
-            ] = Field(default_factory=list)
+            ] = u.Field(default_factory=list)
 
             # File management options
             overwrite_existing: Annotated[
                 bool,
-                Field(
+                u.Field(
                     default=False,
                     description="Overwrite existing LDIF files",
                 ),
             ]
             create_directories: Annotated[
                 bool,
-                Field(
+                u.Field(
                     default=True,
                     description="Create output directories if they don't exist",
                 ),
             ]
             compress_output: Annotated[
                 bool,
-                Field(
+                u.Field(
                     default=False,
                     description="Compress LDIF files with gzip",
                 ),
@@ -151,10 +149,10 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             # Format configuration
             format_options: Annotated[
                 FlextTargetLdifModels.TargetLdif.LdifFormatOptions,
-                Field(
+                u.Field(
                     description="LDIF format options",
                 ),
-            ] = Field(
+            ] = u.Field(
                 default_factory=lambda: (
                     FlextTargetLdifModels.TargetLdif.LdifFormatOptions.model_validate(
                         {},
@@ -167,36 +165,36 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             distinguished_name: Annotated[
                 t.NonEmptyStr,
-                Field(
+                u.Field(
                     ...,
                     description="LDIF Distinguished Name (DN)",
                 ),
             ]
             attributes: Annotated[
                 Mapping[str, t.StrSequence],
-                Field(
+                u.Field(
                     description="LDIF attributes with values",
                 ),
-            ] = Field(default_factory=dict)
+            ] = u.Field(default_factory=dict)
             object_classes: Annotated[
                 t.StrSequence,
-                Field(
+                u.Field(
                     description="LDAP t.NormalizedValue classes",
                 ),
-            ] = Field(default_factory=list)
+            ] = u.Field(default_factory=list)
             change_type: Annotated[
                 str | None,
-                Field(
+                u.Field(
                     None,
                     description="LDIF change type (add, modify, delete, modrdn)",
                 ),
             ]
             controls: Annotated[
                 t.StrSequence,
-                Field(
+                u.Field(
                     description="LDAP controls for the entry",
                 ),
-            ] = Field(default_factory=list)
+            ] = u.Field(default_factory=list)
 
             def validate_business_rules(self) -> r[bool]:
                 """Validate LDIF entry business rules."""
@@ -233,25 +231,25 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             file_path: Annotated[
                 t.NonEmptyStr,
-                Field(..., description="Path to the LDIF file"),
+                u.Field(..., description="Path to the LDIF file"),
             ]
             stream_name: Annotated[
                 t.NonEmptyStr,
-                Field(..., description="Singer stream name"),
+                u.Field(..., description="Singer stream name"),
             ]
             entries: Annotated[
                 Sequence[FlextTargetLdifModels.TargetLdif.LdifEntry],
-                Field(
+                u.Field(
                     description="LDIF entries in the file",
                 ),
-            ] = Field(
+            ] = u.Field(
                 default_factory=lambda: list[
                     FlextTargetLdifModels.TargetLdif.LdifEntry
                 ](),
             )
             format_options: Annotated[
                 FlextTargetLdifModels.TargetLdif.LdifFormatOptions,
-                Field(
+                u.Field(
                     ...,
                     description="Format options used for the file",
                 ),
@@ -260,15 +258,15 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             # File metadata
             file_size_bytes: Annotated[
                 t.NonNegativeInt,
-                Field(default=0, description="File size in bytes"),
+                u.Field(default=0, description="File size in bytes"),
             ]
             entry_count: Annotated[
                 t.NonNegativeInt,
-                Field(default=0, description="Number of entries in file"),
+                u.Field(default=0, description="Number of entries in file"),
             ]
             is_compressed: Annotated[
                 bool,
-                Field(default=False, description="Whether file is compressed"),
+                u.Field(default=False, description="Whether file is compressed"),
             ]
 
             def validate_business_rules(self) -> r[bool]:
@@ -293,37 +291,37 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             original_record: Annotated[
                 t.ContainerValueMapping,
-                Field(
+                u.Field(
                     ...,
                     description="Original Singer record",
                 ),
             ]
             transformed_entry: Annotated[
                 FlextTargetLdifModels.TargetLdif.LdifEntry,
-                Field(
+                u.Field(
                     ...,
                     description="Resulting LDIF entry",
                 ),
             ]
             transformation_errors: Annotated[
                 t.StrSequence,
-                Field(
+                u.Field(
                     description="Transformation errors",
                 ),
-            ] = Field(default_factory=list)
+            ] = u.Field(default_factory=list)
             processing_time_ms: Annotated[
                 t.NonNegativeFloat,
-                Field(
+                u.Field(
                     default=0.0,
                     description="Processing time in milliseconds",
                 ),
             ]
             transformation_timestamp: Annotated[
                 datetime,
-                Field(
+                u.Field(
                     description="Transformation timestamp",
                 ),
-            ] = Field(default_factory=lambda: datetime.now(UTC))
+            ] = u.Field(default_factory=lambda: datetime.now(UTC))
 
             @property
             def has_errors(self) -> bool:
@@ -359,40 +357,40 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             stream_name: Annotated[
                 t.NonEmptyStr,
-                Field(..., description="Singer stream name"),
+                u.Field(..., description="Singer stream name"),
             ]
             batch_size: Annotated[
                 t.BatchSize,
-                Field(
+                u.Field(
                     default=c.DEFAULT_SIZE,
                     description="Records per batch",
                 ),
             ]
             current_batch: Annotated[
                 Sequence[FlextTargetLdifModels.TargetLdif.LdifEntry],
-                Field(
+                u.Field(
                     description="Current batch of entries",
                 ),
-            ] = Field(
+            ] = u.Field(
                 default_factory=lambda: list[
                     FlextTargetLdifModels.TargetLdif.LdifEntry
                 ](),
             )
             total_processed: Annotated[
                 t.NonNegativeInt,
-                Field(default=0, description="Total entries processed"),
+                u.Field(default=0, description="Total entries processed"),
             ]
             successful_exports: Annotated[
                 t.NonNegativeInt,
-                Field(default=0, description="Successful exports"),
+                u.Field(default=0, description="Successful exports"),
             ]
             failed_exports: Annotated[
                 t.NonNegativeInt,
-                Field(default=0, description="Failed exports"),
+                u.Field(default=0, description="Failed exports"),
             ]
             last_processed_at: Annotated[
                 datetime | None,
-                Field(
+                u.Field(
                     None,
                     description="Last processing timestamp",
                 ),
@@ -434,25 +432,25 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             stream_name: Annotated[
                 t.NonEmptyStr,
-                Field(..., description="Singer stream name"),
+                u.Field(..., description="Singer stream name"),
             ]
             ldif_config: Annotated[
                 FlextTargetLdifModels.TargetLdif.LdifExportConfig,
-                Field(
+                u.Field(
                     ...,
                     description="LDIF export configuration",
                 ),
             ]
             batch_size: Annotated[
                 t.BatchSize,
-                Field(
+                u.Field(
                     default=c.DEFAULT_SIZE,
                     description="Batch size for processing",
                 ),
             ]
             enable_validation: Annotated[
                 bool,
-                Field(
+                u.Field(
                     default=True,
                     description="Enable LDIF format validation",
                 ),
@@ -463,28 +461,28 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             stream_name: Annotated[
                 t.NonEmptyStr,
-                Field(..., description="Singer stream name"),
+                u.Field(..., description="Singer stream name"),
             ]
             output_files: Annotated[
                 t.StrSequence,
-                Field(
+                u.Field(
                     description="Generated LDIF file paths",
                 ),
-            ] = Field(default_factory=list)
+            ] = u.Field(default_factory=list)
             records_processed: Annotated[
                 t.NonNegativeInt,
-                Field(
+                u.Field(
                     default=0,
                     description="Total records processed",
                 ),
             ]
             entries_exported: Annotated[
                 t.NonNegativeInt,
-                Field(default=0, description="LDIF entries exported"),
+                u.Field(default=0, description="LDIF entries exported"),
             ]
             entries_failed: Annotated[
                 t.NonNegativeInt,
-                Field(
+                u.Field(
                     default=0,
                     description="Entries that failed export",
                 ),
@@ -493,14 +491,14 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             # File statistics
             total_file_size_bytes: Annotated[
                 t.NonNegativeInt,
-                Field(
+                u.Field(
                     default=0,
                     description="Total size of generated files",
                 ),
             ]
             files_compressed: Annotated[
                 t.NonNegativeInt,
-                Field(
+                u.Field(
                     default=0,
                     description="Number of compressed files",
                 ),
@@ -509,14 +507,14 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             # Performance metrics
             total_duration_ms: Annotated[
                 t.NonNegativeFloat,
-                Field(
+                u.Field(
                     default=0.0,
                     description="Total processing duration",
                 ),
             ]
             average_processing_time_ms: Annotated[
                 t.NonNegativeFloat,
-                Field(
+                u.Field(
                     default=0.0,
                     description="Average processing time per record",
                 ),
@@ -525,14 +523,14 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             # Error tracking
             error_messages: Annotated[
                 t.StrSequence,
-                Field(
+                u.Field(
                     description="Error messages encountered",
                 ),
-            ] = Field(default_factory=list)
+            ] = u.Field(default_factory=list)
             warnings: Annotated[
                 t.StrSequence,
-                Field(description="Warning messages"),
-            ] = Field(default_factory=list)
+                u.Field(description="Warning messages"),
+            ] = u.Field(default_factory=list)
 
             @property
             def failure_rate(self) -> float:
@@ -573,43 +571,43 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 
             error_type: Annotated[
                 t.NonEmptyStr,
-                Field(..., description="Error category"),
+                u.Field(..., description="Error category"),
             ]
 
             # Context information
             file_path: Annotated[
                 str | None,
-                Field(None, description="File path that caused error"),
+                u.Field(None, description="File path that caused error"),
             ]
             entry_dn: Annotated[
                 str | None,
-                Field(None, description="DN of entry causing error"),
+                u.Field(None, description="DN of entry causing error"),
             ]
             attribute_name: Annotated[
                 str | None,
-                Field(None, description="Attribute causing error"),
+                u.Field(None, description="Attribute causing error"),
             ]
             stream_name: Annotated[
                 str | None,
-                Field(None, description="Singer stream name"),
+                u.Field(None, description="Singer stream name"),
             ]
             line_number: Annotated[
                 int | None,
-                Field(None, description="Line number in LDIF file"),
+                u.Field(None, description="Line number in LDIF file"),
             ]
 
             # Recovery information
             is_retryable: Annotated[
                 bool,
-                Field(default=False, description="Whether error is retryable"),
+                u.Field(default=False, description="Whether error is retryable"),
             ]
             suggested_action: Annotated[
                 str | None,
-                Field(None, description="Suggested recovery action"),
+                u.Field(None, description="Suggested recovery action"),
             ]
             max_retry_attempts: Annotated[
                 int | None,
-                Field(None, description="Maximum retry attempts"),
+                u.Field(None, description="Maximum retry attempts"),
             ]
 
         class Sink:
@@ -731,4 +729,4 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
 # Short alias
 m = FlextTargetLdifModels
 
-__all__ = ["FlextTargetLdifModels", "m"]
+__all__: list[str] = ["FlextTargetLdifModels", "m"]

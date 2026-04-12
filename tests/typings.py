@@ -28,4 +28,4 @@ class TestsFlextTargetLdifTypes(FlextTestsTypes, FlextTargetLdifTypes):
 
 t = TestsFlextTargetLdifTypes
 
-__all__ = ["TestsFlextTargetLdifTypes", "t"]
+__all__: list[str] = ["TestsFlextTargetLdifTypes", "t"]

@@ -33,4 +33,4 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
 c = FlextTargetLdifConstants
 
-__all__ = ["FlextTargetLdifConstants", "c"]
+__all__: list[str] = ["FlextTargetLdifConstants", "c"]
