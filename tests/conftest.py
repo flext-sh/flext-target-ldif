@@ -16,8 +16,6 @@ import pytest
 from flext_target_ldif import FlextTargetLdifSettings
 from tests import t
 
-pytest_plugins = ["flext_tests.conftest_plugin"]
-
 
 @pytest.fixture
 def target_ldif_settings() -> FlextTargetLdifSettings:
