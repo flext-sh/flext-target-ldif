@@ -13,9 +13,9 @@ from collections.abc import Callable, Mapping, MutableSequence
 from datetime import datetime
 from pathlib import Path
 
-from flext_core import p, r
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
+from flext_target_ldif import p, r
 from flext_target_ldif.constants import c
 from flext_target_ldif.typings import t
 

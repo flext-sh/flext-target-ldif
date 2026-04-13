@@ -10,8 +10,8 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Annotated, ClassVar, override as _override
 
-from flext_core import FlextSettings, r
-from flext_target_ldif import c, t, u
+from flext_core import FlextSettings
+from flext_target_ldif import c, p, r, t, u
 
 
 @FlextSettings.auto_register("target-ldif")

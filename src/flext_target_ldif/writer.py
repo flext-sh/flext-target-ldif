@@ -16,8 +16,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Self, TextIO, override
 
-from flext_core import p, r
 from flext_ldif import ldif
+from flext_target_ldif import p, r
 from flext_target_ldif.constants import c
 from flext_target_ldif.errors import FlextTargetLdifWriterError
 from flext_target_ldif.typings import t
