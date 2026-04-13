@@ -127,7 +127,7 @@ class FlextTargetLdifSettings(FlextSettings):
         ),
     ]
 
-    def validate_domain_rules(self) -> r[bool]:
+    def validate_domain_rules(self) -> p.Result[bool]:
         """Validate required target configuration constraints."""
         if not self.output_file.strip():
             msg = "Output file cannot be empty"

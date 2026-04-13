@@ -196,7 +196,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 ),
             ] = u.Field(default_factory=list)
 
-            def validate_business_rules(self) -> r[bool]:
+            def validate_business_rules(self) -> p.Result[bool]:
                 """Validate LDIF entry business rules."""
                 try:
                     errors: MutableSequence[str] = []
@@ -269,7 +269,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 u.Field(default=False, description="Whether file is compressed"),
             ]
 
-            def validate_business_rules(self) -> r[bool]:
+            def validate_business_rules(self) -> p.Result[bool]:
                 """Validate LDIF file business rules."""
                 try:
                     # Validate file path
@@ -333,7 +333,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 """Calculate transformation success rate."""
                 return 0.0 if self.has_errors else 100.0
 
-            def validate_business_rules(self) -> r[bool]:
+            def validate_business_rules(self) -> p.Result[bool]:
                 """Validate transformation result business rules."""
                 try:
                     if not self.original_record:
@@ -409,7 +409,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                     return 0.0
                 return (self.successful_exports / total) * 100.0
 
-            def validate_business_rules(self) -> r[bool]:
+            def validate_business_rules(self) -> p.Result[bool]:
                 """Validate batch processing business rules."""
                 try:
                     if len(self.current_batch) > self.batch_size:
@@ -546,7 +546,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                     return 0.0
                 return (self.entries_exported / self.records_processed) * 100.0
 
-            def validate_business_rules(self) -> r[bool]:
+            def validate_business_rules(self) -> p.Result[bool]:
                 """Validate LDIF target result business rules."""
                 try:
                     # Validate entry counts

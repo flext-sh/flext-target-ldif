@@ -16,7 +16,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Self, TextIO, override
 
-from flext_core import r
+from flext_core import p, r
 from flext_ldif import ldif
 from flext_target_ldif.constants import c
 from flext_target_ldif.errors import FlextTargetLdifWriterError
@@ -87,7 +87,7 @@ class FlextTargetLdifWriter:
         """Get the number of records written."""
         return self._record_count
 
-    def close(self) -> r[bool]:
+    def close(self) -> p.Result[bool]:
         """Close the output file and write all collected records."""
         try:
             self._ldif_entries = []
@@ -104,7 +104,7 @@ class FlextTargetLdifWriter:
             self._file_handle = None
             return r[bool].fail(f"Failed to close LDIF file: {e}")
 
-    def open(self) -> r[bool]:
+    def open(self) -> p.Result[bool]:
         """Open the output file for writing."""
         try:
             self.output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -113,7 +113,7 @@ class FlextTargetLdifWriter:
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[bool].fail(f"Failed to open LDIF file: {e}")
 
-    def write_record(self, record: t.ContainerValueMapping) -> r[bool]:
+    def write_record(self, record: t.ContainerValueMapping) -> p.Result[bool]:
         """Write a record to the LDIF file buffer."""
         try:
             if self._file_handle is None:

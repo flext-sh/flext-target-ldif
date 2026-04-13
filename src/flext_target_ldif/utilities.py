@@ -13,7 +13,7 @@ from collections.abc import Callable, Mapping, MutableSequence
 from datetime import datetime
 from pathlib import Path
 
-from flext_core import r
+from flext_core import p, r
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
 from flext_target_ldif.constants import c
@@ -34,7 +34,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 record: t.ContainerValueMapping,
                 dn_template: str,
                 base_dn: str | None = None,
-            ) -> r[str]:
+            ) -> p.Result[str]:
                 """Build LDIF Distinguished Name from record data.
 
                 Args:
@@ -71,7 +71,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 dn: str,
                 object_classes: t.StrSequence | None = None,
                 attribute_mapping: t.StrMapping | None = None,
-            ) -> r[str]:
+            ) -> p.Result[str]:
                 """Convert Singer record to LDIF entry format.
 
                 Args:
@@ -153,7 +153,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 return bool(re.match(dn_pattern, dn.strip()))
 
             @staticmethod
-            def validate_ldif_entry(entry: str) -> r[bool]:
+            def validate_ldif_entry(entry: str) -> p.Result[bool]:
                 """Validate LDIF entry format.
 
                 Args:
@@ -210,7 +210,9 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """File handling utilities for LDIF operations."""
 
             @staticmethod
-            def append_to_ldif_file(file_path: str, entries: t.StrSequence) -> r[str]:
+            def append_to_ldif_file(
+                file_path: str, entries: t.StrSequence
+            ) -> p.Result[str]:
                 """Append entries to existing LDIF file.
 
                 Args:
@@ -242,7 +244,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 entries: t.StrSequence,
                 *,
                 overwrite: bool = False,
-            ) -> r[str]:
+            ) -> p.Result[str]:
                 """Create LDIF file with entries.
 
                 Args:
@@ -271,7 +273,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     return r[str].fail(f"Error creating LDIF file: {e}")
 
             @staticmethod
-            def validate_ldif_file_path(file_path: str) -> r[str]:
+            def validate_ldif_file_path(file_path: str) -> p.Result[str]:
                 """Validate LDIF file path.
 
                 Args:
