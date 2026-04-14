@@ -648,7 +648,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             def clean_up(self) -> None:
                 """Clean up resources when sink is finished."""
                 if self._ldif_writer:
-                    result: r[bool] = self._ldif_writer.close()
+                    result: p.Result[bool] = self._ldif_writer.close()
                     if not result.success:
                         self.logger.error(
                             "Failed to close LDIF writer",
@@ -671,7 +671,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             ) -> None:
                 """Process a single record and write to LDIF."""
                 ldif_writer = self._get_ldif_writer()
-                result: r[bool] = ldif_writer.write_record(record)
+                result: p.Result[bool] = ldif_writer.write_record(record)
                 if not result.success:
                     msg: str = f"Failed to write LDIF record: {result.error}"
                     raise RuntimeError(msg)
