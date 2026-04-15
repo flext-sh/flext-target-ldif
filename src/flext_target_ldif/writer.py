@@ -17,11 +17,7 @@ from pathlib import Path
 from typing import Self, TextIO, override
 
 from flext_ldif import ldif
-from flext_target_ldif import p, r
-from flext_target_ldif.constants import c
-from flext_target_ldif.errors import FlextTargetLdifWriterError
-from flext_target_ldif.typings import t
-from flext_target_ldif.utilities import u
+from flext_target_ldif import FlextTargetLdifWriterError, c, p, r, t, u
 
 logger = u.fetch_logger(__name__)
 

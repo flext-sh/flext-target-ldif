@@ -9,6 +9,19 @@ _LAZY_IMPORTS = build_lazy_import_map(
     {
         ".test_target": ("test_target",),
         ".test_writer": ("test_writer",),
+        "flext_target_ldif": (
+            "c",
+            "d",
+            "e",
+            "h",
+            "m",
+            "p",
+            "r",
+            "s",
+            "t",
+            "u",
+            "x",
+        ),
     },
 )
 

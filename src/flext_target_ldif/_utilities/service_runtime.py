@@ -5,14 +5,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import override
 
-from flext_meltano.services.singer_sdk import (
+from flext_meltano import (
     Sink as FlextMeltanoSingerSinkBase,
     Target as FlextMeltanoSingerTargetBase,
 )
-from flext_target_ldif.models import FlextTargetLdifModels
-from flext_target_ldif.protocols import p
-from flext_target_ldif.typings import t
-from flext_target_ldif.utilities import u
+from flext_target_ldif import FlextTargetLdifModels, p, t, u
 
 
 class FlextTargetLdifServiceRuntime:

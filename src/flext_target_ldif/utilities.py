@@ -15,9 +15,7 @@ from pathlib import Path
 
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
-from flext_target_ldif import p, r
-from flext_target_ldif.constants import c
-from flext_target_ldif.typings import t
+from flext_target_ldif import c, p, r, t
 
 
 class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):

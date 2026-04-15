@@ -12,12 +12,12 @@ from __future__ import annotations
 from typing import Annotated, override
 
 from flext_meltano import FlextMeltanoTargetServiceBase
-from flext_target_ldif import u
-from flext_target_ldif._utilities.service_runtime import (
+from flext_target_ldif import (
     FlextTargetLdifServiceRuntime,
+    p,
+    t,
+    u,
 )
-from flext_target_ldif.protocols import p
-from flext_target_ldif.typings import t
 
 
 class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
