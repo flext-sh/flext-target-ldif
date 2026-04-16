@@ -22,7 +22,7 @@ from flext_target_ldif import (
 
 
 class TestFlextTargetLdifSettings:
-    """Test FlextTargetLdifSettings value t.RecursiveContainer."""
+    """Test FlextTargetLdifSettings value object."""
 
     def test_config_creation_with_defaults(self) -> None:
         """Test creating settings with default values."""

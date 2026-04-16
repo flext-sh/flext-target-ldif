@@ -42,6 +42,7 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "__version__",
                 "__version_info__",
             ),
+            "._utilities.service_runtime": ("FlextTargetLdifServiceRuntime",),
             ".api": (
                 "FlextTargetLdifService",
                 "target_ldif",

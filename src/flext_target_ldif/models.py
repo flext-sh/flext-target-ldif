@@ -115,7 +115,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             object_classes: Annotated[
                 t.StrSequence,
                 u.Field(
-                    description="Default LDAP t.RecursiveContainer classes for entries",
+                    description="Default LDAP object classes for entries",
                 ),
             ] = u.Field(default_factory=list)
 
@@ -175,7 +175,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             object_classes: Annotated[
                 t.StrSequence,
                 u.Field(
-                    description="LDAP t.RecursiveContainer classes",
+                    description="LDAP object classes",
                 ),
             ] = u.Field(default_factory=list)
             change_type: Annotated[
@@ -206,10 +206,10 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                             "DN must contain attribute=value pairs separated by commas",
                         )
 
-                    # Validate t.RecursiveContainer classes
+                    # Validate object classes
                     if not self.object_classes:
                         errors.append(
-                            "Entry must have at least one t.RecursiveContainer class",
+                            "Entry must have at least one object class",
                         )
 
                     # Validate attributes exist

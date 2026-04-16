@@ -75,7 +75,7 @@ def sample_record() -> t.StrMapping:
 def sample_schema() -> t.RecursiveContainerMapping:
     """Provide a sample Singer schema for testing."""
     return {
-        "type": "t.RecursiveContainer",
+        "type": "object",
         "properties": {
             "uid": {"type": "string"},
             "cn": {"type": "string"},
