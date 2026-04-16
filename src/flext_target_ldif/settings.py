@@ -11,14 +11,14 @@ from collections.abc import Callable
 from typing import Annotated, ClassVar, override as _override
 
 from flext_core import FlextSettings
-from flext_target_ldif import c, p, r, t, u
+from flext_target_ldif import c, m, p, r, t, u
 
 
 @FlextSettings.auto_register("target-ldif")
 class FlextTargetLdifSettings(FlextSettings):
     """Typed runtime configuration for the LDIF target."""
 
-    model_config: ClassVar[c.SettingsConfigDict] = c.SettingsConfigDict(
+    model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
         env_prefix="FLEXT_TARGET_LDIF_", extra="ignore"
     )
 
