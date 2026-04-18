@@ -19,6 +19,23 @@ if _t.TYPE_CHECKING:
     from tests.models import TestsFlextTargetLdifModels, m
     from tests.protocols import TestsFlextTargetLdifProtocols, p
     from tests.typings import TestsFlextTargetLdifTypes, t
+    from tests.unit.test_target import (
+        TestFlextTargetLdif,
+        TestFlextTargetLdifClass,
+        TestFlextTargetLdifSettings,
+        TestIntegration,
+    )
+    from tests.unit.test_writer import (
+        TestFlextTargetLdifWriterBase64Encoding,
+        TestFlextTargetLdifWriterContextManager,
+        TestFlextTargetLdifWriterDnGeneration,
+        TestFlextTargetLdifWriterFileOperations,
+        TestFlextTargetLdifWriterHeaderGeneration,
+        TestFlextTargetLdifWriterInitialization,
+        TestFlextTargetLdifWriterLineWrapping,
+        TestFlextTargetLdifWriterProperties,
+        TestFlextTargetLdifWriterRecordWriting,
+    )
     from tests.utilities import TestsFlextTargetLdifUtilities, u
 _LAZY_IMPORTS = merge_lazy_imports(
     (".unit",),
@@ -39,6 +56,23 @@ _LAZY_IMPORTS = merge_lazy_imports(
             ".typings": (
                 "TestsFlextTargetLdifTypes",
                 "t",
+            ),
+            ".unit.test_target": (
+                "TestFlextTargetLdif",
+                "TestFlextTargetLdifClass",
+                "TestFlextTargetLdifSettings",
+                "TestIntegration",
+            ),
+            ".unit.test_writer": (
+                "TestFlextTargetLdifWriterBase64Encoding",
+                "TestFlextTargetLdifWriterContextManager",
+                "TestFlextTargetLdifWriterDnGeneration",
+                "TestFlextTargetLdifWriterFileOperations",
+                "TestFlextTargetLdifWriterHeaderGeneration",
+                "TestFlextTargetLdifWriterInitialization",
+                "TestFlextTargetLdifWriterLineWrapping",
+                "TestFlextTargetLdifWriterProperties",
+                "TestFlextTargetLdifWriterRecordWriting",
             ),
             ".utilities": (
                 "TestsFlextTargetLdifUtilities",
@@ -77,6 +111,19 @@ _LAZY_IMPORTS = merge_lazy_imports(
 install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
 
 __all__: list[str] = [
+    "TestFlextTargetLdif",
+    "TestFlextTargetLdifClass",
+    "TestFlextTargetLdifSettings",
+    "TestFlextTargetLdifWriterBase64Encoding",
+    "TestFlextTargetLdifWriterContextManager",
+    "TestFlextTargetLdifWriterDnGeneration",
+    "TestFlextTargetLdifWriterFileOperations",
+    "TestFlextTargetLdifWriterHeaderGeneration",
+    "TestFlextTargetLdifWriterInitialization",
+    "TestFlextTargetLdifWriterLineWrapping",
+    "TestFlextTargetLdifWriterProperties",
+    "TestFlextTargetLdifWriterRecordWriting",
+    "TestIntegration",
     "TestsFlextTargetLdifConstants",
     "TestsFlextTargetLdifModels",
     "TestsFlextTargetLdifProtocols",
