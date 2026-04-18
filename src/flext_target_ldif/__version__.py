@@ -1,39 +1,29 @@
-"""Package version and metadata information.
+# AUTO-GENERATED FILE — Regenerate with: make gen
+"""Package version and metadata for flext-target-ldif.
 
-Provides version information and package metadata for the flext-target-ldif package
-using standard library metadata extraction.
+Subclass of ``FlextVersion`` — overrides only ``_metadata``.
+All derived attributes (``__version__``, ``__title__``, etc.) are
+computed automatically via ``FlextVersion.__init_subclass__``.
 
-Copyright (c) 2025 Flext Telecom. Todos os direitos reservados.
-SPDX-License-Identifier: Proprietary
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
 
 from importlib.metadata import PackageMetadata, metadata
 
+from flext_core import FlextVersion
 
-class FlextTargetLdifVersion:
-    """Package version and metadata information.
 
-    Provides version information and package metadata using standard library
-    metadata extraction.
-    """
+class FlextTargetLdifVersion(FlextVersion):
+    """flext-target-ldif version — MRO-derived from FlextVersion."""
 
     _metadata: PackageMetadata = metadata("flext-target-ldif")
-    version = _metadata["Version"]
-    version_info = tuple(
-        int(part) if part.isdigit() else part for part in version.split(".")
-    )
-    __title__ = _metadata["Name"]
-    __description__ = _metadata.get("Summary", "")
-    __author__ = _metadata.get("Author", "")
-    __author_email__ = _metadata.get("Author-Email", "")
-    __license__ = _metadata.get("License", "")
-    __url__ = _metadata.get("Home-Page", "")
 
 
-__version__ = FlextTargetLdifVersion.version
-__version_info__ = FlextTargetLdifVersion.version_info
+__version__ = FlextTargetLdifVersion.__version__
+__version_info__ = FlextTargetLdifVersion.__version_info__
 __title__ = FlextTargetLdifVersion.__title__
 __description__ = FlextTargetLdifVersion.__description__
 __author__ = FlextTargetLdifVersion.__author__
