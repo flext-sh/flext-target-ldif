@@ -9,9 +9,9 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import Protocol, runtime_checkable
 
-from flext_ldif import FlextLdifProtocols
+from flext_ldif.protocols import FlextLdifProtocols
 from flext_meltano import FlextMeltanoProtocols
-from flext_target_ldif import t
+from flext_target_ldif.typings import t
 
 
 class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):

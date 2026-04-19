@@ -5,22 +5,18 @@ from __future__ import annotations
 from pathlib import Path
 from typing import override
 
-from flext_meltano import (
-    Sink as FlextMeltanoSingerSinkBase,
-    Target as FlextMeltanoSingerTargetBase,
-)
-from flext_target_ldif import FlextTargetLdifModels, p, t, u
+from flext_target_ldif import FlextTargetLdifModels, m, p, t, u
 
 
 class FlextTargetLdifServiceRuntime:
     """Service-runtime helpers used by the target-ldif facade."""
 
-    class Target(FlextMeltanoSingerTargetBase):
+    class Target(m.Meltano.SingerTargetBase):
         """Minimal Singer target used by the service facade."""
 
         name = "target-ldif"
 
-    class Sink(FlextMeltanoSingerSinkBase):
+    class Sink(m.Meltano.SingerSinkBase):
         """Singer sink adapter delegating to the LDIF runtime sink."""
 
         name = "target-ldif-sink"
@@ -32,7 +28,7 @@ class FlextTargetLdifServiceRuntime:
             cls,
             *,
             runtime_sink: FlextTargetLdifModels.TargetLdif.Sink,
-            target: FlextMeltanoSingerTargetBase,
+            target: m.Meltano.SingerTargetBase,
             stream_name: str,
             schema: t.MutableMappingKV[str, t.ContainerValue],
             key_properties: t.StrSequence,
