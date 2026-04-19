@@ -117,7 +117,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 u.Field(
                     description="Default LDAP object classes for entries",
                 ),
-            ] = u.Field(default_factory=list)
+            ] = u.Field(default_factory=tuple)
 
             # File management options
             overwrite_existing: Annotated[
@@ -177,7 +177,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 u.Field(
                     description="LDAP object classes",
                 ),
-            ] = u.Field(default_factory=list)
+            ] = u.Field(default_factory=tuple)
             change_type: Annotated[
                 str | None,
                 u.Field(
@@ -190,7 +190,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 u.Field(
                     description="LDAP controls for the entry",
                 ),
-            ] = u.Field(default_factory=list)
+            ] = u.Field(default_factory=tuple)
 
             def validate_business_rules(self) -> p.Result[bool]:
                 """Validate LDIF entry business rules."""
@@ -304,7 +304,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 u.Field(
                     description="Transformation errors",
                 ),
-            ] = u.Field(default_factory=list)
+            ] = u.Field(default_factory=tuple)
             processing_time_ms: Annotated[
                 t.NonNegativeFloat,
                 u.Field(
@@ -464,7 +464,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 u.Field(
                     description="Generated LDIF file paths",
                 ),
-            ] = u.Field(default_factory=list)
+            ] = u.Field(default_factory=tuple)
             records_processed: Annotated[
                 t.NonNegativeInt,
                 u.Field(
@@ -522,11 +522,11 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 u.Field(
                     description="Error messages encountered",
                 ),
-            ] = u.Field(default_factory=list)
+            ] = u.Field(default_factory=tuple)
             warnings: Annotated[
                 t.StrSequence,
                 u.Field(description="Warning messages"),
-            ] = u.Field(default_factory=list)
+            ] = u.Field(default_factory=tuple)
 
             @property
             def failure_rate(self) -> float:

@@ -17,7 +17,7 @@ class FlextTargetLdifCli:
     def run(cls, args: t.StrSequence | None = None) -> int:
         """Execute the canonical target-ldif CLI entry point."""
         _ = cls
-        return FlextTargetLdifService.get_instance().cli_main(args)
+        return FlextTargetLdifService().cli_main(args)
 
 
 def main(args: t.StrSequence | None = None) -> int:
