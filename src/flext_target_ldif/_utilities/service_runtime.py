@@ -46,7 +46,7 @@ class FlextTargetLdifServiceRuntime:
         @override
         def process_batch(
             self,
-            context: t.RecursiveContainerMapping,
+            context: Mapping[str, t.Container],
         ) -> None:
             """Singer batch hook is handled by the LDIF runtime sink."""
             self._runtime_sink.process_batch(
@@ -56,8 +56,8 @@ class FlextTargetLdifServiceRuntime:
         @override
         def process_record(
             self,
-            record: t.RecursiveContainerMapping,
-            context: t.RecursiveContainerMapping,
+            record: Mapping[str, t.Container],
+            context: Mapping[str, t.Container],
         ) -> None:
             """Delegate Singer record handling to the LDIF runtime sink."""
             self._runtime_sink.process_record(
@@ -71,7 +71,7 @@ class FlextTargetLdifServiceRuntime:
         *,
         stream_name: str,
         schema: t.FlatContainerMapping,
-        target_config: t.RecursiveContainerMapping,
+        target_config: Mapping[str, t.Container],
     ) -> p.Meltano.SingerDrainSink:
         """Create the LDIF runtime sink for the service facade."""
         normalized_target_config = cls.normalize_singer_mapping(target_config)
@@ -95,7 +95,7 @@ class FlextTargetLdifServiceRuntime:
     @classmethod
     def normalize_singer_mapping(
         cls,
-        source: t.RecursiveContainerMapping,
+        source: Mapping[str, t.Container],
     ) -> t.MutableMappingKV[str, t.ContainerValue]:
         """Normalize a Singer payload mapping to the LDIF runtime contract."""
         normalized: t.MutableMappingKV[str, t.ContainerValue] = {}
@@ -108,7 +108,7 @@ class FlextTargetLdifServiceRuntime:
     @classmethod
     def normalize_singer_value(
         cls,
-        value: t.RecursiveContainer,
+        value: t.Container,
     ) -> t.ContainerValue | None:
         """Normalize a Singer payload value to the LDIF runtime contract."""
         if value is None:

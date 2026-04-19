@@ -35,7 +35,7 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
         schema: t.FlatContainerMapping,
     ) -> p.Meltano.SingerDrainSink:
         """Create an LDIF sink for a stream."""
-        target_config: t.RecursiveContainerMapping = self.settings_overrides or {}
+        target_config: Mapping[str, t.Container] = self.settings_overrides or {}
         return FlextTargetLdifServiceRuntime.create_sink(
             stream_name=stream_name,
             schema=schema,

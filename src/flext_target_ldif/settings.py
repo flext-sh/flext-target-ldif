@@ -38,15 +38,13 @@ class FlextTargetLdifSettings(FlextSettings):
                 if field_info.default is not c.PydanticUndefined:
                     kwargs[field_name] = field_info.default
                 elif field_info.default_factory is not None:
-                    factory_fn: Callable[..., t.RecursiveContainer] = (
-                        field_info.default_factory
-                    )
+                    factory_fn: Callable[..., t.Container] = field_info.default_factory
                     kwargs[field_name] = factory_fn()
         super().__init__(**kwargs)
         object.__setattr__(self, "_allow_mutation", False)
 
     @_override
-    def __setattr__(self, name: str, value: t.RecursiveContainer) -> None:
+    def __setattr__(self, name: str, value: t.Container) -> None:
         """Block attribute mutation after initialization."""
         try:
             allow = object.__getattribute__(self, "_allow_mutation")

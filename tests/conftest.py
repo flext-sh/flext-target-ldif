@@ -41,7 +41,7 @@ def temp_file() -> Generator[Path]:
 
 
 @pytest.fixture
-def sample_config(temp_dir: Path) -> t.RecursiveContainerMapping:
+def sample_config(temp_dir: Path) -> Mapping[str, t.Container]:
     """Provide a sample configuration for testing."""
     return {
         "output_path": str(temp_dir),
@@ -72,7 +72,7 @@ def sample_record() -> t.StrMapping:
 
 
 @pytest.fixture
-def sample_schema() -> t.RecursiveContainerMapping:
+def sample_schema() -> Mapping[str, t.Container]:
     """Provide a sample Singer schema for testing."""
     return {
         "type": "object",
@@ -119,7 +119,7 @@ def multiple_records() -> Sequence[t.StrMapping]:
 
 
 @pytest.fixture
-def ldif_options() -> t.RecursiveContainerMapping:
+def ldif_options() -> Mapping[str, t.Container]:
     """Provide sample LDIF options for testing."""
     return {"line_length": 78, "base64_encode": False, "include_timestamps": True}
 
