@@ -13,6 +13,7 @@ from typing import Protocol, runtime_checkable
 
 from flext_ldif.protocols import FlextLdifProtocols
 from flext_meltano import FlextMeltanoProtocols
+
 from flext_target_ldif.typings import t
 
 

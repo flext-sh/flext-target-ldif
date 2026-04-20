@@ -148,11 +148,14 @@ omit = [ "*/dependency_injector/providers.pyx" ]
 # [MANAGED] deptry
 [tool.deptry]
 known_first_party = [
-  "flext_core",
-  "flext_ldif",
-  "flext_meltano",
-  "flext_observability",
+  "flext-core",
+  "flext-ldif",
+  "flext-meltano",
+  "flext-observability",
   "flext_target_ldif",
+  "pydantic",
+  "pydantic-core",
+  "pydantic-settings",
 ]
 pep621_dev_dependency_groups = [ "dev" ]
 
@@ -476,11 +479,14 @@ select = [ "ALL" ]
 combine-as-imports = true
 force-single-line = false
 known-first-party = [
-  "flext_core",
-  "flext_ldif",
-  "flext_meltano",
-  "flext_observability",
+  "flext-core",
+  "flext-ldif",
+  "flext-meltano",
+  "flext-observability",
   "flext_target_ldif",
+  "pydantic",
+  "pydantic-core",
+  "pydantic-settings",
 ]
 split-on-trailing-comma = true
 
