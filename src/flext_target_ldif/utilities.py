@@ -306,7 +306,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
 
             @staticmethod
-            def transform_timestamp(value: t.ContainerValue) -> str:
+            def transform_timestamp(value: t.Container) -> str:
                 """Transform timestamp values to LDAP timestamp format."""
                 if isinstance(value, datetime):
                     return value.isoformat()
@@ -319,7 +319,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 return str(value)
 
             @staticmethod
-            def transform_boolean(value: t.ContainerValue) -> str:
+            def transform_boolean(value: t.Container) -> str:
                 """Transform boolean values to LDAP boolean format."""
                 if isinstance(value, bool):
                     return "TRUE" if value else "FALSE"
@@ -332,7 +332,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 return ""
 
             @staticmethod
-            def transform_email(value: t.ContainerValue) -> str:
+            def transform_email(value: t.Container) -> str:
                 """Transform email values to ensure LDAP compatibility."""
                 email_str = str(value).strip().lower()
                 if "@" in email_str and "." in email_str:
@@ -340,13 +340,13 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 return ""
 
             @staticmethod
-            def transform_phone(value: t.ContainerValue) -> str:
+            def transform_phone(value: t.Container) -> str:
                 """Transform phone numbers to standard format."""
                 phone_str = str(value)
                 return "".join(ch for ch in phone_str if ch.isdigit() or ch in "+- ()")
 
             @staticmethod
-            def transform_name(value: t.ContainerValue) -> str:
+            def transform_name(value: t.Container) -> str:
                 """Transform name fields to ensure proper formatting."""
                 name_str = str(value).strip()
                 return " ".join(word.capitalize() for word in name_str.split())
@@ -354,7 +354,7 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             @staticmethod
             def get_builtin_transformer(
                 attr_name: str,
-            ) -> Callable[[t.ContainerValue], str] | None:
+            ) -> Callable[[t.Container], str] | None:
                 """Get built-in transformer function for attribute name."""
                 rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer
                 attr_lower = attr_name.lower()
@@ -373,9 +373,8 @@ class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             @staticmethod
             def normalize_attribute_value(
                 attr_name: str,
-                value: t.ContainerValue,
-                transformers: Mapping[str, Callable[[t.ContainerValue], str]]
-                | None = None,
+                value: t.Container,
+                transformers: Mapping[str, Callable[[t.Container], str]] | None = None,
             ) -> str:
                 """Normalize attribute value based on attribute type."""
                 rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer

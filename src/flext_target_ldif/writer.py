@@ -42,7 +42,7 @@ class FlextTargetLdifWriter:
         ldif_options: t.ContainerValueMapping | None = None,
         dn_template: str | None = None,
         attribute_mapping: t.StrMapping | None = None,
-        schema: Mapping[str, t.ContainerValue | t.StrSequence] | None = None,
+        schema: Mapping[str, t.Container | t.StrSequence] | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure."""
         self.output_file = Path(output_file) if output_file else Path("output.ldif")
