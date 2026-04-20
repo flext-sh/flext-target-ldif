@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import (
     Mapping,
 )
+from datetime import datetime
 from pathlib import Path
 from typing import override
 
@@ -99,9 +100,9 @@ class FlextTargetLdifServiceRuntime:
     def normalize_singer_mapping(
         cls,
         source: Mapping[str, t.Container],
-    ) -> t.MutableMappingKV[str, t.Container]:
+    ) -> dict[str, t.JsonValue]:
         """Normalize a Singer payload mapping to the LDIF runtime contract."""
-        normalized: t.MutableMappingKV[str, t.Container] = {}
+        normalized: dict[str, t.JsonValue] = {}
         for key, value in source.items():
             normalized_value = cls.normalize_singer_value(value)
             if normalized_value is not None:
@@ -112,17 +113,19 @@ class FlextTargetLdifServiceRuntime:
     def normalize_singer_value(
         cls,
         value: t.Container,
-    ) -> t.Container | None:
+    ) -> t.JsonValue | None:
         """Normalize a Singer payload value to the LDIF runtime contract."""
         if value is None:
             return None
-        if isinstance(value, Path):
+        if isinstance(value, (bytes, Path)):
             return str(value)
         if u.scalar(value):
+            if isinstance(value, (bytes, datetime)):
+                return str(value)
             return value
         if u.mapping(value):
             return cls.normalize_singer_mapping(value)
-        normalized_sequence: t.MutableSequenceOf[t.Container] = []
+        normalized_sequence: list[t.JsonValue] = []
         for item in value:
             normalized_item = cls.normalize_singer_value(item)
             if normalized_item is not None:
