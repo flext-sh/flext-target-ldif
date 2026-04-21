@@ -10,10 +10,10 @@ from __future__ import annotations
 from typing import Final
 
 from flext_ldif import FlextLdifConstants
-from flext_meltano import FlextMeltanoConstants
+from flext_meltano import c
 
 
-class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
+class FlextTargetLdifConstants(c, FlextLdifConstants):
     """LDIF target export-specific constants following flext-core patterns."""
 
     class TargetLdif:

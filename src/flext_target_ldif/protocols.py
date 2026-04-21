@@ -11,13 +11,13 @@ from collections.abc import (
 )
 from typing import Protocol, runtime_checkable
 
-from flext_ldif.protocols import FlextLdifProtocols
-from flext_meltano import FlextMeltanoProtocols
+from flext_ldif import FlextLdifProtocols
+from flext_meltano import p
 
-from flext_target_ldif.typings import t
+from flext_target_ldif import t
 
 
-class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
+class FlextTargetLdifProtocols(p, FlextLdifProtocols):
     """Singer Target LDIF protocols extending LDIF and Meltano protocols.
 
     Extends both FlextLdifProtocols and FlextMeltanoProtocols via multiple inheritance
@@ -66,7 +66,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 def generate_ldif(
                     self,
                     records: Sequence[t.ContainerValueMapping],
-                ) -> FlextMeltanoProtocols.Result[str]:
+                ) -> p.Result[str]:
                     """Generate LDIF content from records.
 
                     Args:
@@ -88,7 +88,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 def transform_to_ldif(
                     self,
                     record: t.ContainerValueMapping,
-                ) -> FlextMeltanoProtocols.Result[str]:
+                ) -> p.Result[str]:
                     """Transform Singer record to LDIF format.
 
                     Args:
@@ -111,7 +111,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                     self,
                     file_path: str,
                     content: str,
-                ) -> FlextMeltanoProtocols.Result[bool]:
+                ) -> p.Result[bool]:
                     """Write LDIF content to file.
 
                     Args:
@@ -134,7 +134,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 def validate_ldif(
                     self,
                     ldif_content: str,
-                ) -> FlextMeltanoProtocols.Result[bool]:
+                ) -> p.Result[bool]:
                     """Validate LDIF content.
 
                     Args:
@@ -156,7 +156,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 def optimize_batch(
                     self,
                     batch_size: int,
-                ) -> FlextMeltanoProtocols.Result[int]:
+                ) -> p.Result[int]:
                     """Optimize batch size for performance.
 
                     Args:
@@ -178,7 +178,7 @@ class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 def track_progress(
                     self,
                     records: int,
-                ) -> FlextMeltanoProtocols.Result[bool]:
+                ) -> p.Result[bool]:
                     """Track progress of LDIF generation.
 
                     Args:

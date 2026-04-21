@@ -18,8 +18,8 @@ from flext_core import (
     FlextSettings,
     r,
 )
-from flext_ldif.models import FlextLdifModels
-from flext_meltano import FlextMeltanoModels
+from flext_ldif import FlextLdifModels
+from flext_meltano import m
 
 from flext_target_ldif import FlextTargetLdifWriter, c, p, t, u
 
@@ -30,7 +30,7 @@ compliance, format validation, and target operations following standardized patt
 """
 
 
-class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
+class FlextTargetLdifModels(m, FlextLdifModels):
     """Unified models collection for FLEXT Target LDIF following [Project]Models standard.
 
     This class extends FlextMeltanoModels and FlextLdifModels and provides a centralized
@@ -161,7 +161,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 ),
             )
 
-        class LdifEntry(FlextMeltanoModels.Entity):
+        class LdifEntry(m.Entity):
             """LDIF entry representation with format validation."""
 
             distinguished_name: Annotated[
@@ -227,7 +227,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"LDIF entry validation failed: {e}")
 
-        class LdifFile(FlextMeltanoModels.Entity):
+        class LdifFile(m.Entity):
             """LDIF file representation with metadata."""
 
             file_path: Annotated[
@@ -287,7 +287,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"LDIF file validation failed: {e}")
 
-        class LdifTransformationResult(FlextMeltanoModels.Entity):
+        class LdifTransformationResult(m.Entity):
             """Result of Singer to LDIF transformation."""
 
             original_record: Annotated[
@@ -353,7 +353,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                         f"Transformation result validation failed: {e}",
                     )
 
-        class LdifBatchProcessing(FlextMeltanoModels.Entity):
+        class LdifBatchProcessing(m.Entity):
             """LDIF batch processing configuration and state."""
 
             stream_name: Annotated[
@@ -457,7 +457,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 ),
             ]
 
-        class LdifTargetResult(FlextMeltanoModels.Entity):
+        class LdifTargetResult(m.Entity):
             """Result of LDIF target operation processing."""
 
             stream_name: Annotated[
@@ -567,7 +567,7 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"Target result validation failed: {e}")
 
-        class LdifErrorContext(FlextMeltanoModels.ArbitraryTypesModel):
+        class LdifErrorContext(m.ArbitraryTypesModel):
             """Error context for LDIF target error handling."""
 
             error_type: Annotated[

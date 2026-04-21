@@ -17,13 +17,13 @@ from collections.abc import (
 from datetime import datetime
 from pathlib import Path
 
-from flext_ldif.utilities import FlextLdifUtilities
-from flext_meltano import FlextMeltanoUtilities
+from flext_ldif import FlextLdifUtilities
+from flext_meltano import u
 
 from flext_target_ldif import c, p, r, t
 
 
-class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
+class FlextTargetLdifUtilities(u, FlextLdifUtilities):
     """Single unified utilities class for Singer target LDIF operations."""
 
     class TargetLdif:

@@ -5,7 +5,6 @@ from __future__ import annotations
 from collections.abc import (
     Mapping,
 )
-from datetime import datetime
 from pathlib import Path
 from typing import override
 
@@ -54,7 +53,7 @@ class FlextTargetLdifServiceRuntime:
         ) -> None:
             """Singer batch hook is handled by the LDIF runtime sink."""
             self._runtime_sink.process_batch(
-                FlextTargetLdifServiceRuntime.normalize_singer_mapping(context),
+                u.Meltano.normalize_runtime_json_mapping(context),
             )
 
         @override
@@ -65,8 +64,8 @@ class FlextTargetLdifServiceRuntime:
         ) -> None:
             """Delegate Singer record handling to the LDIF runtime sink."""
             self._runtime_sink.process_record(
-                FlextTargetLdifServiceRuntime.normalize_singer_mapping(record),
-                FlextTargetLdifServiceRuntime.normalize_singer_mapping(context),
+                u.Meltano.normalize_runtime_json_mapping(record),
+                u.Meltano.normalize_runtime_json_mapping(context),
             )
 
     @classmethod
@@ -78,7 +77,9 @@ class FlextTargetLdifServiceRuntime:
         target_config: Mapping[str, t.Container],
     ) -> p.Meltano.SingerDrainSink:
         """Create the LDIF runtime sink for the service facade."""
-        normalized_target_config = cls.normalize_singer_mapping(target_config)
+        normalized_target_config = u.Meltano.normalize_runtime_json_mapping(
+            target_config,
+        )
         normalized_schema = cls.normalize_schema(schema)
         runtime_sink = FlextTargetLdifModels.TargetLdif.Sink(
             target_config=normalized_target_config,
@@ -95,42 +96,6 @@ class FlextTargetLdifServiceRuntime:
             schema=dict(normalized_schema),
             key_properties=[],
         )
-
-    @classmethod
-    def normalize_singer_mapping(
-        cls,
-        source: Mapping[str, t.Container],
-    ) -> dict[str, t.JsonValue]:
-        """Normalize a Singer payload mapping to the LDIF runtime contract."""
-        normalized: dict[str, t.JsonValue] = {}
-        for key, value in source.items():
-            normalized_value = cls.normalize_singer_value(value)
-            if normalized_value is not None:
-                normalized[str(key)] = normalized_value
-        return normalized
-
-    @classmethod
-    def normalize_singer_value(
-        cls,
-        value: t.Container,
-    ) -> t.JsonValue | None:
-        """Normalize a Singer payload value to the LDIF runtime contract."""
-        if value is None:
-            return None
-        if isinstance(value, (bytes, Path)):
-            return str(value)
-        if u.scalar(value):
-            if isinstance(value, (bytes, datetime)):
-                return str(value)
-            return value
-        if u.mapping(value):
-            return cls.normalize_singer_mapping(value)
-        normalized_sequence: list[t.JsonValue] = []
-        for item in value:
-            normalized_item = cls.normalize_singer_value(item)
-            if normalized_item is not None:
-                normalized_sequence.append(normalized_item)
-        return normalized_sequence
 
     @staticmethod
     def normalize_schema(
