@@ -291,7 +291,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             """Result of Singer to LDIF transformation."""
 
             original_record: Annotated[
-                t.ContainerValueMapping,
+                t.JsonMapping,
                 u.Field(
                     ...,
                     description="Original Singer record",
@@ -620,13 +620,13 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             @override
             def __init__(
                 self,
-                target_config: t.ContainerValueMapping,
+                target_config: t.JsonMapping,
                 stream_name: str,
-                schema: t.ContainerValueMapping,
+                schema: t.JsonMapping,
                 key_properties: t.StrSequence | None = None,
             ) -> None:
                 """Initialize the LDIF sink."""
-                self.settings: t.ContainerValueMapping = target_config
+                self.settings: t.JsonMapping = target_config
                 self.stream_name = stream_name
                 self.schema = schema
                 self.key_properties = key_properties or []
@@ -661,14 +661,14 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                             output_file=str(self._output_file),
                         )
 
-            def process_batch(self, _context: t.ContainerValueMapping) -> None:
+            def process_batch(self, _context: t.JsonMapping) -> None:
                 """Process a batch of records."""
                 self._get_ldif_writer()
 
             def process_record(
                 self,
-                record: t.ContainerValueMapping,
-                _context: t.ContainerValueMapping,
+                record: t.JsonMapping,
+                _context: t.JsonMapping,
             ) -> None:
                 """Process a single record and write to LDIF."""
                 ldif_writer = self._get_ldif_writer()
@@ -682,7 +682,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 if self._ldif_writer is None:
                     output_file = self._get_output_file()
                     raw_ldif_options = self.settings.get("ldif_options", {})
-                    ldif_options: t.ContainerValueMapping = {}
+                    ldif_options: t.JsonMapping = {}
                     if isinstance(raw_ldif_options, Mapping):
                         ldif_options = {
                             str(key): value for key, value in raw_ldif_options.items()

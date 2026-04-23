@@ -30,19 +30,19 @@ class FlextTargetLdif:
     @override
     def __init__(
         self,
-        settings: t.ContainerValueMapping | None = None,
+        settings: t.JsonMapping | None = None,
         validate_config: bool = False,
     ) -> None:
         """Initialize the LDIF target."""
-        defaults: t.ContainerValueMapping = {
+        defaults: t.JsonMapping = {
             "file_naming_pattern": "{stream_name}_{timestamp}.ldif",
             "dn_template": "uid={uid},ou=users,dc=example,dc=com",
             "output_path": "./output",
         }
-        merged: t.ContainerValueMapping = {**defaults, **(settings or {})}
-        self.settings: t.ContainerValueMapping = merged
+        merged: t.JsonMapping = {**defaults, **(settings or {})}
+        self.settings: t.JsonMapping = merged
         self.sinks: MutableMapping[str, FlextTargetLdifModels.TargetLdif.Sink] = {}
-        self._test_config: t.ContainerValueMapping | None = None
+        self._test_config: t.JsonMapping | None = None
         if validate_config:
             self.validate_config()
         output_path_raw = self.settings.get("output_path", "./output")
@@ -58,7 +58,7 @@ class FlextTargetLdif:
         return cli_main
 
     @property
-    def config_jsonschema(self) -> t.ContainerValueMapping:
+    def config_jsonschema(self) -> t.JsonMapping:
         """Return JSON schema for configuration."""
         return FlextTargetLdifSettings.model_json_schema()
 
@@ -70,7 +70,7 @@ class FlextTargetLdif:
     def get_sink(
         self,
         stream_name: str,
-        schema: t.ContainerValueMapping,
+        schema: t.JsonMapping,
     ) -> FlextTargetLdifModels.TargetLdif.Sink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
@@ -101,7 +101,7 @@ class FlextTargetLdif:
             "base64_encode",
             "include_timestamps",
         }
-        filtered_config: t.MutableContainerValueMapping = {
+        filtered_config: t.MutableJsonMapping = {
             k: v for k, v in config_dict.items() if k in allowed_fields
         }
         if "output_file" not in filtered_config:

@@ -230,7 +230,7 @@ class TestFlextTargetLdif:
         assert callable(target.cli)
 
     def test_target_ldif_config_dict_access(self) -> None:
-        """Test settings Mapping[str, t.Container] access."""
+        """Test settings t.JsonMapping access."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {
                 "output_path": tmp_dir,
@@ -298,7 +298,7 @@ class TestIntegration:
             assert isinstance(target, FlextTargetLdif)
 
     def test_config_to_dict_conversion(self) -> None:
-        """Test settings can be converted to Mapping[str, t.Container] for Singer SDK."""
+        """Test settings can be converted to t.JsonMapping for Singer SDK."""
         settings = FlextTargetLdifSettings(
             output_file="test.ldif",
             schema_validation=True,

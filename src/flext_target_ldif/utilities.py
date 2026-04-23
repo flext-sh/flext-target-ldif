@@ -34,7 +34,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
 
             @staticmethod
             def build_ldif_dn(
-                record: t.ContainerValueMapping,
+                record: t.JsonMapping,
                 dn_template: str,
                 base_dn: str | None = None,
             ) -> p.Result[str]:
@@ -70,7 +70,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
 
             @staticmethod
             def convert_record_to_ldif_entry(
-                record: t.ContainerValueMapping,
+                record: t.JsonMapping,
                 dn: str,
                 object_classes: t.StrSequence | None = None,
                 attribute_mapping: t.StrMapping | None = None,
@@ -307,7 +307,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
             """
 
             @staticmethod
-            def transform_timestamp(value: t.Container) -> str:
+            def transform_timestamp(value: t.JsonValue) -> str:
                 """Transform timestamp values to LDAP timestamp format."""
                 if isinstance(value, datetime):
                     return value.isoformat()
@@ -320,7 +320,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 return str(value)
 
             @staticmethod
-            def transform_boolean(value: t.Container) -> str:
+            def transform_boolean(value: t.JsonValue) -> str:
                 """Transform boolean values to LDAP boolean format."""
                 if isinstance(value, bool):
                     return "TRUE" if value else "FALSE"
@@ -333,7 +333,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 return ""
 
             @staticmethod
-            def transform_email(value: t.Container) -> str:
+            def transform_email(value: t.JsonValue) -> str:
                 """Transform email values to ensure LDAP compatibility."""
                 email_str = str(value).strip().lower()
                 if "@" in email_str and "." in email_str:
@@ -341,13 +341,13 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 return ""
 
             @staticmethod
-            def transform_phone(value: t.Container) -> str:
+            def transform_phone(value: t.JsonValue) -> str:
                 """Transform phone numbers to standard format."""
                 phone_str = str(value)
                 return "".join(ch for ch in phone_str if ch.isdigit() or ch in "+- ()")
 
             @staticmethod
-            def transform_name(value: t.Container) -> str:
+            def transform_name(value: t.JsonValue) -> str:
                 """Transform name fields to ensure proper formatting."""
                 name_str = str(value).strip()
                 return " ".join(word.capitalize() for word in name_str.split())
@@ -355,7 +355,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
             @staticmethod
             def get_builtin_transformer(
                 attr_name: str,
-            ) -> Callable[[t.Container], str] | None:
+            ) -> Callable[[t.JsonValue], str] | None:
                 """Get built-in transformer function for attribute name."""
                 rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer
                 attr_lower = attr_name.lower()
@@ -374,8 +374,8 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
             @staticmethod
             def normalize_attribute_value(
                 attr_name: str,
-                value: t.Container,
-                transformers: Mapping[str, Callable[[t.Container], str]] | None = None,
+                value: t.JsonValue,
+                transformers: Mapping[str, Callable[[t.JsonValue], str]] | None = None,
             ) -> str:
                 """Normalize attribute value based on attribute type."""
                 rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer
@@ -389,9 +389,9 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
             @staticmethod
             def add_required_attributes(
                 record: t.StrMapping,
-            ) -> t.ContainerValueMapping:
+            ) -> t.JsonMapping:
                 """Add required LDAP attributes to the record."""
-                result: t.MutableContainerValueMapping = dict(record)
+                result: t.MutableJsonMapping = dict(record)
                 if "objectclass" not in result:
                     result["objectclass"] = ["inetOrgPerson", "person"]
                 if "cn" not in result:
@@ -422,7 +422,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
 
             def transform_record(
                 self,
-                record: t.ContainerValueMapping,
+                record: t.JsonMapping,
             ) -> t.StrMapping:
                 """Transform a Singer record to LDAP-compatible format."""
                 rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer

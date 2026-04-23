@@ -48,7 +48,7 @@ class FlextTargetLdifSettings(FlextSettings):
         object.__setattr__(self, "_allow_mutation", False)
 
     @_override
-    def __setattr__(self, name: str, value: t.Container) -> None:
+    def __setattr__(self, name: str, value: t.JsonValue) -> None:
         """Block attribute mutation after initialization."""
         try:
             allow = object.__getattribute__(self, "_allow_mutation")
@@ -95,7 +95,7 @@ class FlextTargetLdifSettings(FlextSettings):
         ),
     ] = u.Field(default_factory=dict)
     ldif_options: Annotated[
-        t.ContainerValueMapping,
+        t.JsonMapping,
         u.Field(
             description="Raw LDIF formatter options",
         ),

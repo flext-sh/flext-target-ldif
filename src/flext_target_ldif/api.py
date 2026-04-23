@@ -9,9 +9,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import (
-    Mapping,
-)
 from typing import Annotated, override
 
 from flext_meltano import FlextMeltanoTargetServiceBase
@@ -36,10 +33,10 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
     def create_sink(
         self,
         stream_name: str,
-        schema: t.FlatContainerMapping,
+        schema: t.JsonMapping,
     ) -> p.Meltano.SingerDrainSink:
         """Create an LDIF sink for a stream."""
-        target_config: Mapping[str, t.Container] = self.settings_overrides or {}
+        target_config: t.JsonMapping = self.settings_overrides or {}
         return FlextTargetLdifServiceRuntime.create_sink(
             stream_name=stream_name,
             schema=schema,

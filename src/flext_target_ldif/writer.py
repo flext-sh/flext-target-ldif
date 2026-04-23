@@ -40,10 +40,10 @@ class FlextTargetLdifWriter:
     def __init__(
         self,
         output_file: Path | str | None = None,
-        ldif_options: t.ContainerValueMapping | None = None,
+        ldif_options: t.JsonMapping | None = None,
         dn_template: str | None = None,
         attribute_mapping: t.StrMapping | None = None,
-        schema: Mapping[str, t.Container | t.StrSequence] | None = None,
+        schema: Mapping[str, t.JsonValue | t.StrSequence] | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure."""
         self.output_file = Path(output_file) if output_file else Path("output.ldif")
@@ -63,7 +63,7 @@ class FlextTargetLdifWriter:
         timestamps_val = self.ldif_options.get("include_timestamps", True)
         self.include_timestamps: bool = bool(timestamps_val)
         self._ldif_api = ldif()
-        self._records: MutableSequence[t.ContainerValueMapping] = []
+        self._records: MutableSequence[t.JsonMapping] = []
         self._record_count = 0
         self._ldif_entries: Sequence[
             Mapping[str, str | Mapping[str, t.StrSequence]]
@@ -115,7 +115,7 @@ class FlextTargetLdifWriter:
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[bool].fail(f"Failed to open LDIF file: {e}")
 
-    def write_record(self, record: t.ContainerValueMapping) -> p.Result[bool]:
+    def write_record(self, record: t.JsonMapping) -> p.Result[bool]:
         """Write a record to the LDIF file buffer."""
         try:
             if self._file_handle is None:
@@ -131,12 +131,12 @@ class FlextTargetLdifWriter:
 
     def _convert_record_to_entry(
         self,
-        record: t.ContainerValueMapping,
+        record: t.JsonMapping,
     ) -> Mapping[str, str | Mapping[str, t.StrSequence]] | None:
         """Convert a single record to LDIF entry format."""
         try:
             dn = self._generate_dn(record)
-            attributes: t.MutableContainerValueMapping = {}
+            attributes: t.MutableJsonMapping = {}
             for key, value in record.items():
                 if key != "dn":
                     mapped_key = self.attribute_mapping.get(key, key)
@@ -157,7 +157,7 @@ class FlextTargetLdifWriter:
             logger.warning("Skipping invalid record: %s", msg)
             return None
 
-    def _generate_dn(self, record: t.ContainerValueMapping) -> str:
+    def _generate_dn(self, record: t.JsonMapping) -> str:
         """Generate DN from record using template."""
         try:
             return self.dn_template.format(**record)

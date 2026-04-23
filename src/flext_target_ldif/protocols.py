@@ -65,7 +65,7 @@ class FlextTargetLdifProtocols(p, FlextLdifProtocols):
 
                 def generate_ldif(
                     self,
-                    records: Sequence[t.ContainerValueMapping],
+                    records: Sequence[t.JsonMapping],
                 ) -> p.Result[str]:
                     """Generate LDIF content from records.
 
@@ -87,7 +87,7 @@ class FlextTargetLdifProtocols(p, FlextLdifProtocols):
 
                 def transform_to_ldif(
                     self,
-                    record: t.ContainerValueMapping,
+                    record: t.JsonMapping,
                 ) -> p.Result[str]:
                     """Transform Singer record to LDIF format.
 

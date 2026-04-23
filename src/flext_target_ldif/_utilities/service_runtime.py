@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import (
-    Mapping,
-)
 from pathlib import Path
 from typing import override
 
@@ -33,7 +30,7 @@ class FlextTargetLdifServiceRuntime:
             runtime_sink: FlextTargetLdifModels.TargetLdif.Sink,
             target: m.Meltano.SingerTargetBase,
             stream_name: str,
-            schema: t.MutableMappingKV[str, t.Container],
+            schema: t.MutableMappingKV[str, t.JsonValue],
             key_properties: t.StrSequence,
         ) -> FlextTargetLdifServiceRuntime.Sink:
             """Create an adapter sink and attach the LDIF runtime sink."""
@@ -49,7 +46,7 @@ class FlextTargetLdifServiceRuntime:
         @override
         def process_batch(
             self,
-            context: Mapping[str, t.Container],
+            context: t.JsonMapping,
         ) -> None:
             """Singer batch hook is handled by the LDIF runtime sink."""
             self._runtime_sink.process_batch(
@@ -59,8 +56,8 @@ class FlextTargetLdifServiceRuntime:
         @override
         def process_record(
             self,
-            record: Mapping[str, t.Container],
-            context: Mapping[str, t.Container],
+            record: t.JsonMapping,
+            context: t.JsonMapping,
         ) -> None:
             """Delegate Singer record handling to the LDIF runtime sink."""
             self._runtime_sink.process_record(
@@ -73,8 +70,8 @@ class FlextTargetLdifServiceRuntime:
         cls,
         *,
         stream_name: str,
-        schema: t.FlatContainerMapping,
-        target_config: Mapping[str, t.Container],
+        schema: t.JsonMapping,
+        target_config: t.JsonMapping,
     ) -> p.Meltano.SingerDrainSink:
         """Create the LDIF runtime sink for the service facade."""
         normalized_target_config = u.Meltano.normalize_runtime_json_mapping(
@@ -99,8 +96,8 @@ class FlextTargetLdifServiceRuntime:
 
     @staticmethod
     def normalize_schema(
-        source: t.FlatContainerMapping,
-    ) -> t.MutableMappingKV[str, t.Container]:
+        source: t.JsonMapping,
+    ) -> t.MutableMappingKV[str, t.JsonValue]:
         """Normalize a flat Singer schema to the LDIF runtime contract."""
         return {
             key: (str(value) if isinstance(value, Path) else value)
