@@ -26,8 +26,8 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
 
     target_name: Annotated[
         t.NonEmptyStr,
-        u.Field(default="target-ldif", description="Singer target name"),
-    ]
+        u.Field(description="Singer target name"),
+    ] = "target-ldif"
 
     @override
     def create_sink(
