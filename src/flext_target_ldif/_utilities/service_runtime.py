@@ -34,10 +34,11 @@ class FlextTargetLdifServiceRuntime:
             key_properties: t.StrSequence,
         ) -> FlextTargetLdifServiceRuntime.Sink:
             """Create an adapter sink and attach the LDIF runtime sink."""
+            schema_dict: dict[str, t.JsonValue] = dict(schema)
             service_sink = cls(
                 target=target,
                 stream_name=stream_name,
-                schema=schema,
+                schema=schema_dict,
                 key_properties=key_properties,
             )
             service_sink._runtime_sink = runtime_sink

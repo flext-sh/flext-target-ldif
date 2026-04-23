@@ -664,7 +664,8 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             def process_batch(self, context: t.JsonMapping) -> None:
                 """Process a batch of records."""
                 if context:
-                    self.logger.debug("Processing LDIF batch", context=context)
+                    context_dict: dict[str, t.JsonValue] = dict(context)
+                    self.logger.debug("Processing LDIF batch", context=context_dict)
                 self._get_ldif_writer()
 
             def process_record(
@@ -674,7 +675,8 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             ) -> None:
                 """Process a single record and write to LDIF."""
                 if context:
-                    self.logger.debug("Processing LDIF record", context=context)
+                    context_dict: dict[str, t.JsonValue] = dict(context)
+                    self.logger.debug("Processing LDIF record", context=context_dict)
                 ldif_writer = self._get_ldif_writer()
                 result: p.Result[bool] = ldif_writer.write_record(record)
                 if not result.success:
