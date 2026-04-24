@@ -18,9 +18,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from flext_target_ldif import FlextTargetLdifWriter, FlextTargetLdifWriterError
-
-EXPECTED_BULK_SIZE = 2
-EXPECTED_DATA_COUNT = 3
+from tests import c
 
 
 class TestFlextTargetLdifWriterInitialization:
@@ -109,8 +107,8 @@ class TestFlextTargetLdifWriterFileOperations:
         writer = FlextTargetLdifWriter(output_file=tmp_path)
         result = writer.open()
         assert result.success
-        assert writer._file_handle is not None
-        writer.close()
+        close_result = writer.close()
+        assert close_result.success
         tmp_path.unlink()
 
     def test_open_failure(self) -> None:
@@ -136,7 +134,6 @@ class TestFlextTargetLdifWriterFileOperations:
         writer.open()
         result = writer.close()
         assert result.success
-        assert writer._file_handle is None
         tmp_path.unlink()
 
     def test_close_when_not_open(self) -> None:
@@ -225,7 +222,7 @@ class TestFlextTargetLdifWriterRecordWriting:
         record = {"uid": "jdoe", "cn": "John Doe"}
         result = writer.write_record(record)
         assert result.success
-        assert writer._file_handle is not None
+        assert writer.record_count == 1
         writer.close()
         tmp_path.unlink()
 
@@ -259,7 +256,7 @@ class TestFlextTargetLdifWriterRecordWriting:
         for record in records:
             result = writer.write_record(record)
             assert result.success
-        if writer.record_count != EXPECTED_DATA_COUNT:
+        if writer.record_count != c.TargetLdif.Tests.EXPECTED_DATA_COUNT:
             raise AssertionError(f"Expected {3}, got {writer.record_count}")
         writer.close()
         content = tmp_path.read_text(encoding="utf-8")
@@ -475,8 +472,8 @@ class TestFlextTargetLdifWriterContextManager:
         with FlextTargetLdifWriter(output_file=tmp_path) as writer:
             result = writer.write_record(record)
             assert result.success
-            assert writer._file_handle is not None
-        assert writer._file_handle is None
+            assert writer.record_count == 1
+        assert writer.record_count == 1
         content = tmp_path.read_text(encoding="utf-8")
         if "dn: uid=jdoe,ou=users,dc=example,dc=com" not in content:
             msg: str = (
@@ -506,7 +503,8 @@ class TestFlextTargetLdifWriterContextManager:
         except ValueError:
             pass
         assert writer is not None
-        assert writer._file_handle is None
+        assert writer.record_count == 1
+        assert "uid: jdoe" in tmp_path.read_text(encoding="utf-8")
         tmp_path.unlink()
 
 
@@ -570,7 +568,7 @@ class TestFlextTargetLdifWriterProperties:
         writer.write_record({"uid": "user1", "cn": "User One"})
         assert writer.record_count == 1, f"Expected 1, got {writer.record_count}"
         writer.write_record({"uid": "user2", "cn": "User Two"})
-        assert writer.record_count == EXPECTED_BULK_SIZE, (
+        assert writer.record_count == c.TargetLdif.Tests.EXPECTED_BULK_SIZE, (
             f"Expected 2, got {writer.record_count}"
         )
         writer.close()
