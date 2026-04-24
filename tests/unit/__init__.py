@@ -7,23 +7,8 @@ from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 _LAZY_IMPORTS = build_lazy_import_map(
     {
-        ".test_target": (
-            "TestFlextTargetLdif",
-            "TestFlextTargetLdifClass",
-            "TestFlextTargetLdifSettings",
-            "TestIntegration",
-        ),
-        ".test_writer": (
-            "TestFlextTargetLdifWriterBase64Encoding",
-            "TestFlextTargetLdifWriterContextManager",
-            "TestFlextTargetLdifWriterDnGeneration",
-            "TestFlextTargetLdifWriterFileOperations",
-            "TestFlextTargetLdifWriterHeaderGeneration",
-            "TestFlextTargetLdifWriterInitialization",
-            "TestFlextTargetLdifWriterLineWrapping",
-            "TestFlextTargetLdifWriterProperties",
-            "TestFlextTargetLdifWriterRecordWriting",
-        ),
+        ".test_target": ("TestsFlextTargetLdifTarget",),
+        ".test_writer": ("TestsFlextTargetLdifWriter",),
     },
 )
 

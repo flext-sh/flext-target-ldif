@@ -19,12 +19,8 @@ if _t.TYPE_CHECKING:
     from tests.models import TestsFlextTargetLdifModels, m
     from tests.protocols import TestsFlextTargetLdifProtocols, p
     from tests.typings import TestsFlextTargetLdifTypes, t
-    from tests.unit.test_target import (
-        TestsFlextTargetLdifTarget,
-    )
-    from tests.unit.test_writer import (
-        TestsFlextTargetLdifWriter,
-    )
+    from tests.unit.test_target import TestsFlextTargetLdifTarget
+    from tests.unit.test_writer import TestsFlextTargetLdifWriter
     from tests.utilities import TestsFlextTargetLdifUtilities, u
 _LAZY_IMPORTS = merge_lazy_imports(
     (".unit",),
