@@ -21,7 +21,7 @@ from flext_target_ldif import (
 )
 
 
-class TestFlextTargetLdifSettings:
+class TestsFlextTargetLdifTarget:
     """Test FlextTargetLdifSettings value object."""
 
     def test_config_creation_with_defaults(self) -> None:
@@ -106,10 +106,6 @@ class TestFlextTargetLdifSettings:
         )
         settings.validate_domain_rules()
 
-
-class TestFlextTargetLdifClass:
-    """Test FlextTargetLdif main class."""
-
     def test_target_inheritance(self) -> None:
         """Test that FlextTargetLdif is properly instantiated."""
         target = FlextTargetLdif()
@@ -174,10 +170,6 @@ class TestFlextTargetLdifClass:
             raise AssertionError(
                 f"Expected {'DN template cannot be empty'} in {exc_info.value!s}",
             )
-
-
-class TestFlextTargetLdif:
-    """Test the base FlextTargetLdif class."""
 
     def test_target_ldif_creation(self) -> None:
         """Test creating FlextTargetLdif instance."""
@@ -257,10 +249,6 @@ class TestFlextTargetLdif:
             assert (
                 target.settings["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
             )
-
-
-class TestIntegration:
-    """Integration tests for the complete target system."""
 
     def test_end_to_end_ldif_generation(self) -> None:
         """Test end-to-end LDIF generation."""

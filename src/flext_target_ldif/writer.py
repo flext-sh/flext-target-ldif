@@ -110,7 +110,7 @@ class FlextTargetLdifWriter:
         """Open the output file for writing."""
         try:
             self.output_file.parent.mkdir(parents=True, exist_ok=True)
-            self._file_handle = self.output_file.open("w", encoding="utf-8")
+            self._file_handle = self.output_file.open("w", encoding=c.DEFAULT_ENCODING)
             return r[bool].ok(value=True)
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
             return r[bool].fail(f"Failed to open LDIF file: {e}")
@@ -181,14 +181,14 @@ class FlextTargetLdifWriter:
             msg = "File handle is not open"
             raise ValueError(msg)
         if self._needs_base64_encoding(value):
-            encoded = base64.b64encode(value.encode("utf-8")).decode("ascii")
+            encoded = base64.b64encode(value.encode(c.DEFAULT_ENCODING)).decode("ascii")
             self._file_handle.write(f"{attr_name}:: {encoded}\n")
         else:
             self._file_handle.write(f"{attr_name}: {value}\n")
 
     def _write_entries_to_file(self) -> None:
         """Write LDIF entries to file."""
-        with self.output_file.open("w", encoding="utf-8") as f:
+        with self.output_file.open("w", encoding=c.DEFAULT_ENCODING) as f:
             f.write("version: 1\n")
             if self.include_timestamps:
                 f.write(f"# Generated on: {datetime.now(UTC).isoformat()}\n")
@@ -219,14 +219,18 @@ class FlextTargetLdifWriter:
             if isinstance(values, list):
                 for value in values:
                     if self.base64_encode:
-                        encoded = base64.b64encode(str(value).encode("utf-8")).decode(
+                        encoded = base64.b64encode(
+                            str(value).encode(c.DEFAULT_ENCODING)
+                        ).decode(
                             "ascii",
                         )
                         f.write(f"{attr}:: {encoded}\n")
                     else:
                         f.write(f"{attr}: {value}\n")
             elif self.base64_encode:
-                encoded = base64.b64encode(str(values).encode("utf-8")).decode("ascii")
+                encoded = base64.b64encode(
+                    str(values).encode(c.DEFAULT_ENCODING)
+                ).decode("ascii")
                 f.write(f"{attr}:: {encoded}\n")
             else:
                 f.write(f"{attr}: {values}\n")

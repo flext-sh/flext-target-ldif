@@ -21,7 +21,7 @@ from flext_target_ldif import FlextTargetLdifWriter, FlextTargetLdifWriterError
 from tests import c
 
 
-class TestFlextTargetLdifWriterInitialization:
+class TestsFlextTargetLdifWriter:
     """Test FlextTargetLdifWriter initialization."""
 
     def test_init_with_defaults(self) -> None:
@@ -92,10 +92,6 @@ class TestFlextTargetLdifWriterInitialization:
                     f"Expected {Path(test_file)}, got {writer.output_file}",
                 )
 
-
-class TestFlextTargetLdifWriterFileOperations:
-    """Test file operations (open/close)."""
-
     def test_open_success(self) -> None:
         """Test successful file opening."""
         with tempfile.NamedTemporaryFile(
@@ -156,10 +152,6 @@ class TestFlextTargetLdifWriterFileOperations:
             raise AssertionError(
                 f"Expected {'Failed to close LDIF file'} in {result.error}",
             )
-
-
-class TestFlextTargetLdifWriterRecordWriting:
-    """Test record writing functionality."""
 
     def test_write_simple_record(self) -> None:
         """Test writing a simple record."""
@@ -271,10 +263,6 @@ class TestFlextTargetLdifWriterRecordWriting:
             )
         tmp_path.unlink()
 
-
-class TestFlextTargetLdifWriterBase64Encoding:
-    """Test base64 encoding functionality."""
-
     def test_needs_base64_encoding_space_start(self) -> None:
         """Test detection of values that start with space."""
         writer = FlextTargetLdifWriter()
@@ -356,10 +344,6 @@ class TestFlextTargetLdifWriterBase64Encoding:
         assert "cn:: " in content
         tmp_path.unlink()
 
-
-class TestFlextTargetLdifWriterLineWrapping:
-    """Test line wrapping functionality."""
-
     def test_short_line_no_wrapping(self) -> None:
         """Test short lines are not wrapped."""
         with tempfile.NamedTemporaryFile(
@@ -416,10 +400,6 @@ class TestFlextTargetLdifWriterLineWrapping:
         if writer.line_length != 100:
             raise AssertionError(f"Expected {100}, got {writer.line_length}")
 
-
-class TestFlextTargetLdifWriterDnGeneration:
-    """Test DN generation functionality."""
-
     def test_generate_dn_success(self) -> None:
         """Test successful DN generation."""
         writer = FlextTargetLdifWriter(
@@ -455,10 +435,6 @@ class TestFlextTargetLdifWriterDnGeneration:
             raise AssertionError(
                 f"Expected {'cn=John Doe,ou=people,dc=test,dc=org'}, got {dn}",
             )
-
-
-class TestFlextTargetLdifWriterContextManager:
-    """Test context manager functionality."""
 
     def test_context_manager_usage(self) -> None:
         """Test using FlextTargetLdifWriter as context manager."""
@@ -507,10 +483,6 @@ class TestFlextTargetLdifWriterContextManager:
         assert "uid: jdoe" in tmp_path.read_text(encoding="utf-8")
         tmp_path.unlink()
 
-
-class TestFlextTargetLdifWriterHeaderGeneration:
-    """Test LDIF header generation."""
-
     def test_header_with_timestamps(self) -> None:
         """Test header generation with timestamps."""
         with tempfile.NamedTemporaryFile(
@@ -550,10 +522,6 @@ class TestFlextTargetLdifWriterHeaderGeneration:
             raise AssertionError(f"Expected {'version: 1'} in {content}")
         assert "# Generated on:" not in content
         tmp_path.unlink()
-
-
-class TestFlextTargetLdifWriterProperties:
-    """Test FlextTargetLdifWriter properties."""
 
     def test_record_count_property(self) -> None:
         """Test record_count property."""

@@ -81,7 +81,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             encoding: Annotated[
                 str,
                 u.Field(
-                    default="utf-8",
+                    default=c.DEFAULT_ENCODING,
                     description="Character encoding for LDIF files",
                 ),
             ]

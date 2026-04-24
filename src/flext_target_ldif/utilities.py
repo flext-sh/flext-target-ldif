@@ -131,7 +131,9 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                     or ord(ch) > c.TargetLdif.ASCII_TILDE
                     for ch in value
                 ):
-                    encoded = base64.b64encode(value.encode("utf-8")).decode("ascii")
+                    encoded = base64.b64encode(value.encode(c.DEFAULT_ENCODING)).decode(
+                        "ascii"
+                    )
                     return f":: {encoded}"
                 if len(value) > c.TargetLdif.LDIF_LINE_WRAP_LENGTH:
                     return FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.wrap_ldif_line(
@@ -232,7 +234,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                     path = Path(file_path)
                     if not path.exists():
                         path.parent.mkdir(parents=True, exist_ok=True)
-                    with Path(path).open("a", encoding="utf-8") as f:
+                    with Path(path).open("a", encoding=c.DEFAULT_ENCODING) as f:
                         for entry in entries:
                             f.write(entry)
                             if not entry.endswith("\n"):
@@ -266,7 +268,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                     if path.exists() and (not overwrite):
                         return r[str].fail(f"File already exists: {file_path}")
                     path.parent.mkdir(parents=True, exist_ok=True)
-                    with Path(path).open("w", encoding="utf-8") as f:
+                    with Path(path).open("w", encoding=c.DEFAULT_ENCODING) as f:
                         for entry in entries:
                             f.write(entry)
                             if not entry.endswith("\n"):
