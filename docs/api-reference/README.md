@@ -19,7 +19,7 @@ This section is generated from public exports and real docstrings.
 
 ## Surface Summary
 
-- Primary facades: `FlextTargetLdifSettings`, `FlextTargetLdifWriterError`, `FlextTargetLdifUtilities`, `FlextTargetLdifWriter`, `FlextTargetLdif`, `FlextTargetLdifCli` (+6 more)
+- Primary facades: `FlextTargetLdifUtilities`, `FlextTargetLdifWriter`, `FlextTargetLdifTypes`, `FlextTargetLdifWriterError`, `FlextTargetLdifProtocols`, `FlextTargetLdifConstants` (+6 more)
 - Generated module pages: `12`
 
 - [Back to project docs](../index.md)
