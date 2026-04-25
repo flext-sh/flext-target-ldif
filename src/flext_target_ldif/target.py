@@ -15,8 +15,8 @@ from pathlib import Path
 from typing import override
 
 from flext_target_ldif import (
-    FlextTargetLdifModels,
     FlextTargetLdifSettings,
+    m,
     main as cli_main,
     t,
 )
@@ -41,7 +41,7 @@ class FlextTargetLdif:
         }
         merged: t.JsonMapping = {**defaults, **(settings or {})}
         self.settings: t.JsonMapping = merged
-        self.sinks: MutableMapping[str, FlextTargetLdifModels.TargetLdif.Sink] = {}
+        self.sinks: MutableMapping[str, m.TargetLdif.Sink] = {}
         self._test_config: t.JsonMapping | None = None
         if validate_config:
             self.validate_config()
@@ -63,18 +63,18 @@ class FlextTargetLdif:
         return FlextTargetLdifSettings.model_json_schema()
 
     @property
-    def default_sink_class(self) -> type[FlextTargetLdifModels.TargetLdif.Sink]:
+    def default_sink_class(self) -> type[m.TargetLdif.Sink]:
         """Return the default sink class for this target."""
-        return FlextTargetLdifModels.TargetLdif.Sink
+        return m.TargetLdif.Sink
 
     def get_sink(
         self,
         stream_name: str,
         schema: t.JsonMapping,
-    ) -> FlextTargetLdifModels.TargetLdif.Sink:
+    ) -> m.TargetLdif.Sink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
-            self.sinks[stream_name] = FlextTargetLdifModels.TargetLdif.Sink(
+            self.sinks[stream_name] = m.TargetLdif.Sink(
                 target_config=self.settings,
                 stream_name=stream_name,
                 schema=schema,
