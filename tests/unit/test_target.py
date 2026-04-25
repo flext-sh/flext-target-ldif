@@ -12,13 +12,13 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
-from pydantic import ValidationError
 
 from flext_target_ldif import (
     FlextTargetLdif,
     FlextTargetLdifModels,
     FlextTargetLdifSettings,
 )
+from tests import c
 
 
 class TestsFlextTargetLdifTarget:
@@ -73,7 +73,7 @@ class TestsFlextTargetLdifTarget:
     def test_config_immutability(self) -> None:
         """Test that settings is immutable."""
         settings = FlextTargetLdifSettings(output_file="test.ldif")
-        with pytest.raises(ValidationError):
+        with pytest.raises(c.ValidationError):
             settings.output_file = "modified.ldif"
 
     def test_config_validation_empty_output_file(self) -> None:
@@ -91,7 +91,7 @@ class TestsFlextTargetLdifTarget:
     def test_config_validation_invalid_line_length(self) -> None:
         """Test validation with invalid line length."""
         invalid_line_length = int("0")
-        with pytest.raises(ValidationError):
+        with pytest.raises(c.ValidationError):
             FlextTargetLdifSettings(
                 output_file="test.ldif",
                 line_length=invalid_line_length,
