@@ -13,7 +13,6 @@ from collections.abc import (
 from typing import Annotated, ClassVar, override as _override
 
 from flext_core import FlextSettings
-
 from flext_target_ldif import c, m, p, r, t, u
 
 

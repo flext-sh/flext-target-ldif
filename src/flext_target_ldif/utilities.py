@@ -19,7 +19,6 @@ from pathlib import Path
 
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import u
-
 from flext_target_ldif import c, p, r, t
 
 

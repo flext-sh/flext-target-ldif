@@ -20,7 +20,6 @@ from flext_core import (
 )
 from flext_ldif import FlextLdifModels
 from flext_meltano import m
-
 from flext_target_ldif import FlextTargetLdifWriter, c, p, t, u
 
 """LDIF target models extending flext-core FlextModels.
