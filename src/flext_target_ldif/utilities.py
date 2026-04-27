@@ -17,6 +17,7 @@ from collections.abc import (
 from datetime import datetime
 from pathlib import Path
 
+from flext_core import c as core_c
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import u
 from flext_target_ldif import c, p, r, t
@@ -153,8 +154,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 """
                 if not dn:
                     return False
-                dn_pattern = "^[a-zA-Z][\\w\\-]*\\s*=\\s*[^,]+(?:\\s*,\\s*[a-zA-Z][\\w\\-]*\\s*=\\s*[^,]+)*$"
-                return bool(re.match(dn_pattern, dn.strip()))
+                return bool(re.match(core_c.PATTERN_LDAP_DN, dn.strip()))
 
             @staticmethod
             def validate_ldif_entry(entry: str) -> p.Result[bool]:
