@@ -33,4 +33,4 @@ class FlextTargetLdifConstants(c, FlextLdifConstants):
 
 c = FlextTargetLdifConstants
 
-__all__: list[str] = ["FlextTargetLdifConstants", "c"]
+__all__: tuple[str, ...] = ("FlextTargetLdifConstants", "c")
