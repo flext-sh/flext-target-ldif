@@ -51,7 +51,7 @@ class FlextTargetLdifServiceRuntime:
         ) -> None:
             """Singer batch hook is handled by the LDIF runtime sink."""
             self._runtime_sink.process_batch(
-                u.Meltano.normalize_runtime_json_mapping(context),
+                u.normalize_to_json_mapping(context),
             )
 
         @override
@@ -62,8 +62,8 @@ class FlextTargetLdifServiceRuntime:
         ) -> None:
             """Delegate Singer record handling to the LDIF runtime sink."""
             self._runtime_sink.process_record(
-                u.Meltano.normalize_runtime_json_mapping(record),
-                u.Meltano.normalize_runtime_json_mapping(context),
+                u.normalize_to_json_mapping(record),
+                u.normalize_to_json_mapping(context),
             )
 
     @classmethod
@@ -75,7 +75,7 @@ class FlextTargetLdifServiceRuntime:
         target_config: t.JsonMapping,
     ) -> p.Meltano.SingerDrainSink:
         """Create the LDIF runtime sink for the service facade."""
-        normalized_target_config = u.Meltano.normalize_runtime_json_mapping(
+        normalized_target_config = u.normalize_to_json_mapping(
             target_config,
         )
         normalized_schema = cls.normalize_schema(schema)
