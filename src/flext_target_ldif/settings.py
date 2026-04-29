@@ -26,7 +26,7 @@ class FlextTargetLdifSettings(FlextSettings):
 
     _allow_mutation: bool = True
 
-    def __init__(self, **kwargs: t.SettingsValue) -> None:
+    def __init__(self, **kwargs: t.SettingsInput) -> None:
         """Initialize settings and freeze after construction.
 
         Explicitly applies field defaults for missing kwargs to ensure
@@ -39,7 +39,7 @@ class FlextTargetLdifSettings(FlextSettings):
                 if field_info.default is not c.PydanticUndefined:
                     kwargs[field_name] = field_info.default
                 elif field_info.default_factory is not None:
-                    factory_fn: Callable[..., t.SettingsValue] = (
+                    factory_fn: Callable[..., t.SettingsInput] = (
                         field_info.default_factory
                     )
                     kwargs[field_name] = factory_fn()

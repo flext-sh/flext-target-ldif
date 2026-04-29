@@ -689,9 +689,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                     raw_ldif_options = self.settings.get("ldif_options", {})
                     ldif_options: t.JsonMapping = {}
                     if isinstance(raw_ldif_options, Mapping):
-                        ldif_options = {
-                            str(key): value for key, value in raw_ldif_options.items()
-                        }
+                        ldif_options = dict(raw_ldif_options.items())
                     dn_template = self.settings.get("dn_template")
                     if dn_template is not None and (not isinstance(dn_template, str)):
                         dn_template = None
@@ -699,7 +697,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                     attribute_mapping: t.StrMapping = {}
                     if isinstance(raw_attribute_mapping, Mapping):
                         attribute_mapping = {
-                            str(key): value
+                            key: value
                             for key, value in raw_attribute_mapping.items()
                             if isinstance(value, str)
                         }

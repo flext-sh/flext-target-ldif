@@ -199,9 +199,7 @@ class FlextTargetLdifWriter:
                 attributes_obj: t.AttributeMapping = {}
                 if isinstance(raw_attributes, dict):
                     attributes_obj = {
-                        str(key): list(value)
-                        if not isinstance(value, str)
-                        else str(value)
+                        key: list(value) if not isinstance(value, str) else value
                         for key, value in raw_attributes.items()
                     }
                 f.write(f"dn: {dn_str}\n")
@@ -219,7 +217,7 @@ class FlextTargetLdifWriter:
                 for value in values:
                     if self.base64_encode:
                         encoded = base64.b64encode(
-                            str(value).encode(c.DEFAULT_ENCODING)
+                            value.encode(c.DEFAULT_ENCODING)
                         ).decode(
                             "ascii",
                         )
