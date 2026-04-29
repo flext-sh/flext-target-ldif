@@ -12,6 +12,7 @@ from collections.abc import (
 )
 from datetime import UTC, datetime
 from pathlib import Path
+from types import MappingProxyType
 from typing import Annotated, override
 
 from flext_core import (
@@ -115,7 +116,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 u.Field(
                     description="Singer field to LDIF attribute mappings",
                 ),
-            ] = u.Field(default_factory=dict)
+            ] = u.Field(default_factory=MappingProxyType)
             object_classes: Annotated[
                 t.StrSequence,
                 u.Field(
@@ -175,7 +176,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 u.Field(
                     description="LDIF attributes with values",
                 ),
-            ] = u.Field(default_factory=dict)
+            ] = u.Field(default_factory=MappingProxyType)
             object_classes: Annotated[
                 t.StrSequence,
                 u.Field(
