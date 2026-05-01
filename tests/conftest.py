@@ -10,7 +10,6 @@ from __future__ import annotations
 import tempfile
 from collections.abc import (
     Generator,
-    Sequence,
 )
 from pathlib import Path
 
@@ -94,7 +93,7 @@ def sample_schema() -> t.JsonMapping:
 
 
 @pytest.fixture
-def multiple_records() -> Sequence[t.StrMapping]:
+def multiple_records() -> t.SequenceOf[t.StrMapping]:
     """Provide multiple sample records for testing."""
     return [
         {

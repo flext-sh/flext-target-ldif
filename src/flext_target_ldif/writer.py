@@ -11,12 +11,6 @@ from __future__ import annotations
 
 import base64
 import types
-from collections.abc import (
-    Mapping,
-    MutableMapping,
-    MutableSequence,
-    Sequence,
-)
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Self, TextIO, override
@@ -42,7 +36,7 @@ class FlextTargetLdifWriter:
         ldif_options: t.JsonMapping | None = None,
         dn_template: str | None = None,
         attribute_mapping: t.StrMapping | None = None,
-        schema: Mapping[str, t.JsonValue | t.StrSequence] | None = None,
+        schema: t.MappingKV[str, t.JsonValue | t.StrSequence] | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure."""
         self.output_file = Path(output_file) if output_file else Path("output.ldif")
@@ -62,10 +56,10 @@ class FlextTargetLdifWriter:
         timestamps_val = self.ldif_options.get("include_timestamps", True)
         self.include_timestamps: bool = bool(timestamps_val)
         self._ldif_api = ldif()
-        self._records: MutableSequence[t.JsonMapping] = []
+        self._records: list[t.JsonMapping] = []
         self._record_count = 0
-        self._ldif_entries: Sequence[
-            Mapping[str, str | Mapping[str, t.StrSequence]]
+        self._ldif_entries: t.SequenceOf[
+            t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]]
         ] = []
         self._file_handle: TextIO | None = None
 
@@ -131,7 +125,7 @@ class FlextTargetLdifWriter:
     def _convert_record_to_entry(
         self,
         record: t.JsonMapping,
-    ) -> Mapping[str, str | Mapping[str, t.StrSequence]] | None:
+    ) -> t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] | None:
         """Convert a single record to LDIF entry format."""
         try:
             dn = self._generate_dn(record)
@@ -140,13 +134,13 @@ class FlextTargetLdifWriter:
                 if key != "dn":
                     mapped_key = self.attribute_mapping.get(key, key)
                     attributes[mapped_key] = value
-            attr_dict: MutableMapping[str, t.StrSequence] = {}
+            attr_dict: dict[str, t.StrSequence] = {}
             for key, value in attributes.items():
                 if isinstance(value, list):
                     attr_dict[key] = [str(v) for v in value]
                 else:
                     attr_dict[key] = [str(value)]
-            result: Mapping[str, str | Mapping[str, t.StrSequence]] = {
+            result: t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] = {
                 "dn": dn,
                 "attributes": attr_dict,
             }

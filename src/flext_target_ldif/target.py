@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from collections.abc import (
     Callable,
-    MutableMapping,
 )
 from pathlib import Path
 from typing import override
@@ -41,7 +40,7 @@ class FlextTargetLdif:
         }
         merged: t.JsonMapping = {**defaults, **(settings or {})}
         self.settings: t.JsonMapping = merged
-        self.sinks: MutableMapping[str, m.TargetLdif.Sink] = {}
+        self.sinks: dict[str, m.TargetLdif.Sink] = {}
         self._test_config: t.JsonMapping | None = None
         if validate_config:
             self.validate_config()

@@ -7,8 +7,6 @@ from __future__ import annotations
 
 from collections.abc import (
     Mapping,
-    MutableSequence,
-    Sequence,
 )
 from datetime import UTC, datetime
 from pathlib import Path
@@ -172,7 +170,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 ),
             ]
             attributes: Annotated[
-                Mapping[str, t.StrSequence],
+                t.MappingKV[str, t.StrSequence],
                 u.Field(
                     description="LDIF attributes with values",
                 ),
@@ -200,7 +198,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             def validate_business_rules(self) -> p.Result[bool]:
                 """Validate LDIF entry business rules."""
                 try:
-                    errors: MutableSequence[str] = []
+                    errors: list[str] = []
 
                     # Validate DN format
                     if (
@@ -239,7 +237,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 u.Field(..., description="Singer stream name"),
             ]
             entries: Annotated[
-                Sequence[FlextTargetLdifModels.TargetLdif.LdifEntry],
+                t.SequenceOf[FlextTargetLdifModels.TargetLdif.LdifEntry],
                 u.Field(
                     description="LDIF entries in the file",
                 ),
@@ -368,7 +366,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 ),
             ]
             current_batch: Annotated[
-                Sequence[FlextTargetLdifModels.TargetLdif.LdifEntry],
+                t.SequenceOf[FlextTargetLdifModels.TargetLdif.LdifEntry],
                 u.Field(
                     description="Current batch of entries",
                 ),

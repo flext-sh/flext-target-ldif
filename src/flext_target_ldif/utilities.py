@@ -11,8 +11,6 @@ import base64
 import re
 from collections.abc import (
     Callable,
-    Mapping,
-    MutableSequence,
 )
 from datetime import datetime
 from pathlib import Path
@@ -90,7 +88,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 if not record or not dn:
                     return r[str].fail("Record and DN are required")
                 try:
-                    ldif_lines: MutableSequence[str] = []
+                    ldif_lines: list[str] = []
                     mapping = attribute_mapping or {}
                     ldif_lines.append(f"dn: {dn}")
                     if object_classes:
@@ -197,7 +195,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 """
                 if len(value) <= c.TargetLdif.LDIF_LINE_WRAP_LENGTH:
                     return value
-                lines: MutableSequence[str] = []
+                lines: list[str] = []
                 remaining = value
                 while remaining:
                     if len(remaining) <= c.TargetLdif.LDIF_LINE_WRAP_LENGTH:
@@ -376,7 +374,8 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
             def normalize_attribute_value(
                 attr_name: str,
                 value: t.JsonValue,
-                transformers: Mapping[str, Callable[[t.JsonValue], str]] | None = None,
+                transformers: t.MappingKV[str, Callable[[t.JsonValue], str]]
+                | None = None,
             ) -> str:
                 """Normalize attribute value based on attribute type."""
                 rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer
@@ -415,7 +414,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
             def __init__(
                 self,
                 attribute_mapping: t.StrMapping | None = None,
-                custom_transformers: Mapping[str, Callable[..., str]] | None = None,
+                custom_transformers: t.MappingKV[str, Callable[..., str]] | None = None,
             ) -> None:
                 """Initialize the record transformer."""
                 self.attribute_mapping = attribute_mapping or {}
