@@ -347,9 +347,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
 
                     return r[bool].ok(value=True)
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[bool].fail(
-                        f"Transformation result validation failed: {e}",
-                    )
+                    return r[bool].fail_op("Transformation result validation", e)
 
         class LdifBatchProcessing(m.Entity):
             """LDIF batch processing configuration and state."""
