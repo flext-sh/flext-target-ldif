@@ -223,7 +223,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                         return r[bool].fail("; ".join(errors))
                     return r[bool].ok(value=True)
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[bool].fail(f"LDIF entry validation failed: {e}")
+                    return r[bool].fail_op("LDIF entry validation", e)
 
         class LdifFile(m.Entity):
             """LDIF file representation with metadata."""
@@ -283,7 +283,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
 
                     return r[bool].ok(value=True)
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[bool].fail(f"LDIF file validation failed: {e}")
+                    return r[bool].fail_op("LDIF file validation", e)
 
         class LdifTransformationResult(m.Entity):
             """Result of Singer to LDIF transformation."""
@@ -424,7 +424,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
 
                     return r[bool].ok(value=True)
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[bool].fail(f"Batch processing validation failed: {e}")
+                    return r[bool].fail_op("Batch processing validation", e)
 
         class SingerStreamConfig(FlextSettings):
             """Singer stream configuration for LDIF export."""
@@ -563,7 +563,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
 
                     return r[bool].ok(value=True)
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[bool].fail(f"Target result validation failed: {e}")
+                    return r[bool].fail_op("Target result validation", e)
 
         class LdifErrorContext(m.ArbitraryTypesModel):
             """Error context for LDIF target error handling."""
