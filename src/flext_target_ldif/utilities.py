@@ -13,7 +13,6 @@ from collections.abc import (
     Callable,
 )
 from datetime import datetime
-from pathlib import Path
 
 from flext_core import c as core_c
 from flext_ldif import FlextLdifUtilities
@@ -207,97 +206,6 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                     lines.append(remaining[:break_point])
                     remaining = " " + remaining[break_point:].lstrip()
                 return "\n".join(lines)
-
-        class FileUtilities:
-            """File handling utilities for LDIF operations."""
-
-            @staticmethod
-            def append_to_ldif_file(
-                file_path: str, entries: t.StrSequence
-            ) -> p.Result[str]:
-                """Append entries to existing LDIF file.
-
-                Args:
-                file_path: Path to LDIF file
-                entries: List of LDIF entries to append
-
-                Returns:
-                r[str]: Success message or error
-
-                """
-                if not file_path or not entries:
-                    return r[str].fail("File path and entries are required")
-                try:
-                    path = Path(file_path)
-                    if not path.exists():
-                        path.parent.mkdir(parents=True, exist_ok=True)
-                    with Path(path).open("a", encoding=c.DEFAULT_ENCODING) as f:
-                        for entry in entries:
-                            f.write(entry)
-                            if not entry.endswith("\n"):
-                                f.write("\n")
-                    return r[str].ok(f"Entries appended to LDIF file: {file_path}")
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[str].fail(f"Error appending to LDIF file: {e}")
-
-            @staticmethod
-            def create_ldif_file(
-                file_path: str,
-                entries: t.StrSequence,
-                *,
-                overwrite: bool = False,
-            ) -> p.Result[str]:
-                """Create LDIF file with entries.
-
-                Args:
-                file_path: Path to LDIF file
-                entries: List of LDIF entries
-                overwrite: Whether to overwrite existing file
-
-                Returns:
-                r[str]: Success message or error
-
-                """
-                if not file_path or not entries:
-                    return r[str].fail("File path and entries are required")
-                try:
-                    path = Path(file_path)
-                    if path.exists() and (not overwrite):
-                        return r[str].fail(f"File already exists: {file_path}")
-                    path.parent.mkdir(parents=True, exist_ok=True)
-                    with Path(path).open("w", encoding=c.DEFAULT_ENCODING) as f:
-                        for entry in entries:
-                            f.write(entry)
-                            if not entry.endswith("\n"):
-                                f.write("\n")
-                    return r[str].ok(f"LDIF file created: {file_path}")
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[str].fail(f"Error creating LDIF file: {e}")
-
-            @staticmethod
-            def validate_ldif_file_path(file_path: str) -> p.Result[str]:
-                """Validate LDIF file path.
-
-                Args:
-                file_path: Path to validate
-
-                Returns:
-                r[str]: Validated path or error
-
-                """
-                if not file_path or not file_path.strip():
-                    return r[str].fail("File path cannot be empty")
-                try:
-                    path = Path(file_path)
-                    if not path.name:
-                        return r[str].fail("Invalid file path")
-                    if path.suffix.lower() != ".ldif":
-                        return r[str].fail("File must have .ldif extension")
-                    if path.parent.exists() and (not path.parent.is_dir()):
-                        return r[str].fail("Parent path is not a directory")
-                    return r[str].ok(str(path.resolve()))
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[str].fail(f"Invalid file path: {e}")
 
         class RecordTransformer:
             """Transform Singer records for LDIF output.
