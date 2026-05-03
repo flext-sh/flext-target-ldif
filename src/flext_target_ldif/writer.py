@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Self, TextIO, override
 
 from flext_ldif import ldif
-from flext_target_ldif import FlextTargetLdifWriterError, c, p, r, t, u
+from flext_target_ldif import FlextTargetLdifWriterError, c, e, p, r, t, u
 
 logger = u.fetch_logger(__name__)
 
@@ -95,9 +95,9 @@ class FlextTargetLdifWriter:
                 self._file_handle.close()
                 self._file_handle = None
             return r[bool].ok(value=True)
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
             self._file_handle = None
-            return r[bool].fail(f"Failed to close LDIF file: {e}")
+            return e.fail_operation("close LDIF file", exc, result_type=r[bool])
 
     def open(self) -> p.Result[bool]:
         """Open the output file for writing."""
@@ -105,8 +105,8 @@ class FlextTargetLdifWriter:
             self.output_file.parent.mkdir(parents=True, exist_ok=True)
             self._file_handle = self.output_file.open("w", encoding=c.DEFAULT_ENCODING)
             return r[bool].ok(value=True)
-        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-            return r[bool].fail(f"Failed to open LDIF file: {e}")
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
+            return e.fail_operation("open LDIF file", exc, result_type=r[bool])
 
     def write_record(self, record: t.JsonMapping) -> p.Result[bool]:
         """Write a record to the LDIF file buffer."""
@@ -114,13 +114,15 @@ class FlextTargetLdifWriter:
             if self._file_handle is None:
                 open_result = self.open()
                 if not open_result.success:
-                    return r[bool].fail(f"Failed to write record: {open_result.error}")
+                    return e.fail_operation(
+                        "write record", open_result.error, result_type=r[bool]
+                    )
             self._generate_dn(record)
             self._records.append(dict(record))
             self._record_count += 1
             return r[bool].ok(value=True)
-        except _WRITER_SAFE_EXCEPTIONS as e:
-            return r[bool].fail(f"Failed to write record: {e}")
+        except _WRITER_SAFE_EXCEPTIONS as exc:
+            return e.fail_operation("write record", exc, result_type=r[bool])
 
     def _convert_record_to_entry(
         self,
