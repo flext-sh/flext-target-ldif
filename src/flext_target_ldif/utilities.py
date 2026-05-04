@@ -8,7 +8,6 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import base64
-import re
 from collections.abc import (
     Callable,
 )
@@ -151,7 +150,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 """
                 if not dn:
                     return False
-                return bool(re.match(core_c.PATTERN_LDAP_DN, dn.strip()))
+                return bool(core_c.PATTERN_LDAP_DN_RE.match(dn.strip()))
 
             @staticmethod
             def validate_ldif_entry(entry: str) -> p.Result[bool]:
