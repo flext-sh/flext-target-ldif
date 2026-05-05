@@ -287,10 +287,12 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 """Normalize attribute value based on attribute type."""
                 rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer
                 if transformers and attr_name in transformers:
-                    return transformers[attr_name](value)
+                    custom: str = transformers[attr_name](value)
+                    return custom
                 builtin_transformer = rt.get_builtin_transformer(attr_name)
                 if builtin_transformer:
-                    return builtin_transformer(value)
+                    builtin: str = builtin_transformer(value)
+                    return builtin
                 return str(value).strip()
 
             @staticmethod

@@ -64,7 +64,8 @@ class FlextTargetLdif:
     @property
     def default_sink_class(self) -> type[m.TargetLdif.Sink]:
         """Return the default sink class for this target."""
-        return m.TargetLdif.Sink
+        sink_cls: type[m.TargetLdif.Sink] = m.TargetLdif.Sink
+        return sink_cls
 
     def get_sink(
         self,
