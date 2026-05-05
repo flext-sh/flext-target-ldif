@@ -12,12 +12,11 @@ from collections.abc import (
 )
 from typing import Annotated, ClassVar, override as _override
 
-from flext_core import FlextSettings
+from flext_core import FlextSettingsBase
 from flext_target_ldif import c, m, p, r, t, u
 
 
-@FlextSettings.auto_register("target-ldif")
-class FlextTargetLdifSettings(FlextSettings):
+class FlextTargetLdifSettings(FlextSettingsBase):
     """Typed runtime configuration for the LDIF target."""
 
     model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
