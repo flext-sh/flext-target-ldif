@@ -7,57 +7,27 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import (
-    Callable,
-)
-from typing import Annotated, ClassVar, override as _override
+from typing import Annotated, ClassVar
 
 from flext_core import FlextSettingsBase
 from flext_target_ldif import c, m, p, r, t, u
 
 
 class FlextTargetLdifSettings(FlextSettingsBase):
-    """Typed runtime configuration for the LDIF target."""
+    """Typed runtime configuration for the LDIF target.
+
+    Mutation is blocked by ``model_config.frozen=True`` (Pydantic-2 native);
+    runtime overrides go through ``cls.update_global(**overrides)`` which
+    creates a fresh validated instance via ``model_copy(update=…)`` and
+    replaces the singleton — no custom ``__setattr__`` hack required.
+    """
 
     model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
-        env_prefix="FLEXT_TARGET_LDIF_", extra="ignore"
+        env_prefix="FLEXT_TARGET_LDIF_",
+        extra="ignore",
+        frozen=True,
+        validate_assignment=True,
     )
-
-    _allow_mutation: bool = True
-
-    def __init__(self, **kwargs: t.SettingsInput) -> None:
-        """Initialize settings and freeze after construction.
-
-        Explicitly applies field defaults for missing kwargs to ensure
-        clean initialization when FlextSettings DI provider
-        short-circuits BaseSettings.__init__.
-        """
-        object.__setattr__(self, "_allow_mutation", True)
-        for field_name, field_info in type(self).model_fields.items():
-            if field_name not in kwargs:
-                if field_info.default is not c.PydanticUndefined:
-                    kwargs[field_name] = field_info.default
-                elif field_info.default_factory is not None:
-                    factory_fn: Callable[..., t.SettingsInput] = (
-                        field_info.default_factory
-                    )
-                    kwargs[field_name] = factory_fn()
-        super().__init__(**kwargs)
-        object.__setattr__(self, "_allow_mutation", False)
-
-    @_override
-    def __setattr__(self, name: str, value: t.JsonValue) -> None:
-        """Block attribute mutation after initialization."""
-        try:
-            allow = object.__getattribute__(self, "_allow_mutation")
-        except AttributeError:
-            allow = True
-        if not allow and name != "_allow_mutation" and name in type(self).model_fields:
-            raise c.ValidationError.from_exception_data(
-                type(self).__name__,
-                [{"type": "frozen_instance", "loc": (name,), "input": value}],
-            )
-        super().__setattr__(name, value)
 
     output_file: Annotated[
         str,
