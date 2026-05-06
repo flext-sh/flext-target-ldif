@@ -10,7 +10,7 @@ from __future__ import annotations
 from typing import Final
 
 from flext_ldif import FlextLdifConstants
-from flext_meltano import c
+from flext_meltano import c, t
 
 
 class FlextTargetLdifConstants(c, FlextLdifConstants):
@@ -33,4 +33,4 @@ class FlextTargetLdifConstants(c, FlextLdifConstants):
 
 c = FlextTargetLdifConstants
 
-__all__: tuple[str, ...] = ("FlextTargetLdifConstants", "c")
+__all__: t.StrSequence = ("FlextTargetLdifConstants", "c")

@@ -266,7 +266,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             def process_batch(self, context: t.JsonMapping) -> None:
                 """Process a batch of records."""
                 if context:
-                    context_dict: t.JsonDict = dict(context)
+                    context_dict = t.json_dict_adapter().validate_python(context)
                     self.logger.debug("Processing LDIF batch", context=context_dict)
                 self._get_ldif_writer()
 
@@ -277,7 +277,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             ) -> None:
                 """Process a single record and write to LDIF."""
                 if context:
-                    context_dict: t.JsonDict = dict(context)
+                    context_dict = t.json_dict_adapter().validate_python(context)
                     self.logger.debug("Processing LDIF record", context=context_dict)
                 ldif_writer = self._get_ldif_writer()
                 result: p.Result[bool] = ldif_writer.write_record(record)
@@ -292,7 +292,9 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                     raw_ldif_options = self.settings.get("ldif_options", {})
                     ldif_options: t.JsonMapping = {}
                     if isinstance(raw_ldif_options, Mapping):
-                        ldif_options = dict(raw_ldif_options.items())
+                        ldif_options = t.json_mapping_adapter().validate_python(
+                            raw_ldif_options,
+                        )
                     dn_template = self.settings.get("dn_template")
                     if dn_template is not None and (not isinstance(dn_template, str)):
                         dn_template = None

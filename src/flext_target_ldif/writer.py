@@ -244,4 +244,4 @@ class FlextTargetLdifWriter:
                 remaining = remaining[self.line_length - 1 :]
 
 
-__all__: t.StrSequence = ["FlextTargetLdifWriter"]
+__all__: t.StrSequence = ("FlextTargetLdifWriter",)
