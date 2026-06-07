@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import base64
 import types
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Self, TextIO, override
 
@@ -186,7 +185,7 @@ class FlextTargetLdifWriter:
         with self.output_file.open("w", encoding=c.DEFAULT_ENCODING) as f:
             f.write("version: 1\n")
             if self.include_timestamps:
-                f.write(f"# Generated on: {datetime.now(UTC).isoformat()}\n")
+                f.write(f"# Generated on: {u.now().isoformat()}\n")
             f.write("\n")
             for entry in self._ldif_entries:
                 dn_obj = entry.get("dn", "")
