@@ -3,15 +3,15 @@
 # flext-target-ldif API Overview
 
 - Package: `flext_target_ldif`
-- Version: ``
+- Version: `0.12.0-dev`
 - Description: FLEXT Target LDIF - Singer Target for LDAP Data Interchange Format (LDIF) output
 - Project class: `integration`
 - Keywords: `data-loading`, `enterprise`, `etl`, `flext`, `singer`, `target`, `typed`
-- Main facades: `FlextTargetLdifProtocols`, `FlextTargetLdifServiceRuntime`, `FlextTargetLdifUtilities`, `FlextTargetLdifConstants`, `FlextTargetLdif`, `FlextTargetLdifModels`, `FlextTargetLdifCli`, `FlextTargetLdifWriter` (+4 more)
+- Main facades: _none_
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
-- Public symbol exports: `FlextTargetLdifProtocols`, `main`, `target_ldif`, `FlextTargetLdifServiceRuntime`, `FlextTargetLdifUtilities`, `FlextTargetLdifConstants`, `FlextTargetLdif`, `FlextTargetLdifModels`, `FlextTargetLdifCli`, `FlextTargetLdifWriter` (+4 more)
+- Public symbol exports: `FlextTargetLdifUtilities`, `FlextTargetLdifWriter`, `FlextTargetLdifWriterError`, `FlextTargetLdifServiceRuntime`, `FlextTargetLdifTypes`, `FlextTargetLdif`, `FlextTargetLdifConstants`, `target_ldif`, `FlextTargetLdifService`, `FlextTargetLdifProtocols` (+4 more)
 - Exported module shortcuts: _none_
-- Generated module pages: `12`
+- Generated module pages: `11`
 
 ## Next Pages
 

@@ -4,7 +4,6 @@
 
 These pages are generated from public modules and their docstrings.
 
-- [flext_target_ldif](flext_target_ldif.md)
 - [flext_target_ldif.api](api.md)
 - [flext_target_ldif.cli](cli.md)
 - [flext_target_ldif.constants](constants.md)
