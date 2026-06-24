@@ -2,7 +2,7 @@
 
 # flext-target-ldif Documentation
 
-- Version: `unknown`
+- Version: `0.12.0-dev`
 - Project class: `integration`
 - Package: `flext_target_ldif`
 - Description: FLEXT Target LDIF - Singer Target for LDAP Data Interchange Format (LDIF) output
