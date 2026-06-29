@@ -3,13 +3,9 @@
 
 from __future__ import annotations
 
-import typing as _t
+from typing import TYPE_CHECKING
 
-from flext_core.lazy import (
-    build_lazy_import_map,
-    install_lazy_exports,
-    merge_lazy_imports,
-)
+from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 from flext_target_ldif.__version__ import (
     __author__,
     __author_email__,
@@ -21,11 +17,8 @@ from flext_target_ldif.__version__ import (
     __version_info__,
 )
 
-if _t.TYPE_CHECKING:
+if TYPE_CHECKING:
     from flext_meltano import d as d, e as e, h as h, r as r, s as s, x as x
-    from flext_target_ldif._utilities.service_runtime import (
-        FlextTargetLdifServiceRuntime as FlextTargetLdifServiceRuntime,
-    )
     from flext_target_ldif.api import (
         FlextTargetLdifService as FlextTargetLdifService,
         target_ldif as target_ldif,
@@ -38,9 +31,6 @@ if _t.TYPE_CHECKING:
         FlextTargetLdifConstants as FlextTargetLdifConstants,
         c as c,
     )
-    from flext_target_ldif.errors import (
-        FlextTargetLdifWriterError as FlextTargetLdifWriterError,
-    )
     from flext_target_ldif.models import (
         FlextTargetLdifModels as FlextTargetLdifModels,
         m as m,
@@ -52,7 +42,6 @@ if _t.TYPE_CHECKING:
     from flext_target_ldif.settings import (
         FlextTargetLdifSettings as FlextTargetLdifSettings,
     )
-    from flext_target_ldif.target import FlextTargetLdif as FlextTargetLdif
     from flext_target_ldif.typings import (
         FlextTargetLdifTypes as FlextTargetLdifTypes,
         t as t,
@@ -61,95 +50,50 @@ if _t.TYPE_CHECKING:
         FlextTargetLdifUtilities as FlextTargetLdifUtilities,
         u as u,
     )
-    from flext_target_ldif.writer import FlextTargetLdifWriter as FlextTargetLdifWriter
-_LAZY_IMPORTS = merge_lazy_imports(
-    ("._utilities",),
-    build_lazy_import_map(
-        {
-            "._utilities.service_runtime": ("FlextTargetLdifServiceRuntime",),
-            ".api": (
-                "FlextTargetLdifService",
-                "target_ldif",
-            ),
-            ".cli": (
-                "FlextTargetLdifCli",
-                "main",
-            ),
-            ".constants": (
-                "FlextTargetLdifConstants",
-                "c",
-            ),
-            ".errors": ("FlextTargetLdifWriterError",),
-            ".models": (
-                "FlextTargetLdifModels",
-                "m",
-            ),
-            ".protocols": (
-                "FlextTargetLdifProtocols",
-                "p",
-            ),
-            ".settings": ("FlextTargetLdifSettings",),
-            ".target": ("FlextTargetLdif",),
-            ".typings": (
-                "FlextTargetLdifTypes",
-                "t",
-            ),
-            ".utilities": (
-                "FlextTargetLdifUtilities",
-                "u",
-            ),
-            ".writer": ("FlextTargetLdifWriter",),
-            "flext_meltano": (
-                "d",
-                "e",
-                "h",
-                "r",
-                "s",
-                "x",
-            ),
-        },
-    ),
-    exclude_names=(
-        "cleanup_submodule_namespace",
-        "install_lazy_exports",
-        "lazy_getattr",
-        "logger",
-        "merge_lazy_imports",
-        "output",
-        "output_reporting",
-        "pytest_addoption",
-        "pytest_collect_file",
-        "pytest_collection_modifyitems",
-        "pytest_configure",
-        "pytest_runtest_setup",
-        "pytest_runtest_teardown",
-        "pytest_sessionfinish",
-        "pytest_sessionstart",
-        "pytest_terminal_summary",
-        "pytest_warning_recorded",
-    ),
-    module_name=__name__,
+_LAZY_IMPORTS = build_lazy_import_map(
+    {
+        ".api": (
+            "FlextTargetLdifService",
+            "target_ldif",
+        ),
+        ".cli": (
+            "FlextTargetLdifCli",
+            "main",
+        ),
+        ".constants": (
+            "FlextTargetLdifConstants",
+            "c",
+        ),
+        ".models": (
+            "FlextTargetLdifModels",
+            "m",
+        ),
+        ".protocols": (
+            "FlextTargetLdifProtocols",
+            "p",
+        ),
+        ".settings": ("FlextTargetLdifSettings",),
+        ".typings": (
+            "FlextTargetLdifTypes",
+            "t",
+        ),
+        ".utilities": (
+            "FlextTargetLdifUtilities",
+            "u",
+        ),
+        "flext_meltano": (
+            "d",
+            "e",
+            "h",
+            "r",
+            "s",
+            "x",
+        ),
+    },
 )
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    [
-        "__author__",
-        "__author_email__",
-        "__description__",
-        "__license__",
-        "__title__",
-        "__url__",
-        "__version__",
-        "__version_info__",
-    ],
-)
-
-__all__: list[str] = [
-    "FlextTargetLdif",
+__all__: tuple[str, ...] = (
     "FlextTargetLdifCli",
     "FlextTargetLdifConstants",
     "FlextTargetLdifModels",
@@ -158,8 +102,6 @@ __all__: list[str] = [
     "FlextTargetLdifSettings",
     "FlextTargetLdifTypes",
     "FlextTargetLdifUtilities",
-    "FlextTargetLdifWriter",
-    "FlextTargetLdifWriterError",
     "__author__",
     "__author_email__",
     "__description__",
@@ -181,4 +123,12 @@ __all__: list[str] = [
     "target_ldif",
     "u",
     "x",
-]
+)
+
+
+install_lazy_exports(
+    __name__,
+    globals(),
+    _LAZY_IMPORTS,
+    public_exports=__all__,
+)

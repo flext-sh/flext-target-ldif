@@ -17,8 +17,9 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from flext_target_ldif import FlextTargetLdifWriter, FlextTargetLdifWriterError
-from tests import c
+from flext_target_ldif.errors import FlextTargetLdifWriterError
+from flext_target_ldif.writer import FlextTargetLdifWriter
+from tests.constants import c
 
 
 class TestsFlextTargetLdifWriter:

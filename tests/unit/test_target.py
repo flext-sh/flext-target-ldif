@@ -14,11 +14,11 @@ from unittest.mock import Mock, patch
 import pytest
 
 from flext_target_ldif import (
-    FlextTargetLdif,
     FlextTargetLdifModels,
     FlextTargetLdifSettings,
 )
-from tests import c
+from flext_target_ldif.target import FlextTargetLdif
+from tests.constants import c
 
 
 class TestsFlextTargetLdifTarget:

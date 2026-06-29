@@ -11,13 +11,11 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from flext_meltano import FlextMeltanoTargetServiceBase
-from flext_target_ldif import (
-    FlextTargetLdifServiceRuntime,
-    p,
-    t,
-    u,
+from flext_meltano.services.consumer_bases.target_service_base import (
+    FlextMeltanoTargetServiceBase,
 )
+from flext_target_ldif import p, t, u
+from flext_target_ldif._utilities.service_runtime import FlextTargetLdifServiceRuntime
 
 
 class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
