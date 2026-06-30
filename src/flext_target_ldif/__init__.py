@@ -37,8 +37,17 @@ _EAGER_EXPORTS = (
     x,
 )
 
+
 _PUBLIC_EXPORTS: tuple[str, ...] = (
-    *_LAZY_IMPORTS,
+    "FlextTargetLdifCli",
+    "FlextTargetLdifConstants",
+    "FlextTargetLdifModels",
+    "FlextTargetLdifProtocols",
+    "FlextTargetLdifService",
+    "FlextTargetLdifSettings",
+    "FlextTargetLdifTypes",
+    "FlextTargetLdifUtilities",
+    "target_ldif",
     "__author__",
     "__author_email__",
     "__description__",
@@ -47,11 +56,17 @@ _PUBLIC_EXPORTS: tuple[str, ...] = (
     "__url__",
     "__version__",
     "__version_info__",
+    "c",
     "d",
     "e",
     "h",
+    "m",
+    "main",
+    "p",
     "r",
     "s",
+    "t",
+    "u",
     "x",
 )
 

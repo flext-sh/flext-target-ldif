@@ -13,7 +13,7 @@ _LOCAL_LAZY_IMPORTS = {
 }
 
 FLEXT_TARGET_LDIF_LAZY_IMPORTS = merge_lazy_imports(
-    ("._utilities",),
+    (),
     _LOCAL_LAZY_IMPORTS,
     exclude_names=(
         "cleanup_submodule_namespace",
