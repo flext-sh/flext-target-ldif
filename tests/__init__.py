@@ -3,12 +3,61 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from flext_core.lazy import (
     build_lazy_import_map,
     install_lazy_exports,
     merge_lazy_imports,
 )
 
+if TYPE_CHECKING:
+    from flext_tests import (
+        d as d,
+        e as e,
+        h as h,
+        r as r,
+        td as td,
+        tf as tf,
+        tk as tk,
+        tm as tm,
+        tv as tv,
+        x as x,
+    )
+
+    from tests.base import (
+        TestsFlextTargetLdifServiceBase as TestsFlextTargetLdifServiceBase,
+        s as s,
+    )
+    from tests.constants import (
+        TestsFlextTargetLdifConstants as TestsFlextTargetLdifConstants,
+        c as c,
+    )
+    from tests.models import (
+        TestsFlextTargetLdifModels as TestsFlextTargetLdifModels,
+        m as m,
+    )
+    from tests.protocols import (
+        TestsFlextTargetLdifProtocols as TestsFlextTargetLdifProtocols,
+        p as p,
+    )
+    from tests.settings import (
+        TestsFlextTargetLdifSettings as TestsFlextTargetLdifSettings,
+    )
+    from tests.typings import (
+        TestsFlextTargetLdifTypes as TestsFlextTargetLdifTypes,
+        t as t,
+    )
+    from tests.unit.test_target import (
+        TestsFlextTargetLdifTarget as TestsFlextTargetLdifTarget,
+    )
+    from tests.unit.test_writer import (
+        TestsFlextTargetLdifWriter as TestsFlextTargetLdifWriter,
+    )
+    from tests.utilities import (
+        TestsFlextTargetLdifUtilities as TestsFlextTargetLdifUtilities,
+        u as u,
+    )
 _LAZY_IMPORTS = merge_lazy_imports(
     (".unit",),
     build_lazy_import_map(
