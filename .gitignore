@@ -349,13 +349,14 @@ staging/
 .claude/
 .github/*.rej
 
+
+# --- workspace-migrate: required ignores (auto-managed) ---
+
+!base.mk
+
 # --- workspace-sync: required ignores (auto-managed) ---
+.direnv/
 .reports/
 .venv/
 __pycache__/
-
-# --- workspace-migrate: required ignores (auto-managed) ---
 base.mk
-
-# --- workspace-sync: required ignores (auto-managed) ---
-!base.mk
