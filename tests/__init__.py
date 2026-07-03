@@ -25,36 +25,36 @@ if TYPE_CHECKING:
         x as x,
     )
 
-    from flext_target_ldif.tests.base import (
+    from tests.base import (
         TestsFlextTargetLdifServiceBase as TestsFlextTargetLdifServiceBase,
         s as s,
     )
-    from flext_target_ldif.tests.constants import (
+    from tests.constants import (
         TestsFlextTargetLdifConstants as TestsFlextTargetLdifConstants,
         c as c,
     )
-    from flext_target_ldif.tests.models import (
+    from tests.models import (
         TestsFlextTargetLdifModels as TestsFlextTargetLdifModels,
         m as m,
     )
-    from flext_target_ldif.tests.protocols import (
+    from tests.protocols import (
         TestsFlextTargetLdifProtocols as TestsFlextTargetLdifProtocols,
         p as p,
     )
-    from flext_target_ldif.tests.settings import (
+    from tests.settings import (
         TestsFlextTargetLdifSettings as TestsFlextTargetLdifSettings,
     )
-    from flext_target_ldif.tests.typings import (
+    from tests.typings import (
         TestsFlextTargetLdifTypes as TestsFlextTargetLdifTypes,
         t as t,
     )
-    from flext_target_ldif.tests.unit.test_target import (
+    from tests.unit.test_target import (
         TestsFlextTargetLdifTarget as TestsFlextTargetLdifTarget,
     )
-    from flext_target_ldif.tests.unit.test_writer import (
+    from tests.unit.test_writer import (
         TestsFlextTargetLdifWriter as TestsFlextTargetLdifWriter,
     )
-    from flext_target_ldif.tests.utilities import (
+    from tests.utilities import (
         TestsFlextTargetLdifUtilities as TestsFlextTargetLdifUtilities,
         u as u,
     )
