@@ -1,6 +1,6 @@
 """Test protocol definitions for flext-target-ldif.
 
-Provides TestsFlextTargetLdifProtocols, combining FlextTestsProtocols with
+Provides TestsFlextTargetLdifProtocols, combining TestsFlextProtocols with
 FlextTargetLdifProtocols for test-specific protocol definitions.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
@@ -11,18 +11,19 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsProtocols
 
-from flext_target_ldif.protocols import FlextTargetLdifProtocols
+from flext_target_ldif import FlextTargetLdifProtocols
 
 
 class TestsFlextTargetLdifProtocols(FlextTestsProtocols, FlextTargetLdifProtocols):
-    """Test protocols combining FlextTestsProtocols and FlextTargetLdifProtocols.
+    """Test protocols combining TestsFlextProtocols and FlextTargetLdifProtocols.
 
     Provides access to:
-    - p.Tests.Docker.* (from FlextTestsProtocols)
-    - p.Tests.Factory.* (from FlextTestsProtocols)
+    - p.Tests.Docker.* (from TestsFlextProtocols)
+    - p.Tests.Factory.* (from TestsFlextProtocols)
     - p.TargetLdif.* (from FlextTargetLdifProtocols)
     """
 
 
 p = TestsFlextTargetLdifProtocols
-__all__ = ["TestsFlextTargetLdifProtocols", "p"]
+
+__all__: list[str] = ["TestsFlextTargetLdifProtocols", "p"]

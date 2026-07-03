@@ -2,7 +2,7 @@
 
 This module provides test-specific utilities that extend the main flext-target-ldif utilities.
 Uses the unified namespace pattern u.TargetLdif.Tests.* for test-only objects.
-Combines FlextTestsUtilities functionality with project-specific test utilities.
+Combines TestsFlextUtilities functionality with project-specific test utilities.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsUtilities
 
-from flext_target_ldif.utilities import FlextTargetLdifUtilities
+from flext_target_ldif import FlextTargetLdifUtilities
 
 
 class TestsFlextTargetLdifUtilities(FlextTestsUtilities, FlextTargetLdifUtilities):
@@ -21,4 +21,5 @@ class TestsFlextTargetLdifUtilities(FlextTestsUtilities, FlextTargetLdifUtilitie
 
 
 u = TestsFlextTargetLdifUtilities
-__all__ = ["TestsFlextTargetLdifUtilities", "u"]
+
+__all__: list[str] = ["TestsFlextTargetLdifUtilities", "u"]
