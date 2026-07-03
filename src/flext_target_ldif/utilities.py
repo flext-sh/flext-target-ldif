@@ -1,5 +1,6 @@
 """Singer target utilities for LDIF domain operations.
 
+from flext_target_ldif.constants import c as c
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
@@ -13,7 +14,6 @@ from collections.abc import (
 )
 from datetime import datetime
 
-from flext_core import c as core_c
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import u
 from flext_target_ldif import c, p, r, t
@@ -150,7 +150,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 """
                 if not dn:
                     return False
-                return bool(core_c.PATTERN_LDAP_DN_RE.match(dn.strip()))
+                return bool(c.PATTERN_LDAP_DN_RE.match(dn.strip()))
 
             @staticmethod
             def validate_ldif_entry(entry: str) -> p.Result[bool]:
