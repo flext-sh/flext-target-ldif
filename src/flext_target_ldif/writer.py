@@ -79,7 +79,7 @@ class FlextTargetLdifWriter:
 
     @property
     def record_count(self) -> int:
-        """Get the number of records written."""
+        """The number of records written."""
         return self._record_count
 
     def close(self) -> p.Result[bool]:

@@ -53,17 +53,17 @@ class FlextTargetLdif:
 
     @property
     def cli(self) -> Callable[..., int]:
-        """Return the CLI entry point for this target."""
+        """The CLI entry point for this target."""
         return cli_main
 
     @property
     def config_jsonschema(self) -> t.JsonMapping:
-        """Return JSON schema for configuration."""
+        """The JSON schema for configuration."""
         return FlextTargetLdifSettings.model_json_schema()
 
     @property
     def default_sink_class(self) -> type[m.TargetLdif.Sink]:
-        """Return the default sink class for this target."""
+        """The default sink class for this target."""
         sink_cls: type[m.TargetLdif.Sink] = m.TargetLdif.Sink
         return sink_cls
 
@@ -72,7 +72,7 @@ class FlextTargetLdif:
         stream_name: str,
         schema: t.JsonMapping,
     ) -> m.TargetLdif.Sink:
-        """Get or create a sink for the given stream."""
+        """The or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = m.TargetLdif.Sink(
                 target_config=self.settings,
