@@ -47,7 +47,8 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 """
                 if not record or not dn_template:
                     return r[str].fail("Record and DN template are required")
-                try:
+
+                def _run_build_ldif_dn() -> p.Result[str]:
                     dn_rdn = dn_template
                     for key, value in record.items():
                         placeholder = f"{{{key}}}"
@@ -61,6 +62,9 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                     ):
                         return r[str].fail(f"Invalid DN format: {full_dn}")
                     return r[str].ok(full_dn)
+
+                try:
+                    return _run_build_ldif_dn()
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Error building DN: {e}")
 
@@ -85,7 +89,8 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 """
                 if not record or not dn:
                     return r[str].fail("Record and DN are required")
-                try:
+
+                def _run_convert_record_to_ldif_entry() -> p.Result[str]:
                     ldif_lines: list[str] = []
                     mapping = attribute_mapping or {}
                     ldif_lines.append(f"dn: {dn}")
@@ -106,6 +111,9 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                             ldif_lines.append(f"{ldif_attr}: {ldif_value}")
                     ldif_lines.append("")
                     return r[str].ok("\n".join(ldif_lines))
+
+                try:
+                    return _run_convert_record_to_ldif_entry()
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[str].fail(f"Error converting to LDIF entry: {e}")
 

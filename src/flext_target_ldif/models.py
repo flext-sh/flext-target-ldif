@@ -126,7 +126,8 @@ class FlextTargetLdifModels(m, FlextLdifModels):
 
             def validate_business_rules(self) -> p.Result[bool]:
                 """Validate LDIF entry business rules."""
-                try:
+
+                def _run_validate_business_rules() -> p.Result[bool]:
                     errors: list[str] = []
 
                     # Validate DN format
@@ -151,6 +152,9 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                     if errors:
                         return r[bool].fail("; ".join(errors))
                     return r[bool].ok(value=True)
+
+                try:
+                    return _run_validate_business_rules()
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[bool].fail_op("LDIF entry validation", e)
 
