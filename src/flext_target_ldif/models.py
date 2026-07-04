@@ -175,9 +175,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                     description="LDIF entries in the file",
                 ),
             ] = u.Field(
-                default_factory=lambda: list[
-                    FlextTargetLdifModels.TargetLdif.LdifEntry
-                ](),
+                default_factory=list[FlextTargetLdifModels.TargetLdif.LdifEntry],
             )
             format_options: Annotated[
                 FlextTargetLdifModels.TargetLdif.LdifFormatOptions,

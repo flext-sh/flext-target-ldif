@@ -9,14 +9,17 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import base64
-from collections.abc import (
-    Callable,
-)
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import u
 from flext_target_ldif import c, p, r, t
+
+if TYPE_CHECKING:
+    from collections.abc import (
+        Callable,
+    )
 
 
 class FlextTargetLdifUtilities(u, FlextLdifUtilities):
@@ -136,7 +139,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                     for ch in value
                 ):
                     encoded = base64.b64encode(value.encode(c.DEFAULT_ENCODING)).decode(
-                        "ascii"
+                        "ascii",
                     )
                     return f":: {encoded}"
                 if len(value) > c.TargetLdif.LDIF_LINE_WRAP_LENGTH:

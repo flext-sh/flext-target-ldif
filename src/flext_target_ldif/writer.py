@@ -10,13 +10,15 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import base64
-import types
 from pathlib import Path
-from typing import Self, TextIO, override
+from typing import TYPE_CHECKING, Self, TextIO, override
 
 from flext_ldif import ldif
 from flext_target_ldif import c, e, p, r, t, u
 from flext_target_ldif.errors import FlextTargetLdifWriterError
+
+if TYPE_CHECKING:
+    import types
 
 logger = u.fetch_logger(__name__)
 
@@ -120,7 +122,9 @@ class FlextTargetLdifWriter:
                 open_result = self.open()
                 if not open_result.success:
                     return e.fail_operation(
-                        "write record", open_result.error, result_type=r[bool]
+                        "write record",
+                        open_result.error,
+                        result_type=r[bool],
                     )
             self._generate_dn(record)
             self._records.append(dict(record))
@@ -227,7 +231,7 @@ class FlextTargetLdifWriter:
                 for value in values:
                     if self.base64_encode:
                         encoded = base64.b64encode(
-                            value.encode(c.DEFAULT_ENCODING)
+                            value.encode(c.DEFAULT_ENCODING),
                         ).decode(
                             "ascii",
                         )
@@ -236,7 +240,7 @@ class FlextTargetLdifWriter:
                         f.write(f"{attr}: {value}\n")
             elif self.base64_encode:
                 encoded = base64.b64encode(
-                    str(values).encode(c.DEFAULT_ENCODING)
+                    str(values).encode(c.DEFAULT_ENCODING),
                 ).decode("ascii")
                 f.write(f"{attr}:: {encoded}\n")
             else:

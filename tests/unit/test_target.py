@@ -57,7 +57,7 @@ class TestsFlextTargetLdifTarget:
                 )
             if settings.schema_validation:
                 raise AssertionError(
-                    f"Expected False, got {settings.schema_validation}"
+                    f"Expected False, got {settings.schema_validation}",
                 )
             assert settings.dn_template == "cn={name},ou=people,dc=test,dc=com"
             if settings.line_length != 100:

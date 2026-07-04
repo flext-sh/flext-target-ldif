@@ -32,7 +32,8 @@ class FlextTargetLdifSettings(FlextSettingsBase):
     output_file: Annotated[
         str,
         u.Field(
-            default=c.TargetLdif.DEFAULT_OUTPUT_FILE, description="Output LDIF filename"
+            default=c.TargetLdif.DEFAULT_OUTPUT_FILE,
+            description="Output LDIF filename",
         ),
     ]
     output_path: Annotated[
