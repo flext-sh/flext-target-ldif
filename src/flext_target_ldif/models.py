@@ -17,8 +17,11 @@ from flext_core import (
     r,
 )
 from flext_ldif import FlextLdifModels
-from flext_meltano import m
-from flext_target_ldif import c, p, t, u
+from flext_meltano.models import FlextMeltanoModels as m
+from flext_target_ldif.constants import FlextTargetLdifConstants as c
+from flext_target_ldif.protocols import FlextTargetLdifProtocols as p
+from flext_target_ldif.typings import FlextTargetLdifTypes as t
+from flext_target_ldif.utilities import FlextTargetLdifUtilities as u
 from flext_target_ldif.writer import FlextTargetLdifWriter
 
 """LDIF target models extending flext-core FlextModels.
@@ -175,7 +178,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                     description="LDIF entries in the file",
                 ),
             ] = u.Field(
-                default_factory=list[FlextTargetLdifModels.TargetLdif.LdifEntry],
+                default_factory=list,
             )
             format_options: Annotated[
                 FlextTargetLdifModels.TargetLdif.LdifFormatOptions,
