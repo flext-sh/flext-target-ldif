@@ -178,7 +178,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                     description="LDIF entries in the file",
                 ),
             ] = u.Field(
-                default_factory=list,
+                default_factory=tuple,
             )
             format_options: Annotated[
                 FlextTargetLdifModels.TargetLdif.LdifFormatOptions,
@@ -301,9 +301,12 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                         ldif_options = t.json_mapping_adapter().validate_python(
                             raw_ldif_options,
                         )
-                    dn_template = self.settings.get("dn_template")
-                    if dn_template is not None and (not isinstance(dn_template, str)):
-                        dn_template = None
+                    raw_dn_template = self.settings.get("dn_template")
+                    dn_template: str | None = (
+                        raw_dn_template
+                        if isinstance(raw_dn_template, str)
+                        else None
+                    )
                     raw_attribute_mapping = self.settings.get("attribute_mapping", {})
                     attribute_mapping: t.StrMapping = {}
                     if isinstance(raw_attribute_mapping, Mapping):

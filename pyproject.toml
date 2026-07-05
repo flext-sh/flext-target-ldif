@@ -122,8 +122,8 @@ dev = [
 ]
 
 [project.scripts]
-flext-target-ldif = "flext_target_ldif.target:TargetLDIF.cli"
-target-ldif = "flext_target_ldif.target:TargetLDIF.cli"
+flext-target-ldif = "flext_target_ldif.cli:main"
+target-ldif = "flext_target_ldif.cli:main"
 
 [project.urls]
 Documentation = "https://github.com/flext-sh/flext/blob/main/README.md"
