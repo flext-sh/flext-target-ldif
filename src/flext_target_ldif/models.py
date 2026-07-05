@@ -303,9 +303,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                         )
                     raw_dn_template = self.settings.get("dn_template")
                     dn_template: str | None = (
-                        raw_dn_template
-                        if isinstance(raw_dn_template, str)
-                        else None
+                        raw_dn_template if isinstance(raw_dn_template, str) else None
                     )
                     raw_attribute_mapping = self.settings.get("attribute_mapping", {})
                     attribute_mapping: t.StrMapping = {}
