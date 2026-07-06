@@ -19,7 +19,7 @@ from flext_target_ldif.__version__ import (
 
 if TYPE_CHECKING:
     from flext_ldif import d, e, h, r, s, x
-    from flext_target_ldif.api import FlextTargetLdifService
+    from flext_target_ldif.api import FlextTargetLdifService, target_ldif
     from flext_target_ldif.cli import FlextTargetLdifCli, main
     from flext_target_ldif.constants import FlextTargetLdifConstants, c
     from flext_target_ldif.models import FlextTargetLdifModels, m
