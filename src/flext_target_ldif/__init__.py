@@ -19,14 +19,7 @@ from flext_target_ldif.__version__ import (
 from flext_target_ldif._exports import FLEXT_TARGET_LDIF_LAZY_IMPORTS
 
 if TYPE_CHECKING:
-    from flext_core._root_typing_parts.facades import (
-        d as d,
-        e as e,
-        h as h,
-        r as r,
-        s as s,
-        x as x,
-    )
+    from flext_ldif import d as d, e as e, h as h, r as r, s as s, x as x
     from flext_target_ldif.api import (
         FlextTargetLdifService as FlextTargetLdifService,
         target_ldif as target_ldif,
