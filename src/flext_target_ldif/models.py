@@ -17,18 +17,9 @@ from flext_core import (
     r,
 )
 from flext_ldif import FlextLdifModels
-from flext_meltano.models import FlextMeltanoModels as m
-from flext_target_ldif.constants import FlextTargetLdifConstants as c
-from flext_target_ldif.protocols import FlextTargetLdifProtocols as p
-from flext_target_ldif.typings import FlextTargetLdifTypes as t
-from flext_target_ldif.utilities import FlextTargetLdifUtilities as u
+from flext_meltano import m, u
+from flext_target_ldif import c, p, t
 from flext_target_ldif.writer import FlextTargetLdifWriter
-
-"""LDIF target models extending flext-core FlextModels.
-
-Provides complete models for LDIF file export, Singer protocol
-compliance, format validation, and target operations following standardized patterns.
-"""
 
 
 class FlextTargetLdifModels(m, FlextLdifModels):
@@ -158,8 +149,8 @@ class FlextTargetLdifModels(m, FlextLdifModels):
 
                 try:
                     return _run_validate_business_rules()
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[bool].fail_op("LDIF entry validation", e)
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
+                    return r[bool].fail_op("LDIF entry validation", exc)
 
         class LdifFile(m.Entity):
             """LDIF file representation with metadata."""
@@ -216,8 +207,8 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                         )
 
                     return r[bool].ok(value=True)
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[bool].fail_op("LDIF file validation", e)
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
+                    return r[bool].fail_op("LDIF file validation", exc)
 
         class Sink:
             """Singer sink for writing records to LDIF format.

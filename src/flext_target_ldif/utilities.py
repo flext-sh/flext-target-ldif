@@ -1,6 +1,5 @@
 """Singer target utilities for LDIF domain operations.
 
-from flext_target_ldif.constants import c as c
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
@@ -68,8 +67,8 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
 
                 try:
                     return _run_build_ldif_dn()
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[str].fail(f"Error building DN: {e}")
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
+                    return r[str].fail(f"Error building DN: {exc}")
 
             @staticmethod
             def convert_record_to_ldif_entry(
@@ -117,8 +116,8 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
 
                 try:
                     return _run_convert_record_to_ldif_entry()
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[str].fail(f"Error converting to LDIF entry: {e}")
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
+                    return r[str].fail(f"Error converting to LDIF entry: {exc}")
 
             @staticmethod
             def format_ldif_value(value: str) -> str:
