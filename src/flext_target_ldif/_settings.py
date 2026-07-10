@@ -9,11 +9,11 @@ from __future__ import annotations
 
 from typing import Annotated, ClassVar
 
-from flext_core import FlextSettingsBase
+from flext_core import FlextSettings
 from flext_target_ldif import c, m, p, r, t, u
 
 
-class FlextTargetLdifSettings(FlextSettingsBase):
+class FlextTargetLdifSettings(FlextSettings):
     """Typed runtime configuration for the LDIF target.
 
     Mutation is blocked by ``model_config.frozen=True`` (Pydantic-2 native);
@@ -111,3 +111,7 @@ class FlextTargetLdifSettings(FlextSettingsBase):
             msg = "DN template cannot be empty"
             raise ValueError(msg)
         return r[bool].ok(value=True)
+
+
+settings: FlextTargetLdifSettings = FlextTargetLdifSettings.fetch_global()
+"""Pre-instantiated project settings singleton — ``from flext_target_ldif import settings``."""

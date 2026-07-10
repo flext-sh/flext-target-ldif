@@ -39,9 +39,6 @@ if TYPE_CHECKING:
         FlextTargetLdifProtocols as FlextTargetLdifProtocols,
         p as p,
     )
-    from flext_target_ldif.settings import (
-        FlextTargetLdifSettings as FlextTargetLdifSettings,
-    )
     from flext_target_ldif.typings import (
         FlextTargetLdifTypes as FlextTargetLdifTypes,
         t as t,
@@ -52,6 +49,7 @@ if TYPE_CHECKING:
     )
 _LAZY_IMPORTS = build_lazy_import_map(
     {
+        "._settings": ("FlextTargetLdifSettings", "settings"),
         ".api": (
             "FlextTargetLdifService",
             "target_ldif",
@@ -72,7 +70,6 @@ _LAZY_IMPORTS = build_lazy_import_map(
             "FlextTargetLdifProtocols",
             "p",
         ),
-        ".settings": ("FlextTargetLdifSettings",),
         ".typings": (
             "FlextTargetLdifTypes",
             "t",
@@ -94,12 +91,13 @@ _LAZY_IMPORTS = build_lazy_import_map(
 
 
 __all__: tuple[str, ...] = (
+    "FlextTargetLdifSettings",
+    "settings",
     "FlextTargetLdifCli",
     "FlextTargetLdifConstants",
     "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
     "FlextTargetLdifService",
-    "FlextTargetLdifSettings",
     "FlextTargetLdifTypes",
     "FlextTargetLdifUtilities",
     "__author__",

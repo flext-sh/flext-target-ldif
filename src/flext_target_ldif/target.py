@@ -41,12 +41,12 @@ class FlextTargetLdif:
             "output_path": "./output",
         }
         merged: t.JsonMapping = {**defaults, **(settings or {})}
-        self.settings: t.JsonMapping = merged
+        settings: t.JsonMapping = merged
         self.sinks: dict[str, m.TargetLdif.Sink] = {}
         self._test_config: t.JsonMapping | None = None
         if validate_config:
             self.validate_config()
-        output_path_raw = self.settings.get("output_path", "./output")
+        output_path_raw = settings.get("output_path", "./output")
         output_path_str = (
             output_path_raw if isinstance(output_path_raw, str) else "./output"
         )
@@ -77,7 +77,7 @@ class FlextTargetLdif:
         """The or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = m.TargetLdif.Sink(
-                target_config=self.settings,
+                target_config=settings,
                 stream_name=stream_name,
                 schema=schema,
             )
@@ -85,9 +85,7 @@ class FlextTargetLdif:
 
     def validate_config(self) -> None:
         """Validate the target configuration."""
-        config_dict = (
-            dict(self._test_config) if self._test_config else dict(self.settings)
-        )
+        config_dict = dict(self._test_config) if self._test_config else dict(settings)
         if self._test_config is not None and "output_file" not in config_dict:
             msg = "Output file is required"
             raise ValueError(msg)
