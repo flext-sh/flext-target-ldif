@@ -106,5 +106,4 @@ class FlextTargetLdif:
         }
         if "output_file" not in filtered_config:
             filtered_config["output_file"] = "output.ldif"
-        settings = FlextTargetLdifSettings.model_validate(filtered_config)
-        settings.validate_domain_rules()
+        FlextTargetLdifSettings.model_validate(filtered_config)

@@ -91,13 +91,12 @@ _LAZY_IMPORTS = build_lazy_import_map(
 
 
 __all__: tuple[str, ...] = (
-    "FlextTargetLdifSettings",
-    "settings",
     "FlextTargetLdifCli",
     "FlextTargetLdifConstants",
     "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
     "FlextTargetLdifService",
+    "FlextTargetLdifSettings",
     "FlextTargetLdifTypes",
     "FlextTargetLdifUtilities",
     "__author__",
@@ -117,6 +116,7 @@ __all__: tuple[str, ...] = (
     "p",
     "r",
     "s",
+    "settings",
     "t",
     "target_ldif",
     "u",
