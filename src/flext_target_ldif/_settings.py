@@ -65,14 +65,17 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
         ]
 
         @model_validator(mode="after")
-        def _validate_domain_rules(self) -> "FlextTargetLdifSettings._TargetLdif":
+        def _validate_domain_rules(self) -> FlextTargetLdifSettings._TargetLdif:
             """Enforce required target configuration invariants at construction."""
             if not self.output_file.strip():
-                raise ValueError("Output file cannot be empty")
+                msg = "Output file cannot be empty"
+                raise ValueError(msg)
             if not self.output_path.strip():
-                raise ValueError("output_path cannot be empty")
+                msg = "output_path cannot be empty"
+                raise ValueError(msg)
             if not self.dn_template.strip():
-                raise ValueError("DN template cannot be empty")
+                msg = "DN template cannot be empty"
+                raise ValueError(msg)
             return self
 
     if TYPE_CHECKING:
