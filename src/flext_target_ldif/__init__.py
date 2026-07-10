@@ -19,6 +19,10 @@ from flext_target_ldif.__version__ import (
 
 if TYPE_CHECKING:
     from flext_ldif import d as d, e as e, h as h, r as r, s as s, x as x
+    from flext_target_ldif._settings import (
+        FlextTargetLdifSettings as FlextTargetLdifSettings,
+        settings as settings,
+    )
     from flext_target_ldif.api import (
         FlextTargetLdifService as FlextTargetLdifService,
         target_ldif as target_ldif,
