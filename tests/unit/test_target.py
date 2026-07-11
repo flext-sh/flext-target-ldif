@@ -16,6 +16,7 @@ import pytest
 from flext_target_ldif import (
     FlextTargetLdifModels,
     FlextTargetLdifSettings,
+    t,
 )
 from flext_target_ldif.target import FlextTargetLdif
 from tests.constants import c
@@ -173,12 +174,17 @@ class TestsFlextTargetLdifTarget:
         target = FlextTargetLdif()
         assert isinstance(target.config_jsonschema, dict)
         # NOTE (multi-agent): mro-rn88 — project fields live in the nested TargetLdif
-        # schema definition ($defs._TargetLdif), not at the top level.
-        target_ldif_props = (
-            target.config_jsonschema
-            .get("$defs", {})
-            .get("_TargetLdif", {})
-            .get("properties", {})
+        # schema definition ($defs._TargetLdif), not at the top level. Each level is
+        # re-validated through t.json_mapping_adapter because JsonMapping values are
+        # JsonValue unions, so raw chained .get() is not type-safe.
+        schema_defs = t.json_mapping_adapter().validate_python(
+            target.config_jsonschema.get("$defs", {}),
+        )
+        target_ldif_def = t.json_mapping_adapter().validate_python(
+            schema_defs.get("_TargetLdif", {}),
+        )
+        target_ldif_props = t.json_mapping_adapter().validate_python(
+            target_ldif_def.get("properties", {}),
         )
         assert "output_path" in target_ldif_props
         assert "file_naming_pattern" in target_ldif_props
