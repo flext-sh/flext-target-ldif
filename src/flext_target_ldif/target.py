@@ -93,7 +93,9 @@ class FlextTargetLdif:
 
     def validate_config(self) -> None:
         """Validate the target configuration."""
-        config_dict = dict(self._test_config) if self._test_config else dict(self._config)
+        config_dict = (
+            dict(self._test_config) if self._test_config else dict(self._config)
+        )
         if self._test_config is not None and "output_file" not in config_dict:
             msg = "Output file is required"
             raise ValueError(msg)

@@ -175,7 +175,8 @@ class TestsFlextTargetLdifTarget:
         # NOTE (multi-agent): mro-rn88 — project fields live in the nested TargetLdif
         # schema definition ($defs._TargetLdif), not at the top level.
         target_ldif_props = (
-            target.config_jsonschema.get("$defs", {})
+            target.config_jsonschema
+            .get("$defs", {})
             .get("_TargetLdif", {})
             .get("properties", {})
         )

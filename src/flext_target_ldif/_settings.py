@@ -29,11 +29,18 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
     class _TargetLdif(BaseModel):
         """Namespaced LDIF target settings."""
 
-        output_file: Annotated[str, Field(default="output.ldif", description="Output LDIF filename")]
-        output_path: Annotated[str, Field(default="./output", description="Output directory path")]
+        output_file: Annotated[
+            str, Field(default="output.ldif", description="Output LDIF filename")
+        ]
+        output_path: Annotated[
+            str, Field(default="./output", description="Output directory path")
+        ]
         file_naming_pattern: Annotated[
             str,
-            Field(default="{stream_name}.ldif", description="Pattern for generated filenames"),
+            Field(
+                default="{stream_name}.ldif",
+                description="Pattern for generated filenames",
+            ),
         ]
         dn_template: Annotated[
             str,
@@ -52,16 +59,24 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
         ]
         schema_validation: Annotated[
             bool,
-            Field(default=True, description="Enable schema validation for transformed records"),
+            Field(
+                default=True,
+                description="Enable schema validation for transformed records",
+            ),
         ]
-        line_length: Annotated[int, Field(default=78, ge=1, description="LDIF line wrap length")]
+        line_length: Annotated[
+            int, Field(default=78, ge=1, description="LDIF line wrap length")
+        ]
         base64_encode: Annotated[
             bool,
             Field(default=False, description="Force base64 encoding for all values"),
         ]
         include_timestamps: Annotated[
             bool,
-            Field(default=True, description="Include timestamp metadata in generated entries"),
+            Field(
+                default=True,
+                description="Include timestamp metadata in generated entries",
+            ),
         ]
 
         @model_validator(mode="after")
