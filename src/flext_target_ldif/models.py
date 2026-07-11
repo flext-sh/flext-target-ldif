@@ -225,6 +225,9 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 key_properties: t.StrSequence | None = None,
             ) -> None:
                 """Initialize the LDIF sink."""
+                # NOTE (multi-agent): mro-rn88 — retain target_config; writer/output methods
+                # read self._config.get(...) (was an undefined bare `settings`).
+                self._config = target_config
                 self.stream_name = stream_name
                 self.schema = schema
                 self.key_properties = key_properties or []
@@ -285,17 +288,17 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 """The or create the LDIF writer for this sink."""
                 if self._ldif_writer is None:
                     output_file = self._get_output_file()
-                    raw_ldif_options = settings.get("ldif_options", {})
+                    raw_ldif_options = self._config.get("ldif_options", {})
                     ldif_options: t.JsonMapping = {}
                     if isinstance(raw_ldif_options, Mapping):
                         ldif_options = t.json_mapping_adapter().validate_python(
                             raw_ldif_options,
                         )
-                    raw_dn_template = settings.get("dn_template")
+                    raw_dn_template = self._config.get("dn_template")
                     dn_template: str | None = (
                         raw_dn_template if isinstance(raw_dn_template, str) else None
                     )
-                    raw_attribute_mapping = settings.get("attribute_mapping", {})
+                    raw_attribute_mapping = self._config.get("attribute_mapping", {})
                     attribute_mapping: t.StrMapping = {}
                     if isinstance(raw_attribute_mapping, Mapping):
                         attribute_mapping = {
@@ -315,7 +318,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             def _get_output_file(self) -> Path:
                 """The output file path for this stream."""
                 if self._output_file is None:
-                    output_path_raw = settings.get("output_path", "./output")
+                    output_path_raw = self._config.get("output_path", "./output")
                     output_path_str = (
                         output_path_raw
                         if isinstance(output_path_raw, str)

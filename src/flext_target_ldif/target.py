@@ -40,18 +40,26 @@ class FlextTargetLdif:
             "dn_template": "uid={uid},ou=users,dc=example,dc=com",
             "output_path": "./output",
         }
-        merged: t.JsonMapping = {**defaults, **(settings or {})}
-        settings: t.JsonMapping = merged
+        # NOTE (multi-agent): mro-rn88 — persist the merged config on the instance so
+        # get_sink/validate_config read self._config (was an undefined bare `settings`).
+        self._config: t.JsonMapping = {**defaults, **(settings or {})}
         self.sinks: dict[str, m.TargetLdif.Sink] = {}
         self._test_config: t.JsonMapping | None = None
         if validate_config:
             self.validate_config()
-        output_path_raw = settings.get("output_path", "./output")
+        output_path_raw = self._config.get("output_path", "./output")
         output_path_str = (
             output_path_raw if isinstance(output_path_raw, str) else "./output"
         )
         output_path = Path(output_path_str)
         output_path.mkdir(parents=True, exist_ok=True)
+
+    @property
+    def settings(self) -> t.JsonMapping:
+        """The merged target configuration mapping."""
+        # NOTE (multi-agent): mro-rn88 — public accessor for the merged config that
+        # tests read as target.settings[...]; backed by the instance _config.
+        return self._config
 
     @property
     def cli(self) -> Callable[..., int]:
@@ -77,7 +85,7 @@ class FlextTargetLdif:
         """The or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = m.TargetLdif.Sink(
-                target_config=settings,
+                target_config=self._config,
                 stream_name=stream_name,
                 schema=schema,
             )
@@ -85,7 +93,7 @@ class FlextTargetLdif:
 
     def validate_config(self) -> None:
         """Validate the target configuration."""
-        config_dict = dict(self._test_config) if self._test_config else dict(settings)
+        config_dict = dict(self._test_config) if self._test_config else dict(self._config)
         if self._test_config is not None and "output_file" not in config_dict:
             msg = "Output file is required"
             raise ValueError(msg)
@@ -106,4 +114,6 @@ class FlextTargetLdif:
         }
         if "output_file" not in filtered_config:
             filtered_config["output_file"] = "output.ldif"
-        FlextTargetLdifSettings.model_validate(filtered_config)
+        # NOTE (multi-agent): mro-rn88 — wrap under the TargetLdif namespace so the domain
+        # validator runs (a flat dict is dropped by extra="ignore").
+        FlextTargetLdifSettings.model_validate({"TargetLdif": filtered_config})
