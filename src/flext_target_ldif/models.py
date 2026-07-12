@@ -14,7 +14,6 @@ from typing import Annotated, override
 
 from flext_core import (
     FlextSettings,
-    r,
 )
 from flext_ldif import FlextLdifModels
 from flext_meltano import m, u
@@ -117,41 +116,6 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                     description="LDAP controls for the entry",
                 ),
             ] = u.Field(default_factory=tuple)
-
-            def validate_business_rules(self) -> p.Result[bool]:
-                """Validate LDIF entry business rules."""
-
-                def _run_validate_business_rules() -> p.Result[bool]:
-                    errors: list[str] = []
-
-                    # Validate DN format
-                    if (
-                        "=" not in self.distinguished_name
-                        or "," not in self.distinguished_name
-                    ):
-                        errors.append(
-                            "DN must contain attribute=value pairs separated by commas",
-                        )
-
-                    # Validate object classes
-                    if not self.object_classes:
-                        errors.append(
-                            "Entry must have at least one object class",
-                        )
-
-                    # Validate attributes exist
-                    if not self.attributes:
-                        errors.append("Entry must have at least one attribute")
-
-                    if errors:
-                        return r[bool].fail("; ".join(errors))
-                    return r[bool].ok(value=True)
-
-                try:
-                    return _run_validate_business_rules()
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
-                    return r[bool].fail_op("LDIF entry validation", exc)
-
         class LdifFile(m.Entity):
             """LDIF file representation with metadata."""
 
@@ -192,24 +156,6 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 bool,
                 u.Field(default=False, description="Whether file is compressed"),
             ]
-
-            def validate_business_rules(self) -> p.Result[bool]:
-                """Validate LDIF file business rules."""
-                try:
-                    # Validate file path
-                    if not self.file_path.strip():
-                        return r[bool].fail("File path cannot be empty")
-
-                    # Validate entry count matches actual entries
-                    if len(self.entries) != self.entry_count:
-                        return r[bool].fail(
-                            f"Entry count mismatch: {len(self.entries)} vs {self.entry_count}",
-                        )
-
-                    return r[bool].ok(value=True)
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
-                    return r[bool].fail_op("LDIF file validation", exc)
-
         class Sink:
             """Singer sink for writing records to LDIF format.
 
