@@ -5,11 +5,13 @@
 - Package: `flext_target_ldif`
 - Version: `0.12.0-dev`
 - Description: FLEXT Target LDIF - Singer Target for LDAP Data Interchange Format (LDIF) output
+- Doc summary: Flext Target Ldif package.
+- Classifiers: `Development Status :: 4 - Beta`, `Development Status :: 5 - Production/Stable`, `Intended Audience :: Developers`, `Operating System :: OS Independent`, `Programming Language :: Python :: 3 :: Only`, `Programming Language :: Python :: 3.13` (+4 more)
 - Project class: `integration`
 - Keywords: `data-loading`, `enterprise`, `etl`, `flext`, `singer`, `target`, `typed`
 - Main facades: _none_
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
-- Public symbol exports: `FlextTargetLdifTypes`, `main`, `FlextTargetLdifCli`, `FlextTargetLdifConstants`, `FlextTargetLdifUtilities`, `FlextTargetLdifModels`, `settings`, `target_ldif`, `FlextTargetLdifService`, `FlextTargetLdifSettings` (+1 more)
+- Public symbol exports: `target_ldif`, `settings`, `FlextTargetLdifConstants`, `FlextTargetLdifProtocols`, `FlextTargetLdifCli`, `FlextTargetLdifTypes`, `FlextTargetLdifUtilities`, `FlextTargetLdifModels`, `FlextTargetLdifService`, `FlextTargetLdifSettings` (+1 more)
 - Exported module shortcuts: _none_
 - Generated module pages: `7`
 
