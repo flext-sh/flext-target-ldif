@@ -285,7 +285,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                     raise RuntimeError(msg)
 
             def _get_ldif_writer(self) -> FlextTargetLdifWriter:
-                """The or create the LDIF writer for this sink."""
+                """Get or create the LDIF writer for this sink."""
                 if self._ldif_writer is None:
                     output_file = self._get_output_file()
                     raw_ldif_options = self._config.get("ldif_options", {})
@@ -316,7 +316,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 return self._ldif_writer
 
             def _get_output_file(self) -> Path:
-                """The output file path for this stream."""
+                """Get the output file path for this stream."""
                 if self._output_file is None:
                     output_path_raw = self._config.get("output_path", "./output")
                     output_path_str = (

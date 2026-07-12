@@ -82,7 +82,7 @@ class FlextTargetLdif:
         stream_name: str,
         schema: t.JsonMapping,
     ) -> m.TargetLdif.Sink:
-        """The or create a sink for the given stream."""
+        """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = m.TargetLdif.Sink(
                 target_config=self._config,
