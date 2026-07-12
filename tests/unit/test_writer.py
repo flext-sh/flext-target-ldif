@@ -13,7 +13,6 @@ from __future__ import annotations
 import base64
 import tempfile
 from pathlib import Path
-from unittest.mock import Mock, patch
 
 import pytest
 
@@ -139,15 +138,22 @@ class TestsFlextTargetLdifWriter:
         result = writer.close()
         assert result.success
 
-    @patch("pathlib.Path.open")
-    def test_self(self, mock_open_method: Mock) -> None:
-        """Test file closing failure."""
-        mock_file = Mock()
-        mock_file.close.side_effect = Exception("Close failed")
-        mock_open_method.return_value = mock_file
-        writer = FlextTargetLdifWriter()
-        writer.open()
-        result = writer.close()
+    # NOTE (multi-agent): no-mock rewrite — close() failure is exercised through a
+    # REAL filesystem failure (output directory made unwritable) instead of the old
+    # patched pathlib.Path.open returning a Mock whose close() raised.
+    def test_close_failure_when_output_directory_unwritable(
+        self,
+        tmp_path: Path,
+    ) -> None:
+        """close() reports failure when the output directory is not writable."""
+        readonly_dir = tmp_path / "readonly"
+        readonly_dir.mkdir()
+        writer = FlextTargetLdifWriter(output_file=readonly_dir / "out.ldif")
+        readonly_dir.chmod(0o555)
+        try:
+            result = writer.close()
+        finally:
+            readonly_dir.chmod(0o755)
         assert not result.success
         if result.error is not None and "Failed to close LDIF file" not in result.error:
             raise AssertionError(
