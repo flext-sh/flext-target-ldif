@@ -116,6 +116,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                     description="LDAP controls for the entry",
                 ),
             ] = u.Field(default_factory=tuple)
+
         class LdifFile(m.Entity):
             """LDIF file representation with metadata."""
 
@@ -156,6 +157,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 bool,
                 u.Field(default=False, description="Whether file is compressed"),
             ]
+
         class Sink:
             """Singer sink for writing records to LDIF format.
 

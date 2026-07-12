@@ -147,9 +147,7 @@ class TestsFlextTargetLdifTarget:
         target = FlextTargetLdif(settings={"output_path": str(tmp_path)})
         assert target.name == "target-ldif"
         assert target.settings["output_path"] == str(tmp_path)
-        assert (
-            target.settings["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
-        )
+        assert target.settings["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
 
     def test_target_validate_config_success(self) -> None:
         """Test successful settings validation."""
