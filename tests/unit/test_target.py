@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import tempfile
 from pathlib import Path
-from unittest.mock import Mock, patch
 
 import pytest
 
@@ -98,12 +97,59 @@ class TestsFlextTargetLdifTarget:
         """Test creating target with default configuration."""
         FlextTargetLdif()
 
-    @patch("flext_target_ldif.target.FlextTargetLdif.__init__")
-    def test_self(self, mock_init: Mock) -> None:
-        """Test target initialization calls parent."""
-        mock_init.return_value = None
-        FlextTargetLdif()
-        mock_init.assert_called_once()
+    # NOTE (multi-agent): no-mock rewrite — these exercise the REAL public flow
+    # (FlextTargetLdif.get_sink → Sink.process_record → Sink.clean_up) against real
+    # LDIF files under tmp_path; the old test patched __init__ and asserted nothing
+    # about behavior, which the workspace no-mock rule forbids.
+    def test_end_to_end_sink_writes_real_ldif_file(self, tmp_path: Path) -> None:
+        """A record through the public sink lands as a real LDIF file on disk."""
+        target = FlextTargetLdif(settings={"output_path": str(tmp_path)})
+        sink = target.get_sink(
+            "users",
+            schema={"type": "object", "properties": {}},
+        )
+        sink.process_record(
+            {"uid": "jdoe", "cn": "John Doe", "mail": "jdoe@example.com"},
+            {},
+        )
+        assert sink.ldif_writer.record_count == 1
+        sink.clean_up()
+        content = (tmp_path / "users.ldif").read_text(encoding="utf-8")
+        assert content.startswith("version: 1\n")
+        assert "dn: uid=jdoe,ou=users,dc=example,dc=com\n" in content
+        assert "cn: John Doe\n" in content
+        assert "mail: jdoe@example.com\n" in content
+
+    def test_end_to_end_attribute_mapping_is_applied(self, tmp_path: Path) -> None:
+        """Attribute mapping from settings renames attributes in the real output."""
+        target = FlextTargetLdif(
+            settings={
+                "output_path": str(tmp_path),
+                "attribute_mapping": {"email": "mail"},
+            },
+        )
+        sink = target.get_sink(
+            "people",
+            schema={"type": "object", "properties": {}},
+        )
+        sink.process_record(
+            {"uid": "jsmith", "email": "jsmith@example.com"},
+            {},
+        )
+        sink.clean_up()
+        content = (tmp_path / "people.ldif").read_text(encoding="utf-8")
+        assert "dn: uid=jsmith,ou=users,dc=example,dc=com\n" in content
+        assert "mail: jsmith@example.com\n" in content
+        assert "email:" not in content
+
+    def test_target_initialization_exposes_real_state(self, tmp_path: Path) -> None:
+        """Real initialization creates the output directory and merges defaults."""
+        target = FlextTargetLdif(settings={"output_path": str(tmp_path)})
+        assert target.name == "target-ldif"
+        assert target.settings["output_path"] == str(tmp_path)
+        assert (
+            target.settings["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
+        )
 
     def test_target_validate_config_success(self) -> None:
         """Test successful settings validation."""
