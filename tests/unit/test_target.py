@@ -18,7 +18,7 @@ from flext_target_ldif import (
     t,
 )
 from flext_target_ldif.target import FlextTargetLdif
-from tests.constants import c
+from tests import c
 
 
 class TestsFlextTargetLdifTarget:

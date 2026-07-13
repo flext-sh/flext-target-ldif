@@ -18,7 +18,7 @@ import pytest
 
 from flext_target_ldif.errors import FlextTargetLdifWriterError
 from flext_target_ldif.writer import FlextTargetLdifWriter
-from tests.constants import c
+from tests import c
 
 
 class TestsFlextTargetLdifWriter:
