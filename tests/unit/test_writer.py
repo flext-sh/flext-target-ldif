@@ -15,6 +15,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+from flext_tests import tm
 
 from flext_target_ldif.errors import FlextTargetLdifWriterError
 from flext_target_ldif.writer import FlextTargetLdifWriter
@@ -31,15 +32,15 @@ class TestsFlextTargetLdifWriter:
             raise AssertionError(
                 f"Expected {Path('output.ldif')}, got {writer.output_file}",
             )
-        assert writer.ldif_options == {}
+        tm.that(writer.ldif_options, eq={})
         if writer.dn_template != "uid={uid},ou=users,dc=example,dc=com":
             raise AssertionError(
                 f"Expected {'uid={uid},ou=users,dc=example,dc=com'}, got {writer.dn_template}",
             )
-        assert writer.attribute_mapping == {}
+        tm.that(writer.attribute_mapping, eq={})
         if writer.schema != {}:
             raise AssertionError(f"Expected {{}}, got {writer.schema}")
-        assert writer.line_length == 78
+        tm.that(writer.line_length, eq=78)
         if writer.base64_encode:
             raise AssertionError(f"Expected False, got {writer.base64_encode}")
         if not writer.include_timestamps:
@@ -68,15 +69,15 @@ class TestsFlextTargetLdifWriter:
                 raise AssertionError(
                     f"Expected {output_file}, got {writer.output_file}",
                 )
-            assert writer.ldif_options == ldif_options
+            tm.that(writer.ldif_options, eq=ldif_options)
             if writer.dn_template != dn_template:
                 raise AssertionError(
                     f"Expected {dn_template}, got {writer.dn_template}",
                 )
-            assert writer.attribute_mapping == attribute_mapping
+            tm.that(writer.attribute_mapping, eq=attribute_mapping)
             if writer.schema != schema:
                 raise AssertionError(f"Expected {schema}, got {writer.schema}")
-            assert writer.line_length == 100
+            tm.that(writer.line_length, eq=100)
             if not writer.base64_encode:
                 raise AssertionError(f"Expected True, got {writer.base64_encode}")
             if writer.include_timestamps:
@@ -102,9 +103,9 @@ class TestsFlextTargetLdifWriter:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
         result = writer.open()
-        assert result.success
+        tm.ok(result)
         close_result = writer.close()
-        assert close_result.success
+        tm.ok(close_result)
         tmp_path.unlink()
 
     def test_open_failure(self) -> None:
@@ -112,7 +113,7 @@ class TestsFlextTargetLdifWriter:
         invalid_path = Path("/nonexistent/directory/test.ldif")
         writer = FlextTargetLdifWriter(output_file=invalid_path)
         result = writer.open()
-        assert not result.success
+        tm.fail(result)
         if result.error is not None and "Failed to open LDIF file" not in result.error:
             raise AssertionError(
                 f"Expected {'Failed to open LDIF file'} in {result.error}",
@@ -129,14 +130,14 @@ class TestsFlextTargetLdifWriter:
         writer = FlextTargetLdifWriter(output_file=tmp_path)
         writer.open()
         result = writer.close()
-        assert result.success
+        tm.ok(result)
         tmp_path.unlink()
 
     def test_close_when_not_open(self) -> None:
         """Test closing when file is not open."""
         writer = FlextTargetLdifWriter()
         result = writer.close()
-        assert result.success
+        tm.ok(result)
 
     # NOTE (multi-agent): no-mock rewrite — close() failure is exercised through a
     # REAL filesystem failure (output directory made unwritable) instead of the old
@@ -154,7 +155,7 @@ class TestsFlextTargetLdifWriter:
             result = writer.close()
         finally:
             readonly_dir.chmod(0o755)
-        assert not result.success
+        tm.fail(result)
         if result.error is not None and "Failed to close LDIF file" not in result.error:
             raise AssertionError(
                 f"Expected {'Failed to close LDIF file'} in {result.error}",
@@ -171,17 +172,17 @@ class TestsFlextTargetLdifWriter:
         writer = FlextTargetLdifWriter(output_file=tmp_path)
         record = {"uid": "jdoe", "cn": "John Doe", "mail": "john@example.com"}
         result = writer.write_record(record)
-        assert result.success
+        tm.ok(result)
         if writer.record_count != 1:
             raise AssertionError(f"Expected {1}, got {writer.record_count}")
         writer.close()
         content = tmp_path.read_text(encoding="utf-8")
         if "version: 1" not in content:
             raise AssertionError(f"Expected {'version: 1'} in {content}")
-        assert "dn: uid=jdoe,ou=users,dc=example,dc=com" in content
+        tm.that(content, has="dn: uid=jdoe,ou=users,dc=example,dc=com")
         if "uid: jdoe" not in content:
             raise AssertionError(f"Expected {'uid: jdoe'} in {content}")
-        assert "cn: John Doe" in content
+        tm.that(content, has="cn: John Doe")
         if "mail: john@example.com" not in content:
             raise AssertionError(f"Expected {'mail: john@example.com'} in {content}")
         tmp_path.unlink()
@@ -205,7 +206,7 @@ class TestsFlextTargetLdifWriter:
         content = tmp_path.read_text(encoding="utf-8")
         if "cn: John Doe" not in content:
             raise AssertionError(f"Expected {'cn: John Doe'} in {content}")
-        assert "mail: john@example.com" in content
+        tm.that(content, has="mail: john@example.com")
         tmp_path.unlink()
 
     def test_write_record_auto_open(self) -> None:
@@ -220,8 +221,8 @@ class TestsFlextTargetLdifWriter:
         record = {"uid": "jdoe", "cn": "John Doe"}
         record = {"uid": "jdoe", "cn": "John Doe"}
         result = writer.write_record(record)
-        assert result.success
-        assert writer.record_count == 1
+        tm.ok(result)
+        tm.that(writer.record_count, eq=1)
         writer.close()
         tmp_path.unlink()
 
@@ -232,7 +233,7 @@ class TestsFlextTargetLdifWriter:
         )
         record = {"cn": "John Doe", "mail": "john@example.com"}
         result = writer.write_record(record)
-        assert not result.success
+        tm.fail(result)
         if result.error is not None and "Failed to write record" not in result.error:
             raise AssertionError(
                 f"Expected {'Failed to write record'} in {result.error}",
@@ -254,7 +255,7 @@ class TestsFlextTargetLdifWriter:
         ]
         for record in records:
             result = writer.write_record(record)
-            assert result.success
+            tm.ok(result)
         if writer.record_count != c.TargetLdif.Tests.EXPECTED_DATA_COUNT:
             raise AssertionError(f"Expected {3}, got {writer.record_count}")
         writer.close()
@@ -263,7 +264,7 @@ class TestsFlextTargetLdifWriter:
             raise AssertionError(
                 f"Expected {'dn: uid=jdoe,ou=users,dc=example,dc=com'} in {content}",
             )
-        assert "dn: uid=jsmith,ou=users,dc=example,dc=com" in content
+        tm.that(content, has="dn: uid=jsmith,ou=users,dc=example,dc=com")
         if "dn: uid=bob,ou=users,dc=example,dc=com" not in content:
             raise AssertionError(
                 f"Expected {'dn: uid=bob,ou=users,dc=example,dc=com'} in {content}",
@@ -314,7 +315,7 @@ class TestsFlextTargetLdifWriter:
         content = tmp_path.read_text(encoding="utf-8")
         if "description:: " not in content:
             raise AssertionError(f"Expected {'description:: '} in {content}")
-        assert "cn:: " in content
+        tm.that(content, has="cn:: ")
         for line in content.split("\n"):
             if line.startswith("description:: "):
                 encoded = line.split(":: ")[1]
@@ -348,7 +349,7 @@ class TestsFlextTargetLdifWriter:
         content = tmp_path.read_text(encoding="utf-8")
         if "uid:: " not in content:
             raise AssertionError(f"Expected {'uid:: '} in {content}")
-        assert "cn:: " in content
+        tm.that(content, has="cn:: ")
         tmp_path.unlink()
 
     def test_short_line_no_wrapping(self) -> None:
@@ -454,9 +455,9 @@ class TestsFlextTargetLdifWriter:
         record = {"uid": "jdoe", "cn": "John Doe"}
         with FlextTargetLdifWriter(output_file=tmp_path) as writer:
             result = writer.write_record(record)
-            assert result.success
-            assert writer.record_count == 1
-        assert writer.record_count == 1
+            tm.ok(result)
+            tm.that(writer.record_count, eq=1)
+        tm.that(writer.record_count, eq=1)
         content = tmp_path.read_text(encoding="utf-8")
         if "dn: uid=jdoe,ou=users,dc=example,dc=com" not in content:
             msg: str = (
@@ -485,9 +486,9 @@ class TestsFlextTargetLdifWriter:
                 _raise_test_exception()
         except ValueError:
             pass
-        assert writer is not None
-        assert writer.record_count == 1
-        assert "uid: jdoe" in tmp_path.read_text(encoding="utf-8")
+        tm.that(writer, none=False)
+        tm.that(writer.record_count, eq=1)
+        tm.that(tmp_path.read_text(encoding="utf-8"), has="uid: jdoe")
         tmp_path.unlink()
 
     def test_header_with_timestamps(self) -> None:
@@ -507,7 +508,7 @@ class TestsFlextTargetLdifWriter:
         content = tmp_path.read_text(encoding="utf-8")
         if "version: 1" not in content:
             raise AssertionError(f"Expected {'version: 1'} in {content}")
-        assert "# Generated on:" in content
+        tm.that(content, has="# Generated on:")
         tmp_path.unlink()
 
     def test_header_without_timestamps(self) -> None:
@@ -527,7 +528,7 @@ class TestsFlextTargetLdifWriter:
         content = tmp_path.read_text(encoding="utf-8")
         if "version: 1" not in content:
             raise AssertionError(f"Expected {'version: 1'} in {content}")
-        assert "# Generated on:" not in content
+        tm.that(content, lacks="# Generated on:")
         tmp_path.unlink()
 
     def test_record_count_property(self) -> None:
@@ -539,13 +540,11 @@ class TestsFlextTargetLdifWriter:
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
-        assert writer.record_count == 0, f"Expected 0, got {writer.record_count}"
+        tm.that(writer.record_count, eq=0)
         writer.write_record({"uid": "user1", "cn": "User One"})
-        assert writer.record_count == 1, f"Expected 1, got {writer.record_count}"
+        tm.that(writer.record_count, eq=1)
         writer.write_record({"uid": "user2", "cn": "User Two"})
-        assert writer.record_count == c.TargetLdif.Tests.EXPECTED_BULK_SIZE, (
-            f"Expected 2, got {writer.record_count}"
-        )
+        tm.that(writer.record_count, eq=c.TargetLdif.Tests.EXPECTED_BULK_SIZE)
         writer.close()
         tmp_path.unlink()
 

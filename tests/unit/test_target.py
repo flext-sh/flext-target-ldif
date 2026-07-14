@@ -11,6 +11,7 @@ import tempfile
 from pathlib import Path
 
 import pytest
+from flext_tests import tm
 
 from flext_target_ldif import (
     FlextTargetLdifModels,
@@ -30,10 +31,10 @@ class TestsFlextTargetLdifTarget:
         """Test creating settings with default values."""
         settings = FlextTargetLdifSettings(TargetLdif={"output_file": "test.ldif"})
         target_ldif = settings.TargetLdif
-        assert target_ldif.output_file == "test.ldif"
+        tm.that(target_ldif.output_file, eq="test.ldif")
         assert target_ldif.schema_validation
-        assert target_ldif.dn_template == "uid={uid},ou=users,dc=example,dc=com"
-        assert target_ldif.line_length == 78
+        tm.that(target_ldif.dn_template, eq="uid={uid},ou=users,dc=example,dc=com")
+        tm.that(target_ldif.line_length, eq=78)
         assert not target_ldif.base64_encode
 
     def test_config_creation_with_custom_values(self) -> None:
@@ -51,12 +52,12 @@ class TestsFlextTargetLdifTarget:
                 },
             )
             target_ldif = settings.TargetLdif
-            assert target_ldif.output_file == custom_file
+            tm.that(target_ldif.output_file, eq=custom_file)
             assert not target_ldif.schema_validation
-            assert target_ldif.dn_template == "cn={name},ou=people,dc=test,dc=com"
-            assert target_ldif.line_length == 100
+            tm.that(target_ldif.dn_template, eq="cn={name},ou=people,dc=test,dc=com")
+            tm.that(target_ldif.line_length, eq=100)
             assert target_ldif.base64_encode
-            assert target_ldif.attribute_mapping == {"email": "mail"}
+            tm.that(target_ldif.attribute_mapping, eq={"email": "mail"})
 
     def test_config_validation_empty_output_file(self) -> None:
         """Empty output file is rejected at construction by the domain validator."""
@@ -86,12 +87,12 @@ class TestsFlextTargetLdifTarget:
                 "line_length": 78,
             },
         )
-        assert settings.TargetLdif.output_file == "test.ldif"
+        tm.that(settings.TargetLdif.output_file, eq="test.ldif")
 
     def test_target_inheritance(self) -> None:
         """Test that FlextTargetLdif is properly instantiated."""
         target = FlextTargetLdif()
-        assert isinstance(target, FlextTargetLdif)
+        tm.that(target, is_=FlextTargetLdif)
 
     def test_target_creation_with_defaults(self) -> None:
         """Test creating target with default configuration."""
@@ -112,13 +113,13 @@ class TestsFlextTargetLdifTarget:
             {"uid": "jdoe", "cn": "John Doe", "mail": "jdoe@example.com"},
             {},
         )
-        assert sink.ldif_writer.record_count == 1
+        tm.that(sink.ldif_writer.record_count, eq=1)
         sink.clean_up()
         content = (tmp_path / "users.ldif").read_text(encoding="utf-8")
         assert content.startswith("version: 1\n")
-        assert "dn: uid=jdoe,ou=users,dc=example,dc=com\n" in content
-        assert "cn: John Doe\n" in content
-        assert "mail: jdoe@example.com\n" in content
+        tm.that(content, has="dn: uid=jdoe,ou=users,dc=example,dc=com\n")
+        tm.that(content, has="cn: John Doe\n")
+        tm.that(content, has="mail: jdoe@example.com\n")
 
     def test_end_to_end_attribute_mapping_is_applied(self, tmp_path: Path) -> None:
         """Attribute mapping from settings renames attributes in the real output."""
@@ -138,16 +139,18 @@ class TestsFlextTargetLdifTarget:
         )
         sink.clean_up()
         content = (tmp_path / "people.ldif").read_text(encoding="utf-8")
-        assert "dn: uid=jsmith,ou=users,dc=example,dc=com\n" in content
-        assert "mail: jsmith@example.com\n" in content
-        assert "email:" not in content
+        tm.that(content, has="dn: uid=jsmith,ou=users,dc=example,dc=com\n")
+        tm.that(content, has="mail: jsmith@example.com\n")
+        tm.that(content, lacks="email:")
 
     def test_target_initialization_exposes_real_state(self, tmp_path: Path) -> None:
         """Real initialization creates the output directory and merges defaults."""
         target = FlextTargetLdif(settings={"output_path": str(tmp_path)})
-        assert target.name == "target-ldif"
-        assert target.settings["output_path"] == str(tmp_path)
-        assert target.settings["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
+        tm.that(target.name, eq="target-ldif")
+        tm.that(target.settings["output_path"], eq=str(tmp_path))
+        tm.that(
+            target.settings["dn_template"], eq="uid={uid},ou=users,dc=example,dc=com"
+        )
 
     def test_target_validate_config_success(self) -> None:
         """Test successful settings validation."""
@@ -203,7 +206,7 @@ class TestsFlextTargetLdifTarget:
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {"output_path": tmp_dir}
             target = FlextTargetLdif(settings=settings)
-            assert isinstance(target, FlextTargetLdif)
+            tm.that(target, is_=FlextTargetLdif)
 
     def test_target_ldif_name_property(self) -> None:
         """Test target name property."""
@@ -216,7 +219,7 @@ class TestsFlextTargetLdifTarget:
     def test_target_ldif_config_schema(self) -> None:
         """Test target settings schema is properly defined."""
         target = FlextTargetLdif()
-        assert isinstance(target.config_jsonschema, dict)
+        tm.that(target.config_jsonschema, is_=dict)
         # NOTE (multi-agent): mro-rn88 — project fields live in the nested TargetLdif
         # schema definition ($defs._TargetLdif), not at the top level. Each level is
         # re-validated through t.json_mapping_adapter because JsonMapping values are
@@ -230,9 +233,9 @@ class TestsFlextTargetLdifTarget:
         target_ldif_props = t.json_mapping_adapter().validate_python(
             target_ldif_def.get("properties", {}),
         )
-        assert "output_path" in target_ldif_props
-        assert "file_naming_pattern" in target_ldif_props
-        assert "dn_template" in target_ldif_props
+        tm.that(target_ldif_props, has="output_path")
+        tm.that(target_ldif_props, has="file_naming_pattern")
+        tm.that(target_ldif_props, has="dn_template")
 
     def test_target_ldif_default_sink_class(self) -> None:
         """Test target has proper default sink class."""
@@ -302,7 +305,7 @@ class TestsFlextTargetLdifTarget:
                 "dn_template": "uid={uid},ou=users,dc=example,dc=com",
             },
         )
-        assert settings.TargetLdif.output_file == str(tmp_path)
+        tm.that(settings.TargetLdif.output_file, eq=str(tmp_path))
         target = FlextTargetLdif()
         target._test_config = {
             "output_file": str(tmp_path),
@@ -320,8 +323,8 @@ class TestsFlextTargetLdifTarget:
             settings = {"output_path": tmp_dir}
             original_target = FlextTargetLdif(settings=settings)
             target = FlextTargetLdif()
-            assert isinstance(original_target, FlextTargetLdif)
-            assert isinstance(target, FlextTargetLdif)
+            tm.that(original_target, is_=FlextTargetLdif)
+            tm.that(target, is_=FlextTargetLdif)
 
     def test_config_to_dict_conversion(self) -> None:
         """Test settings can be converted to t.JsonMapping for Singer SDK."""
@@ -336,12 +339,12 @@ class TestsFlextTargetLdifTarget:
             },
         )
         config_dict = settings.model_dump()["TargetLdif"]
-        assert config_dict["output_file"] == "test.ldif"
+        tm.that(config_dict["output_file"], eq="test.ldif")
         assert config_dict["schema_validation"]
-        assert config_dict["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
-        assert config_dict["line_length"] == 100
+        tm.that(config_dict["dn_template"], eq="uid={uid},ou=users,dc=example,dc=com")
+        tm.that(config_dict["line_length"], eq=100)
         assert config_dict["base64_encode"]
-        assert config_dict["attribute_mapping"] == {"email": "mail", "name": "cn"}
+        tm.that(config_dict["attribute_mapping"], eq={"email": "mail", "name": "cn"})
 
     def test_error_handling_integration(self) -> None:
         """Test error handling across the system."""
