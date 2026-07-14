@@ -118,6 +118,9 @@ class FlextTargetLdifWriter:
         """Write a record to the LDIF file buffer."""
 
         def _run_write_record() -> p.Result[bool]:
+            # mro-p68a.9 (codex): validate before opening so rejected records
+            # cannot leave an auto-opened output handle behind.
+            self._generate_dn(record)
             if self._file_handle is None:
                 open_result = self.open()
                 if not open_result.success:
@@ -126,7 +129,6 @@ class FlextTargetLdifWriter:
                         open_result.error,
                         result_type=r[bool],
                     )
-            self._generate_dn(record)
             self._records.append(dict(record))
             self._record_count += 1
             return r[bool].ok(value=True)

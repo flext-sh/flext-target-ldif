@@ -29,7 +29,9 @@ class TestsFlextTargetLdifTarget:
     # TargetLdif.*; domain validation now fires as a model_validator at construction.
     def test_config_creation_with_defaults(self) -> None:
         """Test creating settings with default values."""
-        settings = FlextTargetLdifSettings(TargetLdif={"output_file": "test.ldif"})
+        settings = FlextTargetLdifSettings.model_validate({
+            "TargetLdif": {"output_file": "test.ldif"}
+        })
         target_ldif = settings.TargetLdif
         tm.that(target_ldif.output_file, eq="test.ldif")
         assert target_ldif.schema_validation
@@ -41,16 +43,16 @@ class TestsFlextTargetLdifTarget:
         """Test creating settings with custom values."""
         with tempfile.TemporaryDirectory() as temp_dir:
             custom_file = f"{temp_dir}/custom.ldif"
-            settings = FlextTargetLdifSettings(
-                TargetLdif={
+            settings = FlextTargetLdifSettings.model_validate({
+                "TargetLdif": {
                     "output_file": custom_file,
                     "schema_validation": False,
                     "dn_template": "cn={name},ou=people,dc=test,dc=com",
                     "line_length": 100,
                     "base64_encode": True,
                     "attribute_mapping": {"email": "mail"},
-                },
-            )
+                }
+            })
             target_ldif = settings.TargetLdif
             tm.that(target_ldif.output_file, eq=custom_file)
             assert not target_ldif.schema_validation
@@ -62,31 +64,31 @@ class TestsFlextTargetLdifTarget:
     def test_config_validation_empty_output_file(self) -> None:
         """Empty output file is rejected at construction by the domain validator."""
         with pytest.raises(c.ValidationError, match="Output file cannot be empty"):
-            FlextTargetLdifSettings(TargetLdif={"output_file": ""})
+            FlextTargetLdifSettings.model_validate({"TargetLdif": {"output_file": ""}})
 
     def test_config_validation_empty_dn_template(self) -> None:
         """Empty DN template is rejected at construction by the domain validator."""
         with pytest.raises(c.ValidationError, match="DN template cannot be empty"):
-            FlextTargetLdifSettings(
-                TargetLdif={"output_file": "test.ldif", "dn_template": ""},
-            )
+            FlextTargetLdifSettings.model_validate({
+                "TargetLdif": {"output_file": "test.ldif", "dn_template": ""}
+            })
 
     def test_config_validation_invalid_line_length(self) -> None:
         """Test validation with invalid line length."""
         with pytest.raises(c.ValidationError):
-            FlextTargetLdifSettings(
-                TargetLdif={"output_file": "test.ldif", "line_length": 0},
-            )
+            FlextTargetLdifSettings.model_validate({
+                "TargetLdif": {"output_file": "test.ldif", "line_length": 0}
+            })
 
     def test_config_validation_valid_config(self) -> None:
         """A fully valid namespaced construction is accepted."""
-        settings = FlextTargetLdifSettings(
-            TargetLdif={
+        settings = FlextTargetLdifSettings.model_validate({
+            "TargetLdif": {
                 "output_file": "test.ldif",
                 "dn_template": "uid={uid},ou=users,dc=example,dc=com",
                 "line_length": 78,
-            },
-        )
+            }
+        })
         tm.that(settings.TargetLdif.output_file, eq="test.ldif")
 
     def test_target_inheritance(self) -> None:
@@ -281,9 +283,9 @@ class TestsFlextTargetLdifTarget:
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {"output_path": tmp_dir}
             target = FlextTargetLdif(settings=settings)
-            assert (
-                target.settings["file_naming_pattern"]
-                == "{stream_name}_{timestamp}.ldif"
+            tm.that(
+                target.settings["file_naming_pattern"],
+                eq="{stream_name}_{timestamp}.ldif",
             )
             assert (
                 target.settings["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
@@ -298,13 +300,13 @@ class TestsFlextTargetLdifTarget:
             suffix=".ldif",
         ) as tmp:
             tmp_path = Path(tmp.name)
-        settings = FlextTargetLdifSettings(
-            TargetLdif={
+        settings = FlextTargetLdifSettings.model_validate({
+            "TargetLdif": {
                 "output_file": str(tmp_path),
                 "schema_validation": True,
                 "dn_template": "uid={uid},ou=users,dc=example,dc=com",
-            },
-        )
+            }
+        })
         tm.that(settings.TargetLdif.output_file, eq=str(tmp_path))
         target = FlextTargetLdif()
         target._test_config = {
@@ -328,16 +330,16 @@ class TestsFlextTargetLdifTarget:
 
     def test_config_to_dict_conversion(self) -> None:
         """Test settings can be converted to t.JsonMapping for Singer SDK."""
-        settings = FlextTargetLdifSettings(
-            TargetLdif={
+        settings = FlextTargetLdifSettings.model_validate({
+            "TargetLdif": {
                 "output_file": "test.ldif",
                 "schema_validation": True,
                 "dn_template": "uid={uid},ou=users,dc=example,dc=com",
                 "line_length": 100,
                 "base64_encode": True,
                 "attribute_mapping": {"email": "mail", "name": "cn"},
-            },
-        )
+            }
+        })
         config_dict = settings.model_dump()["TargetLdif"]
         tm.that(config_dict["output_file"], eq="test.ldif")
         assert config_dict["schema_validation"]
@@ -349,7 +351,7 @@ class TestsFlextTargetLdifTarget:
     def test_error_handling_integration(self) -> None:
         """Test error handling across the system."""
         with pytest.raises(c.ValidationError, match="Output file cannot be empty"):
-            FlextTargetLdifSettings(TargetLdif={"output_file": ""})
+            FlextTargetLdifSettings.model_validate({"TargetLdif": {"output_file": ""}})
         target = FlextTargetLdif()
         target._test_config = {"output_file": ""}
         with pytest.raises(ValueError):
