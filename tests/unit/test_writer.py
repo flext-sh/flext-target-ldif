@@ -486,7 +486,9 @@ class TestsFlextTargetLdifWriter:
                 _raise_test_exception()
         except ValueError:
             pass
-        tm.that(writer, none=False)
+        if writer is None:
+            msg = "Writer was not initialized before the context raised"
+            raise AssertionError(msg)
         tm.that(writer.record_count, eq=1)
         tm.that(tmp_path.read_text(encoding="utf-8"), has="uid: jdoe")
         tmp_path.unlink()
