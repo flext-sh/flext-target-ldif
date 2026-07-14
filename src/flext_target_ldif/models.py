@@ -188,13 +188,6 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 """The LDIF writer (for testing)."""
                 return self._get_ldif_writer()
 
-            @property
-            def logger(self) -> p.Logger:
-                """Lazy logger for Sink."""
-                if self._logger_instance is None:
-                    self._logger_instance = u.fetch_logger(__name__)
-                return self._logger_instance
-
             def clean_up(self) -> None:
                 """Clean up resources when sink is finished."""
                 if self._ldif_writer:
