@@ -41,7 +41,7 @@ if TYPE_CHECKING:
     )
     from flext_target_ldif.protocols import (
         FlextTargetLdifProtocols as FlextTargetLdifProtocols,
-        p as p,
+        p,
     )
     from flext_target_ldif.typings import (
         FlextTargetLdifTypes as FlextTargetLdifTypes,
@@ -49,7 +49,7 @@ if TYPE_CHECKING:
     )
     from flext_target_ldif.utilities import (
         FlextTargetLdifUtilities as FlextTargetLdifUtilities,
-        u as u,
+        u,
     )
 _LAZY_IMPORTS = build_lazy_import_map(
     {

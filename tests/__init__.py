@@ -39,7 +39,7 @@ if TYPE_CHECKING:
     )
     from tests.protocols import (
         TestsFlextTargetLdifProtocols as TestsFlextTargetLdifProtocols,
-        p as p,
+        p,
     )
     from tests.settings import (
         TestsFlextTargetLdifSettings as TestsFlextTargetLdifSettings,
@@ -56,7 +56,7 @@ if TYPE_CHECKING:
     )
     from tests.utilities import (
         TestsFlextTargetLdifUtilities as TestsFlextTargetLdifUtilities,
-        u as u,
+        u,
     )
 _LAZY_IMPORTS = merge_lazy_imports(
     (".unit",),
