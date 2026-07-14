@@ -36,7 +36,6 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
         return FlextTargetLdifServiceRuntime.create_sink(
             stream_name=stream_name,
             schema=schema,
-            target_config=target_config,
         )
 
 
