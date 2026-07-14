@@ -7,13 +7,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final
+from typing import Final
 
 from flext_ldif import FlextLdifConstants
-from flext_meltano import c
-
-if TYPE_CHECKING:
-    from flext_meltano import t
+from flext_meltano import c, t
 
 
 class FlextTargetLdifConstants(c, FlextLdifConstants):

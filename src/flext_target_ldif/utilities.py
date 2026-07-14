@@ -8,17 +8,14 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import base64
+from collections.abc import (
+    Callable,
+)
 from datetime import datetime
-from typing import TYPE_CHECKING
 
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import u
 from flext_target_ldif import c, p, r, t
-
-if TYPE_CHECKING:
-    from collections.abc import (
-        Callable,
-    )
 
 
 class FlextTargetLdifUtilities(u, FlextLdifUtilities):

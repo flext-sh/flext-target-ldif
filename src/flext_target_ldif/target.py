@@ -7,8 +7,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import (
+    Callable,
+)
 from pathlib import Path
-from typing import TYPE_CHECKING, override
+from typing import override
 
 from flext_target_ldif import (
     FlextTargetLdifSettings,
@@ -16,11 +19,6 @@ from flext_target_ldif import (
     main as cli_main,
     t,
 )
-
-if TYPE_CHECKING:
-    from collections.abc import (
-        Callable,
-    )
 
 
 class FlextTargetLdif:

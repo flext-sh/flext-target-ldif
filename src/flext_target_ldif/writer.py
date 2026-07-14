@@ -10,15 +10,13 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import base64
+import types
 from pathlib import Path
-from typing import TYPE_CHECKING, Self, TextIO, override
+from typing import Self, TextIO, override
 
 from flext_ldif import ldif
 from flext_target_ldif import c, e, p, r, t, u
 from flext_target_ldif.errors import FlextTargetLdifWriterError
-
-if TYPE_CHECKING:
-    import types
 
 logger = u.fetch_logger(__name__)
 
