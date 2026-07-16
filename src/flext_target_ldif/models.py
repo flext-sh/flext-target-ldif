@@ -16,7 +16,7 @@ from flext_core import (
     FlextSettings,
 )
 from flext_ldif import FlextLdifModels
-from flext_meltano import m, u
+from flext_meltano import m, p, u
 from flext_target_ldif import c, p, t
 from flext_target_ldif.writer import FlextTargetLdifWriter
 
