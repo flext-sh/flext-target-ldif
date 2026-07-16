@@ -70,16 +70,16 @@ class FlextTargetLdif:
         return FlextTargetLdifSettings.model_json_schema()
 
     @property
-    def default_sink_class(self) -> type[m.TargetLdif.Sink]:
+    def default_sink_class(self) -> type[p.TargetLdif.Sink]:
         """The default sink class for this target."""
-        sink_cls: type[m.TargetLdif.Sink] = m.TargetLdif.Sink
+        sink_cls: type[p.TargetLdif.Sink] = m.TargetLdif.Sink
         return sink_cls
 
     def get_sink(
         self,
         stream_name: str,
         schema: t.JsonMapping,
-    ) -> m.TargetLdif.Sink:
+    ) -> p.TargetLdif.Sink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = m.TargetLdif.Sink(
