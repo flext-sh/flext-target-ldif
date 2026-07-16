@@ -17,6 +17,7 @@ from flext_target_ldif import (
     FlextTargetLdifSettings,
     m,
     main as cli_main,
+    p,
     t,
 )
 
