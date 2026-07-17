@@ -23,6 +23,9 @@ class TestsFlextTargetLdifProtocols(FlextTestsProtocols, FlextTargetLdifProtocol
     - p.TargetLdif.* (from FlextTargetLdifProtocols)
     """
 
+    class Tests(FlextTestsProtocols.Tests):
+        """Internal tests declarations."""
+
 
 p = TestsFlextTargetLdifProtocols
 
