@@ -72,7 +72,7 @@ class FlextTargetLdifServiceRuntime:
         *,
         stream_name: str,
         schema: t.JsonMapping,
-        target_config: t.JsonMapping,
+        target_config: t.ScalarMapping,
     ) -> p.Meltano.SingerDrainSink:
         """Create the LDIF runtime sink for the service facade."""
         normalized_target_config = u.normalize_to_json_mapping(
