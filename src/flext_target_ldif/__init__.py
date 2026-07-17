@@ -20,6 +20,7 @@ from flext_target_ldif.__version__ import (
 if TYPE_CHECKING:
     from flext_ldif import d, e, h, r, s, x
 
+    from ._config import FlextTargetLdifConfig, config
     from ._settings import FlextTargetLdifSettings, settings
     from .api import FlextTargetLdifService, target_ldif
     from .cli import FlextTargetLdifCli, main
@@ -48,6 +49,8 @@ if TYPE_CHECKING:
         x,
         main,
         FlextTargetLdifCli,
+        FlextTargetLdifConfig,
+        config,
         FlextTargetLdifSettings,
         settings,
         FlextTargetLdifService,
@@ -56,6 +59,10 @@ if TYPE_CHECKING:
 
 
 _LAZY_MODULES: dict[str, tuple[str, ...]] = {
+    "._config": (
+        "FlextTargetLdifConfig",
+        "config",
+    ),
     "._settings": (
         "FlextTargetLdifSettings",
         "settings",
@@ -110,6 +117,7 @@ _LAZY_IMPORTS = build_lazy_import_map(
 
 _DIRECT_IMPORTS: tuple[str, ...] = (
     "FlextTargetLdifCli",
+    "FlextTargetLdifConfig",
     "FlextTargetLdifConstants",
     "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
@@ -127,6 +135,7 @@ _DIRECT_IMPORTS: tuple[str, ...] = (
     "__version_info__",
     "build_lazy_import_map",
     "c",
+    "config",
     "d",
     "e",
     "h",
@@ -145,6 +154,7 @@ _DIRECT_IMPORTS: tuple[str, ...] = (
 
 __all__: tuple[str, ...] = (
     "FlextTargetLdifCli",
+    "FlextTargetLdifConfig",
     "FlextTargetLdifConstants",
     "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
@@ -161,6 +171,7 @@ __all__: tuple[str, ...] = (
     "__version__",
     "__version_info__",
     "c",
+    "config",
     "d",
     "e",
     "h",

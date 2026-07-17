@@ -1,8 +1,10 @@
-"""FlextTargetLdifConfig — frozen config singleton for flext-target-ldif (ADR-005 §7).
+"""FlextTargetLdifConfig — frozen, validated config singleton for flext-target-ldif.
 
-Model-less: business rules live in ``config/*.yaml`` under the ``TargetLdif:`` key and
-are exposed through the open ``config.TargetLdif`` namespace (``extra="allow"``), with
-no per-domain model. Access is ``config.TargetLdif.<domain>[<key>...]``.
+Every ``config/*.yaml`` file is auto-discovered and deep-merged at first
+``fetch_global`` call (model-less, ``extra="allow"`` at the FlextMeltanoConfig base).
+The flat YAML is then validated into the pure-Pydantic ``_models.config``
+shapes and exposed as typed domain objects under ``config.TargetLdif`` — never a
+model-less dict subscript.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -10,21 +12,28 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict
+from functools import cached_property
+from pathlib import Path
+from typing import ClassVar
 
 from flext_meltano import FlextMeltanoConfig
-
-
-class _TargetLdifNamespace(BaseModel):
-    """Open, frozen namespace exposing every ``config/*.yaml`` domain model-less."""
-
-    model_config = ConfigDict(extra="allow", frozen=True)
+from flext_target_ldif._models.config import FlextTargetLdifConfigModels
 
 
 class FlextTargetLdifConfig(FlextMeltanoConfig):
-    """TargetLdif config auto-loaded model-less from ``config/*.yaml``."""
+    """TargetLdif config auto-loaded from ``config/*.yaml`` and validated via models."""
 
-    TargetLdif: _TargetLdifNamespace = _TargetLdifNamespace()
+    CONFIG_DIR: ClassVar[str] = str(
+        Path(__file__).resolve().parents[2] / "config",
+    )
+
+    @cached_property
+    def TargetLdif(self) -> FlextTargetLdifConfigModels.TargetLdif:  # noqa: N802
+        """Validated ``TargetLdif`` business-rule config namespace."""
+        root = FlextTargetLdifConfigModels.Root.model_validate(
+            dict(self.model_extra or {}),
+        )
+        return root.TargetLdif
 
 
 config: FlextTargetLdifConfig = FlextTargetLdifConfig.fetch_global()
