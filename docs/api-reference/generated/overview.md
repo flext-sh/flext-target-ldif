@@ -3,7 +3,7 @@
 # flext-target-ldif API Overview
 
 - Package: `flext_target_ldif`
-- Version: `0.12.0`
+- Version: `0.20.0`
 - Description: FLEXT Target LDIF - Singer Target for LDAP Data Interchange Format (LDIF) output
 - Doc summary: Flext Target Ldif package.
 - Classifiers: `Development Status :: 3 - Alpha`, `Intended Audience :: Developers`, `Operating System :: OS Independent`, `Programming Language :: Python :: 3 :: Only`, `Programming Language :: Python :: 3.13`, `Topic :: Database` (+3 more)
