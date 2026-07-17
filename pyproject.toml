@@ -21,13 +21,13 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "flext-core",
-  "flext-ldif",
-  "flext-meltano",
-  "flext-observability",
-  "pydantic-core>=2.46.3",
-  "pydantic-settings>=2.14.0",
-  "pydantic>=2.13.3",
+    "flext-core @ git+https://github.com/flext-sh/flext-core.git@0.12.0-dev",
+    "flext-ldif @ git+https://github.com/flext-sh/flext-ldif.git@0.12.0-dev",
+    "flext-meltano @ git+https://github.com/flext-sh/flext-meltano.git@0.12.0-dev",
+    "flext-observability @ git+https://github.com/flext-sh/flext-observability.git@0.12.0-dev",
+    "pydantic-core>=2.46.3",
+    "pydantic-settings>=2.14.0",
+    "pydantic>=2.13.3",
 ]
 description = "FLEXT Target LDIF - Singer Target for LDAP Data Interchange Format (LDIF) output"
 keywords = [ "data-loading", "enterprise", "etl", "flext", "singer", "target", "typed" ]
@@ -35,7 +35,7 @@ license = "MIT"
 name = "flext-target-ldif"
 readme = "README.md"
 requires-python = ">=3.13,<3.14"
-version = "0.12.0"
+version = "0.12.0.rc0"
 
 [[project.authors]]
 email = "team@flext.sh"
@@ -749,19 +749,6 @@ all = true
 in_place = true
 sort_first = [ "build-system", "dependency-groups", "project", "tool" ]
 
-[tool.uv.sources.flext-core]
-workspace = true
-
-[tool.uv.sources.flext-ldif]
-workspace = true
-
-[tool.uv.sources.flext-meltano]
-workspace = true
-
-[tool.uv.sources.flext-observability]
-workspace = true
-
-# [MANAGED] yamlfix
 [tool.yamlfix]
 explicit_start = false
 line_length = 88
