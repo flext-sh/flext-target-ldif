@@ -223,7 +223,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
             """
 
             @staticmethod
-            def transform_timestamp(value: t.JsonValue) -> str:
+            def transform_timestamp(value: t.JsonValue | datetime) -> str:
                 """Transform timestamp values to LDAP timestamp format."""
                 if isinstance(value, datetime):
                     return value.isoformat()
