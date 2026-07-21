@@ -16,9 +16,7 @@ from flext_meltano import u
 from flext_target_ldif import c, p, r, t
 
 if TYPE_CHECKING:
-    from collections.abc import (
-        Callable,
-    )
+    from collections.abc import Callable
 
 
 class FlextTargetLdifUtilities(u, FlextLdifUtilities):

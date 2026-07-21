@@ -28,7 +28,7 @@ class FlextTargetLdifConfig(FlextMeltanoConfig):
     )
 
     @cached_property
-    def TargetLdif(self) -> FlextTargetLdifConfigModels.TargetLdif:  # noqa: N802
+    def TargetLdif(self) -> FlextTargetLdifConfigModels.TargetLdif:
         """Validated ``TargetLdif`` business-rule config namespace."""
         root = FlextTargetLdifConfigModels.Root.model_validate(
             dict(self.model_extra or {}),

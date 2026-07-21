@@ -13,11 +13,7 @@ from pathlib import Path
 import pytest
 from flext_tests import tm
 
-from flext_target_ldif import (
-    FlextTargetLdifModels,
-    FlextTargetLdifSettings,
-    t,
-)
+from flext_target_ldif import FlextTargetLdifModels, FlextTargetLdifSettings, t
 from flext_target_ldif.target import FlextTargetLdif
 from tests import c
 

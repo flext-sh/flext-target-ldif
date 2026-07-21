@@ -5,16 +5,12 @@ This module provides data models for LDIF target operations.
 
 from __future__ import annotations
 
-from collections.abc import (
-    Mapping,
-)
+from collections.abc import Mapping
 from pathlib import Path
 from types import MappingProxyType
 from typing import Annotated, override
 
-from flext_core import (
-    FlextSettings,
-)
+from flext_core import FlextSettings
 from flext_ldif import FlextLdifModels
 from flext_meltano import m, u
 from flext_target_ldif import FlextTargetLdifWriter, c, p, t

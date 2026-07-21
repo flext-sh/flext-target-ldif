@@ -10,18 +10,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, override
 
-from flext_target_ldif import (
-    FlextTargetLdifSettings,
-    m,
-    main as cli_main,
-    p,
-    t,
-)
+from flext_target_ldif import FlextTargetLdifSettings, m, main as cli_main, p, t
 
 if TYPE_CHECKING:
-    from collections.abc import (
-        Callable,
-    )
+    from collections.abc import Callable
 
 
 class FlextTargetLdif:
