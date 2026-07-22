@@ -45,21 +45,12 @@ class FlextTargetLdifServiceRuntime:
             return service_sink
 
         @override
-        def process_batch(
-            self,
-            context: t.JsonMapping,
-        ) -> None:
+        def process_batch(self, context: t.JsonMapping) -> None:
             """Singer batch hook is handled by the LDIF runtime sink."""
-            self._runtime_sink.process_batch(
-                u.normalize_to_json_mapping(context),
-            )
+            self._runtime_sink.process_batch(u.normalize_to_json_mapping(context))
 
         @override
-        def process_record(
-            self,
-            record: t.JsonMapping,
-            context: t.JsonMapping,
-        ) -> None:
+        def process_record(self, record: t.JsonMapping, context: t.JsonMapping) -> None:
             """Delegate Singer record handling to the LDIF runtime sink."""
             self._runtime_sink.process_record(
                 u.normalize_to_json_mapping(record),
@@ -68,16 +59,10 @@ class FlextTargetLdifServiceRuntime:
 
     @classmethod
     def create_sink(
-        cls,
-        *,
-        stream_name: str,
-        schema: t.JsonMapping,
-        target_config: t.ScalarMapping,
+        cls, *, stream_name: str, schema: t.JsonMapping, target_config: t.ScalarMapping
     ) -> p.Meltano.SingerDrainSink:
         """Create the LDIF runtime sink for the service facade."""
-        normalized_target_config = u.normalize_to_json_mapping(
-            target_config,
-        )
+        normalized_target_config = u.normalize_to_json_mapping(target_config)
         normalized_schema = cls.normalize_schema(schema)
         runtime_sink = FlextTargetLdifModels.TargetLdif.Sink(
             target_config=normalized_target_config,
@@ -96,9 +81,7 @@ class FlextTargetLdifServiceRuntime:
         )
 
     @staticmethod
-    def normalize_schema(
-        source: t.JsonMapping,
-    ) -> t.MutableMappingKV[str, t.JsonValue]:
+    def normalize_schema(source: t.JsonMapping) -> t.MutableMappingKV[str, t.JsonValue]:
         """Normalize a flat Singer schema to the LDIF runtime contract."""
         return {
             key: (str(value) if isinstance(value, Path) else value)

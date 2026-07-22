@@ -51,47 +51,17 @@ if TYPE_CHECKING:
         FlextTargetLdifUtilities as FlextTargetLdifUtilities,
         u,
     )
-_LAZY_IMPORTS = build_lazy_import_map(
-    {
-        "._settings": ("FlextTargetLdifSettings", "settings"),
-        ".api": (
-            "FlextTargetLdifService",
-            "target_ldif",
-        ),
-        ".cli": (
-            "FlextTargetLdifCli",
-            "main",
-        ),
-        ".constants": (
-            "FlextTargetLdifConstants",
-            "c",
-        ),
-        ".models": (
-            "FlextTargetLdifModels",
-            "m",
-        ),
-        ".protocols": (
-            "FlextTargetLdifProtocols",
-            "p",
-        ),
-        ".typings": (
-            "FlextTargetLdifTypes",
-            "t",
-        ),
-        ".utilities": (
-            "FlextTargetLdifUtilities",
-            "u",
-        ),
-        "flext_ldif": (
-            "d",
-            "e",
-            "h",
-            "r",
-            "s",
-            "x",
-        ),
-    },
-)
+_LAZY_IMPORTS = build_lazy_import_map({
+    "._settings": ("FlextTargetLdifSettings", "settings"),
+    ".api": ("FlextTargetLdifService", "target_ldif"),
+    ".cli": ("FlextTargetLdifCli", "main"),
+    ".constants": ("FlextTargetLdifConstants", "c"),
+    ".models": ("FlextTargetLdifModels", "m"),
+    ".protocols": ("FlextTargetLdifProtocols", "p"),
+    ".typings": ("FlextTargetLdifTypes", "t"),
+    ".utilities": ("FlextTargetLdifUtilities", "u"),
+    "flext_ldif": ("d", "e", "h", "r", "s", "x"),
+})
 
 
 __all__: tuple[str, ...] = (
@@ -128,9 +98,4 @@ __all__: tuple[str, ...] = (
 )
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    public_exports=__all__,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)

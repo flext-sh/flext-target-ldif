@@ -125,9 +125,7 @@ class FlextTargetLdifWriter:
                 open_result = self.open()
                 if not open_result.success:
                     return e.fail_operation(
-                        "write record",
-                        open_result.error,
-                        result_type=r[bool],
+                        "write record", open_result.error, result_type=r[bool]
                     )
             self._records.append(dict(record))
             self._record_count += 1
@@ -139,8 +137,7 @@ class FlextTargetLdifWriter:
             return e.fail_operation("write record", exc, result_type=r[bool])
 
     def _convert_record_to_entry(
-        self,
-        record: t.JsonMapping,
+        self, record: t.JsonMapping
     ) -> t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] | None:
         """Convert a single record to LDIF entry format."""
 
@@ -223,9 +220,7 @@ class FlextTargetLdifWriter:
                 f.write("\n")
 
     def _write_entry_attributes(
-        self,
-        f: TextIO,
-        attributes_obj: t.AttributeMapping,
+        self, f: TextIO, attributes_obj: t.AttributeMapping
     ) -> None:
         """Write entry attributes to file."""
         for attr, values in attributes_obj.items():
@@ -233,16 +228,14 @@ class FlextTargetLdifWriter:
                 for value in values:
                     if self.base64_encode:
                         encoded = base64.b64encode(
-                            value.encode(c.DEFAULT_ENCODING),
-                        ).decode(
-                            "ascii",
-                        )
+                            value.encode(c.DEFAULT_ENCODING)
+                        ).decode("ascii")
                         f.write(f"{attr}:: {encoded}\n")
                     else:
                         f.write(f"{attr}: {value}\n")
             elif self.base64_encode:
                 encoded = base64.b64encode(
-                    str(values).encode(c.DEFAULT_ENCODING),
+                    str(values).encode(c.DEFAULT_ENCODING)
                 ).decode("ascii")
                 f.write(f"{attr}:: {encoded}\n")
             else:

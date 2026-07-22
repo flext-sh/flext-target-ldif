@@ -10,17 +10,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, override
 
-from flext_target_ldif import (
-    FlextTargetLdifSettings,
-    m,
-    main as cli_main,
-    t,
-)
+from flext_target_ldif import FlextTargetLdifSettings, m, main as cli_main, t
 
 if TYPE_CHECKING:
-    from collections.abc import (
-        Callable,
-    )
+    from collections.abc import Callable
 
 
 class FlextTargetLdif:
@@ -30,9 +23,7 @@ class FlextTargetLdif:
 
     @override
     def __init__(
-        self,
-        settings: t.JsonMapping | None = None,
-        validate_config: bool = False,
+        self, settings: t.JsonMapping | None = None, validate_config: bool = False
     ) -> None:
         """Initialize the LDIF target."""
         defaults: t.JsonMapping = {
@@ -77,17 +68,11 @@ class FlextTargetLdif:
         sink_cls: type[m.TargetLdif.Sink] = m.TargetLdif.Sink
         return sink_cls
 
-    def get_sink(
-        self,
-        stream_name: str,
-        schema: t.JsonMapping,
-    ) -> m.TargetLdif.Sink:
+    def get_sink(self, stream_name: str, schema: t.JsonMapping) -> m.TargetLdif.Sink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = m.TargetLdif.Sink(
-                target_config=self._config,
-                stream_name=stream_name,
-                schema=schema,
+                target_config=self._config, stream_name=stream_name, schema=schema
             )
         return self.sinks[stream_name]
 

@@ -21,9 +21,7 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
     """LDIF target settings; fields under ``settings.TargetLdif.*``."""
 
     model_config = SettingsConfigDict(
-        env_prefix="FLEXT_TARGET_LDIF_",
-        env_nested_delimiter="__",
-        extra="ignore",
+        env_prefix="FLEXT_TARGET_LDIF_", env_nested_delimiter="__", extra="ignore"
     )
 
     class _TargetLdif(BaseModel):
@@ -97,8 +95,7 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
         TargetLdif: _TargetLdif
     else:
         TargetLdif: _TargetLdif = Field(
-            default_factory=_TargetLdif,
-            description="Namespaced LDIF target settings.",
+            default_factory=_TargetLdif, description="Namespaced LDIF target settings."
         )
 
 
