@@ -259,33 +259,33 @@ class TestsFlextTargetLdifWriter:
             raise AssertionError(msg)
         tmp_path.unlink()
 
-    def test_needs_base64_encoding_space_start(self) -> None:
+    def testneeds_base64_encoding_space_start(self) -> None:
         """Test detection of values that start with space."""
         writer = FlextTargetLdifWriter()
-        assert writer._needs_base64_encoding(" starts with space")
+        assert writer.needs_base64_encoding(" starts with space")
 
-    def test_needs_base64_encoding_colon_start(self) -> None:
+    def testneeds_base64_encoding_colon_start(self) -> None:
         """Test detection of values that start with colon."""
         writer = FlextTargetLdifWriter()
-        assert writer._needs_base64_encoding(":starts with colon")
+        assert writer.needs_base64_encoding(":starts with colon")
 
-    def test_needs_base64_encoding_non_ascii(self) -> None:
+    def testneeds_base64_encoding_non_ascii(self) -> None:
         """Test detection of non-ASCII values."""
         writer = FlextTargetLdifWriter()
-        assert writer._needs_base64_encoding("José")
-        assert writer._needs_base64_encoding("中文")
+        assert writer.needs_base64_encoding("José")
+        assert writer.needs_base64_encoding("中文")
 
-    def test_needs_base64_encoding_newlines(self) -> None:
+    def testneeds_base64_encoding_newlines(self) -> None:
         """Test detection of values with newlines."""
         writer = FlextTargetLdifWriter()
-        assert writer._needs_base64_encoding("line1\nline2")
-        assert writer._needs_base64_encoding("line1\rline2")
+        assert writer.needs_base64_encoding("line1\nline2")
+        assert writer.needs_base64_encoding("line1\rline2")
 
-    def test_needs_base64_encoding_normal_value(self) -> None:
+    def testneeds_base64_encoding_normal_value(self) -> None:
         """Test normal ASCII values don't need encoding."""
         writer = FlextTargetLdifWriter()
-        assert not writer._needs_base64_encoding("normal ascii value")
-        assert not writer._needs_base64_encoding("john@example.com")
+        assert not writer.needs_base64_encoding("normal ascii value")
+        assert not writer.needs_base64_encoding("john@example.com")
 
     def test_write_base64_encoded_attribute(self) -> None:
         """Test writing base64 encoded attributes."""
@@ -295,8 +295,8 @@ class TestsFlextTargetLdifWriter:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
         writer.open()
-        writer._write_attribute("description", " starts with space")
-        writer._write_attribute("cn", "José")
+        writer.write_attribute("description", " starts with space")
+        writer.write_attribute("cn", "José")
         writer.close()
         content = tmp_path.read_text(encoding="utf-8")
         if "description:: " not in content:
@@ -345,7 +345,7 @@ class TestsFlextTargetLdifWriter:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
         writer.open()
-        writer._write_line("short line")
+        writer.write_line("short line")
         writer.close()
         content = tmp_path.read_text(encoding="utf-8")
         lines = content.strip().split("\n")
@@ -365,7 +365,7 @@ class TestsFlextTargetLdifWriter:
         )
         writer.open()
         long_line = "this is a very long line that should be wrapped and exceed the 20 character limit"
-        writer._write_line(long_line)
+        writer.write_line(long_line)
         writer.close()
         content = tmp_path.read_text(encoding="utf-8")
         lines = content.strip().split("\n")
@@ -391,27 +391,27 @@ class TestsFlextTargetLdifWriter:
             msg = f"Expected {100}, got {writer.line_length}"
             raise AssertionError(msg)
 
-    def test_generate_dn_success(self) -> None:
+    def testgenerate_dn_success(self) -> None:
         """Test successful DN generation."""
         writer = FlextTargetLdifWriter(
             dn_template="uid={uid},ou={department},dc=example,dc=com"
         )
         record = {"uid": "jdoe", "department": "engineering"}
-        dn = writer._generate_dn(record)
+        dn = writer.generate_dn(record)
         if dn != "uid=jdoe,ou=engineering,dc=example,dc=com":
             msg: str = (
                 f"Expected {'uid=jdoe,ou=engineering,dc=example,dc=com'}, got {dn}"
             )
             raise AssertionError(msg)
 
-    def test_generate_dn_missing_field(self) -> None:
+    def testgenerate_dn_missing_field(self) -> None:
         """Test DN generation with missing field."""
         writer = FlextTargetLdifWriter(
             dn_template="uid={uid},ou={department},dc=example,dc=com"
         )
         record = {"uid": "jdoe"}
         with pytest.raises(FlextTargetLdifWriterError) as exc_info:
-            writer._generate_dn(record)
+            writer.generate_dn(record)
         if "Missing required field for DN generation" not in str(exc_info.value):
             msg = f"Expected {'Missing required field for DN generation'} in {exc_info.value!s}"
             raise AssertionError(msg)
@@ -420,7 +420,7 @@ class TestsFlextTargetLdifWriter:
         """Test custom DN template."""
         writer = FlextTargetLdifWriter(dn_template="cn={name},ou=people,dc=test,dc=org")
         record = {"name": "John Doe"}
-        dn = writer._generate_dn(record)
+        dn = writer.generate_dn(record)
         if dn != "cn=John Doe,ou=people,dc=test,dc=org":
             msg = f"Expected {'cn=John Doe,ou=people,dc=test,dc=org'}, got {dn}"
             raise AssertionError(msg)

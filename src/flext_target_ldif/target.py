@@ -35,7 +35,6 @@ class FlextTargetLdif:
         # get_sink/validate_config read self._config (was an undefined bare `settings`).
         self._config: t.JsonMapping = {**defaults, **(settings or {})}
         self.sinks: dict[str, m.TargetLdif.Sink] = {}
-        self._test_config: t.JsonMapping | None = None
         if validate_config:
             self.validate_config()
         output_path_raw = self._config.get("output_path", "./output")
@@ -76,12 +75,10 @@ class FlextTargetLdif:
             )
         return self.sinks[stream_name]
 
-    def validate_config(self) -> None:
+    def validate_config(self, config: t.JsonMapping | None = None) -> None:
         """Validate the target configuration."""
-        config_dict = (
-            dict(self._test_config) if self._test_config else dict(self._config)
-        )
-        if self._test_config is not None and "output_file" not in config_dict:
+        config_dict = dict(config) if config is not None else dict(self._config)
+        if config is not None and "output_file" not in config_dict:
             msg = "Output file is required"
             raise ValueError(msg)
         allowed_fields: set[str] = {

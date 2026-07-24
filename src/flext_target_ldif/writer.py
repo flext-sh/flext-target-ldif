@@ -120,7 +120,7 @@ class FlextTargetLdifWriter:
         def _run_write_record() -> p.Result[bool]:
             # mro-p68a.9 (codex): validate before opening so rejected records
             # cannot leave an auto-opened output handle behind.
-            self._generate_dn(record)
+            self.generate_dn(record)
             if self._file_handle is None:
                 open_result = self.open()
                 if not open_result.success:
@@ -144,7 +144,7 @@ class FlextTargetLdifWriter:
         def _run__convert_record_to_entry() -> (
             t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] | None
         ):
-            dn = self._generate_dn(record)
+            dn = self.generate_dn(record)
             attributes: t.MutableJsonMapping = {}
             for key, value in record.items():
                 if key != "dn":
@@ -169,7 +169,7 @@ class FlextTargetLdifWriter:
             logger.warning("Skipping invalid record: %s", msg)
             return None
 
-    def _generate_dn(self, record: t.JsonMapping) -> str:
+    def generate_dn(self, record: t.JsonMapping) -> str:
         """Generate DN from record using template."""
         try:
             return self.dn_template.format(**record)
@@ -177,7 +177,7 @@ class FlextTargetLdifWriter:
             msg: str = f"Missing required field for DN generation: {e}"
             raise FlextTargetLdifWriterError(msg) from e
 
-    def _needs_base64_encoding(self, value: str) -> bool:
+    def needs_base64_encoding(self, value: str) -> bool:
         """Check if a value needs base64 encoding."""
         if value and value[0] in {" ", ":"}:
             return True
@@ -187,12 +187,12 @@ class FlextTargetLdifWriter:
             return True
         return "\n" in value or "\r" in value
 
-    def _write_attribute(self, attr_name: str, value: str) -> None:
+    def write_attribute(self, attr_name: str, value: str) -> None:
         """Write an attribute to the file handle."""
         if self._file_handle is None:
             msg = "File handle is not open"
             raise ValueError(msg)
-        if self._needs_base64_encoding(value):
+        if self.needs_base64_encoding(value):
             encoded = base64.b64encode(value.encode(c.DEFAULT_ENCODING)).decode("ascii")
             self._file_handle.write(f"{attr_name}:: {encoded}\n")
         else:
@@ -241,7 +241,7 @@ class FlextTargetLdifWriter:
             else:
                 f.write(f"{attr}: {values}\n")
 
-    def _write_line(self, line: str) -> None:
+    def write_line(self, line: str) -> None:
         """Write a line to the file handle, wrapping if necessary."""
         if self._file_handle is None:
             msg = "File handle is not open"
