@@ -34,7 +34,4 @@ class TestsFlextTargetLdifModels(FlextTestsModels, FlextTargetLdifModels):
 # Short aliases per FLEXT convention
 m = TestsFlextTargetLdifModels
 
-__all__: list[str] = [
-    "TestsFlextTargetLdifModels",
-    "m",
-]
+__all__: list[str] = ["TestsFlextTargetLdifModels", "m"]

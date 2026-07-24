@@ -23,15 +23,13 @@ from flext_target_ldif._models.config import FlextTargetLdifConfigModels
 class FlextTargetLdifConfig(FlextMeltanoConfig):
     """TargetLdif config auto-loaded from ``config/*.yaml`` and validated via models."""
 
-    CONFIG_DIR: ClassVar[str] = str(
-        Path(__file__).resolve().parents[2] / "config",
-    )
+    CONFIG_DIR: ClassVar[str] = str(Path(__file__).resolve().parents[2] / "config")
 
     @cached_property
     def TargetLdif(self) -> FlextTargetLdifConfigModels.TargetLdif:
         """Validated ``TargetLdif`` business-rule config namespace."""
         root = FlextTargetLdifConfigModels.Root.model_validate(
-            dict(self.model_extra or {}),
+            dict(self.model_extra or {})
         )
         return root.TargetLdif
 

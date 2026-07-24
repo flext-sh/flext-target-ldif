@@ -103,13 +103,9 @@ class TestsFlextTargetLdifTarget:
     def test_end_to_end_sink_writes_real_ldif_file(self, tmp_path: Path) -> None:
         """A record through the public sink lands as a real LDIF file on disk."""
         target = FlextTargetLdif(settings={"output_path": str(tmp_path)})
-        sink = target.get_sink(
-            "users",
-            schema={"type": "object", "properties": {}},
-        )
+        sink = target.get_sink("users", schema={"type": "object", "properties": {}})
         sink.process_record(
-            {"uid": "jdoe", "cn": "John Doe", "mail": "jdoe@example.com"},
-            {},
+            {"uid": "jdoe", "cn": "John Doe", "mail": "jdoe@example.com"}, {}
         )
         tm.that(sink.ldif_writer.record_count, eq=1)
         sink.clean_up()
@@ -125,16 +121,10 @@ class TestsFlextTargetLdifTarget:
             settings={
                 "output_path": str(tmp_path),
                 "attribute_mapping": {"email": "mail"},
-            },
+            }
         )
-        sink = target.get_sink(
-            "people",
-            schema={"type": "object", "properties": {}},
-        )
-        sink.process_record(
-            {"uid": "jsmith", "email": "jsmith@example.com"},
-            {},
-        )
+        sink = target.get_sink("people", schema={"type": "object", "properties": {}})
+        sink.process_record({"uid": "jsmith", "email": "jsmith@example.com"}, {})
         sink.clean_up()
         content = (tmp_path / "people.ldif").read_text(encoding="utf-8")
         tm.that(content, has="dn: uid=jsmith,ou=users,dc=example,dc=com\n")
@@ -170,7 +160,7 @@ class TestsFlextTargetLdifTarget:
             target.validate_config()
         if "Output file is required" not in str(exc_info.value):
             raise AssertionError(
-                f"Expected {'Output file is required'} in {exc_info.value!s}",
+                f"Expected {'Output file is required'} in {exc_info.value!s}"
             )
 
     def test_target_validate_config_invalid_output_file(self) -> None:
@@ -181,7 +171,7 @@ class TestsFlextTargetLdifTarget:
             target.validate_config()
         if "Output file cannot be empty" not in str(exc_info.value):
             raise AssertionError(
-                f"Expected {'Output file cannot be empty'} in {exc_info.value!s}",
+                f"Expected {'Output file cannot be empty'} in {exc_info.value!s}"
             )
 
     def test_target_validate_config_invalid_dn_template(self) -> None:
@@ -196,7 +186,7 @@ class TestsFlextTargetLdifTarget:
             target.validate_config()
         if "DN template cannot be empty" not in str(exc_info.value):
             raise AssertionError(
-                f"Expected {'DN template cannot be empty'} in {exc_info.value!s}",
+                f"Expected {'DN template cannot be empty'} in {exc_info.value!s}"
             )
 
     def test_target_ldif_creation(self) -> None:
@@ -223,13 +213,13 @@ class TestsFlextTargetLdifTarget:
         # re-validated through t.json_mapping_adapter because JsonMapping values are
         # JsonValue unions, so raw chained .get() is not type-safe.
         schema_defs = t.json_mapping_adapter().validate_python(
-            target.config_jsonschema.get("$defs", {}),
+            target.config_jsonschema.get("$defs", {})
         )
         target_ldif_def = t.json_mapping_adapter().validate_python(
-            schema_defs.get("_TargetLdif", {}),
+            schema_defs.get("_TargetLdif", {})
         )
         target_ldif_props = t.json_mapping_adapter().validate_python(
-            target_ldif_def.get("properties", {}),
+            target_ldif_def.get("properties", {})
         )
         tm.that(target_ldif_props, has="output_path")
         tm.that(target_ldif_props, has="file_naming_pattern")
@@ -240,7 +230,7 @@ class TestsFlextTargetLdifTarget:
         target = FlextTargetLdif()
         if target.default_sink_class != FlextTargetLdifModels.TargetLdif.Sink:
             raise AssertionError(
-                f"Expected {FlextTargetLdifModels.TargetLdif.Sink}, got {target.default_sink_class}",
+                f"Expected {FlextTargetLdifModels.TargetLdif.Sink}, got {target.default_sink_class}"
             )
 
     def test_target_ldif_output_directory_creation(self) -> None:
@@ -268,7 +258,7 @@ class TestsFlextTargetLdifTarget:
             target = FlextTargetLdif(settings=settings)
             if target.settings["output_path"] != tmp_dir:
                 raise AssertionError(
-                    f"Expected {tmp_dir}, got {target.settings['output_path']}",
+                    f"Expected {tmp_dir}, got {target.settings['output_path']}"
                 )
             assert (
                 target.settings["dn_template"] == "cn={name},ou=people,dc=test,dc=com"
@@ -290,10 +280,7 @@ class TestsFlextTargetLdifTarget:
     def test_end_to_end_ldif_generation(self) -> None:
         """Test end-to-end LDIF generation."""
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8",
-            mode="w+",
-            delete=False,
-            suffix=".ldif",
+            encoding="utf-8", mode="w+", delete=False, suffix=".ldif"
         ) as tmp:
             tmp_path = Path(tmp.name)
         settings = FlextTargetLdifSettings.model_validate({
@@ -364,7 +351,7 @@ class TestsFlextTargetLdifTarget:
             target = FlextTargetLdif(settings=settings, validate_config=True)
             if target.settings["output_path"] != tmp_dir:
                 raise AssertionError(
-                    f"Expected {tmp_dir}, got {target.settings['output_path']}",
+                    f"Expected {tmp_dir}, got {target.settings['output_path']}"
                 )
             assert (
                 target.settings["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
