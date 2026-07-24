@@ -1,6 +1,5 @@
 """Singer target utilities for LDIF domain operations.
 
-from flext_target_ldif.constants import c as c
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
@@ -9,14 +8,15 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import base64
-from collections.abc import (
-    Callable,
-)
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import u
 from flext_target_ldif import c, p, r, t
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class FlextTargetLdifUtilities(u, FlextLdifUtilities):
@@ -30,9 +30,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
 
             @staticmethod
             def build_ldif_dn(
-                record: t.JsonMapping,
-                dn_template: str,
-                base_dn: str | None = None,
+                record: t.JsonMapping, dn_template: str, base_dn: str | None = None
             ) -> p.Result[str]:
                 """Build LDIF Distinguished Name from record data.
 
@@ -47,7 +45,8 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 """
                 if not record or not dn_template:
                     return r[str].fail("Record and DN template are required")
-                try:
+
+                def _run_build_ldif_dn() -> p.Result[str]:
                     dn_rdn = dn_template
                     for key, value in record.items():
                         placeholder = f"{{{key}}}"
@@ -57,12 +56,15 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                         return r[str].fail(f"Unresolved placeholders in DN: {dn_rdn}")
                     full_dn = f"{dn_rdn},{base_dn}" if base_dn else dn_rdn
                     if not FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.split(
-                        full_dn,
+                        full_dn
                     ):
                         return r[str].fail(f"Invalid DN format: {full_dn}")
                     return r[str].ok(full_dn)
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[str].fail(f"Error building DN: {e}")
+
+                try:
+                    return _run_build_ldif_dn()
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
+                    return r[str].fail(f"Error building DN: {exc}")
 
             @staticmethod
             def convert_record_to_ldif_entry(
@@ -85,7 +87,8 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 """
                 if not record or not dn:
                     return r[str].fail("Record and DN are required")
-                try:
+
+                def _run_convert_record_to_ldif_entry() -> p.Result[str]:
                     ldif_lines: list[str] = []
                     mapping = attribute_mapping or {}
                     ldif_lines.append(f"dn: {dn}")
@@ -96,18 +99,21 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                         if isinstance(value, list):
                             for item in value:
                                 ldif_value = FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.format_ldif_value(
-                                    str(item),
+                                    str(item)
                                 )
                                 ldif_lines.append(f"{ldif_attr}: {ldif_value}")
                         else:
                             ldif_value = FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.format_ldif_value(
-                                str(value),
+                                str(value)
                             )
                             ldif_lines.append(f"{ldif_attr}: {ldif_value}")
                     ldif_lines.append("")
                     return r[str].ok("\n".join(ldif_lines))
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[str].fail(f"Error converting to LDIF entry: {e}")
+
+                try:
+                    return _run_convert_record_to_ldif_entry()
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
+                    return r[str].fail(f"Error converting to LDIF entry: {exc}")
 
             @staticmethod
             def format_ldif_value(value: str) -> str:
@@ -133,7 +139,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                     return f":: {encoded}"
                 if len(value) > c.TargetLdif.LDIF_LINE_WRAP_LENGTH:
                     return FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.wrap_ldif_line(
-                        value,
+                        value
                     )
                 return value
 
@@ -175,7 +181,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 if not dn_value:
                     return r[bool].fail("DN cannot be empty")
                 if not FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.split(
-                    dn_value,
+                    dn_value
                 ):
                     return r[bool].fail(f"Invalid DN format: {dn_value}")
                 return r[bool].ok(value=True)
@@ -213,7 +219,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
             """
 
             @staticmethod
-            def transform_timestamp(value: t.JsonValue) -> str:
+            def transform_timestamp(value: t.JsonValue | datetime) -> str:
                 """Transform timestamp values to LDAP timestamp format."""
                 if isinstance(value, datetime):
                     return value.isoformat()
@@ -296,9 +302,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 return str(value).strip()
 
             @staticmethod
-            def add_required_attributes(
-                record: t.StrMapping,
-            ) -> t.JsonMapping:
+            def add_required_attributes(record: t.StrMapping) -> t.JsonMapping:
                 """Add required LDAP attributes to the record."""
                 result: t.MutableJsonMapping = dict(record)
                 if "objectclass" not in result:
@@ -329,10 +333,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 self.attribute_mapping = attribute_mapping or {}
                 self.custom_transformers = custom_transformers or {}
 
-            def transform_record(
-                self,
-                record: t.JsonMapping,
-            ) -> t.StrMapping:
+            def transform_record(self, record: t.JsonMapping) -> t.StrMapping:
                 """Transform a Singer record to LDAP-compatible format."""
                 rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer
                 transformed: t.MutableStrMapping = {}
@@ -342,9 +343,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                     else:
                         attr_name = field.lower().replace("_", "")
                     transformed_value = rt.normalize_attribute_value(
-                        attr_name,
-                        value,
-                        self.custom_transformers,
+                        attr_name, value, self.custom_transformers
                     )
                     if transformed_value:
                         transformed[attr_name] = transformed_value

@@ -10,9 +10,8 @@ from __future__ import annotations
 
 from typing import Final
 
-from flext_tests import FlextTestsConstants
-
 from flext_target_ldif import FlextTargetLdifConstants
+from flext_tests import FlextTestsConstants
 
 
 class TestsFlextTargetLdifConstants(FlextTestsConstants, FlextTargetLdifConstants):

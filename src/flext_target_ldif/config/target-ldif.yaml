@@ -1,0 +1,3 @@
+TargetLdif:
+  name: flext-target-ldif
+  version: "0.12.0-dev"

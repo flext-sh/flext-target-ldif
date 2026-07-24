@@ -1,0 +1,839 @@
+"""Internal runtime helpers for the target-ldif service facade."""
+
+from __future__ import annotations
+
+from collections.abc import (
+    Mapping,
+)
+from pathlib import Path
+from typing import override
+
+from flext_target_ldif import FlextTargetLdifModels, m, p, t, u
+
+
+class FlextTargetLdifServiceRuntime:
+    """Service-runtime helpers used by the target-ldif facade."""
+
+    class Target(m.Meltano.SingerTargetBase):
+        """Minimal Singer target used by the service facade."""
+
+        name = "target-ldif"
+
+    class Sink(m.Meltano.SingerSinkBase):
+        """Singer sink adapter delegating to the LDIF runtime sink."""
+
+        name = "target-ldif-sink"
+
+        _runtime_sink: FlextTargetLdifModels.TargetLdif.Sink
+
+        @classmethod
+        def create(
+            cls,
+            *,
+            runtime_sink: FlextTargetLdifModels.TargetLdif.Sink,
+            target: m.Meltano.SingerTargetBase,
+            stream_name: str,
+            schema: t.MutableMappingKV[str, t.ContainerValue],
+            key_properties: t.StrSequence,
+        ) -> FlextTargetLdifServiceRuntime.Sink:
+            """Create an adapter sink and attach the LDIF runtime sink."""
+            service_sink = cls(
+                target=target,
+                stream_name=stream_name,
+                schema=schema,
+                key_properties=key_properties,
+            )
+            service_sink._runtime_sink = runtime_sink
+            return service_sink
+
+        @override
+        def process_batch(
+            self,
+            context: Mapping[str, t.Container],
+        ) -> None:
+            """Singer batch hook is handled by the LDIF runtime sink."""
+            self._runtime_sink.process_batch(
+                FlextTargetLdifServiceRuntime.normalize_singer_mapping(context),
+            )
+
+        @override
+        def process_record(
+            self,
+            record: Mapping[str, t.Container],
+            context: Mapping[str, t.Container],
+        ) -> None:
+            """Delegate Singer record handling to the LDIF runtime sink."""
+            self._runtime_sink.process_record(
+                FlextTargetLdifServiceRuntime.normalize_singer_mapping(record),
+                FlextTargetLdifServiceRuntime.normalize_singer_mapping(context),
+            )
+
+    @classmethod
+    def create_sink(
+        cls,
+        *,
+        stream_name: str,
+        schema: t.FlatContainerMapping,
+        target_config: Mapping[str, t.Container],
+    ) -> p.Meltano.SingerDrainSink:
+        """Create the LDIF runtime sink for the service facade."""
+        normalized_target_config = cls.normalize_singer_mapping(target_config)
+        normalized_schema = cls.normalize_schema(schema)
+        runtime_sink = FlextTargetLdifModels.TargetLdif.Sink(
+            target_config=normalized_target_config,
+            stream_name=stream_name,
+            schema=normalized_schema,
+        )
+        return cls.Sink.create(
+            runtime_sink=runtime_sink,
+            target=cls.Target(
+                config=dict(normalized_target_config),
+                validate_config=False,
+            ),
+            stream_name=stream_name,
+            schema=dict(normalized_schema),
+            key_properties=[],
+        )
+
+    @classmethod
+    def normalize_singer_mapping(
+        cls,
+        source: Mapping[str, t.Container],
+    ) -> t.MutableMappingKV[str, t.ContainerValue]:
+        """Normalize a Singer payload mapping to the LDIF runtime contract."""
+        normalized: t.MutableMappingKV[str, t.ContainerValue] = {}
+        for key, value in source.items():
+            normalized_value = cls.normalize_singer_value(value)
+            if normalized_value is not None:
+                normalized[str(key)] = normalized_value
+        return normalized
+
+    @classmethod
+    def normalize_singer_value(
+        cls,
+        value: t.Container,
+    ) -> t.ContainerValue | None:
+        """Normalize a Singer payload value to the LDIF runtime contract."""
+        if value is None:
+            return None
+        if isinstance(value, Path):
+            return str(value)
+        if u.scalar(value):
+            return value
+        if u.mapping(value):
+            return cls.normalize_singer_mapping(value)
+        normalized_sequence: t.MutableSequenceOf[t.ContainerValue] = []
+        for item in value:
+            normalized_item = cls.normalize_singer_value(item)
+            if normalized_item is not None:
+                normalized_sequence.append(normalized_item)
+        return normalized_sequence
+
+    @staticmethod
+    def normalize_schema(
+        source: t.FlatContainerMapping,
+    ) -> t.MutableMappingKV[str, t.ContainerValue]:
+        """Normalize a flat Singer schema to the LDIF runtime contract."""
+        return {
+            key: (str(value) if isinstance(value, Path) else value)
+            for key, value in source.items()
+        }
+
+
+__all__: list[str] = ["FlextTargetLdifServiceRuntime"]
+"""Singer target utilities for LDIF domain operations.
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+
+"""
+
+from __future__ import annotations
+
+import base64
+import re
+from collections.abc import (
+    Callable,
+    Mapping,
+    MutableSequence,
+)
+from datetime import datetime
+from pathlib import Path
+
+from flext_ldif.utilities import FlextLdifUtilities
+from flext_meltano import FlextMeltanoUtilities
+from flext_target_ldif import c, p, r, t
+
+
+class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
+    """Single unified utilities class for Singer target LDIF operations."""
+
+    class TargetLdif:
+        """Singer protocol utilities for target operations."""
+
+        class LdifDataProcessing:
+            """LDIF-specific data processing utilities."""
+
+            @staticmethod
+            def build_ldif_dn(
+                record: t.ContainerValueMapping,
+                dn_template: str,
+                base_dn: str | None = None,
+            ) -> p.Result[str]:
+                """Build LDIF Distinguished Name from record data.
+
+                Args:
+                record: Record data
+                dn_template: DN template with placeholders
+                base_dn: Optional base DN to append
+
+                Returns:
+                r[str]: Built DN or error
+
+                """
+                if not record or not dn_template:
+                    return r[str].fail("Record and DN template are required")
+                try:
+                    dn_rdn = dn_template
+                    for key, value in record.items():
+                        placeholder = f"{{{key}}}"
+                        if placeholder in dn_rdn:
+                            dn_rdn = dn_rdn.replace(placeholder, str(value))
+                    if "{" in dn_rdn and "}" in dn_rdn:
+                        return r[str].fail(f"Unresolved placeholders in DN: {dn_rdn}")
+                    full_dn = f"{dn_rdn},{base_dn}" if base_dn else dn_rdn
+                    if not FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.split(
+                        full_dn,
+                    ):
+                        return r[str].fail(f"Invalid DN format: {full_dn}")
+                    return r[str].ok(full_dn)
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                    return r[str].fail(f"Error building DN: {e}")
+
+            @staticmethod
+            def convert_record_to_ldif_entry(
+                record: t.ContainerValueMapping,
+                dn: str,
+                object_classes: t.StrSequence | None = None,
+                attribute_mapping: t.StrMapping | None = None,
+            ) -> p.Result[str]:
+                """Convert Singer record to LDIF entry format.
+
+                Args:
+                record: Singer record data
+                dn: Distinguished Name for the entry
+                object_classes: Object classes for the entry
+                attribute_mapping: Optional mapping from record keys to LDIF attributes
+
+                Returns:
+                r[str]: LDIF entry or error
+
+                """
+                if not record or not dn:
+                    return r[str].fail("Record and DN are required")
+                try:
+                    ldif_lines: MutableSequence[str] = []
+                    mapping = attribute_mapping or {}
+                    ldif_lines.append(f"dn: {dn}")
+                    if object_classes:
+                        ldif_lines.extend(f"objectClass: {oc}" for oc in object_classes)
+                    for key, value in record.items():
+                        ldif_attr = mapping.get(key, key)
+                        if isinstance(value, list):
+                            for item in value:
+                                ldif_value = FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.format_ldif_value(
+                                    str(item),
+                                )
+                                ldif_lines.append(f"{ldif_attr}: {ldif_value}")
+                        else:
+                            ldif_value = FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.format_ldif_value(
+                                str(value),
+                            )
+                            ldif_lines.append(f"{ldif_attr}: {ldif_value}")
+                    ldif_lines.append("")
+                    return r[str].ok("\n".join(ldif_lines))
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                    return r[str].fail(f"Error converting to LDIF entry: {e}")
+
+            @staticmethod
+            def format_ldif_value(value: str) -> str:
+                """Format value for LDIF attribute.
+
+                Args:
+                value: Value to format
+
+                Returns:
+                str: Formatted LDIF value
+
+                """
+                if not value:
+                    return ""
+                if value.startswith((" ", ":", "<")) or any(
+                    ord(ch) < c.TargetLdif.ASCII_SPACE
+                    or ord(ch) > c.TargetLdif.ASCII_TILDE
+                    for ch in value
+                ):
+                    encoded = base64.b64encode(value.encode("utf-8")).decode("ascii")
+                    return f":: {encoded}"
+                if len(value) > c.TargetLdif.LDIF_LINE_WRAP_LENGTH:
+                    return FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.wrap_ldif_line(
+                        value,
+                    )
+                return value
+
+            @staticmethod
+            def split(dn: str) -> bool:
+                """Validate LDIF Distinguished Name format.
+
+                Args:
+                dn: Distinguished Name to validate
+
+                Returns:
+                bool: True if valid, False otherwise
+
+                """
+                if not dn:
+                    return False
+                dn_pattern = "^[a-zA-Z][\\w\\-]*\\s*=\\s*[^,]+(?:\\s*,\\s*[a-zA-Z][\\w\\-]*\\s*=\\s*[^,]+)*$"
+                return bool(re.match(dn_pattern, dn.strip()))
+
+            @staticmethod
+            def validate_ldif_entry(entry: str) -> p.Result[bool]:
+                """Validate LDIF entry format.
+
+                Args:
+                entry: LDIF entry to validate
+
+                Returns:
+                r[bool]: Validation result
+
+                """
+                if not entry or not entry.strip():
+                    return r[bool].fail("LDIF entry cannot be empty")
+                lines = entry.strip().split("\n")
+                if not lines:
+                    return r[bool].fail("LDIF entry must have at least one line")
+                first_line = lines[0].strip()
+                if not first_line.startswith("dn:"):
+                    return r[bool].fail("LDIF entry must start with DN")
+                dn_value = first_line[3:].strip()
+                if not dn_value:
+                    return r[bool].fail("DN cannot be empty")
+                if not FlextTargetLdifUtilities.TargetLdif.LdifDataProcessing.split(
+                    dn_value,
+                ):
+                    return r[bool].fail(f"Invalid DN format: {dn_value}")
+                return r[bool].ok(value=True)
+
+            @staticmethod
+            def wrap_ldif_line(value: str) -> str:
+                """Wrap long LDIF lines according to RFC 2849.
+
+                Args:
+                value: Value to wrap
+
+                Returns:
+                str: Wrapped value
+
+                """
+                if len(value) <= c.TargetLdif.LDIF_LINE_WRAP_LENGTH:
+                    return value
+                lines: MutableSequence[str] = []
+                remaining = value
+                while remaining:
+                    if len(remaining) <= c.TargetLdif.LDIF_LINE_WRAP_LENGTH:
+                        lines.append(remaining)
+                        break
+                    break_point = c.TargetLdif.LDIF_LINE_WRAP_LENGTH
+                    if " " in remaining[:break_point]:
+                        break_point = remaining[:break_point].rfind(" ")
+                    lines.append(remaining[:break_point])
+                    remaining = " " + remaining[break_point:].lstrip()
+                return "\n".join(lines)
+
+        class FileUtilities:
+            """File handling utilities for LDIF operations."""
+
+            @staticmethod
+            def append_to_ldif_file(
+                file_path: str, entries: t.StrSequence
+            ) -> p.Result[str]:
+                """Append entries to existing LDIF file.
+
+                Args:
+                file_path: Path to LDIF file
+                entries: List of LDIF entries to append
+
+                Returns:
+                r[str]: Success message or error
+
+                """
+                if not file_path or not entries:
+                    return r[str].fail("File path and entries are required")
+                try:
+                    path = Path(file_path)
+                    if not path.exists():
+                        path.parent.mkdir(parents=True, exist_ok=True)
+                    with Path(path).open("a", encoding="utf-8") as f:
+                        for entry in entries:
+                            f.write(entry)
+                            if not entry.endswith("\n"):
+                                f.write("\n")
+                    return r[str].ok(f"Entries appended to LDIF file: {file_path}")
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                    return r[str].fail(f"Error appending to LDIF file: {e}")
+
+            @staticmethod
+            def create_ldif_file(
+                file_path: str,
+                entries: t.StrSequence,
+                *,
+                overwrite: bool = False,
+            ) -> p.Result[str]:
+                """Create LDIF file with entries.
+
+                Args:
+                file_path: Path to LDIF file
+                entries: List of LDIF entries
+                overwrite: Whether to overwrite existing file
+
+                Returns:
+                r[str]: Success message or error
+
+                """
+                if not file_path or not entries:
+                    return r[str].fail("File path and entries are required")
+                try:
+                    path = Path(file_path)
+                    if path.exists() and (not overwrite):
+                        return r[str].fail(f"File already exists: {file_path}")
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    with Path(path).open("w", encoding="utf-8") as f:
+                        for entry in entries:
+                            f.write(entry)
+                            if not entry.endswith("\n"):
+                                f.write("\n")
+                    return r[str].ok(f"LDIF file created: {file_path}")
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                    return r[str].fail(f"Error creating LDIF file: {e}")
+
+            @staticmethod
+            def validate_ldif_file_path(file_path: str) -> p.Result[str]:
+                """Validate LDIF file path.
+
+                Args:
+                file_path: Path to validate
+
+                Returns:
+                r[str]: Validated path or error
+
+                """
+                if not file_path or not file_path.strip():
+                    return r[str].fail("File path cannot be empty")
+                try:
+                    path = Path(file_path)
+                    if not path.name:
+                        return r[str].fail("Invalid file path")
+                    if path.suffix.lower() != ".ldif":
+                        return r[str].fail("File must have .ldif extension")
+                    if path.parent.exists() and (not path.parent.is_dir()):
+                        return r[str].fail("Parent path is not a directory")
+                    return r[str].ok(str(path.resolve()))
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                    return r[str].fail(f"Invalid file path: {e}")
+
+        class RecordTransformer:
+            """Transform Singer records for LDIF output.
+
+            Absorbed from transformers.py into namespace class.
+            """
+
+            @staticmethod
+            def transform_timestamp(value: t.ContainerValue) -> str:
+                """Transform timestamp values to LDAP timestamp format."""
+                if isinstance(value, datetime):
+                    return value.isoformat()
+                if isinstance(value, str):
+                    try:
+                        dt = datetime.fromisoformat(value.removesuffix("Z") + "+00:00")
+                        return dt.isoformat()
+                    except ValueError:
+                        return value
+                return str(value)
+
+            @staticmethod
+            def transform_boolean(value: t.ContainerValue) -> str:
+                """Transform boolean values to LDAP boolean format."""
+                if isinstance(value, bool):
+                    return "TRUE" if value else "FALSE"
+                if isinstance(value, str):
+                    lower_val = value.lower()
+                    if lower_val in {"true", "yes", "1", "on"}:
+                        return "TRUE"
+                    if lower_val in {"false", "no", "0", "off"}:
+                        return "FALSE"
+                return ""
+
+            @staticmethod
+            def transform_email(value: t.ContainerValue) -> str:
+                """Transform email values to ensure LDAP compatibility."""
+                email_str = str(value).strip().lower()
+                if "@" in email_str and "." in email_str:
+                    return email_str
+                return ""
+
+            @staticmethod
+            def transform_phone(value: t.ContainerValue) -> str:
+                """Transform phone numbers to standard format."""
+                phone_str = str(value)
+                return "".join(ch for ch in phone_str if ch.isdigit() or ch in "+- ()")
+
+            @staticmethod
+            def transform_name(value: t.ContainerValue) -> str:
+                """Transform name fields to ensure proper formatting."""
+                name_str = str(value).strip()
+                return " ".join(word.capitalize() for word in name_str.split())
+
+            @staticmethod
+            def get_builtin_transformer(
+                attr_name: str,
+            ) -> Callable[[t.ContainerValue], str] | None:
+                """Get built-in transformer function for attribute name."""
+                rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer
+                attr_lower = attr_name.lower()
+                if attr_lower in {"mail", "email"}:
+                    return rt.transform_email
+                if attr_lower in {"telephonenumber", "phone", "mobile"}:
+                    return rt.transform_phone
+                if attr_lower in {"givenname", "sn", "cn", "displayname"}:
+                    return rt.transform_name
+                if attr_lower in {"createtimestamp", "modifytimestamp"}:
+                    return rt.transform_timestamp
+                if attr_lower.endswith("boolean") or attr_lower.startswith("is"):
+                    return rt.transform_boolean
+                return None
+
+            @staticmethod
+            def normalize_attribute_value(
+                attr_name: str,
+                value: t.ContainerValue,
+                transformers: Mapping[str, Callable[[t.ContainerValue], str]]
+                | None = None,
+            ) -> str:
+                """Normalize attribute value based on attribute type."""
+                rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer
+                if transformers and attr_name in transformers:
+                    return transformers[attr_name](value)
+                builtin_transformer = rt.get_builtin_transformer(attr_name)
+                if builtin_transformer:
+                    return builtin_transformer(value)
+                return str(value).strip()
+
+            @staticmethod
+            def add_required_attributes(
+                record: t.StrMapping,
+            ) -> t.ContainerValueMapping:
+                """Add required LDAP attributes to the record."""
+                result: t.MutableContainerValueMapping = dict(record)
+                if "objectclass" not in result:
+                    result["objectclass"] = ["inetOrgPerson", "person"]
+                if "cn" not in result:
+                    if "givenname" in result and "sn" in result:
+                        result["cn"] = f"{result['givenname']} {result['sn']}"
+                    elif "displayname" in result:
+                        result["cn"] = result["displayname"]
+                    elif "uid" in result:
+                        result["cn"] = result["uid"]
+                    else:
+                        result["cn"] = "Unknown User"
+                if "sn" not in result and "cn" in result:
+                    cn_value = result["cn"]
+                    words: t.StrSequence = (
+                        cn_value.split() if isinstance(cn_value, str) else []
+                    )
+                    result["sn"] = words[-1] if words else "Unknown"
+                return result
+
+            def __init__(
+                self,
+                attribute_mapping: t.StrMapping | None = None,
+                custom_transformers: Mapping[str, Callable[..., str]] | None = None,
+            ) -> None:
+                """Initialize the record transformer."""
+                self.attribute_mapping = attribute_mapping or {}
+                self.custom_transformers = custom_transformers or {}
+
+            def transform_record(
+                self,
+                record: t.ContainerValueMapping,
+            ) -> t.StrMapping:
+                """Transform a Singer record to LDAP-compatible format."""
+                rt = FlextTargetLdifUtilities.TargetLdif.RecordTransformer
+                transformed: t.MutableStrMapping = {}
+                for field, value in record.items():
+                    if field in self.attribute_mapping:
+                        attr_name = self.attribute_mapping[field]
+                    else:
+                        attr_name = field.lower().replace("_", "")
+                    transformed_value = rt.normalize_attribute_value(
+                        attr_name,
+                        value,
+                        self.custom_transformers,
+                    )
+                    if transformed_value:
+                        transformed[attr_name] = transformed_value
+                return transformed
+
+
+u = FlextTargetLdifUtilities
+
+__all__: list[str] = ["FlextTargetLdifUtilities", "u"]
+"""LDIF writer for flext-target-ldif using flext-ldif infrastructure.
+
+This module eliminates code duplication by using the FLEXT LDIF infrastructure
+implementation from flext-ldif project.
+
+Copyright (c) 2025 Flext. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
+
+from __future__ import annotations
+
+import base64
+import types
+from collections.abc import (
+    Mapping,
+    MutableMapping,
+    MutableSequence,
+    Sequence,
+)
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Self, TextIO, override
+
+from flext_ldif import ldif
+from flext_target_ldif import FlextTargetLdifWriterError, c, p, r, t, u
+
+logger = u.fetch_logger(__name__)
+
+_WRITER_SAFE_EXCEPTIONS: t.VariadicTuple[type[Exception]] = (
+    *c.Meltano.SINGER_SAFE_EXCEPTIONS,
+    FlextTargetLdifWriterError,
+)
+
+
+class FlextTargetLdifWriter:
+    """Writer for converting data records to LDIF format."""
+
+    @override
+    def __init__(
+        self,
+        output_file: Path | str | None = None,
+        ldif_options: t.ContainerValueMapping | None = None,
+        dn_template: str | None = None,
+        attribute_mapping: t.StrMapping | None = None,
+        schema: Mapping[str, t.ContainerValue | t.StrSequence] | None = None,
+    ) -> None:
+        """Initialize the LDIF writer using flext-ldif infrastructure."""
+        self.output_file = Path(output_file) if output_file else Path("output.ldif")
+        self.ldif_options = ldif_options or {}
+        self.dn_template = dn_template or "uid={uid},ou=users,dc=example,dc=com"
+        self.attribute_mapping = attribute_mapping or {}
+        self.schema = schema or {}
+        line_length_val = self.ldif_options.get("line_length", 78)
+        if isinstance(line_length_val, int):
+            self.line_length: int = line_length_val
+        elif isinstance(line_length_val, (str, float)):
+            self.line_length = int(line_length_val)
+        else:
+            self.line_length = 78
+        base64_val = self.ldif_options.get("base64_encode", False)
+        self.base64_encode: bool = bool(base64_val)
+        timestamps_val = self.ldif_options.get("include_timestamps", True)
+        self.include_timestamps: bool = bool(timestamps_val)
+        self._ldif_api = ldif()
+        self._records: MutableSequence[t.ContainerValueMapping] = []
+        self._record_count = 0
+        self._ldif_entries: Sequence[
+            Mapping[str, str | Mapping[str, t.StrSequence]]
+        ] = []
+        self._file_handle: TextIO | None = None
+
+    def __enter__(self) -> Self:
+        """Context manager entry."""
+        self.open()
+        return self
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: types.TracebackType | None,
+    ) -> None:
+        """Context manager exit."""
+        self.close()
+
+    @property
+    def record_count(self) -> int:
+        """Get the number of records written."""
+        return self._record_count
+
+    def close(self) -> p.Result[bool]:
+        """Close the output file and write all collected records."""
+        try:
+            self._ldif_entries = []
+            for record in self._records:
+                entry = self._convert_record_to_entry(record)
+                if entry is not None:
+                    self._ldif_entries.append(entry)
+            self._write_entries_to_file()
+            if self._file_handle is not None:
+                self._file_handle.close()
+                self._file_handle = None
+            return r[bool].ok(value=True)
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+            self._file_handle = None
+            return r[bool].fail(f"Failed to close LDIF file: {e}")
+
+    def open(self) -> p.Result[bool]:
+        """Open the output file for writing."""
+        try:
+            self.output_file.parent.mkdir(parents=True, exist_ok=True)
+            self._file_handle = self.output_file.open("w", encoding="utf-8")
+            return r[bool].ok(value=True)
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+            return r[bool].fail(f"Failed to open LDIF file: {e}")
+
+    def write_record(self, record: t.ContainerValueMapping) -> p.Result[bool]:
+        """Write a record to the LDIF file buffer."""
+        try:
+            if self._file_handle is None:
+                open_result = self.open()
+                if not open_result.success:
+                    return r[bool].fail(f"Failed to write record: {open_result.error}")
+            self._generate_dn(record)
+            self._records.append(dict(record))
+            self._record_count += 1
+            return r[bool].ok(value=True)
+        except _WRITER_SAFE_EXCEPTIONS as e:
+            return r[bool].fail(f"Failed to write record: {e}")
+
+    def _convert_record_to_entry(
+        self,
+        record: t.ContainerValueMapping,
+    ) -> Mapping[str, str | Mapping[str, t.StrSequence]] | None:
+        """Convert a single record to LDIF entry format."""
+        try:
+            dn = self._generate_dn(record)
+            attributes: t.MutableContainerValueMapping = {}
+            for key, value in record.items():
+                if key != "dn":
+                    mapped_key = self.attribute_mapping.get(key, key)
+                    attributes[mapped_key] = value
+            attr_dict: MutableMapping[str, t.StrSequence] = {}
+            for key, value in attributes.items():
+                if isinstance(value, list):
+                    attr_dict[key] = [str(v) for v in value]
+                else:
+                    attr_dict[key] = [str(value)]
+            result: Mapping[str, str | Mapping[str, t.StrSequence]] = {
+                "dn": dn,
+                "attributes": attr_dict,
+            }
+            return result
+        except (RuntimeError, ValueError, TypeError, FlextTargetLdifWriterError) as e:
+            msg: str = str(e)
+            logger.warning("Skipping invalid record: %s", msg)
+            return None
+
+    def _generate_dn(self, record: t.ContainerValueMapping) -> str:
+        """Generate DN from record using template."""
+        try:
+            return self.dn_template.format(**record)
+        except KeyError as e:
+            msg: str = f"Missing required field for DN generation: {e}"
+            raise FlextTargetLdifWriterError(msg) from e
+
+    def _needs_base64_encoding(self, value: str) -> bool:
+        """Check if a value needs base64 encoding."""
+        if value and value[0] in {" ", ":"}:
+            return True
+        try:
+            value.encode("ascii")
+        except UnicodeEncodeError:
+            return True
+        return "\n" in value or "\r" in value
+
+    def _write_attribute(self, attr_name: str, value: str) -> None:
+        """Write an attribute to the file handle."""
+        if self._file_handle is None:
+            msg = "File handle is not open"
+            raise ValueError(msg)
+        if self._needs_base64_encoding(value):
+            encoded = base64.b64encode(value.encode("utf-8")).decode("ascii")
+            self._file_handle.write(f"{attr_name}:: {encoded}\n")
+        else:
+            self._file_handle.write(f"{attr_name}: {value}\n")
+
+    def _write_entries_to_file(self) -> None:
+        """Write LDIF entries to file."""
+        with self.output_file.open("w", encoding="utf-8") as f:
+            f.write("version: 1\n")
+            if self.include_timestamps:
+                f.write(f"# Generated on: {datetime.now(UTC).isoformat()}\n")
+            f.write("\n")
+            for entry in self._ldif_entries:
+                dn_obj = entry.get("dn", "")
+                dn_str = str(dn_obj) if dn_obj else ""
+                raw_attributes = entry.get("attributes", {})
+                attributes_obj: t.AttributeMapping = {}
+                if isinstance(raw_attributes, dict):
+                    attributes_obj = {
+                        str(key): list(value)
+                        if not isinstance(value, str)
+                        else str(value)
+                        for key, value in raw_attributes.items()
+                    }
+                f.write(f"dn: {dn_str}\n")
+                self._write_entry_attributes(f, attributes_obj)
+                f.write("\n")
+
+    def _write_entry_attributes(
+        self,
+        f: TextIO,
+        attributes_obj: t.AttributeMapping,
+    ) -> None:
+        """Write entry attributes to file."""
+        for attr, values in attributes_obj.items():
+            if isinstance(values, list):
+                for value in values:
+                    if self.base64_encode:
+                        encoded = base64.b64encode(str(value).encode("utf-8")).decode(
+                            "ascii",
+                        )
+                        f.write(f"{attr}:: {encoded}\n")
+                    else:
+                        f.write(f"{attr}: {value}\n")
+            elif self.base64_encode:
+                encoded = base64.b64encode(str(values).encode("utf-8")).decode("ascii")
+                f.write(f"{attr}:: {encoded}\n")
+            else:
+                f.write(f"{attr}: {values}\n")
+
+    def _write_line(self, line: str) -> None:
+        """Write a line to the file handle, wrapping if necessary."""
+        if self._file_handle is None:
+            msg = "File handle is not open"
+            raise ValueError(msg)
+        if len(line) <= self.line_length:
+            self._file_handle.write(line + "\n")
+        else:
+            self._file_handle.write(line[: self.line_length] + "\n")
+            remaining = line[self.line_length :]
+            while remaining:
+                chunk = remaining[: self.line_length - 1]
+                self._file_handle.write(" " + chunk + "\n")
+                remaining = remaining[self.line_length - 1 :]
+
+
+__all__: t.StrSequence = ["FlextTargetLdifWriter"]

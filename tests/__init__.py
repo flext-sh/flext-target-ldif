@@ -24,7 +24,6 @@ if TYPE_CHECKING:
         tv as tv,
         x as x,
     )
-
     from tests.base import (
         TestsFlextTargetLdifServiceBase as TestsFlextTargetLdifServiceBase,
         s as s,
@@ -39,7 +38,7 @@ if TYPE_CHECKING:
     )
     from tests.protocols import (
         TestsFlextTargetLdifProtocols as TestsFlextTargetLdifProtocols,
-        p as p,
+        p,
     )
     from tests.settings import (
         TestsFlextTargetLdifSettings as TestsFlextTargetLdifSettings,
@@ -56,55 +55,24 @@ if TYPE_CHECKING:
     )
     from tests.utilities import (
         TestsFlextTargetLdifUtilities as TestsFlextTargetLdifUtilities,
-        u as u,
+        u,
     )
 _LAZY_IMPORTS = merge_lazy_imports(
     (".unit",),
-    build_lazy_import_map(
-        {
-            ".base": (
-                "TestsFlextTargetLdifServiceBase",
-                "s",
-            ),
-            ".conftest": ("conftest",),
-            ".constants": (
-                "TestsFlextTargetLdifConstants",
-                "c",
-            ),
-            ".models": (
-                "TestsFlextTargetLdifModels",
-                "m",
-            ),
-            ".protocols": (
-                "TestsFlextTargetLdifProtocols",
-                "p",
-            ),
-            ".settings": ("TestsFlextTargetLdifSettings",),
-            ".typings": (
-                "TestsFlextTargetLdifTypes",
-                "t",
-            ),
-            ".unit": ("unit",),
-            ".unit.test_target": ("TestsFlextTargetLdifTarget",),
-            ".unit.test_writer": ("TestsFlextTargetLdifWriter",),
-            ".utilities": (
-                "TestsFlextTargetLdifUtilities",
-                "u",
-            ),
-            "flext_tests": (
-                "d",
-                "e",
-                "h",
-                "r",
-                "td",
-                "tf",
-                "tk",
-                "tm",
-                "tv",
-                "x",
-            ),
-        },
-    ),
+    build_lazy_import_map({
+        ".base": ("TestsFlextTargetLdifServiceBase", "s"),
+        ".conftest": ("conftest",),
+        ".constants": ("TestsFlextTargetLdifConstants", "c"),
+        ".models": ("TestsFlextTargetLdifModels", "m"),
+        ".protocols": ("TestsFlextTargetLdifProtocols", "p"),
+        ".settings": ("TestsFlextTargetLdifSettings",),
+        ".typings": ("TestsFlextTargetLdifTypes", "t"),
+        ".unit": ("unit",),
+        ".unit.test_target": ("TestsFlextTargetLdifTarget",),
+        ".unit.test_writer": ("TestsFlextTargetLdifWriter",),
+        ".utilities": ("TestsFlextTargetLdifUtilities", "u"),
+        "flext_tests": ("d", "e", "h", "r", "td", "tf", "tk", "tm", "tv", "x"),
+    }),
     exclude_names=(
         "cleanup_submodule_namespace",
         "install_lazy_exports",
@@ -128,9 +96,4 @@ _LAZY_IMPORTS = merge_lazy_imports(
 )
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    publish_all=False,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)

@@ -10,13 +10,15 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import base64
-import types
 from pathlib import Path
-from typing import Self, TextIO, override
+from typing import TYPE_CHECKING, Self, TextIO, override
 
 from flext_ldif import ldif
 from flext_target_ldif import c, e, p, r, t, u
 from flext_target_ldif.errors import FlextTargetLdifWriterError
+
+if TYPE_CHECKING:
+    import types
 
 logger = u.fetch_logger(__name__)
 
@@ -79,12 +81,13 @@ class FlextTargetLdifWriter:
 
     @property
     def record_count(self) -> int:
-        """Get the number of records written."""
+        """The number of records written."""
         return self._record_count
 
     def close(self) -> p.Result[bool]:
         """Close the output file and write all collected records."""
-        try:
+
+        def _run_close() -> p.Result[bool]:
             self._ldif_entries = []
             for record in self._records:
                 entry = self._convert_record_to_entry(record)
@@ -95,6 +98,9 @@ class FlextTargetLdifWriter:
                 self._file_handle.close()
                 self._file_handle = None
             return r[bool].ok(value=True)
+
+        try:
+            return _run_close()
         except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
             self._file_handle = None
             return e.fail_operation("close LDIF file", exc, result_type=r[bool])
@@ -110,26 +116,34 @@ class FlextTargetLdifWriter:
 
     def write_record(self, record: t.JsonMapping) -> p.Result[bool]:
         """Write a record to the LDIF file buffer."""
-        try:
+
+        def _run_write_record() -> p.Result[bool]:
+            # mro-p68a.9 (codex): validate before opening so rejected records
+            # cannot leave an auto-opened output handle behind.
+            self._generate_dn(record)
             if self._file_handle is None:
                 open_result = self.open()
                 if not open_result.success:
                     return e.fail_operation(
                         "write record", open_result.error, result_type=r[bool]
                     )
-            self._generate_dn(record)
             self._records.append(dict(record))
             self._record_count += 1
             return r[bool].ok(value=True)
+
+        try:
+            return _run_write_record()
         except _WRITER_SAFE_EXCEPTIONS as exc:
             return e.fail_operation("write record", exc, result_type=r[bool])
 
     def _convert_record_to_entry(
-        self,
-        record: t.JsonMapping,
+        self, record: t.JsonMapping
     ) -> t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] | None:
         """Convert a single record to LDIF entry format."""
-        try:
+
+        def _run__convert_record_to_entry() -> (
+            t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] | None
+        ):
             dn = self._generate_dn(record)
             attributes: t.MutableJsonMapping = {}
             for key, value in record.items():
@@ -147,6 +161,9 @@ class FlextTargetLdifWriter:
                 "attributes": attr_dict,
             }
             return result
+
+        try:
+            return _run__convert_record_to_entry()
         except (RuntimeError, ValueError, TypeError, FlextTargetLdifWriterError) as e:
             msg: str = str(e)
             logger.warning("Skipping invalid record: %s", msg)
@@ -203,9 +220,7 @@ class FlextTargetLdifWriter:
                 f.write("\n")
 
     def _write_entry_attributes(
-        self,
-        f: TextIO,
-        attributes_obj: t.AttributeMapping,
+        self, f: TextIO, attributes_obj: t.AttributeMapping
     ) -> None:
         """Write entry attributes to file."""
         for attr, values in attributes_obj.items():
@@ -214,9 +229,7 @@ class FlextTargetLdifWriter:
                     if self.base64_encode:
                         encoded = base64.b64encode(
                             value.encode(c.DEFAULT_ENCODING)
-                        ).decode(
-                            "ascii",
-                        )
+                        ).decode("ascii")
                         f.write(f"{attr}:: {encoded}\n")
                     else:
                         f.write(f"{attr}: {value}\n")
