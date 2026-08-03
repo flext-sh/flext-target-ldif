@@ -1,5 +1,5 @@
-# AUTO-GENERATED FILE — Regenerate with: make gen
-"""Utilities package."""
+# @generated AUTO-GENERATED FILE — Regenerate with: make gen
+"""Flext Target Ldif. Utilities package."""
 
 from __future__ import annotations
 
@@ -8,19 +8,24 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_target_ldif._utilities.service_runtime import (
+    from .service_runtime import (
         FlextTargetLdifServiceRuntime as FlextTargetLdifServiceRuntime,
     )
+
+_LAZY_MODULES: dict[str, tuple[str, ...]] = {
+    ".service_runtime": ("FlextTargetLdifServiceRuntime",)
+}
+
+
+_LAZY_ALIAS_GROUPS: dict[str, tuple[tuple[str, str], ...]] = {}
+
+
 _LAZY_IMPORTS = build_lazy_import_map(
-    {
-        ".service_runtime": ("FlextTargetLdifServiceRuntime",),
-    },
+    _LAZY_MODULES, alias_groups=_LAZY_ALIAS_GROUPS, sort_keys=False
 )
 
+_PUBLIC_EXPORTS: tuple[str, ...] = ("FlextTargetLdifServiceRuntime",)
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    publish_all=False,
-)
+__all__: tuple[str, ...] = tuple(_PUBLIC_EXPORTS)
+
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)
