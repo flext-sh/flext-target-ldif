@@ -1,8 +1,12 @@
 <!-- AUTO-GENERATED — DO NOT EDIT MANUALLY -->
 
-# flext-target-ldif Public API
+# flext_target_ldif.target
 
-::: flext_target_ldif
+<!-- TOC START -->
+- No sections found
+<!-- TOC END -->
+
+::: flext_target_ldif.target
     options:
       show_root_heading: true
       show_root_full_path: false
