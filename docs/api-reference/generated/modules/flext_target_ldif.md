@@ -1,8 +1,12 @@
 <!-- AUTO-GENERATED — DO NOT EDIT MANUALLY -->
 
-# flext_target_ldif.protocols
+# flext_target_ldif
 
-::: flext_target_ldif.protocols
+<!-- TOC START -->
+- No sections found
+<!-- TOC END -->
+
+::: flext_target_ldif
     options:
       show_root_heading: true
       show_root_full_path: false

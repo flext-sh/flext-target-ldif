@@ -2,6 +2,10 @@
 
 # flext_target_ldif.utilities
 
+<!-- TOC START -->
+- No sections found
+<!-- TOC END -->
+
 ::: flext_target_ldif.utilities
     options:
       show_root_heading: true
