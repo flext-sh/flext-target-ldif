@@ -48,7 +48,9 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
         ]
         attribute_mapping: Annotated[
             dict[str, str],
-            m.Field(default_factory=dict, description="Source-to-LDIF attribute mapping"),
+            m.Field(
+                default_factory=dict, description="Source-to-LDIF attribute mapping"
+            ),
         ]
         ldif_options: Annotated[
             dict[str, str],
