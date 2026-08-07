@@ -36,6 +36,11 @@ src/flext_target_ldif/
 
 - `target.py` persists merged settings in `self._config`; **sink/config code must not read an unbound bare `settings`** (a known settings-fallout bug pattern).
 
+## Conventions (specific to this package)
+
+- Config/settings canonical pattern: ADR-012.
+- Codemod governance (ast-grep + make mod): ADR-014.
+
 ## Commands
 
 ```bash
