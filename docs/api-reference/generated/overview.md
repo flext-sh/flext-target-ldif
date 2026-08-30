@@ -29,7 +29,7 @@
   `FlextTargetLdifSettings`, `FlextTargetLdifTypes`, `FlextTargetLdifUtilities`,
   `config` (+3 more)
 - Exported module shortcuts: _none_
-- Generated module pages: `7`
+- Generated module pages: `0`
 
 ## Next Pages
 
