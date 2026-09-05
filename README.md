@@ -55,7 +55,7 @@ slot registry verification).
   of the facade classes listed under Module Map above.
 - Public extensions exposed by this project: `FlextTargetLdifCli`,
   `FlextTargetLdifConfig`, `FlextTargetLdifConstants`, `FlextTargetLdifModels`,
-  `FlextTargetLdifProtocols`, `FlextTargetLdifService` (+3 more).
+  `FlextTargetLdifProtocols`, `FlextTargetLdifService` (+5 more).
 - Library abstraction boundaries: see AGENTS.md §2.7.
 
 ## Quality Gates

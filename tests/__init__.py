@@ -5,95 +5,95 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import (
-    build_lazy_import_map,
-    install_lazy_exports,
-    merge_lazy_imports,
-)
+from types import MappingProxyType
+
+from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_tests import (
-        d as d,
-        e as e,
-        h as h,
-        r as r,
-        td as td,
-        tf as tf,
-        tk as tk,
-        tm as tm,
-        tv as tv,
-        x as x,
+    from . import unit as unit
+    from flext_target_ldif import FlextTargetLdifConstants
+    from flext_tests import FlextTestsConstants, d, e, h, r, td, tf, tk, tm, tv, x
+    from typing import Final
+
+    from .base import (
+        TestsFlextTargetLdifServiceBase,
+        TestsFlextTargetLdifServiceBase as s,
     )
-    from tests.base import (
-        TestsFlextTargetLdifServiceBase as TestsFlextTargetLdifServiceBase,
-        s as s,
+    from .constants import (
+        TestsFlextTargetLdifConstants,
+        TestsFlextTargetLdifConstants as c,
     )
-    from tests.constants import (
-        TestsFlextTargetLdifConstants as TestsFlextTargetLdifConstants,
-        c as c,
+    from .models import TestsFlextTargetLdifModels, TestsFlextTargetLdifModels as m
+    from .protocols import (
+        TestsFlextTargetLdifProtocols,
+        TestsFlextTargetLdifProtocols as p,
     )
-    from tests.models import (
-        TestsFlextTargetLdifModels as TestsFlextTargetLdifModels,
-        m as m,
+    from .settings import TestsFlextTargetLdifSettings
+    from .typings import TestsFlextTargetLdifTypes, TestsFlextTargetLdifTypes as t
+    from .utilities import (
+        TestsFlextTargetLdifUtilities,
+        TestsFlextTargetLdifUtilities as u,
     )
-    from tests.protocols import (
-        TestsFlextTargetLdifProtocols as TestsFlextTargetLdifProtocols,
-        p,
-    )
-    from tests.settings import (
-        TestsFlextTargetLdifSettings as TestsFlextTargetLdifSettings,
-    )
-    from tests.typings import (
-        TestsFlextTargetLdifTypes as TestsFlextTargetLdifTypes,
-        t as t,
-    )
-    from tests.unit.test_target import (
-        TestsFlextTargetLdifTarget as TestsFlextTargetLdifTarget,
-    )
-    from tests.unit.test_writer import (
-        TestsFlextTargetLdifWriter as TestsFlextTargetLdifWriter,
-    )
-    from tests.utilities import (
-        TestsFlextTargetLdifUtilities as TestsFlextTargetLdifUtilities,
-        u,
-    )
-_LAZY_IMPORTS = merge_lazy_imports(
-    (".unit",),
-    build_lazy_import_map({
-        ".base": ("TestsFlextTargetLdifServiceBase", "s"),
-        ".conftest": ("conftest",),
-        ".constants": ("TestsFlextTargetLdifConstants", "c"),
-        ".models": ("TestsFlextTargetLdifModels", "m"),
-        ".protocols": ("TestsFlextTargetLdifProtocols", "p"),
-        ".settings": ("TestsFlextTargetLdifSettings",),
-        ".typings": ("TestsFlextTargetLdifTypes", "t"),
-        ".unit": ("unit",),
-        ".unit.test_target": ("TestsFlextTargetLdifTarget",),
-        ".unit.test_writer": ("TestsFlextTargetLdifWriter",),
-        ".utilities": ("TestsFlextTargetLdifUtilities", "u"),
-        "flext_tests": ("d", "e", "h", "r", "td", "tf", "tk", "tm", "tv", "x"),
-    }),
-    exclude_names=(
-        "cleanup_submodule_namespace",
-        "install_lazy_exports",
-        "lazy_getattr",
-        "logger",
-        "merge_lazy_imports",
-        "output",
-        "output_reporting",
-        "pytest_addoption",
-        "pytest_collect_file",
-        "pytest_collection_modifyitems",
-        "pytest_configure",
-        "pytest_runtest_setup",
-        "pytest_runtest_teardown",
-        "pytest_sessionfinish",
-        "pytest_sessionstart",
-        "pytest_terminal_summary",
-        "pytest_warning_recorded",
-    ),
-    module_name=__name__,
+__all__: tuple[str, ...] = (
+    "Final",
+    "FlextTargetLdifConstants",
+    "FlextTestsConstants",
+    "TestsFlextTargetLdifConstants",
+    "TestsFlextTargetLdifModels",
+    "TestsFlextTargetLdifProtocols",
+    "TestsFlextTargetLdifServiceBase",
+    "TestsFlextTargetLdifSettings",
+    "TestsFlextTargetLdifTypes",
+    "TestsFlextTargetLdifUtilities",
+    "c",
+    "d",
+    "e",
+    "h",
+    "m",
+    "p",
+    "r",
+    "s",
+    "t",
+    "td",
+    "tf",
+    "tk",
+    "tm",
+    "tv",
+    "u",
+    "unit",
+    "x",
 )
 
+_LAZY_IMPORTS = MappingProxyType(
+    build_lazy_import_map(
+        MappingProxyType({
+            ".base": ("TestsFlextTargetLdifServiceBase", "s"),
+            ".constants": ("TestsFlextTargetLdifConstants", "c"),
+            ".models": ("TestsFlextTargetLdifModels", "m"),
+            ".protocols": ("TestsFlextTargetLdifProtocols", "p"),
+            ".settings": ("TestsFlextTargetLdifSettings",),
+            ".typings": ("TestsFlextTargetLdifTypes", "t"),
+            ".unit": ("unit",),
+            ".utilities": ("TestsFlextTargetLdifUtilities", "u"),
+            "flext_target_ldif": ("FlextTargetLdifConstants",),
+            "flext_tests": (
+                "FlextTestsConstants",
+                "d",
+                "e",
+                "h",
+                "r",
+                "td",
+                "tf",
+                "tk",
+                "tm",
+                "tv",
+                "x",
+            ),
+            "typing": ("Final",),
+        }),
+        alias_groups=MappingProxyType({}),
+        sort_keys=False,
+    )
+)
 
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)
