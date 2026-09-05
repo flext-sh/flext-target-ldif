@@ -35,7 +35,4 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
             stream_name=stream_name, schema=schema, target_config=target_config
         )
 
-
-target_ldif = FlextTargetLdifService
-
-__all__: list[str] = ["FlextTargetLdifService", "target_ldif"]
+__all__: list[str] = ["FlextTargetLdifService", ]
