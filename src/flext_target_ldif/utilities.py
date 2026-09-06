@@ -113,7 +113,9 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 try:
                     return _run_convert_record_to_ldif_entry()
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
-                    return r[str].fail(f"Error converting to LDIF entry: {exc}", exception=exc)
+                    return r[str].fail(
+                        f"Error converting to LDIF entry: {exc}", exception=exc
+                    )
 
             @staticmethod
             def format_ldif_value(value: str) -> str:
