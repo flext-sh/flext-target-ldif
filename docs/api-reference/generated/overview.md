@@ -21,15 +21,15 @@
 - Main facades: `FlextTargetLdifCli`, `FlextTargetLdifConfig`,
   `FlextTargetLdifConstants`, `FlextTargetLdifModels`,
   `FlextTargetLdifProtocols`, `FlextTargetLdifService`,
-  `FlextTargetLdifSettings`, `FlextTargetLdifTypes` (+1 more)
+  `FlextTargetLdifSettings`, `FlextTargetLdifTypes` (+3 more)
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
 - Public symbol exports: `FlextTargetLdifCli`, `FlextTargetLdifConfig`,
   `FlextTargetLdifConstants`, `FlextTargetLdifModels`,
   `FlextTargetLdifProtocols`, `FlextTargetLdifService`,
   `FlextTargetLdifSettings`, `FlextTargetLdifTypes`, `FlextTargetLdifUtilities`,
-  `config` (+3 more)
+  `FlextTargetLdifWriter` (+5 more)
 - Exported module shortcuts: _none_
-- Generated module pages: `0`
+- Generated module pages: `9`
 
 ## Next Pages
 

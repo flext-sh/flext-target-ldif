@@ -1,4 +1,4 @@
 version: 1
-workspace: flext-target-ldif
-database: flext-target-ldif
-issue_prefix: flext-target-ldif
+workspace: flext
+database: flext
+issue_prefix: flext
