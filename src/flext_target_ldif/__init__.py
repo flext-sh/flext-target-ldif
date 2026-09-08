@@ -20,8 +20,6 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from typing import TYPE_CHECKING, Final
-
     from flext_ldif import FlextLdifConstants, d, e, h, r, s, x
 
     from ._config import FlextTargetLdifConfig, config
@@ -36,8 +34,6 @@ if TYPE_CHECKING:
     from .utilities import FlextTargetLdifUtilities, FlextTargetLdifUtilities as u
     from .writer import FlextTargetLdifWriter
 __all__: tuple[str, ...] = (
-    "TYPE_CHECKING",
-    "Final",
     "FlextLdifConstants",
     "FlextTargetLdifCli",
     "FlextTargetLdifConfig",
@@ -90,7 +86,6 @@ _LAZY_IMPORTS = MappingProxyType(
             ".utilities": ("FlextTargetLdifUtilities", "u"),
             ".writer": ("FlextTargetLdifWriter",),
             "flext_ldif": ("FlextLdifConstants", "d", "e", "h", "r", "s", "x"),
-            "typing": ("Final", "TYPE_CHECKING"),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,

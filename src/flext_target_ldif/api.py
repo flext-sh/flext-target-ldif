@@ -15,7 +15,8 @@ from flext_meltano.services.consumer_bases.target_service_base import (
     FlextMeltanoTargetServiceBase,
 )
 from flext_target_ldif import p, t, u
-from flext_target_ldif._utilities.service_runtime import FlextTargetLdifServiceRuntime
+
+from ._utilities.service_runtime import FlextTargetLdifServiceRuntime
 
 
 class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
@@ -36,6 +37,6 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
         )
 
 
-target_ldif = FlextTargetLdifService
+target_ldif: FlextTargetLdifService = FlextTargetLdifService.fetch_global()
 
 __all__: list[str] = ["FlextTargetLdifService", "target_ldif"]
