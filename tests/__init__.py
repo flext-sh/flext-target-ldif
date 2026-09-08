@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from flext_target_ldif import FlextTargetLdifConstants
     from flext_tests import FlextTestsConstants, d, e, h, r, td, tf, tk, tm, tv, x
 
-    from . import unit as unit
+    from . import unit
     from .base import (
         TestsFlextTargetLdifServiceBase,
         TestsFlextTargetLdifServiceBase as s,
