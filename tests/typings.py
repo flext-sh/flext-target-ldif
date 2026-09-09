@@ -11,8 +11,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_target_ldif import FlextTargetLdifTypes
 from flext_tests import FlextTestsTypes
+
+from flext_target_ldif import FlextTargetLdifTypes
 
 
 class TestsFlextTargetLdifTypes(FlextTestsTypes, FlextTargetLdifTypes):

@@ -10,9 +10,10 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Annotated
 
-from flext_core import FlextSettings
 from flext_ldif import FlextLdifModels
 from flext_meltano import m, u
+
+from flext_core import FlextSettings
 from flext_target_ldif import c, p, t
 from flext_target_ldif.writer import FlextTargetLdifWriter
 

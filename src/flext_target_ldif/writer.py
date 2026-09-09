@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Self, TextIO, override
 
 from flext_ldif import ldif
+
 from flext_target_ldif import c, e, p, r, t, u
 from flext_target_ldif.errors import FlextTargetLdifWriterError
 

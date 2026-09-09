@@ -15,10 +15,10 @@ import tempfile
 from pathlib import Path
 
 import pytest
+from flext_tests import tm
 
 from flext_target_ldif.errors import FlextTargetLdifWriterError
 from flext_target_ldif.writer import FlextTargetLdifWriter
-from flext_tests import tm
 from tests import c
 
 
