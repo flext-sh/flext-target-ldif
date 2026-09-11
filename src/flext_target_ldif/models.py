@@ -8,11 +8,12 @@ from __future__ import annotations
 from collections.abc import Mapping
 from pathlib import Path
 from types import MappingProxyType
-from typing import Annotated, override
+from typing import Annotated
 
-from flext_core import FlextSettings
 from flext_ldif import FlextLdifModels
 from flext_meltano import m, u
+
+from flext_core import FlextSettings
 from flext_target_ldif import c, p, t
 from flext_target_ldif.writer import FlextTargetLdifWriter
 
@@ -128,7 +129,6 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             Absorbed from sinks.py into namespace class.
             """
 
-            @override
             def __init__(
                 self,
                 target_config: t.JsonMapping,

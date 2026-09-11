@@ -11,9 +11,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated
 
-from pydantic_settings import SettingsConfigDict
-
 from flext_meltano import FlextMeltanoSettings, m, u
+from pydantic_settings import SettingsConfigDict
 
 
 class FlextTargetLdifSettings(FlextMeltanoSettings):

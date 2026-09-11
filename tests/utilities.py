@@ -11,8 +11,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_target_ldif import FlextTargetLdifUtilities
 from flext_tests import FlextTestsUtilities
+
+from flext_target_ldif import FlextTargetLdifUtilities
 
 
 class TestsFlextTargetLdifUtilities(FlextTestsUtilities, FlextTargetLdifUtilities):
