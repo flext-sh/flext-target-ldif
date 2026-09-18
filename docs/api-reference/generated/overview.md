@@ -9,7 +9,7 @@
 <!-- AUTO-GENERATED — DO NOT EDIT MANUALLY -->
 
 - Package: `flext_target_ldif`
-- Version: `0.12.0rc0`
+- Version: `0.12.0`
 - Description: FLEXT Target LDIF - Singer Target for LDAP Data Interchange Format (LDIF)
   output
 - Doc summary: Flext Target Ldif package.
