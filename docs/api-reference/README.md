@@ -28,8 +28,8 @@ This section is generated from public exports and real docstrings.
 ## Surface Summary
 
 - Primary facades: `FlextTargetLdifCli`, `FlextTargetLdifConfig`,
-  `FlextTargetLdifConstants`, `FlextTargetLdifModels`,
-  `FlextTargetLdifProtocols`, `FlextTargetLdifService` (+5 more)
+  `FlextTargetLdifConstants`, `FlextTargetLdifModels`, `FlextTargetLdifProtocols`,
+  `FlextTargetLdifService` (+5 more)
 - Generated module pages: `9`
 
 Back to [project docs](../index.md).
