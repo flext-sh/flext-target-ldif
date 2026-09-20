@@ -12,13 +12,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Annotated
 
 from flext_meltano import FlextMeltanoSettings, m, u
-from pydantic_settings import SettingsConfigDict
 
 
 class FlextTargetLdifSettings(FlextMeltanoSettings):
     """LDIF target settings; fields under ``settings.TargetLdif.*``."""
 
-    model_config = SettingsConfigDict(
+    model_config = m.SettingsConfigDict(
         env_prefix="FLEXT_TARGET_LDIF_", env_nested_delimiter="__", extra="ignore"
     )
 

@@ -61,7 +61,7 @@ class FlextTargetLdifWriter:
         self._ldif_api = ldif()
         self._records: list[t.JsonMapping] = []
         self._record_count = 0
-        self._ldif_entries: t.SequenceOf[
+        self._ldif_entries: list[
             t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]]
         ] = []
         self._file_handle: TextIO | None = None
