@@ -9,14 +9,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Final
 
-from flext_ldif import FlextLdifConstants
+from flext_ldif import c as _ldif_c
 from flext_meltano import c
 
 if TYPE_CHECKING:
     from flext_meltano import t
 
 
-class FlextTargetLdifConstants(c, FlextLdifConstants):
+class FlextTargetLdifConstants(c, _ldif_c):
     """LDIF target export-specific constants following flext-core patterns."""
 
     class TargetLdif:

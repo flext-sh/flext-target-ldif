@@ -10,15 +10,15 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Annotated
 
-from flext_ldif import FlextLdifModels
+from flext_ldif import m as _ldif_m
 from flext_meltano import m, u
 
-from flext_core import FlextSettings
+from flext_core import FlextSettings as _core_FlextSettings
 from flext_target_ldif import c, p, t
 from flext_target_ldif.writer import FlextTargetLdifWriter
 
 
-class FlextTargetLdifModels(m, FlextLdifModels):
+class FlextTargetLdifModels(m, _ldif_m):
     """Unified models collection for FLEXT Target LDIF following [Project]Models standard.
 
     This class extends FlextMeltanoModels and FlextLdifModels and provides a centralized
@@ -35,7 +35,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
     class TargetLdif:
         """TargetLdif domain model namespace."""
 
-        class LdifFormatOptions(FlextSettings):
+        class LdifFormatOptions(_core_FlextSettings):
             """LDIF format configuration with specification compliance."""
 
             line_length: Annotated[
