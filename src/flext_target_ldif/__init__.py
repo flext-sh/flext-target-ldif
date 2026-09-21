@@ -22,6 +22,7 @@ from .__version__ import (
 if TYPE_CHECKING:
     from flext_ldif import FlextLdifConstants, d, e, h, r, s, x
 
+    from .__version__ import FlextTargetLdifVersion
     from ._config import FlextTargetLdifConfig, config
     from ._settings import FlextTargetLdifSettings, settings
     from .api import FlextTargetLdifService, target_ldif
@@ -30,11 +31,13 @@ if TYPE_CHECKING:
     from .errors import FlextTargetLdifWriterError
     from .models import FlextTargetLdifModels, FlextTargetLdifModels as m
     from .protocols import FlextTargetLdifProtocols, FlextTargetLdifProtocols as p
+    from .target import FlextTargetLdif
     from .typings import FlextTargetLdifTypes, FlextTargetLdifTypes as t
     from .utilities import FlextTargetLdifUtilities, FlextTargetLdifUtilities as u
     from .writer import FlextTargetLdifWriter
 __all__: tuple[str, ...] = (
     "FlextLdifConstants",
+    "FlextTargetLdif",
     "FlextTargetLdifCli",
     "FlextTargetLdifConfig",
     "FlextTargetLdifConstants",
@@ -44,6 +47,7 @@ __all__: tuple[str, ...] = (
     "FlextTargetLdifSettings",
     "FlextTargetLdifTypes",
     "FlextTargetLdifUtilities",
+    "FlextTargetLdifVersion",
     "FlextTargetLdifWriter",
     "FlextTargetLdifWriterError",
     "__author__",
@@ -74,6 +78,7 @@ __all__: tuple[str, ...] = (
 _LAZY_IMPORTS = MappingProxyType(
     build_lazy_import_map(
         MappingProxyType({
+            ".__version__": ("FlextTargetLdifVersion",),
             "._config": ("FlextTargetLdifConfig", "config"),
             "._settings": ("FlextTargetLdifSettings", "settings"),
             ".api": ("FlextTargetLdifService", "target_ldif"),
@@ -82,6 +87,7 @@ _LAZY_IMPORTS = MappingProxyType(
             ".errors": ("FlextTargetLdifWriterError",),
             ".models": ("FlextTargetLdifModels", "m"),
             ".protocols": ("FlextTargetLdifProtocols", "p"),
+            ".target": ("FlextTargetLdif",),
             ".typings": ("FlextTargetLdifTypes", "t"),
             ".utilities": ("FlextTargetLdifUtilities", "u"),
             ".writer": ("FlextTargetLdifWriter",),
