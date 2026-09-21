@@ -10,7 +10,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Self
+from typing import Annotated, Self
 
 from flext_meltano import FlextMeltanoConfig, m
 
@@ -47,7 +47,10 @@ class FlextTargetLdifConfig(FlextSettings, FlextMeltanoConfig):
 
     __hash__ = object.__hash__
 
-    TargetLdif: _TargetLdifNamespace = _TargetLdifNamespace()
+    TargetLdif: Annotated[
+        _TargetLdifNamespace,
+        m.Field(description="Open namespace exposing ``config/*.yaml`` under ``TargetLdif``."),
+    ] = _TargetLdifNamespace()
 
 
 config: FlextTargetLdifConfig = FlextTargetLdifConfig.fetch_global()
