@@ -20,7 +20,9 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_ldif import FlextLdifConstants, d, e, h, r, s, x
+    from flext_ldif import s
+
+    from flext_core import d, e, h, r, x
 
     from .__version__ import FlextTargetLdifVersion
     from ._config import FlextTargetLdifConfig, config
@@ -31,13 +33,10 @@ if TYPE_CHECKING:
     from .errors import FlextTargetLdifWriterError
     from .models import FlextTargetLdifModels, FlextTargetLdifModels as m
     from .protocols import FlextTargetLdifProtocols, FlextTargetLdifProtocols as p
-    from .target import FlextTargetLdif
     from .typings import FlextTargetLdifTypes, FlextTargetLdifTypes as t
     from .utilities import FlextTargetLdifUtilities, FlextTargetLdifUtilities as u
     from .writer import FlextTargetLdifWriter
 __all__: tuple[str, ...] = (
-    "FlextLdifConstants",
-    "FlextTargetLdif",
     "FlextTargetLdifCli",
     "FlextTargetLdifConfig",
     "FlextTargetLdifConstants",
@@ -87,11 +86,11 @@ _LAZY_IMPORTS = MappingProxyType(
             ".errors": ("FlextTargetLdifWriterError",),
             ".models": ("FlextTargetLdifModels", "m"),
             ".protocols": ("FlextTargetLdifProtocols", "p"),
-            ".target": ("FlextTargetLdif",),
             ".typings": ("FlextTargetLdifTypes", "t"),
             ".utilities": ("FlextTargetLdifUtilities", "u"),
             ".writer": ("FlextTargetLdifWriter",),
-            "flext_ldif": ("FlextLdifConstants", "d", "e", "h", "r", "s", "x"),
+            "flext_core": ("d", "e", "h", "r", "x"),
+            "flext_ldif": ("s",),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
