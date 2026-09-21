@@ -20,7 +20,8 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_ldif import d, e, h, r, s, x
+    from flext_core import d, e, h, r, x
+    from flext_ldif import s
 
     from .__version__ import FlextTargetLdifVersion
     from ._config import FlextTargetLdifConfig, config
@@ -35,15 +36,41 @@ if TYPE_CHECKING:
     from .utilities import FlextTargetLdifUtilities, FlextTargetLdifUtilities as u
     from .writer import FlextTargetLdifWriter
 __all__: tuple[str, ...] = (
-    "FlextTargetLdifCli", "FlextTargetLdifConfig", "FlextTargetLdifConstants", "FlextTargetLdifModels",
-    "FlextTargetLdifProtocols", "FlextTargetLdifService", "FlextTargetLdifSettings", "FlextTargetLdifTypes",
-    "FlextTargetLdifUtilities", "FlextTargetLdifVersion", "FlextTargetLdifWriter", "FlextTargetLdifWriterError",
-    "__author__", "__author_email__", "__description__", "__license__",
-    "__title__", "__url__", "__version__", "__version_info__",
-    "c", "config", "d", "e",
-    "h", "m", "main", "p",
-    "r", "s", "settings", "t",
-    "target_ldif", "u", "x",
+    "FlextTargetLdifCli",
+    "FlextTargetLdifConfig",
+    "FlextTargetLdifConstants",
+    "FlextTargetLdifModels",
+    "FlextTargetLdifProtocols",
+    "FlextTargetLdifService",
+    "FlextTargetLdifSettings",
+    "FlextTargetLdifTypes",
+    "FlextTargetLdifUtilities",
+    "FlextTargetLdifVersion",
+    "FlextTargetLdifWriter",
+    "FlextTargetLdifWriterError",
+    "__author__",
+    "__author_email__",
+    "__description__",
+    "__license__",
+    "__title__",
+    "__url__",
+    "__version__",
+    "__version_info__",
+    "c",
+    "config",
+    "d",
+    "e",
+    "h",
+    "m",
+    "main",
+    "p",
+    "r",
+    "s",
+    "settings",
+    "t",
+    "target_ldif",
+    "u",
+    "x",
 )
 
 _LAZY_IMPORTS = MappingProxyType(
@@ -61,7 +88,8 @@ _LAZY_IMPORTS = MappingProxyType(
             ".typings": ("FlextTargetLdifTypes", "t"),
             ".utilities": ("FlextTargetLdifUtilities", "u"),
             ".writer": ("FlextTargetLdifWriter",),
-            "flext_ldif": ("d", "e", "h", "r", "s", "x"),
+            "flext_core": ("d", "e", "h", "r", "x"),
+            "flext_ldif": ("s",),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
