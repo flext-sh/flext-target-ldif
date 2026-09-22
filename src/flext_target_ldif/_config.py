@@ -49,7 +49,9 @@ class FlextTargetLdifConfig(FlextSettings, FlextMeltanoConfig):
 
     TargetLdif: Annotated[
         _TargetLdifNamespace,
-        m.Field(description="Open namespace exposing ``config/*.yaml`` under ``TargetLdif``."),
+        m.Field(
+            description="Open namespace exposing ``config/*.yaml`` under ``TargetLdif``."
+        ),
     ] = _TargetLdifNamespace()
 
 
