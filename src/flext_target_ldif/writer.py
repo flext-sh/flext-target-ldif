@@ -92,8 +92,7 @@ class FlextTargetLdifWriter:
             self._ldif_entries = []
             for record in self._records:
                 entry = self._convert_record_to_entry(record)
-                if entry is not None:
-                    self._ldif_entries.append(entry)
+                self._ldif_entries.append(entry)
             self._write_entries_to_file()
             if self._file_handle is not None:
                 self._file_handle.close()
@@ -139,36 +138,25 @@ class FlextTargetLdifWriter:
 
     def _convert_record_to_entry(
         self, record: t.JsonMapping
-    ) -> t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] | None:
-        """Convert a single record to LDIF entry format."""
+    ) -> t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]]:
+        """Convert a single record to LDIF entry format.
 
-        def _run__convert_record_to_entry() -> (
-            t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] | None
-        ):
-            dn = self.generate_dn(record)
-            attributes: t.MutableJsonMapping = {}
-            for key, value in record.items():
-                if key != "dn":
-                    mapped_key = self.attribute_mapping.get(key, key)
-                    attributes[mapped_key] = value
-            attr_dict: dict[str, t.StrSequence] = {}
-            for key, value in attributes.items():
-                if isinstance(value, list):
-                    attr_dict[key] = [str(v) for v in value]
-                else:
-                    attr_dict[key] = [str(value)]
-            result: t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] = {
-                "dn": dn,
-                "attributes": attr_dict,
-            }
-            return result
-
-        try:
-            return _run__convert_record_to_entry()
-        except (RuntimeError, ValueError, TypeError, FlextTargetLdifWriterError) as e:
-            msg: str = str(e)
-            logger.warning("Skipping invalid record: %s", msg)
-            return None
+        Conversion defects (bad DN field, unmappable attribute) propagate to
+        the caller, which reports them as a typed failure.
+        """
+        dn = self.generate_dn(record)
+        attributes: t.MutableJsonMapping = {}
+        for key, value in record.items():
+            if key != "dn":
+                mapped_key = self.attribute_mapping.get(key, key)
+                attributes[mapped_key] = value
+        attr_dict: dict[str, t.StrSequence] = {}
+        for key, value in attributes.items():
+            if isinstance(value, list):
+                attr_dict[key] = [str(v) for v in value]
+            else:
+                attr_dict[key] = [str(value)]
+        return {"dn": dn, "attributes": attr_dict}
 
     def generate_dn(self, record: t.JsonMapping) -> str:
         """Generate DN from record using template."""
