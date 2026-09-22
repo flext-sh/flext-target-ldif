@@ -456,15 +456,17 @@ class TestsFlextTargetLdifWriter:
             msg = "Test exception"
             raise ValueError(msg)
 
-        def _write_and_raise(w: FlextTargetLdifWriter) -> None:
-            w.write_record({"uid": "jdoe", "cn": "John Doe"})
-            _raise_test_exception()
+        writer_holder: list[FlextTargetLdifWriter] = []
 
-        with (
-            pytest.raises(ValueError, match="Test exception"),
-            FlextTargetLdifWriter(output_file=tmp_path) as writer,
-        ):
-            _write_and_raise(writer)
+        def _write_then_raise() -> None:
+            with FlextTargetLdifWriter(output_file=tmp_path) as ctx_writer:
+                writer_holder.append(ctx_writer)
+                ctx_writer.write_record({"uid": "jdoe", "cn": "John Doe"})
+                _raise_test_exception()
+
+        with pytest.raises(ValueError, match="Test exception"):
+            _write_then_raise()
+        writer = writer_holder[0]
         tm.that(writer.record_count, eq=1)
         tm.that(tmp_path.read_text(encoding="utf-8"), has="uid: jdoe")
         tmp_path.unlink()
