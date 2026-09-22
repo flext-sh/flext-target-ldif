@@ -456,14 +456,15 @@ class TestsFlextTargetLdifWriter:
             msg = "Test exception"
             raise ValueError(msg)
 
-        writer: FlextTargetLdifWriter | None = None
-        with pytest.raises(ValueError, match="Test exception"):
-            with FlextTargetLdifWriter(output_file=tmp_path) as writer:
-                writer.write_record({"uid": "jdoe", "cn": "John Doe"})
-                _raise_test_exception()
-        if writer is None:
-            msg = "Writer was not initialized before the context raised"
-            raise AssertionError(msg)
+        def _write_and_raise(w: FlextTargetLdifWriter) -> None:
+            w.write_record({"uid": "jdoe", "cn": "John Doe"})
+            _raise_test_exception()
+
+        with (
+            pytest.raises(ValueError, match="Test exception"),
+            FlextTargetLdifWriter(output_file=tmp_path) as writer,
+        ):
+            _write_and_raise(writer)
         tm.that(writer.record_count, eq=1)
         tm.that(tmp_path.read_text(encoding="utf-8"), has="uid: jdoe")
         tmp_path.unlink()
