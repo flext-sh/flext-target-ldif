@@ -23,8 +23,7 @@ class FlextTargetLdifConstants(c, _ldif_c):
     """LDIF target export-specific constants following flext-core patterns."""
 
     class TargetLdif(
-        FlextTargetLdifConstantsBase,
-        FlextTargetLdifConstantsValues.TargetLdif,
+        FlextTargetLdifConstantsBase, FlextTargetLdifConstantsValues.TargetLdif
     ):
         """Target LDIF domain constants namespace."""
 
