@@ -20,7 +20,9 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_ldif import d, e, h, r, s, x
+    from flext_ldif import s
+
+    from flext_core import d, e, h, r, x
 
     from .__version__ import FlextTargetLdifVersion
     from ._config import FlextTargetLdifConfig, config
@@ -87,7 +89,8 @@ _LAZY_IMPORTS = MappingProxyType(
             ".typings": ("FlextTargetLdifTypes", "t"),
             ".utilities": ("FlextTargetLdifUtilities", "u"),
             ".writer": ("FlextTargetLdifWriter",),
-            "flext_ldif": ("d", "e", "h", "r", "s", "x"),
+            "flext_core": ("d", "e", "h", "r", "x"),
+            "flext_ldif": ("s",),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
