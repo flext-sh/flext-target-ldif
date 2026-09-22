@@ -50,8 +50,9 @@ src/flext_target_ldif/
 ## Commands
 
 ```bash
-make check PROJECT=flext-target-ldif
-make test PROJECT=flext-target-ldif # tests/unit
+make setup
+make check
+make test
 ```
 
 <!-- AIHUB-AGENTS-SCOPE-LOCAL-END -->

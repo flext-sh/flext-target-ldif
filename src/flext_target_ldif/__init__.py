@@ -20,21 +20,23 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_ldif import s
+    from flext_cli import cli
+    from flext_ldif import ldif
+    from flext_meltano import meltano, s
+    from pydantic_core import from_json, to_json, to_jsonable_python
 
-    from flext_core import d, e, h, r, x
+    from flext_core import core, d, e, h, lazy_attribute, r, x
 
-    from .__version__ import FlextTargetLdifVersion
     from ._config import FlextTargetLdifConfig, config
     from ._settings import FlextTargetLdifSettings, settings
     from .api import FlextTargetLdifService, target_ldif
     from .cli import FlextTargetLdifCli, main
-    from .constants import FlextTargetLdifConstants, FlextTargetLdifConstants as c
+    from .constants import FlextTargetLdifConstants, c
     from .errors import FlextTargetLdifWriterError
-    from .models import FlextTargetLdifModels, FlextTargetLdifModels as m
-    from .protocols import FlextTargetLdifProtocols, FlextTargetLdifProtocols as p
-    from .typings import FlextTargetLdifTypes, FlextTargetLdifTypes as t
-    from .utilities import FlextTargetLdifUtilities, FlextTargetLdifUtilities as u
+    from .models import FlextTargetLdifModels, m
+    from .protocols import FlextTargetLdifProtocols, p
+    from .typings import FlextTargetLdifTypes, t
+    from .utilities import FlextTargetLdifUtilities, u
     from .writer import FlextTargetLdifWriter
 __all__: tuple[str, ...] = (
     "FlextTargetLdifCli",
@@ -46,7 +48,6 @@ __all__: tuple[str, ...] = (
     "FlextTargetLdifSettings",
     "FlextTargetLdifTypes",
     "FlextTargetLdifUtilities",
-    "FlextTargetLdifVersion",
     "FlextTargetLdifWriter",
     "FlextTargetLdifWriterError",
     "__author__",
@@ -58,18 +59,26 @@ __all__: tuple[str, ...] = (
     "__version__",
     "__version_info__",
     "c",
+    "cli",
     "config",
+    "core",
     "d",
     "e",
+    "from_json",
     "h",
+    "lazy_attribute",
+    "ldif",
     "m",
     "main",
+    "meltano",
     "p",
     "r",
     "s",
     "settings",
     "t",
     "target_ldif",
+    "to_json",
+    "to_jsonable_python",
     "u",
     "x",
 )
@@ -77,7 +86,6 @@ __all__: tuple[str, ...] = (
 _LAZY_IMPORTS = MappingProxyType(
     build_lazy_import_map(
         MappingProxyType({
-            ".__version__": ("FlextTargetLdifVersion",),
             "._config": ("FlextTargetLdifConfig", "config"),
             "._settings": ("FlextTargetLdifSettings", "settings"),
             ".api": ("FlextTargetLdifService", "target_ldif"),
@@ -89,8 +97,11 @@ _LAZY_IMPORTS = MappingProxyType(
             ".typings": ("FlextTargetLdifTypes", "t"),
             ".utilities": ("FlextTargetLdifUtilities", "u"),
             ".writer": ("FlextTargetLdifWriter",),
-            "flext_core": ("d", "e", "h", "r", "x"),
-            "flext_ldif": ("s",),
+            "flext_cli": ("cli",),
+            "flext_core": ("core", "d", "e", "h", "lazy_attribute", "r", "x"),
+            "flext_ldif": ("ldif",),
+            "flext_meltano": ("meltano", "s"),
+            "pydantic_core": ("from_json", "to_json", "to_jsonable_python"),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
