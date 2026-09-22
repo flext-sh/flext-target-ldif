@@ -22,12 +22,12 @@
 - Keywords: `data-loading`, `enterprise`, `etl`, `flext`, `singer`, `target`, `typed`
 - Main facades: `FlextTargetLdifCli`, `FlextTargetLdifConfig`,
   `FlextTargetLdifConstants`, `FlextTargetLdifModels`, `FlextTargetLdifProtocols`,
-  `FlextTargetLdifService`, `FlextTargetLdifSettings`, `FlextTargetLdifTypes` (+4 more)
+  `FlextTargetLdifService`, `FlextTargetLdifSettings`, `FlextTargetLdifTypes` (+3 more)
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
 - Public symbol exports: `FlextTargetLdifCli`, `FlextTargetLdifConfig`,
   `FlextTargetLdifConstants`, `FlextTargetLdifModels`, `FlextTargetLdifProtocols`,
   `FlextTargetLdifService`, `FlextTargetLdifSettings`, `FlextTargetLdifTypes`,
-  `FlextTargetLdifUtilities`, `FlextTargetLdifVersion` (+6 more)
+  `FlextTargetLdifUtilities`, `FlextTargetLdifWriter` (+5 more)
 - Exported module shortcuts: _none_
 - Generated module pages: `9`
 
