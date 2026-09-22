@@ -23,7 +23,6 @@ if TYPE_CHECKING:
     from flext_cli import cli
     from flext_ldif import ldif
     from flext_meltano import meltano, s
-    from pydantic_core import from_json, to_json, to_jsonable_python
 
     from flext_core import core, d, e, h, lazy_attribute, r, x
 
@@ -38,6 +37,8 @@ if TYPE_CHECKING:
     from .typings import FlextTargetLdifTypes, t
     from .utilities import FlextTargetLdifUtilities, u
     from .writer import FlextTargetLdifWriter
+
+
 __all__: tuple[str, ...] = (
     "FlextTargetLdifCli",
     "FlextTargetLdifConfig",
@@ -64,7 +65,6 @@ __all__: tuple[str, ...] = (
     "core",
     "d",
     "e",
-    "from_json",
     "h",
     "lazy_attribute",
     "ldif",
@@ -77,8 +77,6 @@ __all__: tuple[str, ...] = (
     "settings",
     "t",
     "target_ldif",
-    "to_json",
-    "to_jsonable_python",
     "u",
     "x",
 )
@@ -101,7 +99,6 @@ _LAZY_IMPORTS = MappingProxyType(
             "flext_core": ("core", "d", "e", "h", "lazy_attribute", "r", "x"),
             "flext_ldif": ("ldif",),
             "flext_meltano": ("meltano", "s"),
-            "pydantic_core": ("from_json", "to_json", "to_jsonable_python"),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
