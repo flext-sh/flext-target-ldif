@@ -1,5 +1,6 @@
 <!-- AUTO-GENERATED FILE — regenerate through `make gen` from the workspace root. -->
-<!-- Source of truth: `<workspace-root>/docs/guides/using-flext-tests.md`; adjust that workspace source, never this member projection. -->
+<!-- Source of truth: `<workspace-root>/docs/guides/using-flext-tests.md`; adjust that
+workspace source, never this member projection. -->
 
 # flext-target-ldif - Using flext-tests
 
@@ -18,7 +19,8 @@
 
 <!-- TOC END -->
 
-<!-- mro-wkii.17.7 (agent: codex) — keep test-toolkit guidance separate from Make/codegen ownership. -->
+<!-- mro-wkii.17.7 (agent: codex) — keep test-toolkit guidance separate from
+Make/codegen ownership. -->
 
 `flext_tests` is the shared test toolkit. It provides fixtures, matchers, file helpers,
 and a test runtime that binds the canonical aliases.
