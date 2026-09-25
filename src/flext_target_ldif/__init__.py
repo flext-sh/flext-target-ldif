@@ -26,12 +26,12 @@ if TYPE_CHECKING:
     from ._settings import FlextTargetLdifSettings, settings
     from .api import FlextTargetLdifService, target_ldif
     from .cli import FlextTargetLdifCli, main
-    from .constants import FlextTargetLdifConstants, c
+    from .constants import FlextTargetLdifConstants, FlextTargetLdifConstants as c
     from .errors import FlextTargetLdifWriterError
-    from .models import FlextTargetLdifModels, m
-    from .protocols import FlextTargetLdifProtocols, p
-    from .typings import FlextTargetLdifTypes, t
-    from .utilities import FlextTargetLdifUtilities, u
+    from .models import FlextTargetLdifModels, FlextTargetLdifModels as m
+    from .protocols import FlextTargetLdifProtocols, FlextTargetLdifProtocols as p
+    from .typings import FlextTargetLdifTypes, FlextTargetLdifTypes as t
+    from .utilities import FlextTargetLdifUtilities, FlextTargetLdifUtilities as u
     from .writer import FlextTargetLdifWriter
 
 

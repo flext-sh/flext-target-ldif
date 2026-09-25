@@ -11,8 +11,8 @@ import base64
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from flext_ldif import u as _ldif_u
-from flext_meltano import u
+from flext_ldif import FlextLdifUtilities
+from flext_meltano import FlextMeltanoUtilities
 
 from flext_target_ldif import c, p, r, t
 
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 
-class FlextTargetLdifUtilities(u, _ldif_u):
+class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     """Single unified utilities class for Singer target LDIF operations."""
 
     class TargetLdif:
