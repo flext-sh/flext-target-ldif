@@ -10,15 +10,15 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Annotated
 
-from flext_ldif import m as _ldif_m
-from flext_meltano import m, u
+from flext_ldif import FlextLdifModels
+from flext_meltano import FlextMeltanoModels, u
 
 from flext_core import FlextSettings as _core_FlextSettings
 from flext_target_ldif import c, p, t
 from flext_target_ldif.writer import FlextTargetLdifWriter
 
 
-class FlextTargetLdifModels(m, _ldif_m):
+class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
     """Unified models collection for FLEXT Target LDIF following [Project]Models standard.
 
     This class extends FlextMeltanoModels and FlextLdifModels and provides a centralized
@@ -70,7 +70,7 @@ class FlextTargetLdifModels(m, _ldif_m):
                 str, u.Field(default="\n", description="Line separator character")
             ]
 
-        class LdifEntry(m.Entity):
+        class LdifEntry(FlextMeltanoModels.Entity):
             """LDIF entry representation with format validation."""
 
             distinguished_name: Annotated[
@@ -93,7 +93,7 @@ class FlextTargetLdifModels(m, _ldif_m):
                 t.StrSequence, u.Field(description="LDAP controls for the entry")
             ] = u.Field(default_factory=tuple)
 
-        class LdifFile(m.Entity):
+        class LdifFile(FlextMeltanoModels.Entity):
             """LDIF file representation with metadata."""
 
             file_path: Annotated[

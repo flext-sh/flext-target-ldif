@@ -12,11 +12,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldif import p
-from flext_meltano import p as meltano_p
+from flext_ldif import FlextLdifProtocols
+from flext_meltano import FlextMeltanoProtocols
 
 
-class FlextTargetLdifProtocols(meltano_p, p):
+class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
     """Singer Target LDIF protocols facade — composes Meltano + LDIF."""
 
 
