@@ -7,121 +7,19 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from pathlib import Path
-from types import MappingProxyType
-from typing import Annotated
 
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels, u
 
-from flext_core import FlextSettings as _core_FlextSettings
 from flext_target_ldif import c, p, t
 from flext_target_ldif.writer import FlextTargetLdifWriter
 
 
 class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
-    """Unified models collection for FLEXT Target LDIF following [Project]Models standard.
-
-    This class extends FlextMeltanoModels and FlextLdifModels and provides a centralized
-    access point for all LDIF target-related model classes, ensuring consistency with
-    the FLEXT ecosystem patterns and enabling reusable model composition across the project.
-
-    Model Categories:
-    - Configuration: LDIF format and export configuration models
-    - Entities: Core LDIF data structures and business entities
-    - Processing: Batch processing and transformation models
-    - Results: Operation results and error context models
-    """
+    """Models composed from Meltano and LDIF via MRO plus the LDIF runtime sink."""
 
     class TargetLdif:
         """TargetLdif domain model namespace."""
-
-        class LdifFormatOptions(_core_FlextSettings):
-            """LDIF format configuration with specification compliance."""
-
-            line_length: Annotated[
-                t.PositiveInt,
-                u.Field(
-                    default=c.TargetLdif.STANDARD_LINE_LENGTH,
-                    description="Maximum LDIF line length",
-                ),
-            ]
-            fold_lines: Annotated[
-                bool,
-                u.Field(default=True, description="Enable line folding for long lines"),
-            ]
-            base64_encode: Annotated[
-                bool,
-                u.Field(
-                    default=False,
-                    description="Force base64 encoding for all attributes",
-                ),
-            ]
-            include_version: Annotated[
-                bool, u.Field(default=True, description="Include LDIF version header")
-            ]
-            encoding: Annotated[
-                str,
-                u.Field(
-                    default=c.DEFAULT_ENCODING,
-                    description="Character encoding for LDIF files",
-                ),
-            ]
-            line_separator: Annotated[
-                str, u.Field(default="\n", description="Line separator character")
-            ]
-
-        class LdifEntry(FlextMeltanoModels.Entity):
-            """LDIF entry representation with format validation."""
-
-            distinguished_name: Annotated[
-                t.NonEmptyStr, u.Field(..., description="LDIF Distinguished Name (DN)")
-            ]
-            attributes: Annotated[
-                t.MappingKV[str, t.StrSequence],
-                u.Field(description="LDIF attributes with values"),
-            ] = u.Field(default_factory=MappingProxyType)
-            object_classes: Annotated[
-                t.StrSequence, u.Field(description="LDAP object classes")
-            ] = u.Field(default_factory=tuple)
-            change_type: Annotated[
-                str | None,
-                u.Field(
-                    None, description="LDIF change type (add, modify, delete, modrdn)"
-                ),
-            ]
-            controls: Annotated[
-                t.StrSequence, u.Field(description="LDAP controls for the entry")
-            ] = u.Field(default_factory=tuple)
-
-        class LdifFile(FlextMeltanoModels.Entity):
-            """LDIF file representation with metadata."""
-
-            file_path: Annotated[
-                t.NonEmptyStr, u.Field(..., description="Path to the LDIF file")
-            ]
-            stream_name: Annotated[
-                t.NonEmptyStr, u.Field(..., description="Singer stream name")
-            ]
-            entries: Annotated[
-                t.SequenceOf[FlextTargetLdifModels.TargetLdif.LdifEntry],
-                u.Field(description="LDIF entries in the file"),
-            ] = u.Field(default_factory=tuple)
-            format_options: Annotated[
-                FlextTargetLdifModels.TargetLdif.LdifFormatOptions,
-                u.Field(..., description="Format options used for the file"),
-            ]
-
-            # File metadata
-            file_size_bytes: Annotated[
-                t.NonNegativeInt, u.Field(default=0, description="File size in bytes")
-            ]
-            entry_count: Annotated[
-                t.NonNegativeInt,
-                u.Field(default=0, description="Number of entries in file"),
-            ]
-            is_compressed: Annotated[
-                bool, u.Field(default=False, description="Whether file is compressed")
-            ]
 
         class Sink:
             """Singer sink for writing records to LDIF format.
@@ -226,11 +124,13 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
             def _get_output_file(self) -> Path:
                 """Get the output file path for this stream."""
                 if self._output_file is None:
-                    output_path_raw = self._config.get("output_path", "./output")
+                    output_path_raw = self._config.get(
+                        "output_path", c.TargetLdif.DEFAULT_OUTPUT_PATH
+                    )
                     output_path_str = (
                         output_path_raw
                         if isinstance(output_path_raw, str)
-                        else "./output"
+                        else c.TargetLdif.DEFAULT_OUTPUT_PATH
                     )
                     output_path = Path(output_path_str)
                     safe_name = "".join(
