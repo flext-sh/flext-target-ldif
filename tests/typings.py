@@ -19,11 +19,8 @@ from flext_target_ldif import FlextTargetLdifTypes
 class TestsFlextTargetLdifTypes(FlextTestsTypes, FlextTargetLdifTypes):
     """Test types for flext-target-ldif extending both test and project types."""
 
-    class TargetLdif:
-        """TargetLdif test namespace."""
-
-        class Tests:
-            """Internal tests declarations."""
+    class Tests(FlextTestsTypes.Tests):
+        """Internal tests declarations."""
 
 
 t = TestsFlextTargetLdifTypes

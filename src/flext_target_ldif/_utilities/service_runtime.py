@@ -28,7 +28,7 @@ class FlextTargetLdifServiceRuntime:
             cls,
             *,
             runtime_sink: FlextTargetLdifModels.TargetLdif.Sink,
-            target: m.Meltano.SingerTargetBase,
+            target: p.Meltano.SingerTargetBase,
             stream_name: str,
             schema: t.MutableMappingKV[str, t.JsonValue],
             key_properties: t.StrSequence,

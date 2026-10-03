@@ -27,6 +27,9 @@ class TestsFlextTargetLdifModels(FlextTestsModels, FlextTargetLdifModels):
     - m.* (production models via alternative alias)
     """
 
+    class Tests(FlextTestsModels.Tests):
+        """Internal tests declarations."""
+
 
 # Short aliases per FLEXT convention
 m = TestsFlextTargetLdifModels
