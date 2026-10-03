@@ -1,0 +1,14 @@
+TargetLdif:
+  output:
+    file: "output.ldif"
+    path: "./output"
+    naming_pattern: "{stream_name}.ldif"
+  dn:
+    template: "uid={uid},ou=users,dc=example,dc=com"
+  formatting:
+    line_length: 78
+    line_wrap_length: 76
+    base64_encode: false
+    include_timestamps: true
+  validation:
+    schema_validation: true

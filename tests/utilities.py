@@ -19,6 +19,9 @@ from flext_target_ldif import FlextTargetLdifUtilities
 class TestsFlextTargetLdifUtilities(FlextTestsUtilities, FlextTargetLdifUtilities):
     """Test utilities for flext-target-ldif extending both test and project utilities."""
 
+    class Tests(FlextTestsUtilities.Tests):
+        """Internal tests declarations."""
+
 
 u = TestsFlextTargetLdifUtilities
 
