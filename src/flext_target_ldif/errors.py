@@ -20,7 +20,7 @@ class FlextTargetLdifWriterError(e.OperationError):
         """Initialize writer error with message and optional details."""
         reason = str(details) if details else ""
         super().__init__(message, reason=reason)
-        self.details = details if details is not None else {}
+        self.details = details if details is not None else dict[str, str]()
 
     @override
     def __str__(self) -> str:

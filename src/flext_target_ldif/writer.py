@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Self, TextIO, override
 
 from flext_ldif import ldif
+
 from flext_target_ldif import c, e, p, r, t, u
 from flext_target_ldif.errors import FlextTargetLdifWriterError
 
@@ -60,7 +61,7 @@ class FlextTargetLdifWriter:
         self._ldif_api = ldif()
         self._records: list[t.JsonMapping] = []
         self._record_count = 0
-        self._ldif_entries: t.SequenceOf[
+        self._ldif_entries: list[
             t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]]
         ] = []
         self._file_handle: TextIO | None = None
@@ -91,8 +92,7 @@ class FlextTargetLdifWriter:
             self._ldif_entries = []
             for record in self._records:
                 entry = self._convert_record_to_entry(record)
-                if entry is not None:
-                    self._ldif_entries.append(entry)
+                self._ldif_entries.append(entry)
             self._write_entries_to_file()
             if self._file_handle is not None:
                 self._file_handle.close()
@@ -120,7 +120,7 @@ class FlextTargetLdifWriter:
         def _run_write_record() -> p.Result[bool]:
             # mro-p68a.9 (codex): validate before opening so rejected records
             # cannot leave an auto-opened output handle behind.
-            self._generate_dn(record)
+            self.generate_dn(record)
             if self._file_handle is None:
                 open_result = self.open()
                 if not open_result.success:
@@ -138,38 +138,27 @@ class FlextTargetLdifWriter:
 
     def _convert_record_to_entry(
         self, record: t.JsonMapping
-    ) -> t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] | None:
-        """Convert a single record to LDIF entry format."""
+    ) -> t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]]:
+        """Convert a single record to LDIF entry format.
 
-        def _run__convert_record_to_entry() -> (
-            t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] | None
-        ):
-            dn = self._generate_dn(record)
-            attributes: t.MutableJsonMapping = {}
-            for key, value in record.items():
-                if key != "dn":
-                    mapped_key = self.attribute_mapping.get(key, key)
-                    attributes[mapped_key] = value
-            attr_dict: dict[str, t.StrSequence] = {}
-            for key, value in attributes.items():
-                if isinstance(value, list):
-                    attr_dict[key] = [str(v) for v in value]
-                else:
-                    attr_dict[key] = [str(value)]
-            result: t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]] = {
-                "dn": dn,
-                "attributes": attr_dict,
-            }
-            return result
+        Conversion defects (bad DN field, unmappable attribute) propagate to
+        the caller, which reports them as a typed failure.
+        """
+        dn = self.generate_dn(record)
+        attributes: t.MutableJsonMapping = {}
+        for key, value in record.items():
+            if key != "dn":
+                mapped_key = self.attribute_mapping.get(key, key)
+                attributes[mapped_key] = value
+        attr_dict: dict[str, t.StrSequence] = {}
+        for key, value in attributes.items():
+            if isinstance(value, list):
+                attr_dict[key] = [str(v) for v in value]
+            else:
+                attr_dict[key] = [str(value)]
+        return {"dn": dn, "attributes": attr_dict}
 
-        try:
-            return _run__convert_record_to_entry()
-        except (RuntimeError, ValueError, TypeError, FlextTargetLdifWriterError) as e:
-            msg: str = str(e)
-            logger.warning("Skipping invalid record: %s", msg)
-            return None
-
-    def _generate_dn(self, record: t.JsonMapping) -> str:
+    def generate_dn(self, record: t.JsonMapping) -> str:
         """Generate DN from record using template."""
         try:
             return self.dn_template.format(**record)
@@ -177,7 +166,7 @@ class FlextTargetLdifWriter:
             msg: str = f"Missing required field for DN generation: {e}"
             raise FlextTargetLdifWriterError(msg) from e
 
-    def _needs_base64_encoding(self, value: str) -> bool:
+    def needs_base64_encoding(self, value: str) -> bool:
         """Check if a value needs base64 encoding."""
         if value and value[0] in {" ", ":"}:
             return True
@@ -187,12 +176,12 @@ class FlextTargetLdifWriter:
             return True
         return "\n" in value or "\r" in value
 
-    def _write_attribute(self, attr_name: str, value: str) -> None:
+    def write_attribute(self, attr_name: str, value: str) -> None:
         """Write an attribute to the file handle."""
         if self._file_handle is None:
             msg = "File handle is not open"
             raise ValueError(msg)
-        if self._needs_base64_encoding(value):
+        if self.needs_base64_encoding(value):
             encoded = base64.b64encode(value.encode(c.DEFAULT_ENCODING)).decode("ascii")
             self._file_handle.write(f"{attr_name}:: {encoded}\n")
         else:
@@ -241,7 +230,7 @@ class FlextTargetLdifWriter:
             else:
                 f.write(f"{attr}: {values}\n")
 
-    def _write_line(self, line: str) -> None:
+    def write_line(self, line: str) -> None:
         """Write a line to the file handle, wrapping if necessary."""
         if self._file_handle is None:
             msg = "File handle is not open"

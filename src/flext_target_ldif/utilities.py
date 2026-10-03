@@ -12,14 +12,15 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 from flext_ldif import FlextLdifUtilities
-from flext_meltano import u
+from flext_meltano import FlextMeltanoUtilities
+
 from flext_target_ldif import c, p, r, t
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
 
-class FlextTargetLdifUtilities(u, FlextLdifUtilities):
+class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     """Single unified utilities class for Singer target LDIF operations."""
 
     class TargetLdif:
@@ -64,7 +65,7 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 try:
                     return _run_build_ldif_dn()
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
-                    return r[str].fail(f"Error building DN: {exc}")
+                    return r[str].fail(f"Error building DN: {exc}", exception=exc)
 
             @staticmethod
             def convert_record_to_ldif_entry(
@@ -113,7 +114,9 @@ class FlextTargetLdifUtilities(u, FlextLdifUtilities):
                 try:
                     return _run_convert_record_to_ldif_entry()
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
-                    return r[str].fail(f"Error converting to LDIF entry: {exc}")
+                    return r[str].fail(
+                        f"Error converting to LDIF entry: {exc}", exception=exc
+                    )
 
             @staticmethod
             def format_ldif_value(value: str) -> str:

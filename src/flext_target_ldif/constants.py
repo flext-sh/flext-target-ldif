@@ -7,31 +7,25 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING
 
 from flext_ldif import FlextLdifConstants
-from flext_meltano import c
+from flext_meltano import FlextMeltanoConstants
+
+from ._constants.base import FlextTargetLdifConstantsBase
+from ._constants.values import FlextTargetLdifConstantsValues
 
 if TYPE_CHECKING:
     from flext_meltano import t
 
 
-class FlextTargetLdifConstants(c, FlextLdifConstants):
+class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """LDIF target export-specific constants following flext-core patterns."""
 
-    class TargetLdif:
+    class TargetLdif(
+        FlextTargetLdifConstantsBase, FlextTargetLdifConstantsValues.TargetLdif
+    ):
         """Target LDIF domain constants namespace."""
-
-        DEFAULT_OUTPUT_FILE: Final[str] = "output.ldif"
-        DEFAULT_OUTPUT_PATH: Final[str] = "./output"
-        DEFAULT_FILE_NAMING_PATTERN: Final[str] = "{stream_name}.ldif"
-        DEFAULT_DN_TEMPLATE: Final[str] = "uid={uid},ou=users,dc=example,dc=com"
-        DEFAULT_LINE_LENGTH: Final[int] = 78
-
-        STANDARD_LINE_LENGTH: Final[int] = 78
-        ASCII_SPACE: Final[int] = 32
-        ASCII_TILDE: Final[int] = 126
-        LDIF_LINE_WRAP_LENGTH: Final[int] = 76
 
 
 c = FlextTargetLdifConstants

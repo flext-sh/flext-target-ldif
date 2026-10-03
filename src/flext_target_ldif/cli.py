@@ -7,12 +7,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from flext_target_ldif import t
 
-from flext_target_ldif.api import FlextTargetLdifService
-
-if TYPE_CHECKING:
-    from flext_target_ldif import t
+from .api import FlextTargetLdifService
 
 
 class FlextTargetLdifCli:

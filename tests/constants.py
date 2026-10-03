@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Final
+from typing import ClassVar
 
 from flext_tests import FlextTestsConstants
 
@@ -18,11 +18,14 @@ from flext_target_ldif import FlextTargetLdifConstants
 class TestsFlextTargetLdifConstants(FlextTestsConstants, FlextTargetLdifConstants):
     """Test constants for flext-target-ldif."""
 
-    class Tests(FlextTestsConstants.Tests):
-        """Target LDIF-specific test constants."""
+    class TargetLdif(FlextTargetLdifConstants.TargetLdif):
+        """Target LDIF domain test constants namespace."""
 
-        EXPECTED_BULK_SIZE: Final[int] = 2
-        EXPECTED_DATA_COUNT: Final[int] = 3
+        class Tests(FlextTestsConstants.Tests):
+            """Target LDIF-specific test constants."""
+
+            EXPECTED_BULK_SIZE: ClassVar[int] = 2
+            EXPECTED_DATA_COUNT: ClassVar[int] = 3
 
 
 c = TestsFlextTargetLdifConstants

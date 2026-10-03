@@ -8,10 +8,10 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_ldif import FlextLdifTypes
-from flext_meltano import t
+from flext_meltano import FlextMeltanoTypes
 
 
-class FlextTargetLdifTypes(t, FlextLdifTypes):
+class FlextTargetLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
     """MRO facade composing Meltano + Ldif type namespaces."""
 
 

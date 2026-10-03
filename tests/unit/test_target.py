@@ -143,50 +143,40 @@ class TestsFlextTargetLdifTarget:
     def test_target_validate_config_success(self) -> None:
         """Test successful settings validation."""
         target = FlextTargetLdif()
-        target._test_config = {
-            "output_file": "test.ldif",
-            "schema_validation": True,
-            "dn_template": "uid={uid},ou=users,dc=example,dc=com",
-            "line_length": 78,
-            "base64_encode": False,
-        }
-        target.validate_config()
+        target.validate_config(
+            config={
+                "output_file": "test.ldif",
+                "schema_validation": True,
+                "dn_template": "uid={uid},ou=users,dc=example,dc=com",
+                "line_length": 78,
+                "base64_encode": False,
+            }
+        )
 
     def test_target_validate_config_missing_output_file(self) -> None:
         """Test settings validation with missing output file."""
         target = FlextTargetLdif()
-        target._test_config = {"schema_validation": True}
-        with pytest.raises(ValueError) as exc_info:
-            target.validate_config()
-        if "Output file is required" not in str(exc_info.value):
-            raise AssertionError(
-                f"Expected {'Output file is required'} in {exc_info.value!s}"
-            )
+        with pytest.raises(ValueError, match="Output file is required"):
+            target.validate_config(config={"schema_validation": True})
 
     def test_target_validate_config_invalid_output_file(self) -> None:
         """Test settings validation with invalid output file."""
         target = FlextTargetLdif()
-        target._test_config = {"output_file": "", "schema_validation": True}
-        with pytest.raises(ValueError) as exc_info:
-            target.validate_config()
-        if "Output file cannot be empty" not in str(exc_info.value):
-            raise AssertionError(
-                f"Expected {'Output file cannot be empty'} in {exc_info.value!s}"
+        with pytest.raises(ValueError, match="Output file cannot be empty"):
+            target.validate_config(
+                config={"output_file": "", "schema_validation": True}
             )
 
     def test_target_validate_config_invalid_dn_template(self) -> None:
         """Test settings validation with invalid DN template."""
         target = FlextTargetLdif()
-        target._test_config = {
-            "output_file": "test.ldif",
-            "dn_template": "",
-            "schema_validation": True,
-        }
-        with pytest.raises(ValueError) as exc_info:
-            target.validate_config()
-        if "DN template cannot be empty" not in str(exc_info.value):
-            raise AssertionError(
-                f"Expected {'DN template cannot be empty'} in {exc_info.value!s}"
+        with pytest.raises(ValueError, match="DN template cannot be empty"):
+            target.validate_config(
+                config={
+                    "output_file": "test.ldif",
+                    "dn_template": "",
+                    "schema_validation": True,
+                }
             )
 
     def test_target_ldif_creation(self) -> None:
@@ -202,7 +192,8 @@ class TestsFlextTargetLdifTarget:
             settings = {"output_path": tmp_dir}
             target = FlextTargetLdif(settings=settings)
             if target.name != "target-ldif":
-                raise AssertionError(f"Expected {'target-ldif'}, got {target.name}")
+                msg = f"Expected {'target-ldif'}, got {target.name}"
+                raise AssertionError(msg)
 
     def test_target_ldif_config_schema(self) -> None:
         """Test target settings schema is properly defined."""
@@ -229,9 +220,8 @@ class TestsFlextTargetLdifTarget:
         """Test target has proper default sink class."""
         target = FlextTargetLdif()
         if target.default_sink_class != FlextTargetLdifModels.TargetLdif.Sink:
-            raise AssertionError(
-                f"Expected {FlextTargetLdifModels.TargetLdif.Sink}, got {target.default_sink_class}"
-            )
+            msg = f"Expected {FlextTargetLdifModels.TargetLdif.Sink}, got {target.default_sink_class}"
+            raise AssertionError(msg)
 
     def test_target_ldif_output_directory_creation(self) -> None:
         """Test target creates output directory."""
@@ -257,9 +247,8 @@ class TestsFlextTargetLdifTarget:
             }
             target = FlextTargetLdif(settings=settings)
             if target.settings["output_path"] != tmp_dir:
-                raise AssertionError(
-                    f"Expected {tmp_dir}, got {target.settings['output_path']}"
-                )
+                msg = f"Expected {tmp_dir}, got {target.settings['output_path']}"
+                raise AssertionError(msg)
             assert (
                 target.settings["dn_template"] == "cn={name},ou=people,dc=test,dc=com"
             )
@@ -292,14 +281,15 @@ class TestsFlextTargetLdifTarget:
         })
         tm.that(settings.TargetLdif.output_file, eq=str(tmp_path))
         target = FlextTargetLdif()
-        target._test_config = {
-            "output_file": str(tmp_path),
-            "schema_validation": True,
-            "dn_template": "uid={uid},ou=users,dc=example,dc=com",
-            "line_length": 78,
-            "base64_encode": False,
-        }
-        target.validate_config()
+        target.validate_config(
+            config={
+                "output_file": str(tmp_path),
+                "schema_validation": True,
+                "dn_template": "uid={uid},ou=users,dc=example,dc=com",
+                "line_length": 78,
+                "base64_encode": False,
+            }
+        )
         tmp_path.unlink()
 
     def test_target_ldif_alias_compatibility(self) -> None:
@@ -336,9 +326,8 @@ class TestsFlextTargetLdifTarget:
         with pytest.raises(c.ValidationError, match="Output file cannot be empty"):
             FlextTargetLdifSettings.model_validate({"TargetLdif": {"output_file": ""}})
         target = FlextTargetLdif()
-        target._test_config = {"output_file": ""}
-        with pytest.raises(ValueError):
-            target.validate_config()
+        with pytest.raises(ValueError, match="Output file cannot be empty"):
+            target.validate_config(config={"output_file": ""})
 
     def test_singer_sdk_compatibility(self) -> None:
         """Test compatibility with Singer SDK patterns."""
@@ -350,9 +339,8 @@ class TestsFlextTargetLdifTarget:
             }
             target = FlextTargetLdif(settings=settings, validate_config=True)
             if target.settings["output_path"] != tmp_dir:
-                raise AssertionError(
-                    f"Expected {tmp_dir}, got {target.settings['output_path']}"
-                )
+                msg = f"Expected {tmp_dir}, got {target.settings['output_path']}"
+                raise AssertionError(msg)
             assert (
                 target.settings["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
             )

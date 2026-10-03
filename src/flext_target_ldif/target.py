@@ -10,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, override
 
-from flext_target_ldif import FlextTargetLdifSettings, m, main as cli_main, p, t
+from flext_target_ldif import FlextTargetLdifSettings, m, main as cli_main, t
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -35,7 +35,6 @@ class FlextTargetLdif:
         # get_sink/validate_config read self._config (was an undefined bare `settings`).
         self._config: t.JsonMapping = {**defaults, **(settings or {})}
         self.sinks: dict[str, m.TargetLdif.Sink] = {}
-        self._test_config: t.JsonMapping | None = None
         if validate_config:
             self.validate_config()
         output_path_raw = self._config.get("output_path", "./output")
@@ -63,12 +62,12 @@ class FlextTargetLdif:
         return FlextTargetLdifSettings.model_json_schema()
 
     @property
-    def default_sink_class(self) -> type[p.TargetLdif.Sink]:
+    def default_sink_class(self) -> type[m.TargetLdif.Sink]:
         """The default sink class for this target."""
-        sink_cls: type[p.TargetLdif.Sink] = m.TargetLdif.Sink
+        sink_cls: type[m.TargetLdif.Sink] = m.TargetLdif.Sink
         return sink_cls
 
-    def get_sink(self, stream_name: str, schema: t.JsonMapping) -> p.TargetLdif.Sink:
+    def get_sink(self, stream_name: str, schema: t.JsonMapping) -> m.TargetLdif.Sink:
         """Get or create a sink for the given stream."""
         if stream_name not in self.sinks:
             self.sinks[stream_name] = m.TargetLdif.Sink(
@@ -76,12 +75,10 @@ class FlextTargetLdif:
             )
         return self.sinks[stream_name]
 
-    def validate_config(self) -> None:
+    def validate_config(self, config: t.JsonMapping | None = None) -> None:
         """Validate the target configuration."""
-        config_dict = (
-            dict(self._test_config) if self._test_config else dict(self._config)
-        )
-        if self._test_config is not None and "output_file" not in config_dict:
+        config_dict = dict(config) if config is not None else dict(self._config)
+        if config is not None and "output_file" not in config_dict:
             msg = "Output file is required"
             raise ValueError(msg)
         allowed_fields: set[str] = {

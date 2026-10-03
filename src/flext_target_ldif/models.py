@@ -8,15 +8,17 @@ from __future__ import annotations
 from collections.abc import Mapping
 from pathlib import Path
 from types import MappingProxyType
-from typing import Annotated, override
+from typing import Annotated
 
-from flext_core import FlextSettings
 from flext_ldif import FlextLdifModels
-from flext_meltano import m, u
-from flext_target_ldif import FlextTargetLdifWriter, c, p, t
+from flext_meltano import FlextMeltanoModels, u
+
+from flext_core import FlextSettings as _core_FlextSettings
+from flext_target_ldif import c, p, t
+from flext_target_ldif.writer import FlextTargetLdifWriter
 
 
-class FlextTargetLdifModels(m, FlextLdifModels):
+class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
     """Unified models collection for FLEXT Target LDIF following [Project]Models standard.
 
     This class extends FlextMeltanoModels and FlextLdifModels and provides a centralized
@@ -33,7 +35,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
     class TargetLdif:
         """TargetLdif domain model namespace."""
 
-        class LdifFormatOptions(FlextSettings):
+        class LdifFormatOptions(_core_FlextSettings):
             """LDIF format configuration with specification compliance."""
 
             line_length: Annotated[
@@ -68,7 +70,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 str, u.Field(default="\n", description="Line separator character")
             ]
 
-        class LdifEntry(m.Entity):
+        class LdifEntry(FlextMeltanoModels.Entity):
             """LDIF entry representation with format validation."""
 
             distinguished_name: Annotated[
@@ -91,7 +93,7 @@ class FlextTargetLdifModels(m, FlextLdifModels):
                 t.StrSequence, u.Field(description="LDAP controls for the entry")
             ] = u.Field(default_factory=tuple)
 
-        class LdifFile(m.Entity):
+        class LdifFile(FlextMeltanoModels.Entity):
             """LDIF file representation with metadata."""
 
             file_path: Annotated[
@@ -127,7 +129,6 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             Absorbed from sinks.py into namespace class.
             """
 
-            @override
             def __init__(
                 self,
                 target_config: t.JsonMapping,
@@ -150,6 +151,13 @@ class FlextTargetLdifModels(m, FlextLdifModels):
             def ldif_writer(self) -> FlextTargetLdifWriter:
                 """The LDIF writer (for testing)."""
                 return self._get_ldif_writer()
+
+            @property
+            def logger(self) -> p.Logger:
+                """Lazy logger for Sink."""
+                if self._logger_instance is None:
+                    self._logger_instance = u.fetch_logger(__name__)
+                return self._logger_instance
 
             def clean_up(self) -> None:
                 """Clean up resources when sink is finished."""
