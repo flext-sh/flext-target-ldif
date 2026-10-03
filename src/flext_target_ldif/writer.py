@@ -1,7 +1,4 @@
-"""LDIF writer for flext-target-ldif using flext-ldif infrastructure.
-
-This module eliminates code duplication by using the FLEXT LDIF infrastructure
-implementation from flext-ldif project.
+"""LDIF writer for flext-target-ldif.
 
 Copyright (c) 2025 Flext. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -12,8 +9,6 @@ from __future__ import annotations
 import base64
 from pathlib import Path
 from typing import TYPE_CHECKING, Self, TextIO, override
-
-from flext_ldif import ldif
 
 from flext_target_ldif import c, e, p, r, t, u
 from flext_target_ldif.errors import FlextTargetLdifWriterError
@@ -42,23 +37,24 @@ class FlextTargetLdifWriter:
         schema: t.MappingKV[str, t.JsonValue | t.StrSequence] | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure."""
-        self.output_file = Path(output_file) if output_file else Path("output.ldif")
+        self.output_file = Path(output_file or c.TargetLdif.DEFAULT_OUTPUT_FILE)
         self.ldif_options = ldif_options or {}
-        self.dn_template = dn_template or "uid={uid},ou=users,dc=example,dc=com"
+        self.dn_template = dn_template or c.TargetLdif.DEFAULT_DN_TEMPLATE
         self.attribute_mapping = attribute_mapping or {}
         self.schema = schema or {}
-        line_length_val = self.ldif_options.get("line_length", 78)
+        line_length_val = self.ldif_options.get(
+            "line_length", c.TargetLdif.DEFAULT_LINE_LENGTH
+        )
         if isinstance(line_length_val, int):
             self.line_length: int = line_length_val
         elif isinstance(line_length_val, (str, float)):
             self.line_length = int(line_length_val)
         else:
-            self.line_length = 78
+            self.line_length = c.TargetLdif.DEFAULT_LINE_LENGTH
         base64_val = self.ldif_options.get("base64_encode", False)
         self.base64_encode: bool = bool(base64_val)
         timestamps_val = self.ldif_options.get("include_timestamps", True)
         self.include_timestamps: bool = bool(timestamps_val)
-        self._ldif_api = ldif()
         self._records: list[t.JsonMapping] = []
         self._record_count = 0
         self._ldif_entries: list[
