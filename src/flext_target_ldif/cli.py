@@ -8,8 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_target_ldif import t
-
-from .api import FlextTargetLdifService
+from flext_target_ldif.api import FlextTargetLdifService
 
 
 class FlextTargetLdifCli:
