@@ -1,38 +1,41 @@
 # AUTO-GENERATED FILE — Regenerate with: make gen
-"""Flext Target Ldif package."""
+"""Flext Target Ldif package.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import build_lazy_import_map, install_lazy_exports
-
-from .__version__ import (
-    __author__ as __author__,
-    __author_email__ as __author_email__,
-    __description__ as __description__,
-    __license__ as __license__,
-    __title__ as __title__,
-    __url__ as __url__,
-    __version__ as __version__,
-    __version_info__ as __version_info__,
+from flext_core import install_lazy_exports
+from flext_target_ldif.__version__ import (
+    __author__,
+    __author_email__,
+    __description__,
+    __license__,
+    __title__,
+    __url__,
+    __version__,
+    __version_info__,
 )
 
 if TYPE_CHECKING:
     from flext_meltano import d, e, h, r, s, x
 
-    from ._config import FlextTargetLdifConfig, config
-    from ._settings import FlextTargetLdifSettings, settings
-    from .api import FlextTargetLdifService, target_ldif
-    from .cli import FlextTargetLdifCli, main
-    from .constants import FlextTargetLdifConstants, FlextTargetLdifConstants as c
-    from .errors import FlextTargetLdifWriterError
-    from .models import FlextTargetLdifModels, FlextTargetLdifModels as m
-    from .protocols import FlextTargetLdifProtocols, FlextTargetLdifProtocols as p
-    from .typings import FlextTargetLdifTypes, FlextTargetLdifTypes as t
-    from .utilities import FlextTargetLdifUtilities, FlextTargetLdifUtilities as u
-    from .writer import FlextTargetLdifWriter
+    from flext_target_ldif._config import FlextTargetLdifConfig, config
+    from flext_target_ldif._settings import FlextTargetLdifSettings, settings
+    from flext_target_ldif.api import FlextTargetLdifService, target_ldif
+    from flext_target_ldif.cli import FlextTargetLdifCli, main
+    from flext_target_ldif.constants import FlextTargetLdifConstants, c
+    from flext_target_ldif.errors import FlextTargetLdifWriterError
+    from flext_target_ldif.models import FlextTargetLdifModels, m
+    from flext_target_ldif.protocols import FlextTargetLdifProtocols, p
+    from flext_target_ldif.typings import FlextTargetLdifTypes, t
+    from flext_target_ldif.utilities import FlextTargetLdifUtilities, u
+    from flext_target_ldif.writer import FlextTargetLdifWriter
 
 
 __all__: tuple[str, ...] = (
@@ -72,25 +75,36 @@ __all__: tuple[str, ...] = (
     "x",
 )
 
-_LAZY_IMPORTS = MappingProxyType(
-    build_lazy_import_map(
-        MappingProxyType({
-            "._config": ("FlextTargetLdifConfig", "config"),
-            "._settings": ("FlextTargetLdifSettings", "settings"),
-            ".api": ("FlextTargetLdifService", "target_ldif"),
-            ".cli": ("FlextTargetLdifCli", "main"),
-            ".constants": ("FlextTargetLdifConstants", "c"),
-            ".errors": ("FlextTargetLdifWriterError",),
-            ".models": ("FlextTargetLdifModels", "m"),
-            ".protocols": ("FlextTargetLdifProtocols", "p"),
-            ".typings": ("FlextTargetLdifTypes", "t"),
-            ".utilities": ("FlextTargetLdifUtilities", "u"),
-            ".writer": ("FlextTargetLdifWriter",),
-            "flext_meltano": ("d", "e", "h", "r", "s", "x"),
-        }),
-        alias_groups=MappingProxyType({}),
-        sort_keys=False,
-    )
+install_lazy_exports(
+    __name__,
+    globals(),
+    MappingProxyType({
+        "FlextTargetLdifCli": ".cli",
+        "FlextTargetLdifConfig": "._config",
+        "FlextTargetLdifConstants": ".constants",
+        "FlextTargetLdifModels": ".models",
+        "FlextTargetLdifProtocols": ".protocols",
+        "FlextTargetLdifService": ".api",
+        "FlextTargetLdifSettings": "._settings",
+        "FlextTargetLdifTypes": ".typings",
+        "FlextTargetLdifUtilities": ".utilities",
+        "FlextTargetLdifWriter": ".writer",
+        "FlextTargetLdifWriterError": ".errors",
+        "c": ".constants",
+        "config": "._config",
+        "d": "flext_meltano",
+        "e": "flext_meltano",
+        "h": "flext_meltano",
+        "m": ".models",
+        "main": ".cli",
+        "p": ".protocols",
+        "r": "flext_meltano",
+        "s": "flext_meltano",
+        "settings": "._settings",
+        "t": ".typings",
+        "target_ldif": ".api",
+        "u": ".utilities",
+        "x": "flext_meltano",
+    }),
+    public_exports=__all__,
 )
-
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)

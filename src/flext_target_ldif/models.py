@@ -1,6 +1,10 @@
 """Models for LDIF target operations.
 
 This module provides data models for LDIF target operations.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+src/flext_target_ldif/models
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
@@ -9,9 +13,9 @@ from collections.abc import Mapping
 from pathlib import Path
 
 from flext_ldif import FlextLdifModels
-from flext_meltano import FlextMeltanoModels, u
+from flext_meltano import FlextMeltanoModels
 
-from flext_target_ldif import c, p, t
+from flext_target_ldif import c, p, t, u
 from flext_target_ldif.writer import FlextTargetLdifWriter
 
 
@@ -63,11 +67,13 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                     result: p.Result[bool] = self._ldif_writer.close()
                     if not result.success:
                         self.logger.error(
-                            "Failed to close LDIF writer", error=result.error or ""
+                            "Failed to close LDIF writer",
+                            error=result.error or "",
                         )
                     else:
                         self.logger.info(
-                            "LDIF file written", output_file=str(self._output_file)
+                            "LDIF file written",
+                            output_file=str(self._output_file),
                         )
 
             def process_batch(self, context: t.JsonMapping) -> None:
@@ -78,9 +84,15 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 self._get_ldif_writer()
 
             def process_record(
-                self, record: t.JsonMapping, context: t.JsonMapping
+                self,
+                record: t.JsonMapping,
+                context: t.JsonMapping,
             ) -> None:
-                """Process a single record and write to LDIF."""
+                """Process a single record and write to LDIF.
+
+                Raises:
+                    RuntimeError: If ``not result.success``.
+                """
                 if context:
                     context_dict = t.json_dict_adapter().validate_python(context)
                     self.logger.debug("Processing LDIF record", context=context_dict)
@@ -91,14 +103,18 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                     raise RuntimeError(msg)
 
             def _get_ldif_writer(self) -> FlextTargetLdifWriter:
-                """Get or create the LDIF writer for this sink."""
+                """Get or create the LDIF writer for this sink.
+
+                Returns:
+                    The resulting ``FlextTargetLdifWriter``.
+                """
                 if self._ldif_writer is None:
                     output_file = self._get_output_file()
                     raw_ldif_options = self._config.get("ldif_options", {})
                     ldif_options: t.JsonMapping = {}
                     if isinstance(raw_ldif_options, Mapping):
                         ldif_options = t.json_mapping_adapter().validate_python(
-                            raw_ldif_options
+                            raw_ldif_options,
                         )
                     raw_dn_template = self._config.get("dn_template")
                     dn_template: str | None = (
@@ -122,10 +138,15 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 return self._ldif_writer
 
             def _get_output_file(self) -> Path:
-                """Get the output file path for this stream."""
+                """Get the output file path for this stream.
+
+                Returns:
+                    The resulting ``Path``.
+                """
                 if self._output_file is None:
                     output_path_raw = self._config.get(
-                        "output_path", c.TargetLdif.DEFAULT_OUTPUT_PATH
+                        "output_path",
+                        c.TargetLdif.DEFAULT_OUTPUT_PATH,
                     )
                     output_path_str = (
                         output_path_raw

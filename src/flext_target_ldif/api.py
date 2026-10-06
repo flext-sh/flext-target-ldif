@@ -26,12 +26,20 @@ class FlextTargetLdifService(meltano.Target):
 
     @override
     def create_sink(
-        self, stream_name: str, schema: t.JsonMapping
+        self,
+        stream_name: str,
+        schema: t.JsonMapping,
     ) -> p.Meltano.SingerDrainSink:
-        """Create an LDIF sink for a stream."""
+        """Create an LDIF sink for a stream.
+
+        Returns:
+            The resulting ``p.Meltano.SingerDrainSink``.
+        """
         target_config: t.ScalarMapping = self.settings_overrides or {}
         return FlextTargetLdifServiceRuntime.create_sink(
-            stream_name=stream_name, schema=schema, target_config=target_config
+            stream_name=stream_name,
+            schema=schema,
+            target_config=target_config,
         )
 
 
