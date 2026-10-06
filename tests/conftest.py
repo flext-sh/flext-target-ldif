@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def isolate_working_directory(tmp_path: Path) -> Generator[None]:
     """Run every test from a temporary working directory.
 

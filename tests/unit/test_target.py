@@ -18,6 +18,7 @@ from flext_target_ldif.target import FlextTargetLdif
 from tests import c
 
 
+@pytest.mark.usefixtures("isolate_working_directory")
 class TestsFlextTargetLdifTarget:
     """Test FlextTargetLdifSettings value object."""
 
@@ -109,40 +110,6 @@ class TestsFlextTargetLdifTarget:
     # LDIF files under tmp_path; the old test patched __init__ and asserted nothing
     # about behavior, which the workspace no-mock rule forbids.
     @staticmethod
-    def test_end_to_end_sink_writes_real_ldif_file(tmp_path: Path) -> None:
-        """A record through the public sink lands as a real LDIF file on disk."""
-        target = FlextTargetLdif(settings={"output_path": str(tmp_path)})
-        sink = target.get_sink("users", schema={"type": "object", "properties": {}})
-        sink.process_record(
-            {"uid": "jdoe", "cn": "John Doe", "mail": "jdoe@example.com"},
-            {},
-        )
-        tm.that(sink.ldif_writer.record_count, eq=1)
-        sink.clean_up()
-        content = (tmp_path / "users.ldif").read_text(encoding="utf-8")
-        assert content.startswith("version: 1\n")
-        tm.that(content, has="dn: uid=jdoe,ou=users,dc=example,dc=com\n")
-        tm.that(content, has="cn: John Doe\n")
-        tm.that(content, has="mail: jdoe@example.com\n")
-
-    @staticmethod
-    def test_end_to_end_attribute_mapping_is_applied(tmp_path: Path) -> None:
-        """Attribute mapping from settings renames attributes in the real output."""
-        target = FlextTargetLdif(
-            settings={
-                "output_path": str(tmp_path),
-                "attribute_mapping": {"email": "mail"},
-            },
-        )
-        sink = target.get_sink("people", schema={"type": "object", "properties": {}})
-        sink.process_record({"uid": "jsmith", "email": "jsmith@example.com"}, {})
-        sink.clean_up()
-        content = (tmp_path / "people.ldif").read_text(encoding="utf-8")
-        tm.that(content, has="dn: uid=jsmith,ou=users,dc=example,dc=com\n")
-        tm.that(content, has="mail: jsmith@example.com\n")
-        tm.that(content, lacks="email:")
-
-    @staticmethod
     def test_target_initialization_exposes_real_state(tmp_path: Path) -> None:
         """Real initialization creates the output directory and merges defaults."""
         target = FlextTargetLdif(settings={"output_path": str(tmp_path)})
@@ -195,6 +162,45 @@ class TestsFlextTargetLdifTarget:
                     "schema_validation": True,
                 },
             )
+
+
+@pytest.mark.usefixtures("isolate_working_directory")
+class TestsFlextTargetLdifTargetLifecycle:
+    """Lifecycle, CLI, and end-to-end behavior tests for the LDIF target."""
+
+    @staticmethod
+    def test_end_to_end_sink_writes_real_ldif_file(tmp_path: Path) -> None:
+        """A record through the public sink lands as a real LDIF file on disk."""
+        target = FlextTargetLdif(settings={"output_path": str(tmp_path)})
+        sink = target.get_sink("users", schema={"type": "object", "properties": {}})
+        sink.process_record(
+            {"uid": "jdoe", "cn": "John Doe", "mail": "jdoe@example.com"},
+            {},
+        )
+        tm.that(sink.ldif_writer.record_count, eq=1)
+        sink.clean_up()
+        content = (tmp_path / "users.ldif").read_text(encoding="utf-8")
+        assert content.startswith("version: 1\n")
+        tm.that(content, has="dn: uid=jdoe,ou=users,dc=example,dc=com\n")
+        tm.that(content, has="cn: John Doe\n")
+        tm.that(content, has="mail: jdoe@example.com\n")
+
+    @staticmethod
+    def test_end_to_end_attribute_mapping_is_applied(tmp_path: Path) -> None:
+        """Attribute mapping from settings renames attributes in the real output."""
+        target = FlextTargetLdif(
+            settings={
+                "output_path": str(tmp_path),
+                "attribute_mapping": {"email": "mail"},
+            },
+        )
+        sink = target.get_sink("people", schema={"type": "object", "properties": {}})
+        sink.process_record({"uid": "jsmith", "email": "jsmith@example.com"}, {})
+        sink.clean_up()
+        content = (tmp_path / "people.ldif").read_text(encoding="utf-8")
+        tm.that(content, has="dn: uid=jsmith,ou=users,dc=example,dc=com\n")
+        tm.that(content, has="mail: jsmith@example.com\n")
+        tm.that(content, lacks="email:")
 
     @staticmethod
     def test_target_ldif_creation() -> None:
@@ -249,7 +255,8 @@ class TestsFlextTargetLdifTarget:
         """
         target = FlextTargetLdif()
         if target.default_sink_class != FlextTargetLdifModels.TargetLdif.Sink:
-            msg = f"Expected {FlextTargetLdifModels.TargetLdif.Sink}, got {target.default_sink_class}"
+            expected = FlextTargetLdifModels.TargetLdif.Sink
+            msg = f"Expected {expected}, got {target.default_sink_class}"
             raise AssertionError(msg)
 
     @staticmethod
