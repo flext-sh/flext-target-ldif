@@ -44,5 +44,6 @@ class FlextTargetLdifService(meltano.Target):
 
 
 target_ldif: FlextTargetLdifService = FlextTargetLdifService.fetch_global()
+"""Shared FlextTargetLdifService facade instance."""
 
 __all__: list[str] = ["FlextTargetLdifService", "target_ldif"]
