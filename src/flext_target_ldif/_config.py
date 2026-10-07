@@ -47,12 +47,17 @@ class FlextTargetLdifConfig(FlextMeltanoConfig):
     TargetLdif: Annotated[
         _TargetLdifNamespace,
         m.Field(
-            description="Open namespace exposing ``config/*.yaml`` under ``TargetLdif``.",
+            description=(
+                "Open namespace exposing ``config/*.yaml`` under ``TargetLdif``."
+            ),
         ),
     ] = _TargetLdifNamespace()
 
 
 config: FlextTargetLdifConfig = FlextTargetLdifConfig.fetch_global()
-"""Pre-instantiated frozen config singleton — ``from flext_target_ldif import config``."""
+"""Pre-instantiated frozen config singleton.
+
+Exposed as ``from flext_target_ldif import config``.
+"""
 
 __all__: list[str] = ["FlextTargetLdifConfig", "config"]
