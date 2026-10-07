@@ -39,7 +39,8 @@ class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
                 key_properties: t.StrSequence | None = None,
             ) -> None:
                 """Initialize the LDIF sink."""
-                # NOTE (multi-agent): mro-rn88 — retain target_config; writer/output methods
+                # NOTE (multi-agent): mro-rn88 — retain target_config; writer/output
+                # methods
                 # read self._config.get(...) (was an undefined bare `settings`).
                 self._config = target_config
                 self.stream_name = stream_name

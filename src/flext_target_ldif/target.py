@@ -110,6 +110,7 @@ class FlextTargetLdif:
         }
         if "output_file" not in filtered_config:
             filtered_config["output_file"] = "output.ldif"
-        # NOTE (multi-agent): mro-rn88 — wrap under the TargetLdif namespace so the domain
+        # NOTE (multi-agent): mro-rn88 — wrap under the TargetLdif namespace so the
+        # domain
         # validator runs (a flat dict is dropped by extra="ignore").
         FlextTargetLdifSettings.model_validate({"TargetLdif": filtered_config})

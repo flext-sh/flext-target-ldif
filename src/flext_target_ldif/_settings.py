@@ -114,6 +114,9 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
 
 
 settings: FlextTargetLdifSettings = FlextTargetLdifSettings.fetch_global()
-"""Pre-instantiated project settings singleton — ``from flext_target_ldif import settings``."""
+"""Pre-instantiated project settings singleton.
+
+Exposed as ``from flext_target_ldif import settings``.
+"""
 
 __all__: list[str] = ["FlextTargetLdifSettings", "settings"]
