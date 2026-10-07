@@ -1,4 +1,4 @@
-# flext-target-ldif Public API
+# flext_target_ldif.target
 
 <!-- TOC START -->
 
@@ -6,7 +6,7 @@
 
 <!-- AUTO-GENERATED — DO NOT EDIT MANUALLY -->
 
-::: flext_target_ldif
+::: flext_target_ldif.target
 
     options:
       show_root_heading: true

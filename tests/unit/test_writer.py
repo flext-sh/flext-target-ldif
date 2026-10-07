@@ -25,8 +25,14 @@ from tests import c
 class TestsFlextTargetLdifWriter:
     """Test FlextTargetLdifWriter initialization."""
 
-    def test_init_with_defaults(self) -> None:
-        """Test initialization with default values."""
+    @staticmethod
+    def test_init_with_defaults() -> None:
+        """Test initialization with default values.
+
+        Raises:
+            AssertionError: If Expected; or if Expected {}, got; or if Expected False,
+                got; or if Expected True, got.
+        """
         writer = FlextTargetLdifWriter()
         if writer.output_file != Path("output.ldif"):
             msg = f"Expected {Path('output.ldif')}, got {writer.output_file}"
@@ -47,8 +53,14 @@ class TestsFlextTargetLdifWriter:
             msg = f"Expected True, got {writer.include_timestamps}"
             raise AssertionError(msg)
 
-    def test_init_with_custom_values(self) -> None:
-        """Test initialization with custom values."""
+    @staticmethod
+    def test_init_with_custom_values() -> None:
+        """Test initialization with custom values.
+
+        Raises:
+            AssertionError: If Expected; or if Expected True, got; or if Expected False,
+                got.
+        """
         with tempfile.TemporaryDirectory() as temp_dir:
             output_file = Path(temp_dir) / "custom.ldif"
             ldif_options = {
@@ -85,8 +97,13 @@ class TestsFlextTargetLdifWriter:
                 msg = f"Expected False, got {writer.include_timestamps}"
                 raise AssertionError(msg)
 
-    def test_init_with_string_path(self) -> None:
-        """Test initialization with string path."""
+    @staticmethod
+    def test_init_with_string_path() -> None:
+        """Test initialization with string path.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.TemporaryDirectory() as temp_dir:
             test_file = f"{temp_dir}/test.ldif"
             writer = FlextTargetLdifWriter(output_file=test_file)
@@ -94,10 +111,13 @@ class TestsFlextTargetLdifWriter:
                 msg = f"Expected {Path(test_file)}, got {writer.output_file}"
                 raise AssertionError(msg)
 
-    def test_open_success(self) -> None:
+    @staticmethod
+    def test_open_success() -> None:
         """Test successful file opening."""
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w", delete=False
+            encoding="utf-8",
+            mode="w",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
@@ -107,8 +127,13 @@ class TestsFlextTargetLdifWriter:
         tm.ok(close_result)
         tmp_path.unlink()
 
-    def test_open_failure(self) -> None:
-        """Test file opening failure."""
+    @staticmethod
+    def test_open_failure() -> None:
+        """Test file opening failure.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         invalid_path = Path("/nonexistent/directory/test.ldif")
         writer = FlextTargetLdifWriter(output_file=invalid_path)
         result = writer.open()
@@ -117,10 +142,13 @@ class TestsFlextTargetLdifWriter:
             msg = f"Expected {'Failed to open LDIF file'} in {result.error}"
             raise AssertionError(msg)
 
-    def test_close_success(self) -> None:
+    @staticmethod
+    def test_close_success() -> None:
         """Test successful file closing."""
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w", delete=False
+            encoding="utf-8",
+            mode="w",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
@@ -129,7 +157,8 @@ class TestsFlextTargetLdifWriter:
         tm.ok(result)
         tmp_path.unlink()
 
-    def test_close_when_not_open(self) -> None:
+    @staticmethod
+    def test_close_when_not_open() -> None:
         """Test closing when file is not open."""
         writer = FlextTargetLdifWriter()
         result = writer.close()
@@ -138,10 +167,15 @@ class TestsFlextTargetLdifWriter:
     # NOTE (multi-agent): no-mock rewrite — close() failure is exercised through a
     # REAL filesystem failure (output directory made unwritable) instead of the old
     # patched pathlib.Path.open returning a Mock whose close() raised.
+    @staticmethod
     def test_close_failure_when_output_directory_unwritable(
-        self, tmp_path: Path
+        tmp_path: Path,
     ) -> None:
-        """close() reports failure when the output directory is not writable."""
+        """close() reports failure when the output directory is not writable.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         readonly_dir = tmp_path / "readonly"
         readonly_dir.mkdir()
         writer = FlextTargetLdifWriter(output_file=readonly_dir / "out.ldif")
@@ -155,10 +189,17 @@ class TestsFlextTargetLdifWriter:
             msg = f"Expected {'Failed to close LDIF file'} in {result.error}"
             raise AssertionError(msg)
 
-    def test_write_simple_record(self) -> None:
-        """Test writing a simple record."""
+    @staticmethod
+    def test_write_simple_record() -> None:
+        """Test writing a simple record.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
@@ -183,15 +224,23 @@ class TestsFlextTargetLdifWriter:
             raise AssertionError(msg)
         tmp_path.unlink()
 
-    def test_write_record_with_attribute_mapping(self) -> None:
-        """Test writing record with attribute mapping."""
+    @staticmethod
+    def test_write_record_with_attribute_mapping() -> None:
+        """Test writing record with attribute mapping.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         attribute_mapping = {"email": "mail", "name": "cn"}
         writer = FlextTargetLdifWriter(
-            output_file=tmp_path, attribute_mapping=attribute_mapping
+            output_file=tmp_path,
+            attribute_mapping=attribute_mapping,
         )
         record = {"uid": "jdoe", "name": "John Doe", "email": "john@example.com"}
         writer.write_record(record)
@@ -203,10 +252,13 @@ class TestsFlextTargetLdifWriter:
         tm.that(content, has="mail: john@example.com")
         tmp_path.unlink()
 
-    def test_write_record_auto_open(self) -> None:
+    @staticmethod
+    def test_write_record_auto_open() -> None:
         """Test that write_record automatically opens file if not open."""
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
@@ -218,10 +270,15 @@ class TestsFlextTargetLdifWriter:
         writer.close()
         tmp_path.unlink()
 
-    def test_write_record_missing_dn_field(self) -> None:
-        """Test writing record with missing DN field."""
+    @staticmethod
+    def test_write_record_missing_dn_field() -> None:
+        """Test writing record with missing DN field.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         writer = FlextTargetLdifWriter(
-            dn_template="uid={uid},ou=users,dc=example,dc=com"
+            dn_template="uid={uid},ou=users,dc=example,dc=com",
         )
         record = {"cn": "John Doe", "mail": "john@example.com"}
         result = writer.write_record(record)
@@ -230,10 +287,17 @@ class TestsFlextTargetLdifWriter:
             msg = f"Expected {'Failed to write record'} in {result.error}"
             raise AssertionError(msg)
 
-    def test_write_multiple_records(self) -> None:
-        """Test writing multiple records."""
+    @staticmethod
+    def test_write_multiple_records() -> None:
+        """Test writing multiple records.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
@@ -259,38 +323,50 @@ class TestsFlextTargetLdifWriter:
             raise AssertionError(msg)
         tmp_path.unlink()
 
-    def testneeds_base64_encoding_space_start(self) -> None:
+    @staticmethod
+    def testneeds_base64_encoding_space_start() -> None:
         """Test detection of values that start with space."""
         writer = FlextTargetLdifWriter()
         assert writer.needs_base64_encoding(" starts with space")
 
-    def testneeds_base64_encoding_colon_start(self) -> None:
+    @staticmethod
+    def testneeds_base64_encoding_colon_start() -> None:
         """Test detection of values that start with colon."""
         writer = FlextTargetLdifWriter()
         assert writer.needs_base64_encoding(":starts with colon")
 
-    def testneeds_base64_encoding_non_ascii(self) -> None:
+    @staticmethod
+    def testneeds_base64_encoding_non_ascii() -> None:
         """Test detection of non-ASCII values."""
         writer = FlextTargetLdifWriter()
         assert writer.needs_base64_encoding("José")
         assert writer.needs_base64_encoding("中文")
 
-    def testneeds_base64_encoding_newlines(self) -> None:
+    @staticmethod
+    def testneeds_base64_encoding_newlines() -> None:
         """Test detection of values with newlines."""
         writer = FlextTargetLdifWriter()
         assert writer.needs_base64_encoding("line1\nline2")
         assert writer.needs_base64_encoding("line1\rline2")
 
-    def testneeds_base64_encoding_normal_value(self) -> None:
+    @staticmethod
+    def testneeds_base64_encoding_normal_value() -> None:
         """Test normal ASCII values don't need encoding."""
         writer = FlextTargetLdifWriter()
         assert not writer.needs_base64_encoding("normal ascii value")
         assert not writer.needs_base64_encoding("john@example.com")
 
-    def test_write_base64_encoded_attribute(self) -> None:
-        """Test writing base64 encoded attributes."""
+    @staticmethod
+    def test_write_base64_encoded_attribute() -> None:
+        """Test writing base64 encoded attributes.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
@@ -318,14 +394,22 @@ class TestsFlextTargetLdifWriter:
                     raise AssertionError(msg)
         tmp_path.unlink()
 
-    def test_force_base64_encoding(self) -> None:
-        """Test forcing base64 encoding via options."""
+    @staticmethod
+    def test_force_base64_encoding() -> None:
+        """Test forcing base64 encoding via options.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(
-            output_file=tmp_path, ldif_options={"base64_encode": True}
+            output_file=tmp_path,
+            ldif_options={"base64_encode": True},
         )
         record = {"uid": "jdoe", "cn": "John Doe"}
         writer.write_record(record)
@@ -337,10 +421,17 @@ class TestsFlextTargetLdifWriter:
         tm.that(content, has="cn:: ")
         tmp_path.unlink()
 
-    def test_short_line_no_wrapping(self) -> None:
-        """Test short lines are not wrapped."""
+    @staticmethod
+    def test_short_line_no_wrapping() -> None:
+        """Test short lines are not wrapped.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
@@ -354,14 +445,22 @@ class TestsFlextTargetLdifWriter:
             raise AssertionError(msg)
         tmp_path.unlink()
 
-    def test_long_line_wrapping(self) -> None:
-        """Test long lines are properly wrapped."""
+    @staticmethod
+    def test_long_line_wrapping() -> None:
+        """Test long lines are properly wrapped.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(
-            output_file=tmp_path, ldif_options={"line_length": 20}
+            output_file=tmp_path,
+            ldif_options={"line_length": 20},
         )
         writer.open()
         long_line = "this is a very long line that should be wrapped and exceed the 20 character limit"
@@ -384,17 +483,27 @@ class TestsFlextTargetLdifWriter:
                     assert line.startswith(" ")
         tmp_path.unlink()
 
-    def test_custom_line_length(self) -> None:
-        """Test custom line length setting."""
+    @staticmethod
+    def test_custom_line_length() -> None:
+        """Test custom line length setting.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         writer = FlextTargetLdifWriter(ldif_options={"line_length": 100})
         if writer.line_length != 100:
             msg = f"Expected {100}, got {writer.line_length}"
             raise AssertionError(msg)
 
-    def testgenerate_dn_success(self) -> None:
-        """Test successful DN generation."""
+    @staticmethod
+    def testgenerate_dn_success() -> None:
+        """Test successful DN generation.
+
+        Raises:
+            AssertionError: If ``dn != 'uid=jdoe,ou=engineering,dc=example,dc=com'``.
+        """
         writer = FlextTargetLdifWriter(
-            dn_template="uid={uid},ou={department},dc=example,dc=com"
+            dn_template="uid={uid},ou={department},dc=example,dc=com",
         )
         record = {"uid": "jdoe", "department": "engineering"}
         dn = writer.generate_dn(record)
@@ -404,10 +513,15 @@ class TestsFlextTargetLdifWriter:
             )
             raise AssertionError(msg)
 
-    def testgenerate_dn_missing_field(self) -> None:
-        """Test DN generation with missing field."""
+    @staticmethod
+    def testgenerate_dn_missing_field() -> None:
+        """Test DN generation with missing field.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         writer = FlextTargetLdifWriter(
-            dn_template="uid={uid},ou={department},dc=example,dc=com"
+            dn_template="uid={uid},ou={department},dc=example,dc=com",
         )
         record = {"uid": "jdoe"}
         with pytest.raises(FlextTargetLdifWriterError) as exc_info:
@@ -416,8 +530,13 @@ class TestsFlextTargetLdifWriter:
             msg = f"Expected {'Missing required field for DN generation'} in {exc_info.value!s}"
             raise AssertionError(msg)
 
-    def test_custom_dn_template(self) -> None:
-        """Test custom DN template."""
+    @staticmethod
+    def test_custom_dn_template() -> None:
+        """Test custom DN template.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         writer = FlextTargetLdifWriter(dn_template="cn={name},ou=people,dc=test,dc=org")
         record = {"name": "John Doe"}
         dn = writer.generate_dn(record)
@@ -425,10 +544,18 @@ class TestsFlextTargetLdifWriter:
             msg = f"Expected {'cn=John Doe,ou=people,dc=test,dc=org'}, got {dn}"
             raise AssertionError(msg)
 
-    def test_context_manager_usage(self) -> None:
-        """Test using FlextTargetLdifWriter as context manager."""
+    @staticmethod
+    def test_context_manager_usage() -> None:
+        """Test using FlextTargetLdifWriter as context manager.
+
+        Raises:
+            AssertionError: If ``'dn: uid=jdoe,ou=users,dc=example,dc=com' not in
+                content``.
+        """
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         record = {"uid": "jdoe", "cn": "John Doe"}
@@ -445,10 +572,13 @@ class TestsFlextTargetLdifWriter:
             raise AssertionError(msg)
         tmp_path.unlink()
 
-    def test_context_manager_exception_handling(self) -> None:
+    @staticmethod
+    def test_context_manager_exception_handling() -> None:
         """Test context manager properly closes file on exception."""
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
 
@@ -471,14 +601,22 @@ class TestsFlextTargetLdifWriter:
         tm.that(tmp_path.read_text(encoding="utf-8"), has="uid: jdoe")
         tmp_path.unlink()
 
-    def test_header_with_timestamps(self) -> None:
-        """Test header generation with timestamps."""
+    @staticmethod
+    def test_header_with_timestamps() -> None:
+        """Test header generation with timestamps.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(
-            output_file=tmp_path, ldif_options={"include_timestamps": True}
+            output_file=tmp_path,
+            ldif_options={"include_timestamps": True},
         )
         writer.open()
         writer.close()
@@ -489,14 +627,22 @@ class TestsFlextTargetLdifWriter:
         tm.that(content, has="# Generated on:")
         tmp_path.unlink()
 
-    def test_header_without_timestamps(self) -> None:
-        """Test header generation without timestamps."""
+    @staticmethod
+    def test_header_without_timestamps() -> None:
+        """Test header generation without timestamps.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(
-            output_file=tmp_path, ldif_options={"include_timestamps": False}
+            output_file=tmp_path,
+            ldif_options={"include_timestamps": False},
         )
         writer.open()
         writer.close()
@@ -507,10 +653,13 @@ class TestsFlextTargetLdifWriter:
         tm.that(content, lacks="# Generated on:")
         tmp_path.unlink()
 
-    def test_record_count_property(self) -> None:
+    @staticmethod
+    def test_record_count_property() -> None:
         """Test record_count property."""
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)
@@ -522,10 +671,17 @@ class TestsFlextTargetLdifWriter:
         writer.close()
         tmp_path.unlink()
 
-    def test_record_count_after_close(self) -> None:
-        """Test record_count persists after close."""
+    @staticmethod
+    def test_record_count_after_close() -> None:
+        """Test record_count persists after close.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
         ) as tmp:
             tmp_path = Path(tmp.name)
         writer = FlextTargetLdifWriter(output_file=tmp_path)

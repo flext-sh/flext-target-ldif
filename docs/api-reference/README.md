@@ -30,6 +30,6 @@ This section is generated from public exports and real docstrings.
 - Primary facades: `FlextTargetLdifCli`, `FlextTargetLdifConfig`,
   `FlextTargetLdifConstants`, `FlextTargetLdifModels`, `FlextTargetLdifProtocols`,
   `FlextTargetLdifService` (+5 more)
-- Generated module pages: `9`
+- Generated module pages: `10`
 
 Back to [project docs](../index.md).

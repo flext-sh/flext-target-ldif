@@ -1,4 +1,9 @@
-"""Internal runtime helpers for the target-ldif service facade."""
+"""Internal runtime helpers for the target-ldif service facade.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+src/flext_target_ldif/_utilities/service_runtime
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
@@ -33,7 +38,11 @@ class FlextTargetLdifServiceRuntime:
             schema: t.MutableMappingKV[str, t.JsonValue],
             key_properties: t.StrSequence,
         ) -> FlextTargetLdifServiceRuntime.Sink:
-            """Create an adapter sink and attach the LDIF runtime sink."""
+            """Create an adapter sink and attach the LDIF runtime sink.
+
+            Returns:
+                The resulting ``FlextTargetLdifServiceRuntime.Sink``.
+            """
             schema_dict = t.json_dict_adapter().validate_python(schema)
             service_sink = cls(
                 target=target,
@@ -59,9 +68,17 @@ class FlextTargetLdifServiceRuntime:
 
     @classmethod
     def create_sink(
-        cls, *, stream_name: str, schema: t.JsonMapping, target_config: t.ScalarMapping
+        cls,
+        *,
+        stream_name: str,
+        schema: t.JsonMapping,
+        target_config: t.ScalarMapping,
     ) -> p.Meltano.SingerDrainSink:
-        """Create the LDIF runtime sink for the service facade."""
+        """Create the LDIF runtime sink for the service facade.
+
+        Returns:
+            The resulting ``p.Meltano.SingerDrainSink``.
+        """
         normalized_target_config = u.normalize_to_json_mapping(target_config)
         normalized_schema = cls.normalize_schema(schema)
         runtime_sink = FlextTargetLdifModels.TargetLdif.Sink(
@@ -82,7 +99,11 @@ class FlextTargetLdifServiceRuntime:
 
     @staticmethod
     def normalize_schema(source: t.JsonMapping) -> t.MutableMappingKV[str, t.JsonValue]:
-        """Normalize a flat Singer schema to the LDIF runtime contract."""
+        """Normalize a flat Singer schema to the LDIF runtime contract.
+
+        Returns:
+            The resulting ``t.MutableMappingKV[str, t.JsonValue]``.
+        """
         return {
             key: (str(value) if isinstance(value, Path) else value)
             for key, value in source.items()
