@@ -12,8 +12,8 @@ from typing import TYPE_CHECKING
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
-from ._constants.base import FlextTargetLdifConstantsBase
-from ._constants.values import FlextTargetLdifConstantsValues
+from flext_target_ldif._constants.base import FlextTargetLdifConstantsBase
+from flext_target_ldif._constants.values import FlextTargetLdifConstantsValues
 
 if TYPE_CHECKING:
     from flext_meltano import t
@@ -23,7 +23,8 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """LDIF target export-specific constants following flext-core patterns."""
 
     class TargetLdif(
-        FlextTargetLdifConstantsBase, FlextTargetLdifConstantsValues.TargetLdif
+        FlextTargetLdifConstantsBase,
+        FlextTargetLdifConstantsValues.TargetLdif,
     ):
         """Target LDIF domain constants namespace."""
 

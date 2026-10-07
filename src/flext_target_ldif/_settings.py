@@ -18,17 +18,21 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
     """LDIF target settings; fields under ``settings.TargetLdif.*``."""
 
     model_config = m.SettingsConfigDict(
-        env_prefix="FLEXT_TARGET_LDIF_", env_nested_delimiter="__", extra="ignore"
+        env_prefix="FLEXT_TARGET_LDIF_",
+        env_nested_delimiter="__",
+        extra="ignore",
     )
 
     class _TargetLdif(m.BaseModel):
         """Namespaced LDIF target settings."""
 
         output_file: Annotated[
-            str, m.Field(default="output.ldif", description="Output LDIF filename")
+            str,
+            m.Field(default="output.ldif", description="Output LDIF filename"),
         ]
         output_path: Annotated[
-            str, m.Field(default="./output", description="Output directory path")
+            str,
+            m.Field(default="./output", description="Output directory path"),
         ]
         file_naming_pattern: Annotated[
             str,
@@ -47,7 +51,8 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
         attribute_mapping: Annotated[
             dict[str, str],
             m.Field(
-                default_factory=dict, description="Source-to-LDIF attribute mapping"
+                default_factory=dict,
+                description="Source-to-LDIF attribute mapping",
             ),
         ]
         ldif_options: Annotated[
@@ -62,7 +67,8 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
             ),
         ]
         line_length: Annotated[
-            int, m.Field(default=78, ge=1, description="LDIF line wrap length")
+            int,
+            m.Field(default=78, ge=1, description="LDIF line wrap length"),
         ]
         base64_encode: Annotated[
             bool,
@@ -78,7 +84,15 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
 
         @u.model_validator(mode="after")
         def _validate_domain_rules(self) -> FlextTargetLdifSettings._TargetLdif:
-            """Enforce required target configuration invariants at construction."""
+            """Enforce required target configuration invariants at construction.
+
+            Returns:
+                The resulting ``FlextTargetLdifSettings._TargetLdif``.
+
+            Raises:
+                ValueError: If Output file cannot be empty; or if output_path cannot be
+                    empty; or if DN template cannot be empty.
+            """
             if not self.output_file.strip():
                 msg = "Output file cannot be empty"
                 raise ValueError(msg)
@@ -94,7 +108,8 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
         TargetLdif: _TargetLdif
     else:
         TargetLdif: _TargetLdif = m.Field(
-            default_factory=_TargetLdif, description="Namespaced LDIF target settings."
+            default_factory=_TargetLdif,
+            description="Namespaced LDIF target settings.",
         )
 
 

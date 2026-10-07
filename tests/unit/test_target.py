@@ -23,10 +23,11 @@ class TestsFlextTargetLdifTarget:
 
     # NOTE (multi-agent): mro-rn88 — settings project fields are namespaced under
     # TargetLdif.*; domain validation now fires as a model_validator at construction.
-    def test_config_creation_with_defaults(self) -> None:
+    @staticmethod
+    def test_config_creation_with_defaults() -> None:
         """Test creating settings with default values."""
         settings = FlextTargetLdifSettings.model_validate({
-            "TargetLdif": {"output_file": "test.ldif"}
+            "TargetLdif": {"output_file": "test.ldif"},
         })
         target_ldif = settings.TargetLdif
         tm.that(target_ldif.output_file, eq="test.ldif")
@@ -35,7 +36,8 @@ class TestsFlextTargetLdifTarget:
         tm.that(target_ldif.line_length, eq=78)
         assert not target_ldif.base64_encode
 
-    def test_config_creation_with_custom_values(self) -> None:
+    @staticmethod
+    def test_config_creation_with_custom_values() -> None:
         """Test creating settings with custom values."""
         with tempfile.TemporaryDirectory() as temp_dir:
             custom_file = f"{temp_dir}/custom.ldif"
@@ -47,7 +49,7 @@ class TestsFlextTargetLdifTarget:
                     "line_length": 100,
                     "base64_encode": True,
                     "attribute_mapping": {"email": "mail"},
-                }
+                },
             })
             target_ldif = settings.TargetLdif
             tm.that(target_ldif.output_file, eq=custom_file)
@@ -57,42 +59,48 @@ class TestsFlextTargetLdifTarget:
             assert target_ldif.base64_encode
             tm.that(target_ldif.attribute_mapping, eq={"email": "mail"})
 
-    def test_config_validation_empty_output_file(self) -> None:
+    @staticmethod
+    def test_config_validation_empty_output_file() -> None:
         """Empty output file is rejected at construction by the domain validator."""
         with pytest.raises(c.ValidationError, match="Output file cannot be empty"):
             FlextTargetLdifSettings.model_validate({"TargetLdif": {"output_file": ""}})
 
-    def test_config_validation_empty_dn_template(self) -> None:
+    @staticmethod
+    def test_config_validation_empty_dn_template() -> None:
         """Empty DN template is rejected at construction by the domain validator."""
         with pytest.raises(c.ValidationError, match="DN template cannot be empty"):
             FlextTargetLdifSettings.model_validate({
-                "TargetLdif": {"output_file": "test.ldif", "dn_template": ""}
+                "TargetLdif": {"output_file": "test.ldif", "dn_template": ""},
             })
 
-    def test_config_validation_invalid_line_length(self) -> None:
+    @staticmethod
+    def test_config_validation_invalid_line_length() -> None:
         """Test validation with invalid line length."""
         with pytest.raises(c.ValidationError):
             FlextTargetLdifSettings.model_validate({
-                "TargetLdif": {"output_file": "test.ldif", "line_length": 0}
+                "TargetLdif": {"output_file": "test.ldif", "line_length": 0},
             })
 
-    def test_config_validation_valid_config(self) -> None:
+    @staticmethod
+    def test_config_validation_valid_config() -> None:
         """A fully valid namespaced construction is accepted."""
         settings = FlextTargetLdifSettings.model_validate({
             "TargetLdif": {
                 "output_file": "test.ldif",
                 "dn_template": "uid={uid},ou=users,dc=example,dc=com",
                 "line_length": 78,
-            }
+            },
         })
         tm.that(settings.TargetLdif.output_file, eq="test.ldif")
 
-    def test_target_inheritance(self) -> None:
+    @staticmethod
+    def test_target_inheritance() -> None:
         """Test that FlextTargetLdif is properly instantiated."""
         target = FlextTargetLdif()
         tm.that(target, is_=FlextTargetLdif)
 
-    def test_target_creation_with_defaults(self) -> None:
+    @staticmethod
+    def test_target_creation_with_defaults() -> None:
         """Test creating target with default configuration."""
         FlextTargetLdif()
 
@@ -100,12 +108,14 @@ class TestsFlextTargetLdifTarget:
     # (FlextTargetLdif.get_sink → Sink.process_record → Sink.clean_up) against real
     # LDIF files under tmp_path; the old test patched __init__ and asserted nothing
     # about behavior, which the workspace no-mock rule forbids.
-    def test_end_to_end_sink_writes_real_ldif_file(self, tmp_path: Path) -> None:
+    @staticmethod
+    def test_end_to_end_sink_writes_real_ldif_file(tmp_path: Path) -> None:
         """A record through the public sink lands as a real LDIF file on disk."""
         target = FlextTargetLdif(settings={"output_path": str(tmp_path)})
         sink = target.get_sink("users", schema={"type": "object", "properties": {}})
         sink.process_record(
-            {"uid": "jdoe", "cn": "John Doe", "mail": "jdoe@example.com"}, {}
+            {"uid": "jdoe", "cn": "John Doe", "mail": "jdoe@example.com"},
+            {},
         )
         tm.that(sink.ldif_writer.record_count, eq=1)
         sink.clean_up()
@@ -115,13 +125,14 @@ class TestsFlextTargetLdifTarget:
         tm.that(content, has="cn: John Doe\n")
         tm.that(content, has="mail: jdoe@example.com\n")
 
-    def test_end_to_end_attribute_mapping_is_applied(self, tmp_path: Path) -> None:
+    @staticmethod
+    def test_end_to_end_attribute_mapping_is_applied(tmp_path: Path) -> None:
         """Attribute mapping from settings renames attributes in the real output."""
         target = FlextTargetLdif(
             settings={
                 "output_path": str(tmp_path),
                 "attribute_mapping": {"email": "mail"},
-            }
+            },
         )
         sink = target.get_sink("people", schema={"type": "object", "properties": {}})
         sink.process_record({"uid": "jsmith", "email": "jsmith@example.com"}, {})
@@ -131,16 +142,19 @@ class TestsFlextTargetLdifTarget:
         tm.that(content, has="mail: jsmith@example.com\n")
         tm.that(content, lacks="email:")
 
-    def test_target_initialization_exposes_real_state(self, tmp_path: Path) -> None:
+    @staticmethod
+    def test_target_initialization_exposes_real_state(tmp_path: Path) -> None:
         """Real initialization creates the output directory and merges defaults."""
         target = FlextTargetLdif(settings={"output_path": str(tmp_path)})
         tm.that(target.name, eq="target-ldif")
         tm.that(target.settings["output_path"], eq=str(tmp_path))
         tm.that(
-            target.settings["dn_template"], eq="uid={uid},ou=users,dc=example,dc=com"
+            target.settings["dn_template"],
+            eq="uid={uid},ou=users,dc=example,dc=com",
         )
 
-    def test_target_validate_config_success(self) -> None:
+    @staticmethod
+    def test_target_validate_config_success() -> None:
         """Test successful settings validation."""
         target = FlextTargetLdif()
         target.validate_config(
@@ -150,24 +164,27 @@ class TestsFlextTargetLdifTarget:
                 "dn_template": "uid={uid},ou=users,dc=example,dc=com",
                 "line_length": 78,
                 "base64_encode": False,
-            }
+            },
         )
 
-    def test_target_validate_config_missing_output_file(self) -> None:
+    @staticmethod
+    def test_target_validate_config_missing_output_file() -> None:
         """Test settings validation with missing output file."""
         target = FlextTargetLdif()
         with pytest.raises(ValueError, match="Output file is required"):
             target.validate_config(config={"schema_validation": True})
 
-    def test_target_validate_config_invalid_output_file(self) -> None:
+    @staticmethod
+    def test_target_validate_config_invalid_output_file() -> None:
         """Test settings validation with invalid output file."""
         target = FlextTargetLdif()
         with pytest.raises(ValueError, match="Output file cannot be empty"):
             target.validate_config(
-                config={"output_file": "", "schema_validation": True}
+                config={"output_file": "", "schema_validation": True},
             )
 
-    def test_target_validate_config_invalid_dn_template(self) -> None:
+    @staticmethod
+    def test_target_validate_config_invalid_dn_template() -> None:
         """Test settings validation with invalid DN template."""
         target = FlextTargetLdif()
         with pytest.raises(ValueError, match="DN template cannot be empty"):
@@ -176,18 +193,24 @@ class TestsFlextTargetLdifTarget:
                     "output_file": "test.ldif",
                     "dn_template": "",
                     "schema_validation": True,
-                }
+                },
             )
 
-    def test_target_ldif_creation(self) -> None:
+    @staticmethod
+    def test_target_ldif_creation() -> None:
         """Test creating FlextTargetLdif instance."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {"output_path": tmp_dir}
             target = FlextTargetLdif(settings=settings)
             tm.that(target, is_=FlextTargetLdif)
 
-    def test_target_ldif_name_property(self) -> None:
-        """Test target name property."""
+    @staticmethod
+    def test_target_ldif_name_property() -> None:
+        """Test target name property.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {"output_path": tmp_dir}
             target = FlextTargetLdif(settings=settings)
@@ -195,7 +218,8 @@ class TestsFlextTargetLdifTarget:
                 msg = f"Expected {'target-ldif'}, got {target.name}"
                 raise AssertionError(msg)
 
-    def test_target_ldif_config_schema(self) -> None:
+    @staticmethod
+    def test_target_ldif_config_schema() -> None:
         """Test target settings schema is properly defined."""
         target = FlextTargetLdif()
         tm.that(target.config_jsonschema, is_=dict)
@@ -204,26 +228,32 @@ class TestsFlextTargetLdifTarget:
         # re-validated through t.json_mapping_adapter because JsonMapping values are
         # JsonValue unions, so raw chained .get() is not type-safe.
         schema_defs = t.json_mapping_adapter().validate_python(
-            target.config_jsonschema.get("$defs", {})
+            target.config_jsonschema.get("$defs", {}),
         )
         target_ldif_def = t.json_mapping_adapter().validate_python(
-            schema_defs.get("_TargetLdif", {})
+            schema_defs.get("_TargetLdif", {}),
         )
         target_ldif_props = t.json_mapping_adapter().validate_python(
-            target_ldif_def.get("properties", {})
+            target_ldif_def.get("properties", {}),
         )
         tm.that(target_ldif_props, has="output_path")
         tm.that(target_ldif_props, has="file_naming_pattern")
         tm.that(target_ldif_props, has="dn_template")
 
-    def test_target_ldif_default_sink_class(self) -> None:
-        """Test target has proper default sink class."""
+    @staticmethod
+    def test_target_ldif_default_sink_class() -> None:
+        """Test target has proper default sink class.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         target = FlextTargetLdif()
         if target.default_sink_class != FlextTargetLdifModels.TargetLdif.Sink:
             msg = f"Expected {FlextTargetLdifModels.TargetLdif.Sink}, got {target.default_sink_class}"
             raise AssertionError(msg)
 
-    def test_target_ldif_output_directory_creation(self) -> None:
+    @staticmethod
+    def test_target_ldif_output_directory_creation() -> None:
         """Test target creates output directory."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             output_path = Path(tmp_dir) / "new_directory"
@@ -233,13 +263,19 @@ class TestsFlextTargetLdifTarget:
             assert output_path.exists()
             assert output_path.is_dir()
 
-    def test_target_ldif_cli_method(self) -> None:
+    @staticmethod
+    def test_target_ldif_cli_method() -> None:
         """Test CLI method exists."""
         target = FlextTargetLdif()
         assert callable(target.cli)
 
-    def test_target_ldif_config_dict_access(self) -> None:
-        """Test settings t.JsonMapping access."""
+    @staticmethod
+    def test_target_ldif_config_dict_access() -> None:
+        """Test settings t.JsonMapping access.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {
                 "output_path": tmp_dir,
@@ -253,7 +289,8 @@ class TestsFlextTargetLdifTarget:
                 target.settings["dn_template"] == "cn={name},ou=people,dc=test,dc=com"
             )
 
-    def test_target_ldif_default_config_values(self) -> None:
+    @staticmethod
+    def test_target_ldif_default_config_values() -> None:
         """Test default configuration values."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {"output_path": tmp_dir}
@@ -266,10 +303,14 @@ class TestsFlextTargetLdifTarget:
                 target.settings["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
             )
 
-    def test_end_to_end_ldif_generation(self) -> None:
+    @staticmethod
+    def test_end_to_end_ldif_generation() -> None:
         """Test end-to-end LDIF generation."""
         with tempfile.NamedTemporaryFile(
-            encoding="utf-8", mode="w+", delete=False, suffix=".ldif"
+            encoding="utf-8",
+            mode="w+",
+            delete=False,
+            suffix=".ldif",
         ) as tmp:
             tmp_path = Path(tmp.name)
         settings = FlextTargetLdifSettings.model_validate({
@@ -277,7 +318,7 @@ class TestsFlextTargetLdifTarget:
                 "output_file": str(tmp_path),
                 "schema_validation": True,
                 "dn_template": "uid={uid},ou=users,dc=example,dc=com",
-            }
+            },
         })
         tm.that(settings.TargetLdif.output_file, eq=str(tmp_path))
         target = FlextTargetLdif()
@@ -288,11 +329,12 @@ class TestsFlextTargetLdifTarget:
                 "dn_template": "uid={uid},ou=users,dc=example,dc=com",
                 "line_length": 78,
                 "base64_encode": False,
-            }
+            },
         )
         tmp_path.unlink()
 
-    def test_target_ldif_alias_compatibility(self) -> None:
+    @staticmethod
+    def test_target_ldif_alias_compatibility() -> None:
         """Test that FlextTargetLdif maintains compatibility."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {"output_path": tmp_dir}
@@ -301,7 +343,8 @@ class TestsFlextTargetLdifTarget:
             tm.that(original_target, is_=FlextTargetLdif)
             tm.that(target, is_=FlextTargetLdif)
 
-    def test_config_to_dict_conversion(self) -> None:
+    @staticmethod
+    def test_config_to_dict_conversion() -> None:
         """Test settings can be converted to t.JsonMapping for Singer SDK."""
         settings = FlextTargetLdifSettings.model_validate({
             "TargetLdif": {
@@ -311,7 +354,7 @@ class TestsFlextTargetLdifTarget:
                 "line_length": 100,
                 "base64_encode": True,
                 "attribute_mapping": {"email": "mail", "name": "cn"},
-            }
+            },
         })
         config_dict = settings.model_dump()["TargetLdif"]
         tm.that(config_dict["output_file"], eq="test.ldif")
@@ -321,7 +364,8 @@ class TestsFlextTargetLdifTarget:
         assert config_dict["base64_encode"]
         tm.that(config_dict["attribute_mapping"], eq={"email": "mail", "name": "cn"})
 
-    def test_error_handling_integration(self) -> None:
+    @staticmethod
+    def test_error_handling_integration() -> None:
         """Test error handling across the system."""
         with pytest.raises(c.ValidationError, match="Output file cannot be empty"):
             FlextTargetLdifSettings.model_validate({"TargetLdif": {"output_file": ""}})
@@ -329,8 +373,13 @@ class TestsFlextTargetLdifTarget:
         with pytest.raises(ValueError, match="Output file cannot be empty"):
             target.validate_config(config={"output_file": ""})
 
-    def test_singer_sdk_compatibility(self) -> None:
-        """Test compatibility with Singer SDK patterns."""
+    @staticmethod
+    def test_singer_sdk_compatibility() -> None:
+        """Test compatibility with Singer SDK patterns.
+
+        Raises:
+            AssertionError: If Expected.
+        """
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {
                 "output_path": tmp_dir,

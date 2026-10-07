@@ -23,7 +23,9 @@ class FlextTargetLdif:
 
     @override
     def __init__(
-        self, settings: t.JsonMapping | None = None, validate_config: bool = False
+        self,
+        settings: t.JsonMapping | None = None,
+        validate_config: bool = False,
     ) -> None:
         """Initialize the LDIF target."""
         defaults: t.JsonMapping = {
@@ -68,15 +70,25 @@ class FlextTargetLdif:
         return sink_cls
 
     def get_sink(self, stream_name: str, schema: t.JsonMapping) -> m.TargetLdif.Sink:
-        """Get or create a sink for the given stream."""
+        """Get or create a sink for the given stream.
+
+        Returns:
+            The resulting ``m.TargetLdif.Sink``.
+        """
         if stream_name not in self.sinks:
             self.sinks[stream_name] = m.TargetLdif.Sink(
-                target_config=self._config, stream_name=stream_name, schema=schema
+                target_config=self._config,
+                stream_name=stream_name,
+                schema=schema,
             )
         return self.sinks[stream_name]
 
     def validate_config(self, config: t.JsonMapping | None = None) -> None:
-        """Validate the target configuration."""
+        """Validate the target configuration.
+
+        Raises:
+            ValueError: If Output file is required.
+        """
         config_dict = dict(config) if config is not None else dict(self._config)
         if config is not None and "output_file" not in config_dict:
             msg = "Output file is required"
