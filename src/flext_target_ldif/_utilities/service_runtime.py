@@ -10,7 +10,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import override
 
-from flext_target_ldif import FlextTargetLdifModels, c, m, p, t, u
+from flext_target_ldif import c, m, p, t, u
+from flext_target_ldif._utilities.sink import FlextTargetLdifSink
 
 
 class FlextTargetLdifServiceRuntime:
@@ -26,13 +27,13 @@ class FlextTargetLdifServiceRuntime:
 
         name = "target-ldif-sink"
 
-        _runtime_sink: FlextTargetLdifModels.TargetLdif.Sink
+        _runtime_sink: FlextTargetLdifSink
 
         @classmethod
         def create(
             cls,
             *,
-            runtime_sink: FlextTargetLdifModels.TargetLdif.Sink,
+            runtime_sink: FlextTargetLdifSink,
             target: m.Meltano.SingerTargetBase,
             stream_name: str,
             schema: t.MutableMappingKV[str, t.JsonValue],
@@ -81,7 +82,7 @@ class FlextTargetLdifServiceRuntime:
         """
         normalized_target_config = u.normalize_to_json_mapping(target_config)
         normalized_schema = cls.normalize_schema(schema)
-        runtime_sink = FlextTargetLdifModels.TargetLdif.Sink(
+        runtime_sink = FlextTargetLdifSink(
             target_config=normalized_target_config,
             stream_name=stream_name,
             schema=normalized_schema,

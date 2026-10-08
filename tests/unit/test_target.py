@@ -13,7 +13,7 @@ from pathlib import Path
 import pytest
 from flext_tests import tm
 
-from flext_target_ldif import FlextTargetLdifModels, FlextTargetLdifSettings, t
+from flext_target_ldif import FlextTargetLdifSettings, t
 from flext_target_ldif.target import FlextTargetLdif
 from tests import c
 
@@ -106,7 +106,7 @@ class TestsFlextTargetLdifTarget:
         FlextTargetLdif()
 
     # NOTE (multi-agent): no-mock rewrite — these exercise the REAL public flow
-    # (FlextTargetLdif.get_sink → Sink.process_record → Sink.clean_up) against real
+    # (FlextTargetLdif.resolve_sink → Sink.process_record → Sink.clean_up) against real
     # LDIF files under tmp_path; the old test patched __init__ and asserted nothing
     # about behavior, which the workspace no-mock rule forbids.
     @staticmethod
@@ -172,7 +172,7 @@ class TestsFlextTargetLdifTargetLifecycle:
     def test_end_to_end_sink_writes_real_ldif_file(tmp_path: Path) -> None:
         """A record through the public sink lands as a real LDIF file on disk."""
         target = FlextTargetLdif(settings={"output_path": str(tmp_path)})
-        sink = target.get_sink("users", schema={"type": "object", "properties": {}})
+        sink = target.resolve_sink("users", schema={"type": "object", "properties": {}})
         sink.process_record(
             {"uid": "jdoe", "cn": "John Doe", "mail": "jdoe@example.com"},
             {},
@@ -194,7 +194,9 @@ class TestsFlextTargetLdifTargetLifecycle:
                 "attribute_mapping": {"email": "mail"},
             },
         )
-        sink = target.get_sink("people", schema={"type": "object", "properties": {}})
+        sink = target.resolve_sink(
+            "people", schema={"type": "object", "properties": {}}
+        )
         sink.process_record({"uid": "jsmith", "email": "jsmith@example.com"}, {})
         sink.clean_up()
         content = (tmp_path / "people.ldif").read_text(encoding="utf-8")
@@ -248,16 +250,10 @@ class TestsFlextTargetLdifTargetLifecycle:
 
     @staticmethod
     def test_target_ldif_default_sink_class() -> None:
-        """Test target has proper default sink class.
-
-        Raises:
-            AssertionError: If Expected.
-        """
+        """The default sink class is the class of the sinks the target resolves."""
         target = FlextTargetLdif()
-        if target.default_sink_class != FlextTargetLdifModels.TargetLdif.Sink:
-            expected = FlextTargetLdifModels.TargetLdif.Sink
-            msg = f"Expected {expected}, got {target.default_sink_class}"
-            raise AssertionError(msg)
+        sink = target.resolve_sink("users", schema={"type": "object"})
+        tm.that(sink, is_=target.default_sink_class)
 
     @staticmethod
     def test_target_ldif_output_directory_creation() -> None:

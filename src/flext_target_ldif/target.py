@@ -10,7 +10,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, override
 
-from flext_target_ldif import FlextTargetLdifSettings, m, main as cli_main, t
+from flext_target_ldif import FlextTargetLdifSettings, main as cli_main, t
+from flext_target_ldif._utilities.sink import FlextTargetLdifSink
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -34,9 +35,10 @@ class FlextTargetLdif:
             "output_path": "./output",
         }
         # NOTE (multi-agent): mro-rn88 — persist the merged config on the instance so
-        # get_sink/validate_config read self._config (was an undefined bare `settings`).
+        # resolve_sink/validate_config read self._config (was an undefined bare
+        # `settings`).
         self._config: t.JsonMapping = {**defaults, **(settings or {})}
-        self.sinks: dict[str, m.TargetLdif.Sink] = {}
+        self.sinks: dict[str, FlextTargetLdifSink] = {}
         if validate_config:
             self.validate_config()
         output_path_raw = self._config.get("output_path", "./output")
@@ -64,19 +66,21 @@ class FlextTargetLdif:
         return FlextTargetLdifSettings.model_json_schema()
 
     @property
-    def default_sink_class(self) -> type[m.TargetLdif.Sink]:
+    def default_sink_class(self) -> type[FlextTargetLdifSink]:
         """The default sink class for this target."""
-        sink_cls: type[m.TargetLdif.Sink] = m.TargetLdif.Sink
+        sink_cls: type[FlextTargetLdifSink] = FlextTargetLdifSink
         return sink_cls
 
-    def get_sink(self, stream_name: str, schema: t.JsonMapping) -> m.TargetLdif.Sink:
-        """Get or create a sink for the given stream.
+    def resolve_sink(
+        self, stream_name: str, schema: t.JsonMapping
+    ) -> FlextTargetLdifSink:
+        """Resolve the cached sink for the given stream, creating it on first use.
 
         Returns:
-            The resulting ``m.TargetLdif.Sink``.
+            The resulting ``FlextTargetLdifSink``.
         """
         if stream_name not in self.sinks:
-            self.sinks[stream_name] = m.TargetLdif.Sink(
+            self.sinks[stream_name] = FlextTargetLdifSink(
                 target_config=self._config,
                 stream_name=stream_name,
                 schema=schema,
