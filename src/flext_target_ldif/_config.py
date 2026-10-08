@@ -40,9 +40,21 @@ class FlextTargetLdifConfig(FlextMeltanoConfig):
         _ = args, kwargs
         return object.__new__(cls)
 
-    __eq__ = object.__eq__
+    def __eq__(self, other: object) -> bool:
+        """Preserve identity equality for the config namespace holder.
 
-    __hash__ = object.__hash__
+        Returns:
+            Whether the other object is the same instance as this one.
+        """
+        return object.__eq__(self, other)
+
+    def __hash__(self) -> int:
+        """Preserve the identity hash paired with identity equality.
+
+        Returns:
+            The identity hash of the config namespace holder.
+        """
+        return object.__hash__(self)
 
     TargetLdif: Annotated[
         _TargetLdifNamespace,
