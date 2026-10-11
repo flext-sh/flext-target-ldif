@@ -16,11 +16,10 @@ from pathlib import Path
 from typing import Final
 
 import pytest
-from flext_tests import tm
 
 from flext_target_ldif.errors import FlextTargetLdifWriterError
 from flext_target_ldif.writer import FlextTargetLdifWriter
-from tests import c
+from tests import c, tm
 
 EXPECTED_WRAPPED_LINE_LENGTH: Final[int] = 20
 CUSTOM_LINE_LENGTH: Final[int] = 100

@@ -11,11 +11,10 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from flext_tests import tm
 
 from flext_target_ldif import FlextTargetLdifSettings, t
 from flext_target_ldif.target import FlextTargetLdif
-from tests import c
+from tests import c, tm
 
 
 @pytest.mark.usefixtures("isolate_working_directory")
