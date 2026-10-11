@@ -11,13 +11,13 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from flext_meltano import Target
+from flext_meltano import FlextMeltanoTargetServiceBase
 
 from flext_target_ldif import c, p, t, u
 from flext_target_ldif._utilities.service_runtime import FlextTargetLdifServiceRuntime
 
 
-class FlextTargetLdifService(Target):
+class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
     """Orchestrator for target-ldif. All behavior from base via MRO."""
 
     target_name: Annotated[t.NonEmptyStr, u.Field(description="Singer target name")] = (
