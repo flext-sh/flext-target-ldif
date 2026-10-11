@@ -12,9 +12,9 @@ from pathlib import Path
 
 import pytest
 
-from flext_target_ldif import FlextTargetLdifSettings, t
+from flext_target_ldif import FlextTargetLdifSettings
 from flext_target_ldif.target import FlextTargetLdif
-from tests import c, tm
+from tests import c, tm, u
 
 
 @pytest.mark.usefixtures("isolate_working_directory")

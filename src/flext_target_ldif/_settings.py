@@ -26,61 +26,51 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
     class _TargetLdif(m.BaseModel):
         """Namespaced LDIF target settings."""
 
-        output_file: Annotated[
-            str,
-            m.Field(default="output.ldif", description="Output LDIF filename"),
-        ]
-        output_path: Annotated[
-            str,
-            m.Field(default="./output", description="Output directory path"),
-        ]
+        output_file: Annotated[str, m.Field(description="Output LDIF filename")] = (
+            "output.ldif"
+        )
+        output_path: Annotated[str, m.Field(description="Output directory path")] = (
+            "./output"
+        )
         file_naming_pattern: Annotated[
             str,
             m.Field(
-                default="{stream_name}.ldif",
                 description="Pattern for generated filenames",
             ),
-        ]
+        ] = "{stream_name}.ldif"
         dn_template: Annotated[
             str,
             m.Field(
-                default="uid={uid},ou=users,dc=example,dc=com",
                 description="Template used to build entry DN values",
             ),
-        ]
+        ] = "uid={uid},ou=users,dc=example,dc=com"
         attribute_mapping: Annotated[
             dict[str, str],
             m.Field(
-                default_factory=dict,
                 description="Source-to-LDIF attribute mapping",
             ),
-        ]
+        ] = m.Field(default_factory=dict)
         ldif_options: Annotated[
-            dict[str, str],
-            m.Field(default_factory=dict, description="Raw LDIF formatter options"),
-        ]
+            dict[str, str], m.Field(description="Raw LDIF formatter options")
+        ] = m.Field(default_factory=dict)
         schema_validation: Annotated[
             bool,
             m.Field(
-                default=True,
                 description="Enable schema validation for transformed records",
             ),
-        ]
+        ] = True
         line_length: Annotated[
-            int,
-            m.Field(default=78, ge=1, description="LDIF line wrap length"),
-        ]
+            int, m.Field(ge=1, description="LDIF line wrap length")
+        ] = 78
         base64_encode: Annotated[
-            bool,
-            m.Field(default=False, description="Force base64 encoding for all values"),
-        ]
+            bool, m.Field(description="Force base64 encoding for all values")
+        ] = False
         include_timestamps: Annotated[
             bool,
             m.Field(
-                default=True,
                 description="Include timestamp metadata in generated entries",
             ),
-        ]
+        ] = True
 
         @u.model_validator(mode="after")
         def _validate_domain_rules(self) -> FlextTargetLdifSettings._TargetLdif:
