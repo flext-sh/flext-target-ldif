@@ -97,7 +97,7 @@ class FlextTargetLdifSink:
             raw_ldif_options = self._config.get("ldif_options", {})
             ldif_options: t.JsonMapping = {}
             if isinstance(raw_ldif_options, Mapping):
-                ldif_options = t.json_mapping_adapter().validate_python(
+                ldif_options = u.json_mapping_adapter().validate_python(
                     raw_ldif_options,
                 )
             raw_dn_template = self._config.get("dn_template")

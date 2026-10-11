@@ -232,15 +232,15 @@ class TestsFlextTargetLdifTargetLifecycle:
         tm.that(target.config_jsonschema, is_=dict)
         # NOTE (multi-agent): mro-rn88 — project fields live in the nested TargetLdif
         # schema definition ($defs._TargetLdif), not at the top level. Each level is
-        # re-validated through t.json_mapping_adapter because JsonMapping values are
+        # re-validated through u.json_mapping_adapter because JsonMapping values are
         # JsonValue unions, so raw chained .get() is not type-safe.
-        schema_defs = t.json_mapping_adapter().validate_python(
+        schema_defs = u.json_mapping_adapter().validate_python(
             target.config_jsonschema.get("$defs", {}),
         )
-        target_ldif_def = t.json_mapping_adapter().validate_python(
+        target_ldif_def = u.json_mapping_adapter().validate_python(
             schema_defs.get("_TargetLdif", {}),
         )
-        target_ldif_props = t.json_mapping_adapter().validate_python(
+        target_ldif_props = u.json_mapping_adapter().validate_python(
             target_ldif_def.get("properties", {}),
         )
         tm.that(target_ldif_props, has="output_path")
