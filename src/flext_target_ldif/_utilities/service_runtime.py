@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import override
 
 from flext_meltano import u
+
 from flext_target_ldif import c, m, p, t
 from flext_target_ldif._utilities.sink import FlextTargetLdifSink
 
