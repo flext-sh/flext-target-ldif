@@ -11,10 +11,11 @@ from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
 
 from flext_target_ldif._utilities.service_runtime import FlextTargetLdifServiceRuntime
+from flext_target_ldif._utilities.sink import FlextTargetLdifSink
 
 
 class FlextTargetLdifUtilities(
-    FlextMeltanoUtilities, FlextLdifUtilities, FlextTargetLdifServiceRuntime
+    FlextMeltanoUtilities, FlextLdifUtilities, FlextTargetLdifServiceRuntime, FlextTargetLdifSink
 ):
     """Utilities composed from Meltano and LDIF via MRO."""
 
