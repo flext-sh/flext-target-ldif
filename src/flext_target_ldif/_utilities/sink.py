@@ -10,7 +10,8 @@ from __future__ import annotations
 from collections.abc import Mapping
 from pathlib import Path
 
-from flext_target_ldif import c, p, t, u
+from flext_core import u
+from flext_target_ldif import c, p, t
 from flext_target_ldif.writer import FlextTargetLdifWriter
 
 

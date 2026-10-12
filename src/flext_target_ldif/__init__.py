@@ -11,20 +11,22 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports
-from flext_target_ldif.__version__ import (
-    __author__,
-    __author_email__,
-    __description__,
-    __license__,
-    __title__,
-    __url__,
-    __version__,
-    __version_info__,
-)
+from flext_target_ldif.__version__ import __version__
 
 if TYPE_CHECKING:
     from flext_meltano import d, e, h, r, s, x
 
+    from flext_target_ldif import _constants, _utilities
+    from flext_target_ldif.__version__ import (
+        FlextTargetLdifVersion,
+        __author__,
+        __author_email__,
+        __description__,
+        __license__,
+        __title__,
+        __url__,
+        __version_info__,
+    )
     from flext_target_ldif._config import FlextTargetLdifConfig, config
     from flext_target_ldif._settings import FlextTargetLdifSettings, settings
     from flext_target_ldif.api import FlextTargetLdifService, target_ldif
@@ -48,6 +50,7 @@ __all__: tuple[str, ...] = (
     "FlextTargetLdifSettings",
     "FlextTargetLdifTypes",
     "FlextTargetLdifUtilities",
+    "FlextTargetLdifVersion",
     "FlextTargetLdifWriter",
     "FlextTargetLdifWriterError",
     "__author__",
@@ -58,6 +61,8 @@ __all__: tuple[str, ...] = (
     "__url__",
     "__version__",
     "__version_info__",
+    "_constants",
+    "_utilities",
     "c",
     "config",
     "d",
@@ -88,8 +93,18 @@ install_lazy_exports(
         "FlextTargetLdifSettings": "._settings",
         "FlextTargetLdifTypes": ".typings",
         "FlextTargetLdifUtilities": ".utilities",
+        "FlextTargetLdifVersion": ".__version__",
         "FlextTargetLdifWriter": ".writer",
         "FlextTargetLdifWriterError": ".errors",
+        "__author__": ".__version__",
+        "__author_email__": ".__version__",
+        "__description__": ".__version__",
+        "__license__": ".__version__",
+        "__title__": ".__version__",
+        "__url__": ".__version__",
+        "__version_info__": ".__version__",
+        "_constants": "._constants",
+        "_utilities": "._utilities",
         "c": ".constants",
         "config": "._config",
         "d": "flext_meltano",
