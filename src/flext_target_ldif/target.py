@@ -38,7 +38,7 @@ class FlextTargetLdif:
         # resolve_sink/validate_config read self._config (was an undefined bare
         # `settings`).
         self._config: t.JsonMapping = {**defaults, **(settings or {})}
-        self.sinks: dict[str, FlextTargetLdifSink] = {}
+        self.sinks: t.MutableMappingKV[str, FlextTargetLdifSink] = {}
         if validate_config:
             self.validate_config()
         output_path_raw = self._config.get("output_path", "./output")

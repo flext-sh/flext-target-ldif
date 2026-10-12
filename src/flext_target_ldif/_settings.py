@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated
 
-from flext_meltano import FlextMeltanoSettings, m, u
+from flext_meltano import FlextMeltanoSettings, m, t, u
 
 
 class FlextTargetLdifSettings(FlextMeltanoSettings):
@@ -45,13 +45,13 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
             ),
         ] = "uid={uid},ou=users,dc=example,dc=com"
         attribute_mapping: Annotated[
-            dict[str, str],
+            t.StrMapping,
             m.Field(
                 description="Source-to-LDIF attribute mapping",
             ),
         ] = m.Field(default_factory=dict)
         ldif_options: Annotated[
-            dict[str, str], m.Field(description="Raw LDIF formatter options")
+            t.StrMapping, m.Field(description="Raw LDIF formatter options")
         ] = m.Field(default_factory=dict)
         schema_validation: Annotated[
             bool,

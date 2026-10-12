@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import base64
 from pathlib import Path
-from typing import TYPE_CHECKING, Self, TextIO, override
+from typing import TYPE_CHECKING, ClassVar, Self, TextIO, override
 
 from flext_core import u
 from flext_target_ldif import FlextTargetLdifWriterError, c, e, p, r, t
@@ -16,16 +16,14 @@ from flext_target_ldif import FlextTargetLdifWriterError, c, e, p, r, t
 if TYPE_CHECKING:
     import types
 
-logger = u.fetch_logger(__name__)
-
-_WRITER_SAFE_EXCEPTIONS: t.VariadicTuple[type[Exception]] = (
-    *c.Meltano.SINGER_SAFE_EXCEPTIONS,
-    FlextTargetLdifWriterError,
-)
-
 
 class FlextTargetLdifWriter:
     """Writer for converting data records to LDIF format."""
+
+    _SAFE_EXCEPTIONS: ClassVar[t.VariadicTuple[type[Exception]]] = (
+        *c.Meltano.SINGER_SAFE_EXCEPTIONS,
+        FlextTargetLdifWriterError,
+    )
 
     @override
     def __init__(
@@ -148,7 +146,7 @@ class FlextTargetLdifWriter:
 
         try:
             return _run_write_record()
-        except _WRITER_SAFE_EXCEPTIONS as exc:
+        except FlextTargetLdifWriter._SAFE_EXCEPTIONS as exc:
             return e.fail_operation("write record", exc, result_type=r[bool])
 
     def _convert_record_to_entry(
@@ -169,7 +167,7 @@ class FlextTargetLdifWriter:
             if key != "dn":
                 mapped_key = self.attribute_mapping.get(key, key)
                 attributes[mapped_key] = value
-        attr_dict: dict[str, t.StrSequence] = {}
+        attr_dict: t.MutableMappingKV[str, t.StrSequence] = {}
         for key, value in attributes.items():
             if isinstance(value, list):
                 attr_dict[key] = [str(v) for v in value]
