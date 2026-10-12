@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsSettings
 
-from flext_target_ldif import FlextTargetLdifSettings
+from flext_target_ldif._settings import FlextTargetLdifSettings
 
 
 class TestsFlextTargetLdifSettings(FlextTargetLdifSettings, FlextTestsSettings):

@@ -11,8 +11,7 @@ from collections.abc import Mapping
 from pathlib import Path
 
 from flext_core import u
-from flext_target_ldif import c, p, t
-from flext_target_ldif.writer import FlextTargetLdifWriter
+from flext_target_ldif import FlextTargetLdifWriter, c, p, t
 
 
 class FlextTargetLdifSink:
@@ -64,7 +63,7 @@ class FlextTargetLdifSink:
     def process_batch(self, context: t.JsonMapping) -> None:
         """Process a batch of records."""
         if context:
-            context_dict = t.json_dict_adapter().validate_python(context)
+            context_dict = u.json_dict_adapter().validate_python(context)
             self.logger.debug("Processing LDIF batch", context=context_dict)
         self._resolve_ldif_writer()
 
@@ -79,7 +78,7 @@ class FlextTargetLdifSink:
             RuntimeError: If ``not result.success``.
         """
         if context:
-            context_dict = t.json_dict_adapter().validate_python(context)
+            context_dict = u.json_dict_adapter().validate_python(context)
             self.logger.debug("Processing LDIF record", context=context_dict)
         ldif_writer = self._resolve_ldif_writer()
         result: p.Result[bool] = ldif_writer.write_record(record)

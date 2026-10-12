@@ -13,7 +13,7 @@ from typing import override
 from flext_meltano import u
 
 from flext_target_ldif import c, m, p, t
-from flext_target_ldif._utilities.sink import FlextTargetLdifSink
+from flext_target_ldif._utilities import FlextTargetLdifSink
 
 
 class FlextTargetLdifServiceRuntime:
@@ -46,7 +46,7 @@ class FlextTargetLdifServiceRuntime:
             Returns:
                 The resulting ``FlextTargetLdifServiceRuntime.Sink``.
             """
-            schema_dict = t.json_dict_adapter().validate_python(schema)
+            schema_dict = u.json_dict_adapter().validate_python(schema)
             service_sink = cls(
                 target=target,
                 stream_name=stream_name,
@@ -92,11 +92,11 @@ class FlextTargetLdifServiceRuntime:
         return cls.Sink.create(
             runtime_sink=runtime_sink,
             target=cls.Target(
-                config=t.json_dict_adapter().validate_python(normalized_target_config),
+                config=u.json_dict_adapter().validate_python(normalized_target_config),
                 validate_config=False,
             ),
             stream_name=stream_name,
-            schema=t.json_dict_adapter().validate_python(normalized_schema),
+            schema=u.json_dict_adapter().validate_python(normalized_schema),
             key_properties=[],
         )
 

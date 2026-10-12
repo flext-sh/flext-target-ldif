@@ -14,7 +14,7 @@ from typing import Annotated, override
 from flext_meltano import FlextMeltanoTargetServiceBase
 
 from flext_target_ldif import c, p, t, u
-from flext_target_ldif._utilities.service_runtime import FlextTargetLdifServiceRuntime
+from flext_target_ldif._utilities import FlextTargetLdifServiceRuntime
 
 
 class FlextTargetLdifService(FlextMeltanoTargetServiceBase):

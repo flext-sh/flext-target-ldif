@@ -12,15 +12,8 @@ from __future__ import annotations
 
 from typing import Annotated, Self
 
-from flext_meltano import FlextMeltanoConfig
-
-from flext_target_ldif import m
-
-
-class _TargetLdifNamespace(m.BaseModel):
-    """Open, frozen namespace exposing every ``config/*.yaml`` domain model-less."""
-
-    model_config = m.ConfigDict(extra="allow", frozen=True)
+import _target_ldif_namespace
+from flext_meltano import FlextMeltanoConfig, m
 
 
 class FlextTargetLdifConfig(FlextMeltanoConfig):
@@ -57,13 +50,13 @@ class FlextTargetLdifConfig(FlextMeltanoConfig):
         return object.__hash__(self)
 
     TargetLdif: Annotated[
-        _TargetLdifNamespace,
+        _target_ldif_namespace._TargetLdifNamespace,
         m.Field(
             description=(
                 "Open namespace exposing ``config/*.yaml`` under ``TargetLdif``."
             ),
         ),
-    ] = _TargetLdifNamespace()
+    ] = _target_ldif_namespace._TargetLdifNamespace()
 
 
 config: FlextTargetLdifConfig = FlextTargetLdifConfig.fetch_global()

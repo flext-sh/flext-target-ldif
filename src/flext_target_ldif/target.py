@@ -10,8 +10,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, override
 
-from flext_target_ldif import FlextTargetLdifSettings, main as cli_main, t
-from flext_target_ldif._utilities.sink import FlextTargetLdifSink
+from flext_target_ldif import FlextTargetLdifSettings, main, t
+from flext_target_ldif._utilities import FlextTargetLdifSink
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -58,7 +58,7 @@ class FlextTargetLdif:
     @property
     def cli(self) -> Callable[..., int]:
         """The CLI entry point for this target."""
-        return cli_main
+        return main
 
     @property
     def config_jsonschema(self) -> t.JsonMapping:
