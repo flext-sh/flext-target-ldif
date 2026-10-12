@@ -10,8 +10,12 @@ from __future__ import annotations
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 
+from flext_target_ldif._models.config import FlextTargetLdifConfigModels
 
-class FlextTargetLdifModels(FlextMeltanoModels, FlextLdifModels):
+
+class FlextTargetLdifModels(
+    FlextTargetLdifConfigModels, FlextMeltanoModels, FlextLdifModels
+):
     """Models composed from Meltano and LDIF via MRO."""
 
 

@@ -94,12 +94,6 @@ class TestsFlextTargetLdifTarget:
         tm.that(settings.TargetLdif.output_file, eq="test.ldif")
 
     @staticmethod
-    def test_target_inheritance() -> None:
-        """Test that FlextTargetLdif is properly instantiated."""
-        target = FlextTargetLdif()
-        tm.that(target, is_=FlextTargetLdif)
-
-    @staticmethod
     def test_target_creation_with_defaults() -> None:
         """Test creating target with default configuration."""
         FlextTargetLdif()
@@ -202,14 +196,6 @@ class TestsFlextTargetLdifTargetLifecycle:
         tm.that(content, has="dn: uid=jsmith,ou=users,dc=example,dc=com\n")
         tm.that(content, has="mail: jsmith@example.com\n")
         tm.that(content, lacks="email:")
-
-    @staticmethod
-    def test_target_ldif_creation() -> None:
-        """Test creating FlextTargetLdif instance."""
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            settings = {"output_path": tmp_dir}
-            target = FlextTargetLdif(settings=settings)
-            tm.that(target, is_=FlextTargetLdif)
 
     @staticmethod
     def test_target_ldif_name_property() -> None:
@@ -334,16 +320,6 @@ class TestsFlextTargetLdifTargetLifecycle:
             },
         )
         tmp_path.unlink()
-
-    @staticmethod
-    def test_target_ldif_alias_compatibility() -> None:
-        """Test that FlextTargetLdif maintains compatibility."""
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            settings = {"output_path": tmp_dir}
-            original_target = FlextTargetLdif(settings=settings)
-            target = FlextTargetLdif()
-            tm.that(original_target, is_=FlextTargetLdif)
-            tm.that(target, is_=FlextTargetLdif)
 
     @staticmethod
     def test_config_to_dict_conversion() -> None:

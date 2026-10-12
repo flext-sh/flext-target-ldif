@@ -17,6 +17,8 @@ from flext_target_ldif import FlextTargetLdifWriter, c, p, t
 class FlextTargetLdifSink:
     """Singer sink writing stream records to one LDIF file per stream."""
 
+    logger: p.Logger = u.fetch_logger(__name__)
+
     def __init__(
         self,
         target_config: t.JsonMapping,
@@ -31,19 +33,11 @@ class FlextTargetLdifSink:
         self.key_properties = key_properties or []
         self._ldif_writer: FlextTargetLdifWriter | None = None
         self._output_file: Path | None = None
-        self._logger_instance: p.Logger | None = None
 
     @property
     def ldif_writer(self) -> FlextTargetLdifWriter:
         """The LDIF writer bound to this sink."""
         return self._resolve_ldif_writer()
-
-    @property
-    def logger(self) -> p.Logger:
-        """Lazy logger for the sink."""
-        if self._logger_instance is None:
-            self._logger_instance = u.fetch_logger(__name__)
-        return self._logger_instance
 
     def clean_up(self) -> None:
         """Clean up resources when sink is finished."""

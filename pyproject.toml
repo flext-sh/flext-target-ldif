@@ -463,7 +463,7 @@ runtime-evaluated-base-classes = [
   "flext_meltano.FlextMeltanoSettings",
   "flext_meltano.FlextMeltanoTargetServiceBase",
   "flext_meltano.m.BaseModel",
-  "flext_target_ldif._settings.FlextTargetLdifSettings",
+  "flext_target_ldif.FlextTargetLdifSettings",
   "flext_tests.FlextTestsServiceBase",
   "flext_tests.FlextTestsSettings",
   "flext_tests.FlextTestsUtilities.Tests",
