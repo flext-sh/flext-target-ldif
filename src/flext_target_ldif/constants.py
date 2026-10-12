@@ -24,7 +24,7 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
     class TargetLdif(
         FlextTargetLdifConstantsBase,
-        FlextTargetLdifConstantsValues.TargetLdif,
+        FlextTargetLdifConstantsValues,
     ):
         """Target LDIF domain constants namespace."""
 
