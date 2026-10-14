@@ -34,7 +34,18 @@ class FlextTargetLdifWriter:
         attribute_mapping: t.StrMapping | None = None,
         schema: t.MappingKV[str, t.JsonValue | t.StrSequence] | None = None,
     ) -> None:
-        """Initialize the LDIF writer using flext-ldif infrastructure."""
+        """Initialize the LDIF writer using flext-ldif infrastructure.
+
+        Args:
+            output_file: Path of the LDIF file to write; defaults to the
+                canonical output file.
+            ldif_options: Writer options (``line_length``,
+                ``base64_encode``, ``include_timestamps``).
+            dn_template: Format template deriving the DN from each record.
+            attribute_mapping: Source field to LDIF attribute mapping.
+            schema: Optional Singer schema for the records.
+
+        """
         self.output_file = Path(output_file or c.TargetLdif.DEFAULT_OUTPUT_FILE)
         self.ldif_options = ldif_options or {}
         self.dn_template = dn_template or c.TargetLdif.DEFAULT_DN_TEMPLATE
@@ -65,7 +76,8 @@ class FlextTargetLdifWriter:
         """Context manager entry.
 
         Returns:
-            The resulting ``Self``.
+            The writer with its output file opened.
+
         """
         self.open()
         return self
@@ -88,7 +100,9 @@ class FlextTargetLdifWriter:
         """Close the output file and write all collected records.
 
         Returns:
-            The resulting ``p.Result[bool]``.
+            The outcome of writing the collected records and closing the
+            file.
+
         """
 
         def _run_close() -> p.Result[bool]:
@@ -112,7 +126,8 @@ class FlextTargetLdifWriter:
         """Open the output file for writing.
 
         Returns:
-            The resulting ``p.Result[bool]``.
+            The outcome of opening the output file.
+
         """
         try:
             self.output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -124,8 +139,12 @@ class FlextTargetLdifWriter:
     def write_record(self, record: t.JsonMapping) -> p.Result[bool]:
         """Write a record to the LDIF file buffer.
 
+        Args:
+            record: Singer record payload to write.
+
         Returns:
-            The resulting ``p.Result[bool]``.
+            The outcome of buffering the record.
+
         """
 
         def _run_write_record() -> p.Result[bool]:
@@ -158,8 +177,12 @@ class FlextTargetLdifWriter:
         Conversion defects (bad DN field, unmappable attribute) propagate to
         the caller, which reports them as a typed failure.
 
+        Args:
+            record: Singer record payload to convert.
+
         Returns:
-            The resulting ``t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]]``.
+            The LDIF entry with its DN and stringified attributes.
+
         """
         dn = self.generate_dn(record)
         attributes: t.MutableJsonMapping = {}
@@ -178,11 +201,16 @@ class FlextTargetLdifWriter:
     def generate_dn(self, record: t.JsonMapping) -> str:
         """Generate DN from record using template.
 
+        Args:
+            record: Singer record payload supplying the DN template fields.
+
         Returns:
-            The resulting ``str``.
+            The DN rendered from the template.
 
         Raises:
-            FlextTargetLdifWriterError: If a ``KeyError`` is caught.
+            FlextTargetLdifWriterError: If the record lacks a field
+                required by the DN template.
+
         """
         try:
             return self.dn_template.format(**record)
@@ -194,8 +222,13 @@ class FlextTargetLdifWriter:
     def needs_base64_encoding(value: str) -> bool:
         """Check if a value needs base64 encoding.
 
+        Args:
+            value: Attribute value to inspect.
+
         Returns:
-            The resulting ``bool``.
+            Whether the value starts with a reserved character, is not
+            ASCII, or contains a line break.
+
         """
         if value and value[0] in {" ", ":"}:
             return True
@@ -208,8 +241,13 @@ class FlextTargetLdifWriter:
     def write_attribute(self, attr_name: str, value: str) -> None:
         """Write an attribute to the file handle.
 
+        Args:
+            attr_name: LDIF attribute name.
+            value: Attribute value, base64-encoded when required.
+
         Raises:
-            ValueError: If File handle is not open.
+            ValueError: If the file handle is not open.
+
         """
         if self._file_handle is None:
             msg = "File handle is not open"
@@ -268,8 +306,12 @@ class FlextTargetLdifWriter:
     def write_line(self, line: str) -> None:
         """Write a line to the file handle, wrapping if necessary.
 
+        Args:
+            line: Line content to write.
+
         Raises:
-            ValueError: If File handle is not open.
+            ValueError: If the file handle is not open.
+
         """
         if self._file_handle is None:
             msg = "File handle is not open"

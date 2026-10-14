@@ -32,8 +32,13 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
     ) -> p.Meltano.SingerDrainSink:
         """Create an LDIF sink for a stream.
 
+        Args:
+            stream_name: Name of the Singer stream to drain.
+            schema: Singer schema for the stream.
+
         Returns:
-            The resulting ``p.Meltano.SingerDrainSink``.
+            The service-level Singer sink for the stream.
+
         """
         target_config: t.ScalarMapping = self.settings_overrides or {}
         return FlextTargetLdifServiceRuntime.create_sink(

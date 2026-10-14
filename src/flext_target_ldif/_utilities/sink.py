@@ -1,7 +1,6 @@
 """LDIF runtime sink for the target-ldif Singer target.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
-src/flext_target_ldif/_utilities/sink
 SPDX-License-Identifier: MIT
 """
 
@@ -26,7 +25,15 @@ class FlextTargetLdifSink:
         schema: t.JsonMapping,
         key_properties: t.StrSequence | None = None,
     ) -> None:
-        """Initialize the LDIF sink."""
+        """Initialize the LDIF sink.
+
+        Args:
+            target_config: Merged target configuration mapping.
+            stream_name: Name of the Singer stream this sink drains.
+            schema: Singer schema for the stream.
+            key_properties: Singer key properties for the stream.
+
+        """
         self._config = target_config
         self.stream_name = stream_name
         self.schema = schema
@@ -68,8 +75,13 @@ class FlextTargetLdifSink:
     ) -> None:
         """Process a single record and write to LDIF.
 
+        Args:
+            record: Singer record payload to write.
+            context: Singer record context metadata.
+
         Raises:
-            RuntimeError: If ``not result.success``.
+            RuntimeError: If the LDIF writer rejects the record.
+
         """
         if context:
             context_dict = u.json_dict_adapter().validate_python(context)
@@ -84,7 +96,8 @@ class FlextTargetLdifSink:
         """Resolve the LDIF writer for this sink, creating it on first use.
 
         Returns:
-            The resulting ``FlextTargetLdifWriter``.
+            The LDIF writer configured from the target configuration.
+
         """
         if self._ldif_writer is None:
             output_file = self._resolve_output_file()
@@ -119,7 +132,9 @@ class FlextTargetLdifSink:
         """Resolve the output file path for this stream.
 
         Returns:
-            The resulting ``Path``.
+            The output file path derived from the configured output
+            directory and sanitized stream name.
+
         """
         if self._output_file is None:
             output_path_raw = self._config.get(

@@ -1,7 +1,6 @@
 """Internal runtime helpers for the target-ldif service facade.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
-src/flext_target_ldif/_utilities/service_runtime
 SPDX-License-Identifier: MIT
 """
 
@@ -43,8 +42,16 @@ class FlextTargetLdifServiceRuntime:
         ) -> FlextTargetLdifServiceRuntime.Sink:
             """Create an adapter sink and attach the LDIF runtime sink.
 
+            Args:
+                runtime_sink: LDIF runtime sink handling record writes.
+                target: Singer target owning the sink.
+                stream_name: Name of the Singer stream.
+                schema: Singer schema for the stream.
+                key_properties: Singer key properties for the stream.
+
             Returns:
-                The resulting ``FlextTargetLdifServiceRuntime.Sink``.
+                The adapter sink bound to the runtime sink.
+
             """
             schema_dict = u.json_dict_adapter().validate_python(schema)
             service_sink = cls(
@@ -79,8 +86,14 @@ class FlextTargetLdifServiceRuntime:
     ) -> p.Meltano.SingerDrainSink:
         """Create the LDIF runtime sink for the service facade.
 
+        Args:
+            stream_name: Name of the Singer stream to drain.
+            schema: Singer schema for the stream.
+            target_config: Flat target settings payload.
+
         Returns:
-            The resulting ``p.Meltano.SingerDrainSink``.
+            The service-level Singer sink for the stream.
+
         """
         normalized_target_config = u.normalize_to_json_mapping(target_config)
         normalized_schema = cls.normalize_schema(schema)
@@ -104,8 +117,12 @@ class FlextTargetLdifServiceRuntime:
     def normalize_schema(source: t.JsonMapping) -> t.MutableMappingKV[str, t.JsonValue]:
         """Normalize a flat Singer schema to the LDIF runtime contract.
 
+        Args:
+            source: Flat Singer schema mapping to normalize.
+
         Returns:
-            The resulting ``t.MutableMappingKV[str, t.JsonValue]``.
+            The schema values normalized to the runtime payload types.
+
         """
         return {
             key: (str(value) if isinstance(value, Path) else value)
