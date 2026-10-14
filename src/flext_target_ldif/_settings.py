@@ -80,8 +80,9 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
                 The resulting ``FlextTargetLdifSettings._TargetLdif``.
 
             Raises:
-                ValueError: If Output file cannot be empty; or if output_path cannot be
-                    empty; or if DN template cannot be empty.
+                ValueError: If the output file, the output path, or the
+                    DN template is empty.
+
             """
             if not self.output_file.strip():
                 msg = "Output file cannot be empty"

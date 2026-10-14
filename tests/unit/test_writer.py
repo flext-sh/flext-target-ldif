@@ -35,6 +35,7 @@ class TestsFlextTargetLdifWriter:
 
         Raises:
             AssertionError: If Expected.
+
         """
         with tempfile.TemporaryDirectory() as temp_dir:
             test_file = f"{temp_dir}/test.ldif"
@@ -59,6 +60,7 @@ class TestsFlextTargetLdifWriter:
 
         Raises:
             AssertionError: If Expected.
+
         """
         invalid_path = Path("/nonexistent/directory/test.ldif")
         writer = FlextTargetLdifWriter(output_file=invalid_path)
@@ -95,6 +97,7 @@ class TestsFlextTargetLdifWriter:
 
         Raises:
             AssertionError: If Expected.
+
         """
         readonly_dir = tmp_path / "readonly"
         readonly_dir.mkdir()
@@ -115,6 +118,7 @@ class TestsFlextTargetLdifWriter:
 
         Raises:
             AssertionError: If Expected.
+
         """
         writer = FlextTargetLdifWriter(dn_template="cn={name},ou=people,dc=test,dc=org")
         record = {"name": "John Doe"}
@@ -130,6 +134,7 @@ class TestsFlextTargetLdifWriter:
         Raises:
             AssertionError: If ``'dn: uid=jdoe,ou=users,dc=example,dc=com' not in
                 content``.
+
         """
         output_file = tmp_path / "test.ldif"
         record = {"uid": "jdoe", "cn": "John Doe"}
@@ -186,6 +191,7 @@ class TestsFlextTargetLdifWriter:
 
         Raises:
             AssertionError: If Expected.
+
         """
         output_file = tmp_path / "test.ldif"
         writer = FlextTargetLdifWriter(output_file=output_file)
@@ -207,6 +213,7 @@ class TestsFlextTargetLdifWriterOutput:
         Raises:
             AssertionError: If Expected; or if Expected {}, got; or if Expected False,
                 got; or if Expected True, got.
+
         """
         writer = FlextTargetLdifWriter()
         if writer.output_file != Path("output.ldif"):
@@ -236,6 +243,7 @@ class TestsFlextTargetLdifWriterOutput:
         Raises:
             AssertionError: If Expected; or if Expected True, got; or if Expected False,
                 got.
+
         """
         with tempfile.TemporaryDirectory() as temp_dir:
             output_file = Path(temp_dir) / "custom.ldif"
@@ -279,6 +287,7 @@ class TestsFlextTargetLdifWriterOutput:
 
         Raises:
             AssertionError: If Expected.
+
         """
         output_file = tmp_path / "test.ldif"
         writer = FlextTargetLdifWriter(output_file=output_file)
@@ -308,6 +317,7 @@ class TestsFlextTargetLdifWriterOutput:
 
         Raises:
             AssertionError: If Expected.
+
         """
         attribute_mapping = {"email": "mail", "name": "cn"}
         output_file = tmp_path / "test.ldif"
@@ -341,6 +351,7 @@ class TestsFlextTargetLdifWriterOutput:
 
         Raises:
             AssertionError: If Expected.
+
         """
         writer = FlextTargetLdifWriter(
             dn_template="uid={uid},ou=users,dc=example,dc=com",
@@ -358,6 +369,7 @@ class TestsFlextTargetLdifWriterOutput:
 
         Raises:
             AssertionError: If Expected.
+
         """
         output_file = tmp_path / "test.ldif"
         writer = FlextTargetLdifWriter(output_file=output_file)
@@ -421,6 +433,7 @@ class TestsFlextTargetLdifWriterOutput:
 
         Raises:
             AssertionError: If Expected.
+
         """
         output_file = tmp_path / "test.ldif"
         writer = FlextTargetLdifWriter(output_file=output_file)
@@ -453,6 +466,7 @@ class TestsFlextTargetLdifWriterOutput:
 
         Raises:
             AssertionError: If Expected.
+
         """
         output_file = tmp_path / "test.ldif"
         writer = FlextTargetLdifWriter(
@@ -474,6 +488,7 @@ class TestsFlextTargetLdifWriterOutput:
 
         Raises:
             AssertionError: If Expected.
+
         """
         output_file = tmp_path / "test.ldif"
         writer = FlextTargetLdifWriter(output_file=output_file)
@@ -492,6 +507,7 @@ class TestsFlextTargetLdifWriterOutput:
 
         Raises:
             AssertionError: If Expected.
+
         """
         output_file = tmp_path / "test.ldif"
         writer = FlextTargetLdifWriter(
@@ -528,6 +544,7 @@ class TestsFlextTargetLdifWriterOutput:
 
         Raises:
             AssertionError: If Expected.
+
         """
         writer = FlextTargetLdifWriter(ldif_options={"line_length": CUSTOM_LINE_LENGTH})
         expected_len = CUSTOM_LINE_LENGTH
@@ -541,6 +558,7 @@ class TestsFlextTargetLdifWriterOutput:
 
         Raises:
             AssertionError: If Expected.
+
         """
         output_file = tmp_path / "test.ldif"
         writer = FlextTargetLdifWriter(
@@ -561,6 +579,7 @@ class TestsFlextTargetLdifWriterOutput:
 
         Raises:
             AssertionError: If Expected.
+
         """
         output_file = tmp_path / "test.ldif"
         writer = FlextTargetLdifWriter(
@@ -586,6 +605,7 @@ class TestsFlextTargetLdifWriterDn:
 
         Raises:
             AssertionError: If ``dn != 'uid=jdoe,ou=engineering,dc=example,dc=com'``.
+
         """
         writer = FlextTargetLdifWriter(
             dn_template="uid={uid},ou={department},dc=example,dc=com",
@@ -604,6 +624,7 @@ class TestsFlextTargetLdifWriterDn:
 
         Raises:
             AssertionError: If Expected.
+
         """
         writer = FlextTargetLdifWriter(
             dn_template="uid={uid},ou={department},dc=example,dc=com",
