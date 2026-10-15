@@ -10,6 +10,7 @@ from collections.abc import Mapping
 from pathlib import Path
 
 from flext_core import u
+
 from flext_target_ldif import FlextTargetLdifWriter, c, p, t
 
 

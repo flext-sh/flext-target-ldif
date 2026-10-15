@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar, Self, TextIO, override
 
 from flext_core import u
+
 from flext_target_ldif import FlextTargetLdifWriterError, c, e, p, r, t
 
 if TYPE_CHECKING:
