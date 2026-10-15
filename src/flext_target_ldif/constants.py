@@ -12,11 +12,11 @@ from typing import TYPE_CHECKING
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
+from flext_target_ldif._constants import FlextTargetLdifConstantsValues
 from flext_target_ldif._constants.base import FlextTargetLdifConstantsBase
-from flext_target_ldif._constants.values import FlextTargetLdifConstantsValues
 
 if TYPE_CHECKING:
-    from flext_meltano import t
+    from flext_target_ldif import t
 
 
 class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
@@ -24,7 +24,7 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
     class TargetLdif(
         FlextTargetLdifConstantsBase,
-        FlextTargetLdifConstantsValues.TargetLdif,
+        FlextTargetLdifConstantsValues,
     ):
         """Target LDIF domain constants namespace."""
 

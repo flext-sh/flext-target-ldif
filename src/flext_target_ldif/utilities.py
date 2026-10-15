@@ -10,8 +10,16 @@ from __future__ import annotations
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
 
+from flext_target_ldif._utilities.service_runtime import FlextTargetLdifServiceRuntime
+from flext_target_ldif._utilities.sink import FlextTargetLdifSink
 
-class FlextTargetLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
+
+class FlextTargetLdifUtilities(
+    FlextTargetLdifServiceRuntime,
+    FlextTargetLdifSink,
+    FlextMeltanoUtilities,
+    FlextLdifUtilities,
+):
     """Utilities composed from Meltano and LDIF via MRO."""
 
 

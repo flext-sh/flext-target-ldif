@@ -11,11 +11,10 @@ import tempfile
 from pathlib import Path
 
 import pytest
-from flext_tests import tm
 
-from flext_target_ldif import FlextTargetLdifSettings, t
+from flext_target_ldif import FlextTargetLdifSettings
 from flext_target_ldif.target import FlextTargetLdif
-from tests import c
+from tests import c, tm, u
 
 
 @pytest.mark.usefixtures("isolate_working_directory")
@@ -93,12 +92,6 @@ class TestsFlextTargetLdifTarget:
             },
         })
         tm.that(settings.TargetLdif.output_file, eq="test.ldif")
-
-    @staticmethod
-    def test_target_inheritance() -> None:
-        """Test that FlextTargetLdif is properly instantiated."""
-        target = FlextTargetLdif()
-        tm.that(target, is_=FlextTargetLdif)
 
     @staticmethod
     def test_target_creation_with_defaults() -> None:
@@ -205,19 +198,12 @@ class TestsFlextTargetLdifTargetLifecycle:
         tm.that(content, lacks="email:")
 
     @staticmethod
-    def test_target_ldif_creation() -> None:
-        """Test creating FlextTargetLdif instance."""
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            settings = {"output_path": tmp_dir}
-            target = FlextTargetLdif(settings=settings)
-            tm.that(target, is_=FlextTargetLdif)
-
-    @staticmethod
     def test_target_ldif_name_property() -> None:
         """Test target name property.
 
         Raises:
             AssertionError: If Expected.
+
         """
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {"output_path": tmp_dir}
@@ -233,15 +219,15 @@ class TestsFlextTargetLdifTargetLifecycle:
         tm.that(target.config_jsonschema, is_=dict)
         # NOTE (multi-agent): mro-rn88 — project fields live in the nested TargetLdif
         # schema definition ($defs._TargetLdif), not at the top level. Each level is
-        # re-validated through t.json_mapping_adapter because JsonMapping values are
+        # re-validated through u.json_mapping_adapter because JsonMapping values are
         # JsonValue unions, so raw chained .get() is not type-safe.
-        schema_defs = t.json_mapping_adapter().validate_python(
+        schema_defs = u.json_mapping_adapter().validate_python(
             target.config_jsonschema.get("$defs", {}),
         )
-        target_ldif_def = t.json_mapping_adapter().validate_python(
+        target_ldif_def = u.json_mapping_adapter().validate_python(
             schema_defs.get("_TargetLdif", {}),
         )
-        target_ldif_props = t.json_mapping_adapter().validate_python(
+        target_ldif_props = u.json_mapping_adapter().validate_python(
             target_ldif_def.get("properties", {}),
         )
         tm.that(target_ldif_props, has="output_path")
@@ -278,6 +264,7 @@ class TestsFlextTargetLdifTargetLifecycle:
 
         Raises:
             AssertionError: If Expected.
+
         """
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {
@@ -337,16 +324,6 @@ class TestsFlextTargetLdifTargetLifecycle:
         tmp_path.unlink()
 
     @staticmethod
-    def test_target_ldif_alias_compatibility() -> None:
-        """Test that FlextTargetLdif maintains compatibility."""
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            settings = {"output_path": tmp_dir}
-            original_target = FlextTargetLdif(settings=settings)
-            target = FlextTargetLdif()
-            tm.that(original_target, is_=FlextTargetLdif)
-            tm.that(target, is_=FlextTargetLdif)
-
-    @staticmethod
     def test_config_to_dict_conversion() -> None:
         """Test settings can be converted to t.JsonMapping for Singer SDK."""
         settings = FlextTargetLdifSettings.model_validate({
@@ -382,6 +359,7 @@ class TestsFlextTargetLdifTargetLifecycle:
 
         Raises:
             AssertionError: If Expected.
+
         """
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {

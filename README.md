@@ -57,7 +57,7 @@ verification).
   classes listed under Module Map above.
 - Public extensions exposed by this project: `FlextTargetLdifCli`,
   `FlextTargetLdifConfig`, `FlextTargetLdifConstants`, `FlextTargetLdifModels`,
-  `FlextTargetLdifProtocols`, `FlextTargetLdifService` (+5 more).
+  `FlextTargetLdifProtocols`, `FlextTargetLdifService` (+6 more).
 - Library abstraction boundaries: see AGENTS.md §2.7.
 
 ## Quality Gates

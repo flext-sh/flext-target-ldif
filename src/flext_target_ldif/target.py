@@ -10,8 +10,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, override
 
-from flext_target_ldif import FlextTargetLdifSettings, main as cli_main, t
-from flext_target_ldif._utilities.sink import FlextTargetLdifSink
+from flext_target_ldif import FlextTargetLdifSettings, main, t
+from flext_target_ldif._utilities import FlextTargetLdifSink
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -28,7 +28,13 @@ class FlextTargetLdif:
         settings: t.JsonMapping | None = None,
         validate_config: bool = False,
     ) -> None:
-        """Initialize the LDIF target."""
+        """Initialize the LDIF target.
+
+        Args:
+            settings: Optional target settings merged over the defaults.
+            validate_config: Whether to validate the merged configuration.
+
+        """
         defaults: t.JsonMapping = {
             "file_naming_pattern": "{stream_name}_{timestamp}.ldif",
             "dn_template": "uid={uid},ou=users,dc=example,dc=com",
@@ -38,7 +44,7 @@ class FlextTargetLdif:
         # resolve_sink/validate_config read self._config (was an undefined bare
         # `settings`).
         self._config: t.JsonMapping = {**defaults, **(settings or {})}
-        self.sinks: dict[str, FlextTargetLdifSink] = {}
+        self.sinks: t.MutableMappingKV[str, FlextTargetLdifSink] = {}
         if validate_config:
             self.validate_config()
         output_path_raw = self._config.get("output_path", "./output")
@@ -58,7 +64,7 @@ class FlextTargetLdif:
     @property
     def cli(self) -> Callable[..., int]:
         """The CLI entry point for this target."""
-        return cli_main
+        return main
 
     @property
     def config_jsonschema(self) -> t.JsonMapping:
@@ -76,8 +82,13 @@ class FlextTargetLdif:
     ) -> FlextTargetLdifSink:
         """Resolve the cached sink for the given stream, creating it on first use.
 
+        Args:
+            stream_name: Name of the Singer stream to drain.
+            schema: Singer schema for the stream.
+
         Returns:
-            The resulting ``FlextTargetLdifSink``.
+            The sink bound to this target for the stream.
+
         """
         if stream_name not in self.sinks:
             self.sinks[stream_name] = FlextTargetLdifSink(
@@ -90,8 +101,14 @@ class FlextTargetLdif:
     def validate_config(self, config: t.JsonMapping | None = None) -> None:
         """Validate the target configuration.
 
+        Args:
+            config: Optional configuration mapping to validate; defaults
+                to the merged instance configuration.
+
         Raises:
-            ValueError: If Output file is required.
+            ValueError: If an explicit config omits the required output
+                file or the settings model rejects the values.
+
         """
         config_dict = dict(config) if config is not None else dict(self._config)
         if config is not None and "output_file" not in config_dict:

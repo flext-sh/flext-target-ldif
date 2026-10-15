@@ -1,7 +1,6 @@
 """LDIF runtime sink for the target-ldif Singer target.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
-src/flext_target_ldif/_utilities/sink
 SPDX-License-Identifier: MIT
 """
 
@@ -10,12 +9,15 @@ from __future__ import annotations
 from collections.abc import Mapping
 from pathlib import Path
 
-from flext_target_ldif import c, p, t, u
-from flext_target_ldif.writer import FlextTargetLdifWriter
+from flext_core import u
+
+from flext_target_ldif import FlextTargetLdifWriter, c, p, t
 
 
 class FlextTargetLdifSink:
     """Singer sink writing stream records to one LDIF file per stream."""
+
+    logger: p.Logger = u.fetch_logger(__name__)
 
     def __init__(
         self,
@@ -24,26 +26,26 @@ class FlextTargetLdifSink:
         schema: t.JsonMapping,
         key_properties: t.StrSequence | None = None,
     ) -> None:
-        """Initialize the LDIF sink."""
+        """Initialize the LDIF sink.
+
+        Args:
+            target_config: Merged target configuration mapping.
+            stream_name: Name of the Singer stream this sink drains.
+            schema: Singer schema for the stream.
+            key_properties: Singer key properties for the stream.
+
+        """
         self._config = target_config
         self.stream_name = stream_name
         self.schema = schema
         self.key_properties = key_properties or []
         self._ldif_writer: FlextTargetLdifWriter | None = None
         self._output_file: Path | None = None
-        self._logger_instance: p.Logger | None = None
 
     @property
     def ldif_writer(self) -> FlextTargetLdifWriter:
         """The LDIF writer bound to this sink."""
         return self._resolve_ldif_writer()
-
-    @property
-    def logger(self) -> p.Logger:
-        """Lazy logger for the sink."""
-        if self._logger_instance is None:
-            self._logger_instance = u.fetch_logger(__name__)
-        return self._logger_instance
 
     def clean_up(self) -> None:
         """Clean up resources when sink is finished."""
@@ -63,7 +65,7 @@ class FlextTargetLdifSink:
     def process_batch(self, context: t.JsonMapping) -> None:
         """Process a batch of records."""
         if context:
-            context_dict = t.json_dict_adapter().validate_python(context)
+            context_dict = u.json_dict_adapter().validate_python(context)
             self.logger.debug("Processing LDIF batch", context=context_dict)
         self._resolve_ldif_writer()
 
@@ -74,11 +76,16 @@ class FlextTargetLdifSink:
     ) -> None:
         """Process a single record and write to LDIF.
 
+        Args:
+            record: Singer record payload to write.
+            context: Singer record context metadata.
+
         Raises:
-            RuntimeError: If ``not result.success``.
+            RuntimeError: If the LDIF writer rejects the record.
+
         """
         if context:
-            context_dict = t.json_dict_adapter().validate_python(context)
+            context_dict = u.json_dict_adapter().validate_python(context)
             self.logger.debug("Processing LDIF record", context=context_dict)
         ldif_writer = self._resolve_ldif_writer()
         result: p.Result[bool] = ldif_writer.write_record(record)
@@ -90,14 +97,15 @@ class FlextTargetLdifSink:
         """Resolve the LDIF writer for this sink, creating it on first use.
 
         Returns:
-            The resulting ``FlextTargetLdifWriter``.
+            The LDIF writer configured from the target configuration.
+
         """
         if self._ldif_writer is None:
             output_file = self._resolve_output_file()
             raw_ldif_options = self._config.get("ldif_options", {})
             ldif_options: t.JsonMapping = {}
             if isinstance(raw_ldif_options, Mapping):
-                ldif_options = t.json_mapping_adapter().validate_python(
+                ldif_options = u.json_mapping_adapter().validate_python(
                     raw_ldif_options,
                 )
             raw_dn_template = self._config.get("dn_template")
@@ -125,7 +133,9 @@ class FlextTargetLdifSink:
         """Resolve the output file path for this stream.
 
         Returns:
-            The resulting ``Path``.
+            The output file path derived from the configured output
+            directory and sanitized stream name.
+
         """
         if self._output_file is None:
             output_path_raw = self._config.get(
