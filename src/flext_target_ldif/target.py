@@ -135,3 +135,6 @@ class FlextTargetLdif:
         # domain
         # validator runs (a flat dict is dropped by extra="ignore").
         FlextTargetLdifSettings.model_validate({"TargetLdif": filtered_config})
+
+
+__all__: list[str] = ["FlextTargetLdif"]
