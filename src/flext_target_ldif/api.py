@@ -11,13 +11,13 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from flext_meltano import meltano
+from flext_meltano import FlextMeltanoTargetServiceBase
 
 from flext_target_ldif import c, p, t, u
-from flext_target_ldif._utilities.service_runtime import FlextTargetLdifServiceRuntime
+from flext_target_ldif._utilities import FlextTargetLdifServiceRuntime
 
 
-class FlextTargetLdifService(meltano.Target):
+class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
     """Orchestrator for target-ldif. All behavior from base via MRO."""
 
     target_name: Annotated[t.NonEmptyStr, u.Field(description="Singer target name")] = (
@@ -32,8 +32,13 @@ class FlextTargetLdifService(meltano.Target):
     ) -> p.Meltano.SingerDrainSink:
         """Create an LDIF sink for a stream.
 
+        Args:
+            stream_name: Name of the Singer stream to drain.
+            schema: Singer schema for the stream.
+
         Returns:
-            The resulting ``p.Meltano.SingerDrainSink``.
+            The service-level Singer sink for the stream.
+
         """
         target_config: t.ScalarMapping = self.settings_overrides or {}
         return FlextTargetLdifServiceRuntime.create_sink(

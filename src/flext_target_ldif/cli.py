@@ -7,8 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_target_ldif import t
-from flext_target_ldif.api import FlextTargetLdifService
+from flext_target_ldif import FlextTargetLdifService, t
 
 
 class FlextTargetLdifCli:
@@ -18,8 +17,12 @@ class FlextTargetLdifCli:
     def run(cls, args: t.StrSequence | None = None) -> int:
         """Execute the canonical target-ldif CLI entry point.
 
+        Args:
+            args: Optional CLI arguments forwarded to the service facade.
+
         Returns:
-            The resulting ``int``.
+            The CLI exit code.
+
         """
         _ = cls
         exit_code: int = FlextTargetLdifService().cli_main(args)
@@ -29,8 +32,12 @@ class FlextTargetLdifCli:
 def main(args: t.StrSequence | None = None) -> int:
     """Provide CLI entry point.
 
+    Args:
+        args: Optional CLI arguments forwarded to ``FlextTargetLdifCli.run``.
+
     Returns:
-        The resulting ``int``.
+        The CLI exit code.
+
     """
     return FlextTargetLdifCli.run(args)
 

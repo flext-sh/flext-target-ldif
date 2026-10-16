@@ -9,3 +9,6 @@ from __future__ import annotations
 
 class FlextTargetLdifConstantsBase:
     """Base constants for flext-target-ldif."""
+
+
+__all__: list[str] = ["FlextTargetLdifConstantsBase"]
