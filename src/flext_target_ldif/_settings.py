@@ -23,7 +23,7 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
         extra="ignore",
     )
 
-    class _TargetLdif(m.BaseModel):
+    class _TargetLdif(m.StrictModel):
         """Namespaced LDIF target settings."""
 
         output_file: Annotated[str, m.Field(description="Output LDIF filename")] = (
