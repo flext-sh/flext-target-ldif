@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated
 
-from flext_meltano import FlextMeltanoSettings, m, t, u
+from flext_meltano import FlextMeltanoSettings, m, t
 
 
 class FlextTargetLdifSettings(FlextMeltanoSettings):
@@ -72,7 +72,7 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
             ),
         ] = True
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def _validate_domain_rules(self) -> FlextTargetLdifSettings._TargetLdif:
             """Enforce required target configuration invariants at construction.
 
