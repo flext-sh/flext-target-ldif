@@ -47,9 +47,11 @@ class TestsFlextTargetLdifTarget:
         for name in ("attribute_mapping", "ldif_options"):
             tm.that(first_dump[name], eq={})
             tm.that(second_dump[name], eq={})
-            tm.that(schema["properties"][name]["type"], eq="object")
+            reference = schema["properties"][name]["$ref"]
+            mapping_schema = schema["$defs"][reference.removeprefix("#/$defs/")]
+            tm.that(mapping_schema["type"], eq="object")
             tm.that(
-                schema["properties"][name]["additionalProperties"],
+                mapping_schema["additionalProperties"],
                 eq={"type": "string"},
             )
         tm.that(first.attribute_mapping, is_=dict)
