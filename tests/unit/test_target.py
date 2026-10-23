@@ -31,10 +31,10 @@ class TestsFlextTargetLdifTarget:
         })
         target_ldif = settings.TargetLdif
         tm.that(target_ldif.output_file, eq="test.ldif")
-        assert target_ldif.schema_validation
+        tm.that(target_ldif.schema_validation, truth=True)
         tm.that(target_ldif.dn_template, eq="uid={uid},ou=users,dc=example,dc=com")
         tm.that(target_ldif.line_length, eq=78)
-        assert not target_ldif.base64_encode
+        tm.that(target_ldif.base64_encode, truth=False)
 
     @staticmethod
     def test_config_creation_with_custom_values() -> None:
@@ -53,10 +53,10 @@ class TestsFlextTargetLdifTarget:
             })
             target_ldif = settings.TargetLdif
             tm.that(target_ldif.output_file, eq=custom_file)
-            assert not target_ldif.schema_validation
+            tm.that(target_ldif.schema_validation, truth=False)
             tm.that(target_ldif.dn_template, eq="cn={name},ou=people,dc=test,dc=com")
             tm.that(target_ldif.line_length, eq=100)
-            assert target_ldif.base64_encode
+            tm.that(target_ldif.base64_encode, truth=True)
             tm.that(target_ldif.attribute_mapping, eq={"email": "mail"})
 
     @staticmethod
@@ -173,7 +173,7 @@ class TestsFlextTargetLdifTargetLifecycle:
         tm.that(sink.ldif_writer.record_count, eq=1)
         sink.clean_up()
         content = (tmp_path / "users.ldif").read_text(encoding="utf-8")
-        assert content.startswith("version: 1\n")
+        tm.that(content.startswith("version: 1\n"))
         tm.that(content, has="dn: uid=jdoe,ou=users,dc=example,dc=com\n")
         tm.that(content, has="cn: John Doe\n")
         tm.that(content, has="mail: jdoe@example.com\n")
@@ -199,18 +199,13 @@ class TestsFlextTargetLdifTargetLifecycle:
 
     @staticmethod
     def test_target_ldif_name_property() -> None:
-        """Test target name property.
-
-        Raises:
-            AssertionError: If Expected.
-
-        """
+        """Test target name property."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {"output_path": tmp_dir}
             target = FlextTargetLdif(settings=settings)
             if target.name != "target-ldif":
                 msg = f"Expected {'target-ldif'}, got {target.name}"
-                raise AssertionError(msg)
+                tm.reject(msg)
 
     @staticmethod
     def test_target_ldif_config_schema() -> None:
@@ -247,25 +242,20 @@ class TestsFlextTargetLdifTargetLifecycle:
         with tempfile.TemporaryDirectory() as tmp_dir:
             output_path = Path(tmp_dir) / "new_directory"
             settings = {"output_path": str(output_path)}
-            assert not output_path.exists()
+            tm.that(output_path.exists(), eq=False)
             FlextTargetLdif(settings=settings)
-            assert output_path.exists()
-            assert output_path.is_dir()
+            tm.that(output_path.exists())
+            tm.that(output_path.is_dir())
 
     @staticmethod
     def test_target_ldif_cli_method() -> None:
         """Test CLI method exists."""
         target = FlextTargetLdif()
-        assert callable(target.cli)
+        tm.that(callable(target.cli))
 
     @staticmethod
     def test_target_ldif_config_dict_access() -> None:
-        """Test settings t.JsonMapping access.
-
-        Raises:
-            AssertionError: If Expected.
-
-        """
+        """Test settings t.JsonMapping access."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {
                 "output_path": tmp_dir,
@@ -274,9 +264,9 @@ class TestsFlextTargetLdifTargetLifecycle:
             target = FlextTargetLdif(settings=settings)
             if target.settings["output_path"] != tmp_dir:
                 msg = f"Expected {tmp_dir}, got {target.settings['output_path']}"
-                raise AssertionError(msg)
-            assert (
-                target.settings["dn_template"] == "cn={name},ou=people,dc=test,dc=com"
+                tm.reject(msg)
+            tm.that(
+                target.settings["dn_template"], eq="cn={name},ou=people,dc=test,dc=com"
             )
 
     @staticmethod
@@ -289,8 +279,9 @@ class TestsFlextTargetLdifTargetLifecycle:
                 target.settings["file_naming_pattern"],
                 eq="{stream_name}_{timestamp}.ldif",
             )
-            assert (
-                target.settings["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
+            tm.that(
+                target.settings["dn_template"],
+                eq="uid={uid},ou=users,dc=example,dc=com",
             )
 
     @staticmethod
@@ -338,10 +329,10 @@ class TestsFlextTargetLdifTargetLifecycle:
         })
         config_dict = settings.model_dump()["TargetLdif"]
         tm.that(config_dict["output_file"], eq="test.ldif")
-        assert config_dict["schema_validation"]
+        tm.that(config_dict["schema_validation"], truth=True)
         tm.that(config_dict["dn_template"], eq="uid={uid},ou=users,dc=example,dc=com")
         tm.that(config_dict["line_length"], eq=100)
-        assert config_dict["base64_encode"]
+        tm.that(config_dict["base64_encode"], truth=True)
         tm.that(config_dict["attribute_mapping"], eq={"email": "mail", "name": "cn"})
 
     @staticmethod
@@ -355,12 +346,7 @@ class TestsFlextTargetLdifTargetLifecycle:
 
     @staticmethod
     def test_singer_sdk_compatibility() -> None:
-        """Test compatibility with Singer SDK patterns.
-
-        Raises:
-            AssertionError: If Expected.
-
-        """
+        """Test compatibility with Singer SDK patterns."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             settings = {
                 "output_path": tmp_dir,
@@ -370,7 +356,8 @@ class TestsFlextTargetLdifTargetLifecycle:
             target = FlextTargetLdif(settings=settings, validate_config=True)
             if target.settings["output_path"] != tmp_dir:
                 msg = f"Expected {tmp_dir}, got {target.settings['output_path']}"
-                raise AssertionError(msg)
-            assert (
-                target.settings["dn_template"] == "uid={uid},ou=users,dc=example,dc=com"
+                tm.reject(msg)
+            tm.that(
+                target.settings["dn_template"],
+                eq="uid={uid},ou=users,dc=example,dc=com",
             )
