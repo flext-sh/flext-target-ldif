@@ -37,6 +37,40 @@ class TestsFlextTargetLdifTarget:
         tm.that(target_ldif.base64_encode, truth=False)
 
     @staticmethod
+    def test_mapping_defaults_preserve_fresh_dictionary_contract() -> None:
+        """Default mappings remain independent dictionaries with the declared schema."""
+        first = FlextTargetLdifSettings.model_validate({}).TargetLdif
+        second = FlextTargetLdifSettings.model_validate({}).TargetLdif
+        first_dump = first.model_dump()
+        second_dump = second.model_dump()
+        schema = first.model_json_schema()
+        for name in ("attribute_mapping", "ldif_options"):
+            tm.that(first_dump[name], eq={})
+            tm.that(second_dump[name], eq={})
+            tm.that(schema["properties"][name]["type"], eq="object")
+            tm.that(
+                schema["properties"][name]["additionalProperties"],
+                eq={"type": "string"},
+            )
+        tm.that(first.attribute_mapping, is_=dict)
+        tm.that(first.ldif_options, is_=dict)
+        tm.that(first.attribute_mapping is second.attribute_mapping, eq=False)
+        tm.that(first.ldif_options is second.ldif_options, eq=False)
+        tm.that(first.attribute_mapping is first.ldif_options, eq=False)
+
+    @staticmethod
+    @pytest.mark.parametrize("field", ["attribute_mapping", "ldif_options"])
+    def test_mapping_fields_preserve_string_validation(field: str) -> None:
+        """Both mappings retain string values and reject invalid nested values."""
+        payload = {"TargetLdif": {field: {"source": "destination"}}}
+        settings = FlextTargetLdifSettings.model_validate(payload)
+        tm.that(settings.TargetLdif.model_dump()[field], eq={"source": "destination"})
+        with pytest.raises(c.ValidationError):
+            FlextTargetLdifSettings.model_validate({
+                "TargetLdif": {field: {"source": []}},
+            })
+
+    @staticmethod
     def test_config_creation_with_custom_values() -> None:
         """Test creating settings with custom values."""
         with tempfile.TemporaryDirectory() as temp_dir:
