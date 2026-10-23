@@ -40,7 +40,7 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
             The service-level Singer sink for the stream.
 
         """
-        target_config: t.ScalarMapping = self.settings_overrides or {}
+        target_config: t.JsonMapping = self.settings_overrides or {}
         return FlextTargetLdifServiceRuntime.create_sink(
             stream_name=stream_name,
             schema=schema,
