@@ -1,12 +1,13 @@
 # AGENTS.md — flext-target-ldif
 
-> **Parent workspace law** lives in [`../AGENTS.md`](../AGENTS.md) — read it first.
-> Universal engineering core: `~/.agents/UNIVERSAL_CORE.md`. Composition: global
-> skills + parent/root `AGENTS.md` + this scope delta. Do not re-embed universal law.
->
-> **Standalone / independent mode:** when `../AGENTS.md` does not resolve, pin the
-> parent raw `AGENTS.md` URL to the same branch/release as this package (never
-> `main`): <https://raw.githubusercontent.com/flext-sh/flext/0.12.0-dev/AGENTS.md>
+Read the branch-matched [FLEXT root](../AGENTS.md) and its local flext-law through
+that root's authority entry point. In standalone mode resolve the same branch or
+release; a coincidental parent instruction file does not establish FLEXT authority.
+This file adds only this package's domain delta. Command routing, architecture
+and universal execution stay with their parent owners.
+
+Embedded AI Hub or Beads generated blocks are retired delivery material, not
+active local rules. Their withdrawal remains the publisher's responsibility.
 
 <!-- AIHUB-AGENTS-SCOPE-LOCAL-BEGIN -->
 
@@ -18,43 +19,12 @@
 Singer **target** (loader) writing LDIF output. Thin driver over `flext-meltano`
 (ADR-006), delegating serialization to `flext-ldif`.
 
-## Structure
-
-```text
-src/flext_target_ldif/
-├── api.py            # FlextTargetLdifService(FlextMeltanoTargetServiceBase)
-├── target.py         # FlextTargetLdif — config merge, output-dir creation, sink selection
-├── writer.py         # LDIF writer (serialization)
-├── cli.py errors.py
-├── constants.py typings.py protocols.py models.py utilities.py   # AUTO-GENERATED facets
-└── _utilities/
-```
-
-## Code Map
-
-| Symbol                   | Kind   | Location    | Role                                           |
-| ------------------------ | ------ | ----------- | ---------------------------------------------- |
-| `FlextTargetLdifService` | class  | `api.py`    | `FlextMeltanoTargetServiceBase`                |
-| `FlextTargetLdif`        | class  | `target.py` | config merge + sink selection                  |
-| writer                   | module | `writer.py` | LDIF serialization (delegates to `flext-ldif`) |
-
 ## Anti-Patterns / Gotchas
 
 - `target.py` persists merged settings in `self._config`; **sink/config code must not
   read an unbound bare `settings`** (a known settings-fallout bug pattern).
 
 ## Conventions (specific to this package)
-
-- Config/settings canonical pattern: ADR-012.
-- Codemod governance (ast-grep + make mod): ADR-014.
-
-## Commands
-
-```bash
-make setup
-make check
-make test
-```
 
 <!-- AIHUB-AGENTS-SCOPE-LOCAL-END -->
 
