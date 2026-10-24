@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """Models for LDIF target operations.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
@@ -9,7 +10,7 @@ from __future__ import annotations
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 
-from flext_target_ldif._models.config import FlextTargetLdifConfigModels
+from flext_target_ldif._models import FlextTargetLdifConfigModels
 
 
 class FlextTargetLdifModels(

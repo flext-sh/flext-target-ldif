@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated
 
-from flext_meltano import FlextMeltanoSettings, m, t, u
+from flext_meltano import FlextMeltanoSettings, m, t
 
 
 class FlextTargetLdifSettings(FlextMeltanoSettings):
@@ -23,7 +23,7 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
         extra="ignore",
     )
 
-    class _TargetLdif(m.BaseModel):
+    class _TargetLdif(m.StrictModel):
         """Namespaced LDIF target settings."""
 
         output_file: Annotated[str, m.Field(description="Output LDIF filename")] = (
@@ -49,10 +49,10 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
             m.Field(
                 description="Source-to-LDIF attribute mapping",
             ),
-        ] = m.Field(default_factory=dict)
+        ] = m.Field(default_factory=dict[str, str])
         ldif_options: Annotated[
             t.StrMapping, m.Field(description="Raw LDIF formatter options")
-        ] = m.Field(default_factory=dict)
+        ] = m.Field(default_factory=dict[str, str])
         schema_validation: Annotated[
             bool,
             m.Field(
@@ -72,7 +72,7 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
             ),
         ] = True
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def _validate_domain_rules(self) -> FlextTargetLdifSettings._TargetLdif:
             """Enforce required target configuration invariants at construction.
 
