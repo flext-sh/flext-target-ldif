@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """FLEXT Target LDIF Constants - LDIF target export constants.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
@@ -12,8 +13,10 @@ from typing import TYPE_CHECKING
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
-from flext_target_ldif._constants import FlextTargetLdifConstantsValues
-from flext_target_ldif._constants.base import FlextTargetLdifConstantsBase
+from flext_target_ldif._constants import (
+    FlextTargetLdifConstantsBase,
+    FlextTargetLdifConstantsValues,
+)
 
 if TYPE_CHECKING:
     from flext_target_ldif import t
