@@ -152,7 +152,7 @@ class FlextTargetLdifSink:
                 ch for ch in self.stream_name if ch.isalnum() or ch in "-_"
             ).strip()
             if not safe_name:
-                safe_name = "stream"
+                safe_name = c.ProcessingMode.STREAM
             filename = f"{safe_name}.ldif"
             self._output_file = output_path / filename
         return self._output_file
