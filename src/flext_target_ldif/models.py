@@ -20,5 +20,4 @@ class FlextTargetLdifModels(
 
 
 m = FlextTargetLdifModels
-
 __all__: list[str] = ["FlextTargetLdifModels", "m"]

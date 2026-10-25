@@ -27,5 +27,4 @@ class FlextTargetLdifUtilities(
 
 
 u = FlextTargetLdifUtilities
-
 __all__: list[str] = ["FlextTargetLdifUtilities", "u"]
