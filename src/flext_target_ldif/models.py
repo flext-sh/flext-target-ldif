@@ -7,15 +7,13 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldif import FlextLdifModels
+from flext_ldif import m
 from flext_meltano import FlextMeltanoModels
 
 from flext_target_ldif._models import FlextTargetLdifConfigModels
 
 
-class FlextTargetLdifModels(
-    FlextTargetLdifConfigModels, FlextMeltanoModels, FlextLdifModels
-):
+class FlextTargetLdifModels(FlextTargetLdifConfigModels, FlextMeltanoModels, m):
     """Models composed from Meltano and LDIF via MRO."""
 
 
