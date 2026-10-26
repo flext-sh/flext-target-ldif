@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_ldif import c
-from flext_meltano import FlextMeltanoConstants
+from flext_meltano import c as flext_meltano_c
 
 from flext_target_ldif._constants import (
     FlextTargetLdifConstantsBase,
@@ -17,7 +17,7 @@ from flext_target_ldif._constants import (
 )
 
 
-class FlextTargetLdifConstants(FlextMeltanoConstants, c):
+class FlextTargetLdifConstants(flext_meltano_c, c):
     """LDIF target export-specific constants following flext-core patterns."""
 
     class TargetLdif(
