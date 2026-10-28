@@ -33,7 +33,7 @@ if TYPE_CHECKING:
     from flext_target_ldif.cli import FlextTargetLdifCli, main
     from flext_target_ldif.constants import FlextTargetLdifConstants, c
     from flext_target_ldif.errors import FlextTargetLdifWriterError
-    from flext_target_ldif.models import FlextTargetLdifModels, m
+    from flext_target_ldif.models import FlextModelsTargetLdif, m
     from flext_target_ldif.protocols import FlextTargetLdifProtocols, p
     from flext_target_ldif.target import FlextTargetLdif
     from flext_target_ldif.typings import FlextTargetLdifTypes, t
@@ -42,11 +42,11 @@ if TYPE_CHECKING:
 
 
 __all__: tuple[str, ...] = (
+    "FlextModelsTargetLdif",
     "FlextTargetLdif",
     "FlextTargetLdifCli",
     "FlextTargetLdifConfig",
     "FlextTargetLdifConstants",
-    "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
     "FlextTargetLdifService",
     "FlextTargetLdifSettings",
@@ -91,7 +91,7 @@ install_lazy_exports(
         "FlextTargetLdifCli": ".cli",
         "FlextTargetLdifConfig": "._config",
         "FlextTargetLdifConstants": ".constants",
-        "FlextTargetLdifModels": ".models",
+        "FlextModelsTargetLdif": ".models",
         "FlextTargetLdifProtocols": ".protocols",
         "FlextTargetLdifService": ".api",
         "FlextTargetLdifSettings": "._settings",

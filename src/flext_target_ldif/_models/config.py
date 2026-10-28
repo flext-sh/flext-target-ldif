@@ -9,7 +9,7 @@ from __future__ import annotations
 from flext_meltano import m
 
 
-class FlextTargetLdifConfigModels:
+class FlextModelsTargetLdifConfig:
     """Field-only declarations for the TargetLdif config singleton."""
 
     class ConfigRoot(m.FrozenModel):
@@ -27,4 +27,4 @@ class FlextTargetLdifConfigModels:
         )
 
 
-__all__: list[str] = ["FlextTargetLdifConfigModels"]
+__all__: list[str] = ["FlextModelsTargetLdifConfig"]
