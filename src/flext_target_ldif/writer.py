@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 class FlextTargetLdifWriter:
     """Writer for converting data records to LDIF format."""
 
-    _SAFE_EXCEPTIONS: ClassVar[t.VariadicTuple[type[Exception]]] = (
+    _SAFE_EXCEPTIONS: ClassVar[tuple[type[Exception]], ...] = (
         *c.Meltano.SINGER_SAFE_EXCEPTIONS,
         FlextTargetLdifWriterError,
     )
