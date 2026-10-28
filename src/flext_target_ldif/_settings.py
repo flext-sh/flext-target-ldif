@@ -9,9 +9,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Annotated
 
-from flext_meltano import FlextMeltanoSettings, m, t
+from flext_meltano import FlextMeltanoSettings, m
 
 
 class FlextTargetLdifSettings(FlextMeltanoSettings):
@@ -45,13 +46,13 @@ class FlextTargetLdifSettings(FlextMeltanoSettings):
             ),
         ] = "uid={uid},ou=users,dc=example,dc=com"
         attribute_mapping: Annotated[
-            t.StrMapping,
+            Mapping[str, str],
             m.Field(
                 description="Source-to-LDIF attribute mapping",
             ),
         ] = m.Field(default_factory=dict[str, str])
         ldif_options: Annotated[
-            t.StrMapping, m.Field(description="Raw LDIF formatter options")
+            Mapping[str, str], m.Field(description="Raw LDIF formatter options")
         ] = m.Field(default_factory=dict[str, str])
         schema_validation: Annotated[
             bool,

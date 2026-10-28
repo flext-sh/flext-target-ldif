@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import base64
+from collections.abc import Mapping, MutableMapping, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar, Self, TextIO, override
 
@@ -21,7 +22,7 @@ if TYPE_CHECKING:
 class FlextTargetLdifWriter:
     """Writer for converting data records to LDIF format."""
 
-    _SAFE_EXCEPTIONS: ClassVar[tuple[type[Exception]], ...] = (
+    _SAFE_EXCEPTIONS: ClassVar[tuple[type[Exception], ...]] = (
         *c.Meltano.SINGER_SAFE_EXCEPTIONS,
         FlextTargetLdifWriterError,
     )
@@ -32,8 +33,8 @@ class FlextTargetLdifWriter:
         output_file: Path | str | None = None,
         ldif_options: t.JsonMapping | None = None,
         dn_template: str | None = None,
-        attribute_mapping: t.StrMapping | None = None,
-        schema: t.MappingKV[str, t.JsonValue | t.StrSequence] | None = None,
+        attribute_mapping: Mapping[str, str] | None = None,
+        schema: Mapping[str, t.JsonValue | Sequence[str]] | None = None,
     ) -> None:
         """Initialize the LDIF writer using flext-ldif infrastructure.
 
@@ -68,9 +69,7 @@ class FlextTargetLdifWriter:
         self.include_timestamps: bool = bool(timestamps_val)
         self._records: list[t.JsonMapping] = []
         self._record_count = 0
-        self._ldif_entries: list[
-            t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]]
-        ] = []
+        self._ldif_entries: list[Mapping[str, str | Mapping[str, Sequence[str]]]] = []
         self._file_handle: TextIO | None = None
 
     def __enter__(self) -> Self:
@@ -172,7 +171,7 @@ class FlextTargetLdifWriter:
     def _convert_record_to_entry(
         self,
         record: t.JsonMapping,
-    ) -> t.MappingKV[str, str | t.MappingKV[str, t.StrSequence]]:
+    ) -> Mapping[str, str | Mapping[str, Sequence[str]]]:
         """Convert a single record to LDIF entry format.
 
         Conversion defects (bad DN field, unmappable attribute) propagate to
@@ -191,7 +190,7 @@ class FlextTargetLdifWriter:
             if key != "dn":
                 mapped_key = self.attribute_mapping.get(key, key)
                 attributes[mapped_key] = value
-        attr_dict: t.MutableMappingKV[str, t.StrSequence] = {}
+        attr_dict: MutableMapping[str, Sequence[str]] = {}
         for key, value in attributes.items():
             if isinstance(value, list):
                 attr_dict[key] = [str(v) for v in value]
@@ -328,4 +327,4 @@ class FlextTargetLdifWriter:
                 remaining = remaining[self.line_length - 1 :]
 
 
-__all__: t.StrSequence = ("FlextTargetLdifWriter",)
+__all__: Sequence[str] = ("FlextTargetLdifWriter",)
