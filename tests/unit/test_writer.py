@@ -17,8 +17,7 @@ from typing import Final
 
 import pytest
 
-from flext_target_ldif.errors import FlextTargetLdifWriterError
-from flext_target_ldif.writer import FlextTargetLdifWriter
+from flext_target_ldif import FlextTargetLdifWriter, FlextTargetLdifWriterError
 from tests import c, tm
 
 EXPECTED_WRAPPED_LINE_LENGTH: Final[int] = 20

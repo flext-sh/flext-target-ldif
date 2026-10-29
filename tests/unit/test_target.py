@@ -12,8 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from flext_target_ldif import FlextTargetLdifSettings
-from flext_target_ldif.target import FlextTargetLdif
+from flext_target_ldif import FlextTargetLdif, FlextTargetLdifSettings
 from tests import c, tm, u
 
 
