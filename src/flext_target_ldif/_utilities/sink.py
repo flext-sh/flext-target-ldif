@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 from flext_core import u
@@ -24,7 +24,7 @@ class FlextTargetLdifSink:
         target_config: t.JsonMapping,
         stream_name: str,
         schema: t.JsonMapping,
-        key_properties: t.StrSequence | None = None,
+        key_properties: Sequence[str] | None = None,
     ) -> None:
         """Initialize the LDIF sink.
 
@@ -113,7 +113,7 @@ class FlextTargetLdifSink:
                 raw_dn_template if isinstance(raw_dn_template, str) else None
             )
             raw_attribute_mapping = self._config.get("attribute_mapping", {})
-            attribute_mapping: t.StrMapping = {}
+            attribute_mapping: Mapping[str, str] = {}
             if isinstance(raw_attribute_mapping, Mapping):
                 attribute_mapping = {
                     key: value
@@ -152,7 +152,7 @@ class FlextTargetLdifSink:
                 ch for ch in self.stream_name if ch.isalnum() or ch in "-_"
             ).strip()
             if not safe_name:
-                safe_name = "stream"
+                safe_name = c.ProcessingMode.STREAM
             filename = f"{safe_name}.ldif"
             self._output_file = output_path / filename
         return self._output_file

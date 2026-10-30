@@ -20,14 +20,14 @@
   Typed
 - Project class: `integration`
 - Keywords: `data-loading`, `enterprise`, `etl`, `flext`, `singer`, `target`, `typed`
-- Main facades: `FlextTargetLdifCli`, `FlextTargetLdifConfig`,
-  `FlextTargetLdifConstants`, `FlextTargetLdifModels`, `FlextTargetLdifProtocols`,
-  `FlextTargetLdifService`, `FlextTargetLdifSettings`, `FlextTargetLdifTypes` (+4 more)
+- Main facades: `FlextTargetLdif`, `FlextTargetLdifCli`, `FlextTargetLdifConfig`,
+  `FlextTargetLdifConstants`, `FlextTargetLdifProtocols`, `FlextTargetLdifService`,
+  `FlextTargetLdifSettings`, `FlextTargetLdifTypes` (+4 more)
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
-- Public symbol exports: `FlextTargetLdifCli`, `FlextTargetLdifConfig`,
-  `FlextTargetLdifConstants`, `FlextTargetLdifModels`, `FlextTargetLdifProtocols`,
-  `FlextTargetLdifService`, `FlextTargetLdifSettings`, `FlextTargetLdifTypes`,
-  `FlextTargetLdifUtilities`, `FlextTargetLdifVersion` (+6 more)
+- Public symbol exports: `FlextModelsTargetLdif`, `FlextTargetLdif`,
+  `FlextTargetLdifCli`, `FlextTargetLdifConfig`, `FlextTargetLdifConstants`,
+  `FlextTargetLdifProtocols`, `FlextTargetLdifService`, `FlextTargetLdifSettings`,
+  `FlextTargetLdifTypes`, `FlextTargetLdifUtilities` (+7 more)
 - Exported module shortcuts: _none_
 - Generated module pages: `10`
 

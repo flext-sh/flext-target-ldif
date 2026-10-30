@@ -11,15 +11,15 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsModels
 
-from flext_target_ldif import FlextTargetLdifModels
+from flext_target_ldif import FlextModelsTargetLdif
 
 
-class TestsFlextTargetLdifModels(FlextTestsModels, FlextTargetLdifModels):
+class TestsFlextTargetLdifModels(FlextTestsModels, FlextModelsTargetLdif):
     """Models for flext-target-ldif tests using COMPOSITION INHERITANCE.
 
     MANDATORY: Inherits from BOTH:
     1. TestsFlextModels - for test infrastructure (.Tests.*)
-    2. FlextTargetLdifModels - for domain models
+    2. FlextModelsTargetLdif - for domain models
 
     Access patterns:
     - tm.Tests.* (generic test models from TestsFlextModels)

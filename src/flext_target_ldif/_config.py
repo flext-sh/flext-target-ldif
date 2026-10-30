@@ -14,8 +14,6 @@ from typing import Annotated
 
 from flext_meltano import FlextMeltanoConfig, m
 
-from flext_target_ldif._models.config import FlextTargetLdifConfigModels
-
 
 class FlextTargetLdifConfig(FlextMeltanoConfig):
     """TargetLdif config auto-loaded model-less from ``config/*.yaml``.
@@ -25,13 +23,13 @@ class FlextTargetLdifConfig(FlextMeltanoConfig):
     """
 
     TargetLdif: Annotated[
-        FlextTargetLdifConfigModels.ConfigRoot.ConfigNamespace,
+        m.Meltano.MeltanoNamespace,
         m.Field(
             description=(
                 "Open namespace exposing ``config/*.yaml`` under ``TargetLdif``."
             ),
         ),
-    ] = FlextTargetLdifConfigModels.ConfigRoot.ConfigNamespace()
+    ] = m.Meltano.MeltanoNamespace()
 
 
 config: FlextTargetLdifConfig = FlextTargetLdifConfig.fetch_global()
