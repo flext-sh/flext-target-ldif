@@ -16,7 +16,7 @@ from __future__ import annotations
 from flext_ldif import FlextLdifProtocols
 from flext_meltano import FlextMeltanoProtocols
 
-from flext_target_ldif._protocols.config import FlextTargetLdifProtocolsConfig
+from flext_target_ldif._protocols import FlextTargetLdifProtocolsConfig
 
 
 class FlextTargetLdifProtocols(

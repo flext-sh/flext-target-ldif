@@ -17,18 +17,13 @@ class FlextTargetLdifProtocolsConfig:
     """Own the structural contracts declared by its model source."""
 
     @runtime_checkable
-    class ConfigRoot(FlextMeltanoProtocols.Model, Protocol):
+    class ConfigRoot(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
-        @property
-        def TargetLdif(
-            self,
-        ) -> FlextTargetLdifProtocolsConfig.ConfigRootConfigNamespace:
-            """Open namespace exposing ``config/*.yaml`` under TargetLdif."""
-            ...
+        TargetLdif: FlextTargetLdifProtocolsConfig.ConfigRootConfigNamespace
 
     @runtime_checkable
-    class ConfigRootConfigNamespace(FlextMeltanoProtocols.Model, Protocol):
+    class ConfigRootConfigNamespace(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
 
