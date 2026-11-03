@@ -10,12 +10,16 @@ from __future__ import annotations
 from flext_ldif import m as flext_ldif_m
 from flext_meltano import m as flext_meltano_m
 
-from flext_target_ldif._models import FlextModelsTargetLdifConfig
+from flext_target_ldif._models import FlextTargetLdifModelsConfig
 
 
-class FlextModelsTargetLdif(FlextModelsTargetLdifConfig, flext_meltano_m, flext_ldif_m):
+class FlextTargetLdifModels(
+    flext_meltano_m,
+    flext_ldif_m,
+    FlextTargetLdifModelsConfig,
+):
     """Models composed from Meltano and LDIF via MRO."""
 
 
-m = FlextModelsTargetLdif
-__all__: list[str] = ["FlextModelsTargetLdif", "m"]
+m = FlextTargetLdifModels
+__all__: list[str] = ["FlextTargetLdifModels", "m"]

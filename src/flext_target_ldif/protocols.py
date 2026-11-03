@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """Singer LDIF target protocols for FLEXT ecosystem.
 
 The 6 inner ``TargetLdif.*`` Protocol classes that previously lived here had
@@ -15,8 +16,12 @@ from __future__ import annotations
 from flext_ldif import FlextLdifProtocols
 from flext_meltano import FlextMeltanoProtocols
 
+from flext_target_ldif._protocols.config import FlextTargetLdifProtocolsConfig
 
-class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
+
+class FlextTargetLdifProtocols(
+    FlextMeltanoProtocols, FlextLdifProtocols, FlextTargetLdifProtocolsConfig
+):
     """Singer Target LDIF protocols facade — composes Meltano + LDIF."""
 
 

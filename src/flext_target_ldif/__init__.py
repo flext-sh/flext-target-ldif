@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports
@@ -32,7 +31,7 @@ if TYPE_CHECKING:
     from flext_target_ldif.cli import FlextTargetLdifCli, main
     from flext_target_ldif.constants import FlextTargetLdifConstants, c
     from flext_target_ldif.errors import FlextTargetLdifWriterError
-    from flext_target_ldif.models import FlextModelsTargetLdif, m
+    from flext_target_ldif.models import FlextTargetLdifModels, m
     from flext_target_ldif.protocols import FlextTargetLdifProtocols, p
     from flext_target_ldif.target import FlextTargetLdif
     from flext_target_ldif.typings import FlextTargetLdifTypes, t
@@ -41,11 +40,11 @@ if TYPE_CHECKING:
 
 
 __all__: tuple[str, ...] = (
-    "FlextModelsTargetLdif",
     "FlextTargetLdif",
     "FlextTargetLdifCli",
     "FlextTargetLdifConfig",
     "FlextTargetLdifConstants",
+    "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
     "FlextTargetLdifService",
     "FlextTargetLdifSettings",
@@ -82,12 +81,12 @@ __all__: tuple[str, ...] = (
 install_lazy_exports(
     __name__,
     globals(),
-    MappingProxyType({
-        "FlextModelsTargetLdif": ".models",
+    {
         "FlextTargetLdif": ".target",
         "FlextTargetLdifCli": ".cli",
         "FlextTargetLdifConfig": "._config",
         "FlextTargetLdifConstants": ".constants",
+        "FlextTargetLdifModels": ".models",
         "FlextTargetLdifProtocols": ".protocols",
         "FlextTargetLdifService": ".api",
         "FlextTargetLdifSettings": "._settings",
@@ -118,7 +117,7 @@ install_lazy_exports(
         "target_ldif": ".api",
         "u": ".utilities",
         "x": "flext_meltano",
-    }),
+    },
     public_exports=__all__,
 )
 
