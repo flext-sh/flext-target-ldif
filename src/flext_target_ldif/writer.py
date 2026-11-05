@@ -11,9 +11,7 @@ from collections.abc import Mapping, MutableMapping, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar, Self, TextIO, override
 
-from flext_core import u
-
-from flext_target_ldif import FlextTargetLdifWriterError, c, e, p, r, t
+from flext_target_ldif import FlextTargetLdifWriterError, c, e, p, r, t, u
 
 if TYPE_CHECKING:
     import types

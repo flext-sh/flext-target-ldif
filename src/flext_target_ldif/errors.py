@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import override
 
-from flext_target_ldif import e
+from flext_target_ldif.exceptions import e
 
 
 class FlextTargetLdifWriterError(e.OperationError):

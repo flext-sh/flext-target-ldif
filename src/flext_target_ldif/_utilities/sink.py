@@ -9,9 +9,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 
-from flext_core import u
-
-from flext_target_ldif import FlextTargetLdifWriter, c, p, t
+from flext_target_ldif import FlextTargetLdifWriter, c, p, t, u
 
 
 class FlextTargetLdifSink:

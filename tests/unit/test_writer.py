@@ -18,7 +18,7 @@ from typing import Final
 import pytest
 
 from flext_target_ldif import FlextTargetLdifWriter, FlextTargetLdifWriterError
-from tests import c, tm
+from tests import c, tm, u
 
 EXPECTED_WRAPPED_LINE_LENGTH: Final[int] = 20
 CUSTOM_LINE_LENGTH: Final[int] = 100
@@ -140,7 +140,7 @@ class TestsFlextTargetLdifWriter:
                 ctx_writer.write_record({"uid": "jdoe", "cn": "John Doe"})
                 _raise_test_exception()
 
-        with pytest.raises(ValueError, match="Test exception"):
+        with u.Tests.raises(ValueError, match="Test exception"):
             _write_then_raise()
         writer = writer_holder[0]
         tm.that(writer.record_count, eq=1)
@@ -521,7 +521,7 @@ class TestsFlextTargetLdifWriterDn:
             dn_template="uid={uid},ou={department},dc=example,dc=com",
         )
         record = {"uid": "jdoe"}
-        with pytest.raises(FlextTargetLdifWriterError) as exc_info:
+        with u.Tests.raises(FlextTargetLdifWriterError) as exc_info:
             writer.generate_dn(record)
         if "Missing required field for DN generation" not in str(exc_info.value):
             expected = "Missing required field for DN generation"

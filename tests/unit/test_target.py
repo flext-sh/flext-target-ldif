@@ -66,7 +66,7 @@ class TestsFlextTargetLdifTarget:
         payload = {"TargetLdif": {field: {"source": "destination"}}}
         settings = FlextTargetLdifSettings.model_validate(payload)
         tm.that(settings.TargetLdif.model_dump()[field], eq={"source": "destination"})
-        with pytest.raises(c.ValidationError):
+        with u.Tests.raises(c.ValidationError):
             FlextTargetLdifSettings.model_validate({
                 "TargetLdif": {field: {"source": []}},
             })
@@ -97,13 +97,13 @@ class TestsFlextTargetLdifTarget:
     @staticmethod
     def test_config_validation_empty_output_file() -> None:
         """Empty output file is rejected at construction by the domain validator."""
-        with pytest.raises(c.ValidationError, match="Output file cannot be empty"):
+        with u.Tests.raises(c.ValidationError, match="Output file cannot be empty"):
             FlextTargetLdifSettings.model_validate({"TargetLdif": {"output_file": ""}})
 
     @staticmethod
     def test_config_validation_empty_dn_template() -> None:
         """Empty DN template is rejected at construction by the domain validator."""
-        with pytest.raises(c.ValidationError, match="DN template cannot be empty"):
+        with u.Tests.raises(c.ValidationError, match="DN template cannot be empty"):
             FlextTargetLdifSettings.model_validate({
                 "TargetLdif": {"output_file": "test.ldif", "dn_template": ""},
             })
@@ -111,7 +111,7 @@ class TestsFlextTargetLdifTarget:
     @staticmethod
     def test_config_validation_invalid_line_length() -> None:
         """Test validation with invalid line length."""
-        with pytest.raises(c.ValidationError):
+        with u.Tests.raises(c.ValidationError):
             FlextTargetLdifSettings.model_validate({
                 "TargetLdif": {"output_file": "test.ldif", "line_length": 0},
             })
@@ -166,14 +166,14 @@ class TestsFlextTargetLdifTarget:
     def test_target_validate_config_missing_output_file() -> None:
         """Test settings validation with missing output file."""
         target = FlextTargetLdif()
-        with pytest.raises(ValueError, match="Output file is required"):
+        with u.Tests.raises(ValueError, match="Output file is required"):
             target.validate_config(config={"schema_validation": True})
 
     @staticmethod
     def test_target_validate_config_invalid_output_file() -> None:
         """Test settings validation with invalid output file."""
         target = FlextTargetLdif()
-        with pytest.raises(ValueError, match="Output file cannot be empty"):
+        with u.Tests.raises(ValueError, match="Output file cannot be empty"):
             target.validate_config(
                 config={"output_file": "", "schema_validation": True},
             )
@@ -182,7 +182,7 @@ class TestsFlextTargetLdifTarget:
     def test_target_validate_config_invalid_dn_template() -> None:
         """Test settings validation with invalid DN template."""
         target = FlextTargetLdif()
-        with pytest.raises(ValueError, match="DN template cannot be empty"):
+        with u.Tests.raises(ValueError, match="DN template cannot be empty"):
             target.validate_config(
                 config={
                     "output_file": "test.ldif",
@@ -373,10 +373,10 @@ class TestsFlextTargetLdifTargetLifecycle:
     @staticmethod
     def test_error_handling_integration() -> None:
         """Test error handling across the system."""
-        with pytest.raises(c.ValidationError, match="Output file cannot be empty"):
+        with u.Tests.raises(c.ValidationError, match="Output file cannot be empty"):
             FlextTargetLdifSettings.model_validate({"TargetLdif": {"output_file": ""}})
         target = FlextTargetLdif()
-        with pytest.raises(ValueError, match="Output file cannot be empty"):
+        with u.Tests.raises(ValueError, match="Output file cannot be empty"):
             target.validate_config(config={"output_file": ""})
 
     @staticmethod

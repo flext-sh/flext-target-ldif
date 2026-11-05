@@ -10,10 +10,12 @@ from collections.abc import MutableMapping, Sequence
 from pathlib import Path
 from typing import override
 
-from flext_meltano import u
-
-from flext_target_ldif import c, m, p, t
 from flext_target_ldif._utilities import FlextTargetLdifSink
+from flext_target_ldif.constants import c
+from flext_target_ldif.models import m
+from flext_target_ldif.protocols import p
+from flext_target_ldif.typings import t
+from flext_target_ldif.utilities import u
 
 
 class FlextTargetLdifServiceRuntime:
