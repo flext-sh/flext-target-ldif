@@ -15,8 +15,6 @@ import tempfile
 from pathlib import Path
 from typing import Final
 
-import pytest
-
 from flext_target_ldif import FlextTargetLdifWriter, FlextTargetLdifWriterError
 from tests import c, tm, u
 
@@ -24,7 +22,7 @@ EXPECTED_WRAPPED_LINE_LENGTH: Final[int] = 20
 CUSTOM_LINE_LENGTH: Final[int] = 100
 
 
-@pytest.mark.usefixtures("isolate_working_directory")
+@c.Tests.MARK.usefixtures("isolate_working_directory")
 class TestsFlextTargetLdifWriter:
     """Test FlextTargetLdifWriter initialization."""
 
@@ -170,7 +168,7 @@ class TestsFlextTargetLdifWriter:
             tm.reject(msg)
 
 
-@pytest.mark.usefixtures("isolate_working_directory")
+@c.Tests.MARK.usefixtures("isolate_working_directory")
 class TestsFlextTargetLdifWriterOutput:
     """Writer output formatting tests: DN generation, folding, and encoding."""
 
@@ -496,7 +494,7 @@ class TestsFlextTargetLdifWriterOutput:
         tm.that(content, lacks="# Generated on:")
 
 
-@pytest.mark.usefixtures("isolate_working_directory")
+@c.Tests.MARK.usefixtures("isolate_working_directory")
 class TestsFlextTargetLdifWriterDn:
     """DN generation tests for the LDIF writer."""
 

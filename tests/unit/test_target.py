@@ -10,13 +10,11 @@ from __future__ import annotations
 import tempfile
 from pathlib import Path
 
-import pytest
-
 from flext_target_ldif import FlextTargetLdif, FlextTargetLdifSettings
 from tests import c, tm, u
 
 
-@pytest.mark.usefixtures("isolate_working_directory")
+@c.Tests.MARK.usefixtures("isolate_working_directory")
 class TestsFlextTargetLdifTarget:
     """Test FlextTargetLdifSettings value object."""
 
@@ -60,7 +58,7 @@ class TestsFlextTargetLdifTarget:
         tm.that(first.attribute_mapping is first.ldif_options, eq=False)
 
     @staticmethod
-    @pytest.mark.parametrize("field", ["attribute_mapping", "ldif_options"])
+    @c.Tests.MARK.parametrize("field", ["attribute_mapping", "ldif_options"])
     def test_mapping_fields_preserve_string_validation(field: str) -> None:
         """Both mappings retain string values and reject invalid nested values."""
         payload = {"TargetLdif": {field: {"source": "destination"}}}
@@ -192,7 +190,7 @@ class TestsFlextTargetLdifTarget:
             )
 
 
-@pytest.mark.usefixtures("isolate_working_directory")
+@c.Tests.MARK.usefixtures("isolate_working_directory")
 class TestsFlextTargetLdifTargetLifecycle:
     """Lifecycle, CLI, and end-to-end behavior tests for the LDIF target."""
 
