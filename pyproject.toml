@@ -601,11 +601,20 @@ force-single-line = false
 known-first-party = ["flext_target_ldif"]
 split-on-trailing-comma = false
 
+[tool.ruff.lint.per-file-ignores]
+"**/_protocols/**" = ["invalid-function-name"]
+"**/_protocols/pydantic.py" = ["too-many-arguments"]
+
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.ruff.lint.pylint]
-allow-dunder-method-names = ["__base__", "__bases__"]
+allow-dunder-method-names = [
+  "__base__",
+  "__bases__",
+  "__get_pydantic_core_schema__",
+  "__get_pydantic_json_schema__",
+]
 
 [tool.tomlsort]
 all = true
@@ -635,7 +644,7 @@ constraint-dependencies = [
   "uv>=0.13.4",
 ]
 environments = ["sys_platform == 'linux'", "sys_platform == 'darwin'"]
-link-mode = "copy"
+link-mode = "clone"
 override-dependencies = [
   "rope @ git+https://github.com/marlon-costa-dc/rope.git@5ebf6d5c477fbf8fc66191bd991a27ca1b9eed7a",
   "flext-core @ git+https://github.com/flext-sh/flext-core.git@0.12.0-dev",
