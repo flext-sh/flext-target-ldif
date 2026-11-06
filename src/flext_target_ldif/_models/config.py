@@ -6,25 +6,32 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from typing import Annotated
+
 from flext_meltano import m
 
+from flext_target_ldif import p, t
 
-class FlextTargetLdifConfigModels:
+
+class FlextTargetLdifModelsConfig:
     """Field-only declarations for the TargetLdif config singleton."""
 
-    class ConfigRoot(m.BaseModel):
+    class ConfigRoot(m.StrictModel):
         """Validated root loaded by the private config composition."""
 
-        model_config = m.ConfigDict(frozen=True, extra="ignore")
+        model_config = m.ConfigDict(extra="ignore")
 
         class ConfigNamespace(m.BaseModel):
             """Open namespace loaded from ``config/target_ldif.yaml``."""
 
             model_config = m.ConfigDict(frozen=True, extra="allow")
 
-        TargetLdif: ConfigNamespace = m.Field(
+        TargetLdif: Annotated[
+            p.ConfigRootConfigNamespace,
+            t.schema_for_model(FlextTargetLdifModelsConfig.ConfigRoot.ConfigNamespace),
+        ] = m.Field(
             description="Open namespace exposing ``config/*.yaml`` under TargetLdif.",
         )
 
 
-__all__: list[str] = ["FlextTargetLdifConfigModels"]
+__all__: list[str] = ["FlextTargetLdifModelsConfig"]

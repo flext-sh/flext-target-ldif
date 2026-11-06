@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """FLEXT Target LDIF Constants - LDIF target export constants.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
@@ -7,19 +8,16 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from flext_ldif import c as flext_ldif_c
+from flext_meltano import c as flext_meltano_c
 
-from flext_ldif import FlextLdifConstants
-from flext_meltano import FlextMeltanoConstants
-
-from flext_target_ldif._constants import FlextTargetLdifConstantsValues
-from flext_target_ldif._constants.base import FlextTargetLdifConstantsBase
-
-if TYPE_CHECKING:
-    from flext_target_ldif import t
+from flext_target_ldif._constants import (
+    FlextTargetLdifConstantsBase,
+    FlextTargetLdifConstantsValues,
+)
 
 
-class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
+class FlextTargetLdifConstants(flext_meltano_c, flext_ldif_c):
     """LDIF target export-specific constants following flext-core patterns."""
 
     class TargetLdif(
@@ -30,5 +28,4 @@ class FlextTargetLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
 
 c = FlextTargetLdifConstants
-
-__all__: t.StrSequence = ("FlextTargetLdifConstants", "c")
+__all__: list[str] = ["FlextTargetLdifConstants", "c"]

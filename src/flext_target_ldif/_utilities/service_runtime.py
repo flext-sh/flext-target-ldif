@@ -6,6 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import MutableMapping, Sequence
 from pathlib import Path
 from typing import override
 
@@ -35,10 +36,10 @@ class FlextTargetLdifServiceRuntime:
             cls,
             *,
             runtime_sink: FlextTargetLdifSink,
-            target: m.Meltano.SingerTargetBase,
+            target: p.Meltano.SingerTargetBase,
             stream_name: str,
-            schema: t.MutableMappingKV[str, t.JsonValue],
-            key_properties: t.StrSequence,
+            schema: MutableMapping[str, t.JsonValue],
+            key_properties: Sequence[str],
         ) -> FlextTargetLdifServiceRuntime.Sink:
             """Create an adapter sink and attach the LDIF runtime sink.
 
@@ -82,7 +83,7 @@ class FlextTargetLdifServiceRuntime:
         *,
         stream_name: str,
         schema: t.JsonMapping,
-        target_config: t.ScalarMapping,
+        target_config: t.JsonMapping,
     ) -> p.Meltano.SingerDrainSink:
         """Create the LDIF runtime sink for the service facade.
 
@@ -114,7 +115,7 @@ class FlextTargetLdifServiceRuntime:
         )
 
     @staticmethod
-    def normalize_schema(source: t.JsonMapping) -> t.MutableMappingKV[str, t.JsonValue]:
+    def normalize_schema(source: t.JsonMapping) -> MutableMapping[str, t.JsonValue]:
         """Normalize a flat Singer schema to the LDIF runtime contract.
 
         Args:

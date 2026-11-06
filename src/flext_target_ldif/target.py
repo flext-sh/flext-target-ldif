@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import MutableMapping
 from pathlib import Path
 from typing import TYPE_CHECKING, override
 
@@ -44,7 +45,7 @@ class FlextTargetLdif:
         # resolve_sink/validate_config read self._config (was an undefined bare
         # `settings`).
         self._config: t.JsonMapping = {**defaults, **(settings or {})}
-        self.sinks: t.MutableMappingKV[str, FlextTargetLdifSink] = {}
+        self.sinks: MutableMapping[str, FlextTargetLdifSink] = {}
         if validate_config:
             self.validate_config()
         output_path_raw = self._config.get("output_path", "./output")

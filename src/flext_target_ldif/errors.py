@@ -6,17 +6,18 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import override
 
-from flext_target_ldif import e, t
+from flext_target_ldif import e
 
 
 class FlextTargetLdifWriterError(e.OperationError):
     """Error raised when LDIF writer operations fail."""
 
-    details: t.StrMapping
+    details: Mapping[str, str]
 
-    def __init__(self, message: str, details: t.StrMapping | None = None) -> None:
+    def __init__(self, message: str, details: Mapping[str, str] | None = None) -> None:
         """Initialize writer error with message and optional details."""
         reason = str(details) if details else ""
         super().__init__(message, reason=reason)
