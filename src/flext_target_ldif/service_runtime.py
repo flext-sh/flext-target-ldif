@@ -12,8 +12,7 @@ from typing import override
 
 from flext_meltano import u
 
-from flext_target_ldif import c, m, p, t
-from flext_target_ldif._utilities import FlextTargetLdifSink
+from flext_target_ldif import FlextTargetLdifSink, c, m, p, t
 
 
 class FlextTargetLdifServiceRuntime:

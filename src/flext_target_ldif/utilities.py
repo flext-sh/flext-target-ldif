@@ -8,16 +8,13 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldif import u as flext_ldif_u
-from flext_meltano import u as flext_meltano_u
-
-from flext_target_ldif._utilities import FlextTargetLdifServiceRuntime
+from flext_ldif import FlextLdifUtilities
+from flext_meltano import FlextMeltanoUtilities
 
 
 class FlextTargetLdifUtilities(
-    flext_meltano_u,
-    flext_ldif_u,
-    FlextTargetLdifServiceRuntime,
+    FlextMeltanoUtilities,
+    FlextLdifUtilities,
 ):
     """Utilities composed from Meltano and LDIF via MRO."""
 
