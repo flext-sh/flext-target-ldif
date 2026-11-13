@@ -11,8 +11,7 @@ from collections.abc import MutableMapping
 from pathlib import Path
 from typing import TYPE_CHECKING, override
 
-from flext_target_ldif import FlextTargetLdifSettings, main, t
-from flext_target_ldif._utilities import FlextTargetLdifSink
+from flext_target_ldif import FlextTargetLdifSettings, FlextTargetLdifSink, main, t
 
 if TYPE_CHECKING:
     from collections.abc import Callable

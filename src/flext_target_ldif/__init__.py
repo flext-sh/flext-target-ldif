@@ -33,6 +33,8 @@ if TYPE_CHECKING:
     from flext_target_ldif.errors import FlextTargetLdifWriterError
     from flext_target_ldif.models import FlextTargetLdifModels, m
     from flext_target_ldif.protocols import FlextTargetLdifProtocols, p
+    from flext_target_ldif.service_runtime import FlextTargetLdifServiceRuntime
+    from flext_target_ldif.sink import FlextTargetLdifSink
     from flext_target_ldif.target import FlextTargetLdif
     from flext_target_ldif.typings import FlextTargetLdifTypes, t
     from flext_target_ldif.utilities import FlextTargetLdifUtilities, u
@@ -47,7 +49,9 @@ __all__: tuple[str, ...] = (
     "FlextTargetLdifModels",
     "FlextTargetLdifProtocols",
     "FlextTargetLdifService",
+    "FlextTargetLdifServiceRuntime",
     "FlextTargetLdifSettings",
+    "FlextTargetLdifSink",
     "FlextTargetLdifTypes",
     "FlextTargetLdifUtilities",
     "FlextTargetLdifVersion",
@@ -89,7 +93,9 @@ install_lazy_exports(
         "FlextTargetLdifModels": ".models",
         "FlextTargetLdifProtocols": ".protocols",
         "FlextTargetLdifService": ".api",
+        "FlextTargetLdifServiceRuntime": ".service_runtime",
         "FlextTargetLdifSettings": "._settings",
+        "FlextTargetLdifSink": ".sink",
         "FlextTargetLdifTypes": ".typings",
         "FlextTargetLdifUtilities": ".utilities",
         "FlextTargetLdifVersion": ".__version__",

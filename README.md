@@ -57,7 +57,7 @@ required validation.
   classes listed under Module Map above.
 - Public extensions exposed by this project: `FlextTargetLdif`, `FlextTargetLdifCli`,
   `FlextTargetLdifConfig`, `FlextTargetLdifConstants`, `FlextTargetLdifModels`,
-  `FlextTargetLdifProtocols` (+7 more).
+  `FlextTargetLdifProtocols` (+9 more).
 - Library abstraction boundaries: see the project `AGENTS.md` and the referenced parent
   architecture rules.
 

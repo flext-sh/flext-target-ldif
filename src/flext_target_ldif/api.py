@@ -13,7 +13,7 @@ from typing import Annotated, ClassVar
 
 from flext_meltano import FlextMeltanoTargetServiceBase
 
-from flext_target_ldif import c, m, p, t, u
+from flext_target_ldif import FlextTargetLdifServiceRuntime, c, m, p, t
 
 
 class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
@@ -23,7 +23,9 @@ class FlextTargetLdifService(FlextMeltanoTargetServiceBase):
         c.TargetLdif.TARGET_NAME
     )
 
-    sink_factory: ClassVar[p.Meltano.SinkFactory] = u.create_sink
+    sink_factory: ClassVar[p.Meltano.SinkFactory] = (
+        FlextTargetLdifServiceRuntime.create_sink
+    )
 
 
 target_ldif: FlextTargetLdifService = FlextTargetLdifService.fetch_global()
