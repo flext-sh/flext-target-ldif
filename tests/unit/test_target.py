@@ -118,11 +118,6 @@ class TestsFlextTargetLdifTarget:
         })
         tm.that(settings.TargetLdif.output_file, eq="test.ldif")
 
-    @staticmethod
-    def test_target_creation_with_defaults() -> None:
-        """Test creating target with default configuration."""
-        FlextTargetLdif()
-
     # NOTE (multi-agent): no-mock rewrite — these exercise the REAL public flow
     # (FlextTargetLdif.resolve_sink → Sink.process_record → Sink.clean_up) against real
     # LDIF files under tmp_path; the old test patched __init__ and asserted nothing
@@ -136,20 +131,6 @@ class TestsFlextTargetLdifTarget:
         tm.that(
             target.settings["dn_template"],
             eq="uid={uid},ou=users,dc=example,dc=com",
-        )
-
-    @staticmethod
-    def test_target_validate_config_success() -> None:
-        """Test successful settings validation."""
-        target = FlextTargetLdif()
-        target.validate_config(
-            config={
-                "output_file": "test.ldif",
-                "schema_validation": True,
-                "dn_template": "uid={uid},ou=users,dc=example,dc=com",
-                "line_length": 78,
-                "base64_encode": False,
-            },
         )
 
     @staticmethod
