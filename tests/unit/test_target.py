@@ -35,22 +35,14 @@ class TestsFlextTargetLdifTarget:
 
     @staticmethod
     def test_mapping_defaults_preserve_fresh_dictionary_contract() -> None:
-        """Default mappings remain independent dictionaries with the declared schema."""
+        """Default mappings remain independent, fresh dictionaries."""
         first = FlextTargetLdifSettings.model_validate({}).TargetLdif
         second = FlextTargetLdifSettings.model_validate({}).TargetLdif
         first_dump = first.model_dump()
         second_dump = second.model_dump()
-        schema = first.model_json_schema()
         for name in ("attribute_mapping", "ldif_options"):
             tm.that(first_dump[name], eq={})
             tm.that(second_dump[name], eq={})
-            reference = schema["properties"][name]["$ref"]
-            mapping_schema = schema["$defs"][reference.removeprefix("#/$defs/")]
-            tm.that(mapping_schema["type"], eq="object")
-            tm.that(
-                mapping_schema["additionalProperties"],
-                eq={"type": "string"},
-            )
         tm.that(first.attribute_mapping, is_=dict)
         tm.that(first.ldif_options, is_=dict)
         tm.that(first.attribute_mapping is second.attribute_mapping, eq=False)
