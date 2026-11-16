@@ -29,4 +29,13 @@ install_lazy_exports(
         "FlextTargetLdifConstantsValues": ".values",
     },
     public_exports=__all__,
+    deferred_members={
+        "FlextTargetLdifConstantsValues": (
+            "TARGET_NAME",
+            "DEFAULT_OUTPUT_PATH",
+            "DEFAULT_DN_TEMPLATE",
+            "DEFAULT_LINE_LENGTH",
+            "DEFAULT_OUTPUT_FILE",
+        ),
+    },
 )
