@@ -22,4 +22,10 @@ install_lazy_exports(
     globals(),
     {"FlextTargetLdifProtocolsConfig": ".config"},
     public_exports=__all__,
+    deferred_members={
+        "FlextTargetLdifProtocolsConfig": (
+            "ConfigRoot",
+            "ConfigRootConfigNamespace",
+        ),
+    },
 )
