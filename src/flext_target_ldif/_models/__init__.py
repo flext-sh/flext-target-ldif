@@ -22,4 +22,5 @@ install_lazy_exports(
     globals(),
     {"FlextTargetLdifModelsConfig": ".config"},
     public_exports=__all__,
+    deferred_members=("FlextTargetLdifModelsConfig",),
 )
