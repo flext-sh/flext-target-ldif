@@ -15,8 +15,7 @@ import tempfile
 from pathlib import Path
 from typing import Final
 
-from flext_target_ldif import FlextTargetLdifWriter, FlextTargetLdifWriterError
-from tests import c, tm, u
+from tests import FlextTargetLdifWriter, FlextTargetLdifWriterError, c, tm, u
 
 EXPECTED_WRAPPED_LINE_LENGTH: Final[int] = 20
 CUSTOM_LINE_LENGTH: Final[int] = 100
@@ -153,7 +152,7 @@ class TestsFlextTargetLdifWriter:
         writer.write_record({"uid": "user1", "cn": "User One"})
         tm.that(writer.record_count, eq=1)
         writer.write_record({"uid": "user2", "cn": "User Two"})
-        tm.that(writer.record_count, eq=c.TargetLdif.Tests.EXPECTED_BULK_SIZE)
+        tm.that(writer.record_count, eq=c.Tests.EXPECTED_BULK_SIZE)
         writer.close()
 
     @staticmethod
@@ -315,7 +314,7 @@ class TestsFlextTargetLdifWriterOutput:
         for record in records:
             result = writer.write_record(record)
             tm.ok(result)
-        if writer.record_count != c.TargetLdif.Tests.EXPECTED_DATA_COUNT:
+        if writer.record_count != c.Tests.EXPECTED_DATA_COUNT:
             msg = f"Expected {3}, got {writer.record_count}"
             tm.reject(msg)
         writer.close()
