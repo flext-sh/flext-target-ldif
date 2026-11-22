@@ -30,5 +30,5 @@ def isolate_working_directory(tmp_path: Path) -> Generator[None]:
 
     The shared test scope restores the original directory during teardown.
     """
-    with u.scope(cwd=tmp_path):
+    with u.Tests.scope(cwd=tmp_path):
         yield
