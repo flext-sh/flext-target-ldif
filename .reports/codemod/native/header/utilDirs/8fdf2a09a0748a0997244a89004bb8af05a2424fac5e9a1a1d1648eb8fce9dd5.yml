@@ -1,0 +1,1 @@
+{"id":"exports--flext_target_ldif._constants","language":"Python","rule":{"regex":"^(?:FlextTargetLdifConstantsBase|FlextTargetLdifConstantsValues)$"}}

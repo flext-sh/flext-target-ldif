@@ -1,8 +1,8 @@
-"""Utilities for flext-target-ldif tests - uses u.TargetLdif.Tests.* namespace pattern.
+"""Utilities for flext-target-ldif tests - uses u.Tests.* namespace pattern.
 
 This module provides test-specific utilities that extend the main
 flext-target-ldif utilities.
-Uses the unified namespace pattern u.TargetLdif.Tests.* for test-only objects.
+Uses the unified namespace pattern u.Tests.* for test-only objects.
 Combines TestsFlextUtilities functionality with project-specific test utilities.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsUtilities
 
-from flext_target_ldif import FlextTargetLdifUtilities
+from tests import FlextTargetLdifUtilities
 
 
 class TestsFlextTargetLdifUtilities(FlextTestsUtilities, FlextTargetLdifUtilities):

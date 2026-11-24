@@ -1,7 +1,7 @@
-"""Types for flext-target-ldif tests - uses t.TargetLdif.Tests.* namespace pattern.
+"""Types for flext-target-ldif tests - uses t.Tests.* namespace pattern.
 
 This module provides test-specific types that extend the main flext-target-ldif types.
-Uses the unified namespace pattern t.TargetLdif.Tests.* for test-only objects.
+Uses the unified namespace pattern t.Tests.* for test-only objects.
 Combines TestsFlextTypes functionality with project-specific test types.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsTypes
 
-from flext_target_ldif import FlextTargetLdifTypes
+from tests import FlextTargetLdifTypes
 
 
 class TestsFlextTargetLdifTypes(FlextTestsTypes, FlextTargetLdifTypes):
