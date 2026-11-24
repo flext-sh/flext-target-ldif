@@ -1,0 +1,24 @@
+{"pytest_version": "9.2.0", "$report_type": "SessionStart"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/__init__.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [["Captured stderr", "2026-11-16T01:04:12.740450Z [warning  ] meltano      Could not find line number offset for docstring: Provide the runtime bootstrap options bound to the test settings type.\n\nReturns:\n    The runtime bootstrap capability consumed by the core service.\n"]], "nodeid": "tests/base.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/conftest.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/constants.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/models.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/protocols.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/settings.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/typings.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/unit/__init__.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/unit/test_target.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/unit/test_target.py::TestsFlextTargetLdifTarget", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/unit/test_target.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/unit/test_writer.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/unit/test_writer.py::TestsFlextTargetLdifWriter", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/unit/test_writer.py::TestsFlextTargetLdifWriterOutput", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/unit/test_writer.py::TestsFlextTargetLdifWriterDn", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/unit/test_writer.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/unit", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests/utilities.py", "$report_type": "CollectReport"}
+{"outcome": "passed", "longrepr": null, "result": null, "sections": [], "nodeid": "tests", "$report_type": "CollectReport"}
+{"exitstatus": 0, "$report_type": "SessionFinish"}

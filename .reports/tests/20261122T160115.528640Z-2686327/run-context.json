@@ -1,0 +1,7 @@
+{
+  "execution_mode": "full",
+  "testmon_db": "/home/marlonsc/flext/flext-target-ldif/.testmondata",
+  "deadline_monotonic": null,
+  "report_directory": "/home/marlonsc/flext/flext-target-ldif/.reports/tests/20261122T160115.528640Z-2686327",
+  "profile_sha256": null
+}

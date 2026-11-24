@@ -1,0 +1,6 @@
+=== FAILURE: tests.unit.test_target.TestsFlextTargetLdifTarget::test_mapping_defaults_preserve_fresh_dictionary_contract ===
+KeyError: '$ref'
+/home/marlonsc/flext/flext-target-ldif/tests/unit/test_target.py:47: in test_mapping_defaults_preserve_fresh_dictionary_contract
+    reference = schema["properties"][name]["$ref"]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: '$ref'

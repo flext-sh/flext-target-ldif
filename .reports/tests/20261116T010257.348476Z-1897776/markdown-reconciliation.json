@@ -1,0 +1,70 @@
+{
+  "eligible": [],
+  "selected": [],
+  "deselected": [],
+  "diagnostics": {
+    "failed_count": 1,
+    "error_count": 0,
+    "warning_count": 0,
+    "skipped_count": 0,
+    "connectivity_skip_cases": [],
+    "collection_failed_count": 0,
+    "collection_skipped_count": 0,
+    "collection_failed_cases": [],
+    "collection_skip_cases": [],
+    "reported_node_ids": [
+      "tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_config_creation_with_defaults",
+      "tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_mapping_defaults_preserve_fresh_dictionary_contract"
+    ],
+    "phase_outcomes": [
+      {
+        "node_id": "tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_config_creation_with_defaults",
+        "phase": "setup",
+        "outcome": "passed"
+      },
+      {
+        "node_id": "tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_config_creation_with_defaults",
+        "phase": "call",
+        "outcome": "passed"
+      },
+      {
+        "node_id": "tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_config_creation_with_defaults",
+        "phase": "teardown",
+        "outcome": "passed"
+      },
+      {
+        "node_id": "tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_mapping_defaults_preserve_fresh_dictionary_contract",
+        "phase": "setup",
+        "outcome": "passed"
+      },
+      {
+        "node_id": "tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_mapping_defaults_preserve_fresh_dictionary_contract",
+        "phase": "call",
+        "outcome": "failed"
+      },
+      {
+        "node_id": "tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_mapping_defaults_preserve_fresh_dictionary_contract",
+        "phase": "teardown",
+        "outcome": "passed"
+      }
+    ],
+    "markdown_attempts": [],
+    "markdown_items": [],
+    "failed_cases": [
+      "tests.unit.test_target.TestsFlextTargetLdifTarget::test_mapping_defaults_preserve_fresh_dictionary_contract"
+    ],
+    "error_traces": [
+      "=== FAILURE: tests.unit.test_target.TestsFlextTargetLdifTarget::test_mapping_defaults_preserve_fresh_dictionary_contract ===\nKeyError: '$ref'\n/home/marlonsc/flext/flext-target-ldif/tests/unit/test_target.py:47: in test_mapping_defaults_preserve_fresh_dictionary_contract\n    reference = schema[\"properties\"][name][\"$ref\"]\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE   KeyError: '$ref'"
+    ],
+    "warning_lines": [],
+    "skip_cases": [],
+    "slow_entries": [
+      "0.246000s | tests.unit.test_target.TestsFlextTargetLdifTarget::test_config_creation_with_defaults",
+      "0.038000s | tests.unit.test_target.TestsFlextTargetLdifTarget::test_mapping_defaults_preserve_fresh_dictionary_contract"
+    ]
+  },
+  "cache_hit": false,
+  "violations": [
+    "selected node IDs differ from executed node IDs"
+  ]
+}

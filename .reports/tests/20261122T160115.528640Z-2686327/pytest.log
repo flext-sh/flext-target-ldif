@@ -1,0 +1,53 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.18, pytest-9.2.0, pluggy-1.7.0 -- /home/marlonsc/flext/.venv/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default'
+benchmark: 5.3.1 (defaults: timer=time.perf_counter disable_gc=False min_rounds=5 min_time=0.000005 max_time=1.0 calibration_precision=10 warmup=False warmup_iterations=100000)
+testmon: selection deactivated, environment: toolchain-9fcc61e2dbb2-5f48d76e-e3b0c442
+Help shape testmon! Tell us what saves you time and what we can improve: https://testmon.org/survey
+Using --randomly-seed=2783833178
+rootdir: /home/marlonsc/flext/flext-target-ldif
+configfile: pyproject.toml
+plugins: flext-tests-0.12.0, hypothesis-6.170.15, anyio-4.16.0, platformdirs-4.14.5, asyncio-1.4.1.post1, benchmark-5.3.1, cov-7.1.0, markdown-docs-0.9.2, reportlog-1.0.0, testmon-2.3.0, timeout-2.4.0, xdist-3.8.0, singer-sdk-0.54.9, randomly-5.1.0, flext-infra-0.12.3
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+timeout: 2.0s
+timeout method: signal
+timeout func_only: True
+collecting ... collected 26 items
+run-last-failure: rerun previous 1 failure first
+
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_mapping_defaults_preserve_fresh_dictionary_contract PASSED [  3%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_config_validation_empty_output_file PASSED [  7%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_config_validation_valid_config PASSED [ 11%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_target_validate_config_missing_output_file PASSED [ 15%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_mapping_fields_preserve_string_validation[attribute_mapping] PASSED [ 19%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_config_creation_with_defaults PASSED [ 23%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_target_validate_config_invalid_output_file PASSED [ 26%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_config_validation_invalid_line_length PASSED [ 30%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_config_validation_empty_dn_template PASSED [ 34%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_target_initialization_exposes_real_state PASSED [ 38%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_mapping_fields_preserve_string_validation[ldif_options] PASSED [ 42%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_config_creation_with_custom_values PASSED [ 46%]
+tests/unit/test_target.py::TestsFlextTargetLdifTarget::test_target_validate_config_invalid_dn_template PASSED [ 50%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_target_ldif_cli_method PASSED [ 53%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_target_ldif_name_property PASSED [ 57%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_target_ldif_config_dict_access PASSED [ 61%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_target_ldif_output_directory_creation PASSED [ 65%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_singer_sdk_compatibility PASSED [ 69%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_error_handling_integration PASSED [ 73%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_end_to_end_ldif_generation PASSED [ 76%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_end_to_end_sink_writes_real_ldif_file PASSED [ 80%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_target_ldif_config_schema PASSED [ 84%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_target_ldif_default_sink_class PASSED [ 88%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_end_to_end_attribute_mapping_is_applied PASSED [ 92%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_target_ldif_default_config_values PASSED [ 96%]
+tests/unit/test_target.py::TestsFlextTargetLdifTargetLifecycle::test_config_to_dict_conversion PASSED [100%]
+
+- generated xml file: /home/marlonsc/flext/flext-target-ldif/.reports/tests/20261122T160115.528640Z-2686327/junit.xml -
+- generated report log file: /home/marlonsc/flext/flext-target-ldif/.reports/tests/20261122T160115.528640Z-2686327/events.jsonl -
+------------------------------- flext slow tests -------------------------------
+no test near the ordinary or slow limit
+============================= slowest 25 durations =============================
+
+(25 durations < 2s hidden.)
+============================== 26 passed in 1.46s ==============================
