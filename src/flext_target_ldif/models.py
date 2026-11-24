@@ -16,9 +16,11 @@ from flext_target_ldif._models import FlextTargetLdifModelsConfig
 class FlextTargetLdifModels(
     FlextMeltanoModels,
     FlextLdifModels,
-    FlextTargetLdifModelsConfig,
 ):
     """Models composed from Meltano and LDIF via MRO."""
+
+    class TargetLdif(FlextTargetLdifModelsConfig):
+        """Domain namespace of the package parts."""
 
 
 m = FlextTargetLdifModels
