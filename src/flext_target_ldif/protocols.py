@@ -19,10 +19,11 @@ from flext_meltano import FlextMeltanoProtocols
 from flext_target_ldif._protocols import FlextTargetLdifProtocolsConfig
 
 
-class FlextTargetLdifProtocols(
-    FlextMeltanoProtocols, FlextLdifProtocols, FlextTargetLdifProtocolsConfig
-):
+class FlextTargetLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
     """Singer Target LDIF protocols facade — composes Meltano + LDIF."""
+
+    class TargetLdif(FlextTargetLdifProtocolsConfig):
+        """Domain namespace of the package parts."""
 
 
 p = FlextTargetLdifProtocols
